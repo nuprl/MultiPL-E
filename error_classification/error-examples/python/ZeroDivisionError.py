@@ -1,4 +1,4 @@
-# ---- HumanEval_128_prod_signs --- completion 49 ---- 
+# ---- HumanEval_128_prod_signs --- completion 2 ---- 
 from typing import List, Optional
 
 def prod_signs(arr: List[int]) -> Optional[int]:

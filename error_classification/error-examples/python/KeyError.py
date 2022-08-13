@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 171 ---- 
+# ---- HumanEval_129_minPath --- completion 26 ---- 
 from typing import List
 
 def minPath(grid: List[List[int]], k: int) -> List[int]:
@@ -101,7 +101,7 @@ KeyError: (1, 0)
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 33 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 29 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.

@@ -1,4 +1,4 @@
-# ---- HumanEval_115_max_fill --- completion 95 ---- 
+# ---- HumanEval_115_max_fill --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -77,7 +77,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_104_unique_digits --- completion 26 ---- 
+# ---- HumanEval_104_unique_digits --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -142,7 +142,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_104_unique_digits --- completion 132 ---- 
+# ---- HumanEval_104_unique_digits --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -203,7 +203,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 9 ---- 
+# ---- HumanEval_108_count_nums --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -271,7 +271,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 75 ---- 
+# ---- HumanEval_108_count_nums --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -339,7 +339,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 94 ---- 
+# ---- HumanEval_108_count_nums --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -407,7 +407,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 105 ---- 
+# ---- HumanEval_108_count_nums --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -474,7 +474,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 110 ---- 
+# ---- HumanEval_108_count_nums --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -542,7 +542,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 140 ---- 
+# ---- HumanEval_108_count_nums --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -610,7 +610,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 184 ---- 
+# ---- HumanEval_108_count_nums --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -678,7 +678,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 192 ---- 
+# ---- HumanEval_108_count_nums --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -746,7 +746,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 85 ---- 
+# ---- HumanEval_145_order_by_points --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -822,7 +822,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 80 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

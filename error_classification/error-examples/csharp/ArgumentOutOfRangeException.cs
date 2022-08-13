@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 47 ---- 
+# ---- HumanEval_129_minPath --- completion 45 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -108,7 +108,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_129_minPath --- completion 53 ---- 
+# ---- HumanEval_129_minPath --- completion 50 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -218,7 +218,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 4 ---- 
+# ---- HumanEval_33_sort_third --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -287,7 +287,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 10 ---- 
+# ---- HumanEval_33_sort_third --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -355,7 +355,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 20 ---- 
+# ---- HumanEval_33_sort_third --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -430,7 +430,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 33 ---- 
+# ---- HumanEval_33_sort_third --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -498,7 +498,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 42 ---- 
+# ---- HumanEval_33_sort_third --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -566,7 +566,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 68 ---- 
+# ---- HumanEval_33_sort_third --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -634,7 +634,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 100 ---- 
+# ---- HumanEval_33_sort_third --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -702,7 +702,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 111 ---- 
+# ---- HumanEval_33_sort_third --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -770,7 +770,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 116 ---- 
+# ---- HumanEval_33_sort_third --- completion 25 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -838,7 +838,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 121 ---- 
+# ---- HumanEval_33_sort_third --- completion 26 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -906,7 +906,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 129 ---- 
+# ---- HumanEval_33_sort_third --- completion 27 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -974,7 +974,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 152 ---- 
+# ---- HumanEval_33_sort_third --- completion 36 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1042,7 +1042,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 153 ---- 
+# ---- HumanEval_33_sort_third --- completion 37 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1110,7 +1110,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 154 ---- 
+# ---- HumanEval_33_sort_third --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1178,7 +1178,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 160 ---- 
+# ---- HumanEval_33_sort_third --- completion 39 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1244,7 +1244,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 165 ---- 
+# ---- HumanEval_33_sort_third --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1312,7 +1312,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 170 ---- 
+# ---- HumanEval_33_sort_third --- completion 44 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1380,7 +1380,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 182 ---- 
+# ---- HumanEval_33_sort_third --- completion 49 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1448,7 +1448,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 192 ---- 
+# ---- HumanEval_33_sort_third --- completion 50 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1518,7 +1518,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_33_sort_third --- completion 196 ---- 
+# ---- HumanEval_33_sort_third --- completion 51 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1591,7 +1591,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 69 ---- 
+# ---- HumanEval_5_intersperse --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1647,7 +1647,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 92 ---- 
+# ---- HumanEval_5_intersperse --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1703,7 +1703,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 106 ---- 
+# ---- HumanEval_5_intersperse --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1759,7 +1759,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 127 ---- 
+# ---- HumanEval_5_intersperse --- completion 9 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1815,7 +1815,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 163 ---- 
+# ---- HumanEval_5_intersperse --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1871,7 +1871,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 174 ---- 
+# ---- HumanEval_5_intersperse --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1927,7 +1927,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_5_intersperse --- completion 189 ---- 
+# ---- HumanEval_5_intersperse --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1983,7 +1983,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 9 ---- 
+# ---- HumanEval_126_is_sorted --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2072,7 +2072,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 19 ---- 
+# ---- HumanEval_126_is_sorted --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2154,7 +2154,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 26 ---- 
+# ---- HumanEval_126_is_sorted --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2243,7 +2243,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 34 ---- 
+# ---- HumanEval_126_is_sorted --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2332,7 +2332,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 39 ---- 
+# ---- HumanEval_126_is_sorted --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2421,7 +2421,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 58 ---- 
+# ---- HumanEval_126_is_sorted --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2510,7 +2510,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 84 ---- 
+# ---- HumanEval_126_is_sorted --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2594,7 +2594,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 85 ---- 
+# ---- HumanEval_126_is_sorted --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2683,7 +2683,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 88 ---- 
+# ---- HumanEval_126_is_sorted --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2778,7 +2778,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 106 ---- 
+# ---- HumanEval_126_is_sorted --- completion 9 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2867,7 +2867,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 111 ---- 
+# ---- HumanEval_126_is_sorted --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2949,7 +2949,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 123 ---- 
+# ---- HumanEval_126_is_sorted --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3039,7 +3039,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 145 ---- 
+# ---- HumanEval_126_is_sorted --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3128,7 +3128,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 152 ---- 
+# ---- HumanEval_126_is_sorted --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3220,7 +3220,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_126_is_sorted --- completion 185 ---- 
+# ---- HumanEval_126_is_sorted --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3309,7 +3309,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_34_unique --- completion 69 ---- 
+# ---- HumanEval_34_unique --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3371,7 +3371,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_10_make_palindrome --- completion 37 ---- 
+# ---- HumanEval_10_make_palindrome --- completion 26 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3451,7 +3451,7 @@ Parameter name: startIndex
 
 
 
-# ---- HumanEval_10_make_palindrome --- completion 181 ---- 
+# ---- HumanEval_10_make_palindrome --- completion 126 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3764,7 +3764,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 4 ---- 
+# ---- HumanEval_130_tri --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3843,7 +3843,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 5 ---- 
+# ---- HumanEval_130_tri --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3921,7 +3921,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 6 ---- 
+# ---- HumanEval_130_tri --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3990,6 +3990,85 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
   at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -4184,85 +4263,6 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 11 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
         var result = new List<long>();
         result.Add(1);
         result.Add(3);
@@ -4316,7 +4316,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 12 ---- 
+# ---- HumanEval_130_tri --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4395,7 +4395,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 13 ---- 
+# ---- HumanEval_130_tri --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4474,7 +4474,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 14 ---- 
+# ---- HumanEval_130_tri --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4553,7 +4553,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 17 ---- 
+# ---- HumanEval_130_tri --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4641,7 +4641,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 18 ---- 
+# ---- HumanEval_130_tri --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4723,7 +4723,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 19 ---- 
+# ---- HumanEval_130_tri --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4802,7 +4802,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 20 ---- 
+# ---- HumanEval_130_tri --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4881,7 +4881,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 21 ---- 
+# ---- HumanEval_130_tri --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4969,7 +4969,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 22 ---- 
+# ---- HumanEval_130_tri --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5047,6 +5047,85 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00095] in <7decf756dae540a1b4bc8e643f900502>:0 
   at Problem.Main (System.String[] args) [0x00001] in <7decf756dae540a1b4bc8e643f900502>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 21 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
 
 '''
 ''' stdout = 
@@ -5087,11 +5166,11 @@ class Problem {
         result.Add(1);
         result.Add(3);
         result.Add(2);
-        for (long i = 3; i <= n; i++) {
+        for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
         return result;
@@ -5119,13 +5198,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -5136,7 +5215,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 26 ---- 
+# ---- HumanEval_130_tri --- completion 24 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5205,6 +5284,85 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
   at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 26 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> list = new List<long>();
+        list.Add(1);
+        list.Add(3);
+        list.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                list.Add(1 + i / 2);
+            } else {
+                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
+            }
+        }
+        return list;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
 
 '''
 ''' stdout = 
@@ -5320,6 +5478,331 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 31 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 32 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 33 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        if (n == 0) {
+            return result;
+        }
+        result.Add(3);
+        if (n == 1) {
+            return result;
+        }
+        result.Add(2);
+        if (n == 2) {
+            return result;
+        }
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 34 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
         List<long> list = new List<long>();
         list.Add(1);
         list.Add(3);
@@ -5363,164 +5846,6 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
   at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 31 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 34 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -5715,173 +6040,6 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        if (n == 0) {
-            return result;
-        }
-        result.Add(3);
-        if (n == 1) {
-            return result;
-        }
-        result.Add(2);
-        if (n == 2) {
-            return result;
-        }
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 38 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> list = new List<long>();
-        list.Add(1);
-        list.Add(3);
-        list.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                list.Add(1 + i / 2);
-            } else {
-                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
-            }
-        }
-        return list;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 39 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
         var result = new List<long>();
         result.Add(1);
         result.Add(3);
@@ -5925,6 +6083,85 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
   at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 39 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -6040,15 +6277,103 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
+        List<long> res = new List<long>();
+        res.Add(1);
+        if (n == 0) {
+            return res;
+        }
+        res.Add(3);
+        if (n == 1) {
+            return res;
+        }
+        res.Add(2);
+        if (n == 2) {
+            return res;
+        }
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                res.Add(1 + i / 2);
+            } else {
+                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+            }
+        }
+        return res;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <32a09e09a17749acb203739779686977>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <32a09e09a17749acb203739779686977>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <32a09e09a17749acb203739779686977>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <32a09e09a17749acb203739779686977>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 42 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
         var result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
-        for (int i = 3; i <= n; i++) {
+        for (long i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
             }
         }
         return result;
@@ -6076,13 +6401,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
 
 '''
 ''' stdout = 
@@ -6121,8 +6446,17 @@ class Problem {
     public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
+        if (n == 0) {
+            return result;
+        }
         result.Add(3);
+        if (n == 1) {
+            return result;
+        }
         result.Add(2);
+        if (n == 2) {
+            return result;
+        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -6155,13 +6489,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 
 '''
 ''' stdout = 
@@ -6277,340 +6611,6 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> res = new List<long>();
-        res.Add(1);
-        if (n == 0) {
-            return res;
-        }
-        res.Add(3);
-        if (n == 1) {
-            return res;
-        }
-        res.Add(2);
-        if (n == 2) {
-            return res;
-        }
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                res.Add(1 + i / 2);
-            } else {
-                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
-            }
-        }
-        return res;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <32a09e09a17749acb203739779686977>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <32a09e09a17749acb203739779686977>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <32a09e09a17749acb203739779686977>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <32a09e09a17749acb203739779686977>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 46 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 47 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        if (n == 0) {
-            return result;
-        }
-        result.Add(3);
-        if (n == 1) {
-            return result;
-        }
-        result.Add(2);
-        if (n == 2) {
-            return result;
-        }
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 48 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 49 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
         List<long> list = new List<long>();
         list.Add(1);
         list.Add(3);
@@ -6664,7 +6664,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 50 ---- 
+# ---- HumanEval_130_tri --- completion 46 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6743,7 +6743,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 51 ---- 
+# ---- HumanEval_130_tri --- completion 47 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6812,6 +6812,243 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
   at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 49 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 50 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 52 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var list = new List<long>();
+        list.Add(1);
+        list.Add(3);
+        list.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                list.Add(1 + i / 2);
+            } else {
+                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
+            }
+        }
+        return list;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
 
 '''
 ''' stdout = 
@@ -6927,243 +7164,6 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 56 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var list = new List<long>();
-        list.Add(1);
-        list.Add(3);
-        list.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                list.Add(1 + i / 2);
-            } else {
-                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
-            }
-        }
-        return list;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 57 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 58 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
         List<long> res = new List<long>();
         res.Add(1);
         res.Add(3);
@@ -7217,7 +7217,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 59 ---- 
+# ---- HumanEval_130_tri --- completion 55 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7299,7 +7299,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 60 ---- 
+# ---- HumanEval_130_tri --- completion 56 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7378,7 +7378,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 61 ---- 
+# ---- HumanEval_130_tri --- completion 57 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7460,7 +7460,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 62 ---- 
+# ---- HumanEval_130_tri --- completion 58 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7529,6 +7529,243 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
   at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 59 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 60 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> l = new List<long>();
+        l.Add(1);
+        l.Add(3);
+        l.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                l.Add(1 + i / 2);
+            } else {
+                l.Add(l[i - 1] + l[i - 2] + l[i + 1]);
+            }
+        }
+        return l;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 61 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -7644,18 +7881,21 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> l = new List<long>();
-        l.Add(1);
-        l.Add(3);
-        l.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                l.Add(1 + i / 2);
+        var result = new List<long>();
+        for (long i = 0; i <= n; i++) {
+            if (i == 0) {
+                result.Add(1);
+            } else if (i == 1) {
+                result.Add(3);
+            } else if (i == 2) {
+                result.Add(2);
+            } else if (i % 2 == 0) {
+                result.Add(1 + i / 2);
             } else {
-                l.Add(l[i - 1] + l[i - 2] + l[i + 1]);
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
             }
         }
-        return l;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -7680,13 +7920,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
+  at Problem.Tri (System.Int64 n) [0x0008a] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9e5cb9c152324bf99608f26ec7c68e68>:0 
+  at Problem.Tri (System.Int64 n) [0x0008a] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
 
 '''
 ''' stdout = 
@@ -7698,6 +7938,164 @@ Parameter name: index
 
 
 # ---- HumanEval_130_tri --- completion 65 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 66 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 67 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7881,15 +8279,12 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
-        for (long i = 0; i <= n; i++) {
-            if (i == 0) {
-                result.Add(1);
-            } else if (i == 1) {
-                result.Add(3);
-            } else if (i == 2) {
-                result.Add(2);
-            } else if (i % 2 == 0) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
                 result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
@@ -7920,13 +8315,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008a] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008a] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <44cdebece803434c9ab450eb0f8ea6cc>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
 
 '''
 ''' stdout = 
@@ -7963,7 +8358,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
+        var result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -7999,13 +8394,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -8017,6 +8412,85 @@ Parameter name: index
 
 
 # ---- HumanEval_130_tri --- completion 71 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> res = new List<long>();
+        res.Add(1);
+        res.Add(3);
+        res.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                res.Add(1 + i / 2);
+            } else {
+                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+            }
+        }
+        return res;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 72 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8085,85 +8559,6 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
   at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 72 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -8283,11 +8678,11 @@ class Problem {
         result.Add(1);
         result.Add(3);
         result.Add(2);
-        for (long i = 3; i <= n; i++) {
+        for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
         return result;
@@ -8315,13 +8710,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -8362,11 +8757,11 @@ class Problem {
         result.Add(1);
         result.Add(3);
         result.Add(2);
-        for (int i = 3; i <= n; i++) {
+        for (long i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
             }
         }
         return result;
@@ -8394,13 +8789,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
 
 '''
 ''' stdout = 
@@ -8412,85 +8807,6 @@ Parameter name: index
 
 
 # ---- HumanEval_130_tri --- completion 76 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> res = new List<long>();
-        res.Add(1);
-        res.Add(3);
-        res.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                res.Add(1 + i / 2);
-            } else {
-                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
-            }
-        }
-        return res;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 77 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8832,18 +9148,18 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
+        var list = new List<long>();
+        list.Add(1);
+        list.Add(3);
+        list.Add(2);
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
-                result.Add(1 + i / 2);
+                list.Add(1 + i / 2);
             } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
             }
         }
-        return result;
+        return list;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -8868,13 +9184,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
 
 '''
 ''' stdout = 
@@ -8913,8 +9229,17 @@ class Problem {
     public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
+        if (n == 0) {
+            return result;
+        }
         result.Add(3);
+        if (n == 1) {
+            return result;
+        }
         result.Add(2);
+        if (n == 2) {
+            return result;
+        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -8947,13 +9272,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 
 '''
 ''' stdout = 
@@ -9071,13 +9396,22 @@ class Problem {
     public static List<long> Tri(long n) {
         var result = new List<long>();
         result.Add(1);
+        if (n == 0) {
+            return result;
+        }
         result.Add(3);
+        if (n == 1) {
+            return result;
+        }
         result.Add(2);
-        for (long i = 3; i <= n; i++) {
+        if (n == 2) {
+            return result;
+        }
+        for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
         return result;
@@ -9105,13 +9439,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
 
 '''
 ''' stdout = 
@@ -9123,85 +9457,6 @@ Parameter name: index
 
 
 # ---- HumanEval_130_tri --- completion 87 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var list = new List<long>();
-        list.Add(1);
-        list.Add(3);
-        list.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                list.Add(1 + i / 2);
-            } else {
-                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
-            }
-        }
-        return list;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <59be167f81a24edda45393b6bba6c306>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <59be167f81a24edda45393b6bba6c306>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 91 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9289,7 +9544,86 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 92 ---- 
+# ---- HumanEval_130_tri --- completion 89 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 90 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9394,7 +9728,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
         if (n == 0) {
             return result;
@@ -9439,13 +9773,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 
 '''
 ''' stdout = 
@@ -9484,94 +9818,6 @@ class Problem {
     public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
-        if (n == 0) {
-            return result;
-        }
-        result.Add(3);
-        if (n == 1) {
-            return result;
-        }
-        result.Add(2);
-        if (n == 2) {
-            return result;
-        }
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 98 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
         result.Add(3);
         result.Add(2);
         for (int i = 3; i <= n; i++) {
@@ -9623,253 +9869,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 100 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 105 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        if (n == 0) {
-            return result;
-        }
-        result.Add(3);
-        if (n == 1) {
-            return result;
-        }
-        result.Add(2);
-        if (n == 2) {
-            return result;
-        }
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 106 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 107 ---- 
+# ---- HumanEval_130_tri --- completion 96 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9949,7 +9949,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 108 ---- 
+# ---- HumanEval_130_tri --- completion 97 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10028,7 +10028,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 111 ---- 
+# ---- HumanEval_130_tri --- completion 100 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10107,7 +10107,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 112 ---- 
+# ---- HumanEval_130_tri --- completion 101 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10186,7 +10186,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 115 ---- 
+# ---- HumanEval_130_tri --- completion 104 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10274,7 +10274,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 119 ---- 
+# ---- HumanEval_130_tri --- completion 108 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10343,6 +10343,823 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
   at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 109 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 110 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 111 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 113 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 114 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        if (n == 0) {
+            return result;
+        }
+        result.Add(3);
+        if (n == 1) {
+            return result;
+        }
+        result.Add(2);
+        if (n == 2) {
+            return result;
+        }
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 115 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> res = new List<long>();
+        res.Add(1);
+        res.Add(3);
+        res.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                res.Add(1 + i / 2);
+            } else {
+                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+            }
+        }
+        return res;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 116 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 117 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 118 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var res = new List<long>();
+        res.Add(1);
+        if (n == 0) {
+            return res;
+        }
+        res.Add(3);
+        if (n == 1) {
+            return res;
+        }
+        res.Add(2);
+        if (n == 2) {
+            return res;
+        }
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                res.Add(1 + i / 2);
+            } else {
+                res.Add(res[(int)i - 1] + res[(int)i - 2] + res[(int)i + 1]);
+            }
+        }
+        return res;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00095] in <03eb71fbfb2b467e95db6877a9202c90>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <03eb71fbfb2b467e95db6877a9202c90>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00095] in <03eb71fbfb2b467e95db6877a9202c90>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <03eb71fbfb2b467e95db6877a9202c90>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 119 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        if (n == 0) {
+            return result;
+        }
+        result.Add(3);
+        if (n == 1) {
+            return result;
+        }
+        result.Add(2);
+        if (n == 2) {
+            return result;
+        }
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 
 '''
 ''' stdout = 
@@ -10462,6 +11279,85 @@ class Problem {
         result.Add(1);
         result.Add(3);
         result.Add(2);
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 122 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -10494,13 +11390,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -10511,7 +11407,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 122 ---- 
+# ---- HumanEval_130_tri --- completion 123 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10616,6 +11512,164 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 125 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 126 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
         result.Add(3);
@@ -10669,7 +11723,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 125 ---- 
+# ---- HumanEval_130_tri --- completion 127 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10697,17 +11751,8 @@ class Problem {
     public static List<long> Tri(long n) {
         var result = new List<long>();
         result.Add(1);
-        if (n == 0) {
-            return result;
-        }
         result.Add(3);
-        if (n == 1) {
-            return result;
-        }
         result.Add(2);
-        if (n == 2) {
-            return result;
-        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -10740,13 +11785,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <69e67ae047304f1ebbe4ca31bafc7185>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -10757,7 +11802,165 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 126 ---- 
+# ---- HumanEval_130_tri --- completion 129 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 130 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 132 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10836,498 +12039,6 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 127 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 128 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 129 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var res = new List<long>();
-        res.Add(1);
-        if (n == 0) {
-            return res;
-        }
-        res.Add(3);
-        if (n == 1) {
-            return res;
-        }
-        res.Add(2);
-        if (n == 2) {
-            return res;
-        }
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                res.Add(1 + i / 2);
-            } else {
-                res.Add(res[(int)i - 1] + res[(int)i - 2] + res[(int)i + 1]);
-            }
-        }
-        return res;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00095] in <03eb71fbfb2b467e95db6877a9202c90>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <03eb71fbfb2b467e95db6877a9202c90>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00095] in <03eb71fbfb2b467e95db6877a9202c90>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <03eb71fbfb2b467e95db6877a9202c90>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 130 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        if (n == 0) {
-            return result;
-        }
-        result.Add(3);
-        if (n == 1) {
-            return result;
-        }
-        result.Add(2);
-        if (n == 2) {
-            return result;
-        }
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 131 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 132 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_130_tri --- completion 133 ---- 
 using System;
 using System.Numerics;
@@ -11354,89 +12065,19 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 134 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
+        if (n == 0) {
+            return result;
+        }
         result.Add(3);
+        if (n == 1) {
+            return result;
+        }
         result.Add(2);
+        if (n == 2) {
+            return result;
+        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -11469,13 +12110,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 
 '''
 ''' stdout = 
@@ -11512,7 +12153,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -11548,13 +12189,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -11566,85 +12207,6 @@ Parameter name: index
 
 
 # ---- HumanEval_130_tri --- completion 136 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 137 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11713,6 +12275,85 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
   at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 137 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -11907,7 +12548,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -11943,13 +12584,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -11960,7 +12601,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 143 ---- 
+# ---- HumanEval_130_tri --- completion 142 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11986,18 +12627,18 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> res = new List<long>();
-        res.Add(1);
-        res.Add(3);
-        res.Add(2);
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
-                res.Add(1 + i / 2);
+                result.Add(1 + i / 2);
             } else {
-                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
-        return res;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -12022,13 +12663,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -12067,17 +12708,8 @@ class Problem {
     public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
-        if (n == 0) {
-            return result;
-        }
         result.Add(3);
-        if (n == 1) {
-            return result;
-        }
         result.Add(2);
-        if (n == 2) {
-            return result;
-        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -12110,13 +12742,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -12127,7 +12759,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 146 ---- 
+# ---- HumanEval_130_tri --- completion 145 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12311,15 +12943,24 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
+        if (n == 0) {
+            return result;
+        }
         result.Add(3);
+        if (n == 1) {
+            return result;
+        }
         result.Add(2);
-        for (int i = 3; i <= n; i++) {
+        if (n == 2) {
+            return result;
+        }
+        for (long i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
             }
         }
         return result;
@@ -12347,13 +12988,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00095] in <7decf756dae540a1b4bc8e643f900502>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7decf756dae540a1b4bc8e643f900502>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00095] in <7decf756dae540a1b4bc8e643f900502>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7decf756dae540a1b4bc8e643f900502>:0 
 
 '''
 ''' stdout = 
@@ -12390,7 +13031,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -12426,13 +13067,92 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 150 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> list = new List<long>();
+        list.Add(1);
+        list.Add(3);
+        list.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                list.Add(1 + i / 2);
+            } else {
+                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
+            }
+        }
+        return list;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
 
 '''
 ''' stdout = 
@@ -12469,18 +13189,18 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
+        List<long> res = new List<long>();
+        res.Add(1);
+        res.Add(3);
+        res.Add(2);
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
-                result.Add(1 + i / 2);
+                res.Add(1 + i / 2);
             } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
             }
         }
-        return result;
+        return res;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -12505,13 +13225,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
 
 '''
 ''' stdout = 
@@ -12522,7 +13242,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 152 ---- 
+# ---- HumanEval_130_tri --- completion 153 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12601,7 +13321,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 153 ---- 
+# ---- HumanEval_130_tri --- completion 154 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12706,7 +13426,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
+        var result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -12742,13 +13462,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -12760,6 +13480,85 @@ Parameter name: index
 
 
 # ---- HumanEval_130_tri --- completion 156 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> res = new List<long>();
+        res.Add(1);
+        res.Add(3);
+        res.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                res.Add(1 + i / 2);
+            } else {
+                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+            }
+        }
+        return res;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 157 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12866,6 +13665,94 @@ class Problem {
     public static List<long> Tri(long n) {
         List<long> result = new List<long>();
         result.Add(1);
+        if (n == 0) {
+            return result;
+        }
+        result.Add(3);
+        if (n == 1) {
+            return result;
+        }
+        result.Add(2);
+        if (n == 2) {
+            return result;
+        }
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 159 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
         result.Add(3);
         result.Add(2);
         for (int i = 3; i <= n; i++) {
@@ -12907,94 +13794,6 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
   at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 159 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        if (n == 0) {
-            return result;
-        }
-        result.Add(3);
-        if (n == 1) {
-            return result;
-        }
-        result.Add(2);
-        if (n == 2) {
-            return result;
-        }
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00095] in <7decf756dae540a1b4bc8e643f900502>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7decf756dae540a1b4bc8e643f900502>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00095] in <7decf756dae540a1b4bc8e643f900502>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7decf756dae540a1b4bc8e643f900502>:0 
 
 '''
 ''' stdout = 
@@ -13110,18 +13909,27 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> list = new List<long>();
-        list.Add(1);
-        list.Add(3);
-        list.Add(2);
+        List<long> result = new List<long>();
+        result.Add(1);
+        if (n == 0) {
+            return result;
+        }
+        result.Add(3);
+        if (n == 1) {
+            return result;
+        }
+        result.Add(2);
+        if (n == 2) {
+            return result;
+        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
-                list.Add(1 + i / 2);
+                result.Add(1 + i / 2);
             } else {
-                list.Add(list[i - 1] + list[i - 2] + list[i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
-        return list;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -13146,13 +13954,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <ee9d28307d7840838ae0d4d077ee084b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ee9d28307d7840838ae0d4d077ee084b>:0 
+  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
 
 '''
 ''' stdout = 
@@ -13189,18 +13997,18 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> res = new List<long>();
-        res.Add(1);
-        res.Add(3);
-        res.Add(2);
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
-                res.Add(1 + i / 2);
+                result.Add(1 + i / 2);
             } else {
-                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
-        return res;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -13225,13 +14033,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -13242,7 +14050,86 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 165 ---- 
+# ---- HumanEval_130_tri --- completion 163 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (int i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 164 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -13426,7 +14313,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -13462,13 +14349,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -13507,8 +14394,11 @@ class Problem {
     public static List<long> Tri(long n) {
         List<long> res = new List<long>();
         res.Add(1);
+        if (n == 0) return res;
         res.Add(3);
+        if (n == 1) return res;
         res.Add(2);
+        if (n == 2) return res;
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 res.Add(1 + i / 2);
@@ -13541,13 +14431,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Tri (System.Int64 n) [0x0008c] in <ad8a42111c1a45f092e5381d6380b313>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad8a42111c1a45f092e5381d6380b313>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <4aa45dc1d867442fa4d9d6abef465857>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4aa45dc1d867442fa4d9d6abef465857>:0 
+  at Problem.Tri (System.Int64 n) [0x0008c] in <ad8a42111c1a45f092e5381d6380b313>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad8a42111c1a45f092e5381d6380b313>:0 
 
 '''
 ''' stdout = 
@@ -13663,19 +14553,10 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
+        var result = new List<long>();
         result.Add(1);
-        if (n == 0) {
-            return result;
-        }
         result.Add(3);
-        if (n == 1) {
-            return result;
-        }
         result.Add(2);
-        if (n == 2) {
-            return result;
-        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -13708,13 +14589,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -13751,7 +14632,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
+        var result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -13787,13 +14668,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -13909,19 +14790,10 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
+        var result = new List<long>();
         result.Add(1);
-        if (n == 0) {
-            return result;
-        }
         result.Add(3);
-        if (n == 1) {
-            return result;
-        }
         result.Add(2);
-        if (n == 2) {
-            return result;
-        }
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
@@ -13954,13 +14826,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008f] in <a3da1019b9594b12a50e381c322639dd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <a3da1019b9594b12a50e381c322639dd>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -14002,10 +14874,85 @@ class Problem {
         result.Add(3);
         result.Add(2);
         for (int i = 3; i <= n; i++) {
+            result.Add(i % 2 == 0 ? 1 + i / 2 : result[i - 1] + result[i - 2] + result[i + 1]);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0003f] in <50b6eada2be742968d59158cd5ec2dc7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <50b6eada2be742968d59158cd5ec2dc7>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0003f] in <50b6eada2be742968d59158cd5ec2dc7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <50b6eada2be742968d59158cd5ec2dc7>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 175 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (long i = 3; i <= n; i++) {
             if (i % 2 == 0) {
                 result.Add(1 + i / 2);
             } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
             }
         }
         return result;
@@ -14033,13 +14980,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
 
 '''
 ''' stdout = 
@@ -14050,7 +14997,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 175 ---- 
+# ---- HumanEval_130_tri --- completion 176 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14119,85 +15066,6 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
   at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 176 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -14313,7 +15181,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
+        var result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -14349,13 +15217,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
 
 '''
 ''' stdout = 
@@ -14392,21 +15260,18 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        List<long> res = new List<long>();
-        res.Add(1);
-        if (n == 0) return res;
-        res.Add(3);
-        if (n == 1) return res;
-        res.Add(2);
-        if (n == 2) return res;
+        List<long> result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
         for (int i = 3; i <= n; i++) {
             if (i % 2 == 0) {
-                res.Add(1 + i / 2);
+                result.Add(1 + i / 2);
             } else {
-                res.Add(res[i - 1] + res[i - 2] + res[i + 1]);
+                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
             }
         }
-        return res;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
@@ -14431,13 +15296,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008c] in <ad8a42111c1a45f092e5381d6380b313>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad8a42111c1a45f092e5381d6380b313>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0008c] in <ad8a42111c1a45f092e5381d6380b313>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad8a42111c1a45f092e5381d6380b313>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -14448,7 +15313,86 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 181 ---- 
+# ---- HumanEval_130_tri --- completion 182 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    // the last couple centuries. However, what people don't know is Tribonacci sequence.
+    // Tribonacci sequence is defined by the recurrence:
+    // tri(1) = 3
+    // tri(n) = 1 + n / 2, if n is even.
+    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    // For example:
+    // tri(2) = 1 + (2 / 2) = 2
+    // tri(4) = 3
+    // tri(3) = tri(2) + tri(1) + tri(4)
+    // = 2 + 3 + 3 = 8 
+    // You are given a non-negative integer number n, you have to a return a list of the 
+    // first n + 1 numbers of the Tribonacci sequence.
+    // Examples:
+    // >>> Tri((3L))
+    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
+    public static List<long> Tri(long n) {
+        var result = new List<long>();
+        result.Add(1);
+        result.Add(3);
+        result.Add(2);
+        for (long i = 3; i <= n; i++) {
+            if (i % 2 == 0) {
+                result.Add(1 + i / 2);
+            } else {
+                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
+    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
+    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
+    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
+    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
+    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
+    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
+    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
+    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
+    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 183 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14527,85 +15471,6 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 183 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_130_tri --- completion 184 ---- 
 using System;
 using System.Numerics;
@@ -14632,7 +15497,7 @@ class Problem {
     // >>> Tri((3L))
     // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
     public static List<long> Tri(long n) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         result.Add(1);
         result.Add(3);
         result.Add(2);
@@ -14668,13 +15533,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
+  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
 
 '''
 ''' stdout = 
@@ -14764,872 +15629,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_130_tri --- completion 186 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 187 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            result.Add(i % 2 == 0 ? 1 + i / 2 : result[i - 1] + result[i - 2] + result[i + 1]);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0003f] in <50b6eada2be742968d59158cd5ec2dc7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <50b6eada2be742968d59158cd5ec2dc7>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0003f] in <50b6eada2be742968d59158cd5ec2dc7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <50b6eada2be742968d59158cd5ec2dc7>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 188 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dfb4feb452f0440194a0304ffdfea0ec>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 192 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 193 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <b33b849be81444b4bb6e2b2960074ada>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <b33b849be81444b4bb6e2b2960074ada>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 194 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 196 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        var result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (long i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[(int)i - 1] + result[(int)i - 2] + result[(int)i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x0005c] in <7b22c08098674620a3bec71960c4799b>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7b22c08098674620a3bec71960c4799b>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 197 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 198 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 199 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    // the last couple centuries. However, what people don't know is Tribonacci sequence.
-    // Tribonacci sequence is defined by the recurrence:
-    // tri(1) = 3
-    // tri(n) = 1 + n / 2, if n is even.
-    // tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    // For example:
-    // tri(2) = 1 + (2 / 2) = 2
-    // tri(4) = 3
-    // tri(3) = tri(2) + tri(1) + tri(4)
-    // = 2 + 3 + 3 = 8 
-    // You are given a non-negative integer number n, you have to a return a list of the 
-    // first n + 1 numbers of the Tribonacci sequence.
-    // Examples:
-    // >>> Tri((3L))
-    // (new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))
-    public static List<long> Tri(long n) {
-        List<long> result = new List<long>();
-        result.Add(1);
-        result.Add(3);
-        result.Add(2);
-        for (int i = 3; i <= n; i++) {
-            if (i % 2 == 0) {
-                result.Add(1 + i / 2);
-            } else {
-                result.Add(result[i - 1] + result[i - 2] + result[i + 1]);
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Tri((3L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L}))));
-    Debug.Assert(Tri((4L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L}))));
-    Debug.Assert(Tri((5L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L}))));
-    Debug.Assert(Tri((6L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L}))));
-    Debug.Assert(Tri((7L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L}))));
-    Debug.Assert(Tri((8L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L}))));
-    Debug.Assert(Tri((9L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L}))));
-    Debug.Assert(Tri((20L)).Equals((new List<long>(new long[]{(long)1L, (long)3L, (long)2L, (long)8L, (long)3L, (long)15L, (long)4L, (long)24L, (long)5L, (long)35L, (long)6L, (long)48L, (long)7L, (long)63L, (long)8L, (long)80L, (long)9L, (long)99L, (long)10L, (long)120L, (long)11L}))));
-    Debug.Assert(Tri((0L)).Equals((new List<long>(new long[]{(long)1L}))));
-    Debug.Assert(Tri((1L)).Equals((new List<long>(new long[]{(long)1L, (long)3L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.Tri (System.Int64 n) [0x00056] in <8812a55774e5435f875189e3af591dbe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8812a55774e5435f875189e3af591dbe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 46 ---- 
+# ---- HumanEval_135_can_arrange --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15693,7 +15693,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 47 ---- 
+# ---- HumanEval_135_can_arrange --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15757,7 +15757,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 59 ---- 
+# ---- HumanEval_135_can_arrange --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15822,7 +15822,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 122 ---- 
+# ---- HumanEval_135_can_arrange --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15884,7 +15884,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 170 ---- 
+# ---- HumanEval_135_can_arrange --- completion 57 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15946,7 +15946,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 15 ---- 
+# ---- HumanEval_88_sort_array --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16018,7 +16018,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 22 ---- 
+# ---- HumanEval_88_sort_array --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16087,7 +16087,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 67 ---- 
+# ---- HumanEval_88_sort_array --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16159,7 +16159,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 85 ---- 
+# ---- HumanEval_88_sort_array --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16229,7 +16229,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 88 ---- 
+# ---- HumanEval_88_sort_array --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16298,7 +16298,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 131 ---- 
+# ---- HumanEval_88_sort_array --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16370,7 +16370,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_88_sort_array --- completion 172 ---- 
+# ---- HumanEval_88_sort_array --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23670,7 +23670,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 124 ---- 
+# ---- HumanEval_9_rolling_max --- completion 123 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23727,7 +23727,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 125 ---- 
+# ---- HumanEval_9_rolling_max --- completion 124 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23786,7 +23786,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 126 ---- 
+# ---- HumanEval_9_rolling_max --- completion 125 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23845,7 +23845,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 127 ---- 
+# ---- HumanEval_9_rolling_max --- completion 126 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23901,7 +23901,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 128 ---- 
+# ---- HumanEval_9_rolling_max --- completion 127 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23960,7 +23960,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 129 ---- 
+# ---- HumanEval_9_rolling_max --- completion 128 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24019,7 +24019,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 130 ---- 
+# ---- HumanEval_9_rolling_max --- completion 129 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24078,7 +24078,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 131 ---- 
+# ---- HumanEval_9_rolling_max --- completion 130 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24137,7 +24137,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 132 ---- 
+# ---- HumanEval_9_rolling_max --- completion 131 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24184,6 +24184,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5d0d9a9703e74f0bb56790b545339400>:0 
   at Problem.Main (System.String[] args) [0x00006] in <5d0d9a9703e74f0bb56790b545339400>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 132 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        List<long> result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
 
 '''
 ''' stdout = 
@@ -24326,65 +24385,6 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        List<long> result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 136 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
         List<long> res = new List<long>();
         long max = numbers[0];
         res.Add(max);
@@ -24430,7 +24430,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 137 ---- 
+# ---- HumanEval_9_rolling_max --- completion 136 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24477,6 +24477,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <b850238bdf9f44aea7a64116731de81a>:0 
   at Problem.Main (System.String[] args) [0x00006] in <b850238bdf9f44aea7a64116731de81a>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 137 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        List<long> result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
 
 '''
 ''' stdout = 
@@ -24560,65 +24619,6 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        List<long> result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 140 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
         var result = new List<long>();
         var max = numbers[0];
         result.Add(max);
@@ -24654,6 +24654,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
   at Problem.Main (System.String[] args) [0x00006] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 140 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        var result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
 
 '''
 ''' stdout = 
@@ -24737,6 +24796,65 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
+        List<long> result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 143 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
         var result = new List<long>();
         long max = numbers[0];
         result.Add(max);
@@ -24782,7 +24900,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 143 ---- 
+# ---- HumanEval_9_rolling_max --- completion 144 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24831,65 +24949,6 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
   at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 144 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
-        var result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
 
 '''
 ''' stdout = 
@@ -25091,65 +25150,6 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        List<long> result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 149 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
         var max = numbers[0];
         var result = new List<long>();
         result.Add(max);
@@ -25195,7 +25195,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 150 ---- 
+# ---- HumanEval_9_rolling_max --- completion 149 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25252,7 +25252,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 151 ---- 
+# ---- HumanEval_9_rolling_max --- completion 150 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25309,7 +25309,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 152 ---- 
+# ---- HumanEval_9_rolling_max --- completion 151 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25366,7 +25366,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 153 ---- 
+# ---- HumanEval_9_rolling_max --- completion 152 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25415,6 +25415,63 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <dfc526c787eb465f840c6ad7b8dbb6c5>:0 
   at Problem.Main (System.String[] args) [0x00006] in <dfc526c787eb465f840c6ad7b8dbb6c5>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 153 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        var result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            max = Math.Max(max, numbers[i]);
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
 
 '''
 ''' stdout = 
@@ -25496,63 +25553,6 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        var result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            max = Math.Max(max, numbers[i]);
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <90e5c13429a54af7bdf80b8fcb3d00f2>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 156 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
         List<long> result = new List<long>();
         long max = numbers[0];
         result.Add(max);
@@ -25598,7 +25598,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 157 ---- 
+# ---- HumanEval_9_rolling_max --- completion 156 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25657,7 +25657,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 158 ---- 
+# ---- HumanEval_9_rolling_max --- completion 157 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25714,7 +25714,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 159 ---- 
+# ---- HumanEval_9_rolling_max --- completion 158 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25773,7 +25773,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 160 ---- 
+# ---- HumanEval_9_rolling_max --- completion 159 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25832,7 +25832,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 161 ---- 
+# ---- HumanEval_9_rolling_max --- completion 160 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25889,7 +25889,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 162 ---- 
+# ---- HumanEval_9_rolling_max --- completion 161 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25948,7 +25948,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 163 ---- 
+# ---- HumanEval_9_rolling_max --- completion 162 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26007,7 +26007,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 164 ---- 
+# ---- HumanEval_9_rolling_max --- completion 163 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26056,6 +26056,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
   at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 164 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        var result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
 
 '''
 ''' stdout = 
@@ -26139,7 +26198,7 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        var result = new List<long>();
+        List<long> result = new List<long>();
         long max = numbers[0];
         result.Add(max);
         for (int i = 1; i < numbers.Count; i++) {
@@ -26167,13 +26226,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
 Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
 
 '''
 ''' stdout = 
@@ -26257,65 +26316,6 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        List<long> result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 169 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
         var max = numbers[0];
         var result = new List<long>();
         result.Add(max);
@@ -26361,7 +26361,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 170 ---- 
+# ---- HumanEval_9_rolling_max --- completion 169 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26420,7 +26420,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 171 ---- 
+# ---- HumanEval_9_rolling_max --- completion 170 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26479,7 +26479,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 172 ---- 
+# ---- HumanEval_9_rolling_max --- completion 171 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26528,6 +26528,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
   at Problem.Main (System.String[] args) [0x00006] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 172 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        List<long> result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
 
 '''
 ''' stdout = 
@@ -26615,65 +26674,6 @@ class Problem {
         long max = numbers[0];
         result.Add(max);
         for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 175 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
-        List<long> result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
             max = Math.Max(max, numbers[i]);
             result.Add(max);
         }
@@ -26713,7 +26713,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 176 ---- 
+# ---- HumanEval_9_rolling_max --- completion 175 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26772,7 +26772,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 177 ---- 
+# ---- HumanEval_9_rolling_max --- completion 176 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -26821,6 +26821,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <40ba888c5de5416eb5a8337f40afefb1>:0 
   at Problem.Main (System.String[] args) [0x00006] in <40ba888c5de5416eb5a8337f40afefb1>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 177 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        List<long> result = new List<long>();
+        long max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
 
 '''
 ''' stdout = 
@@ -26963,65 +27022,6 @@ class Problem {
     // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
-        List<long> result = new List<long>();
-        long max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 181 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
         var result = new List<long>();
         var max = numbers[0];
         result.Add(max);
@@ -27067,7 +27067,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 182 ---- 
+# ---- HumanEval_9_rolling_max --- completion 181 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27126,7 +27126,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 183 ---- 
+# ---- HumanEval_9_rolling_max --- completion 182 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27183,7 +27183,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 184 ---- 
+# ---- HumanEval_9_rolling_max --- completion 183 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27240,7 +27240,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 185 ---- 
+# ---- HumanEval_9_rolling_max --- completion 184 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27299,7 +27299,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 186 ---- 
+# ---- HumanEval_9_rolling_max --- completion 185 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27348,6 +27348,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <3483d846ef734708924ad6b7f033b62e>:0 
   at Problem.Main (System.String[] args) [0x00006] in <3483d846ef734708924ad6b7f033b62e>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 186 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        var result = new List<long>();
+        long currentMax = numbers[0];
+        result.Add(currentMax);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > currentMax) {
+                currentMax = numbers[i];
+            }
+            result.Add(currentMax);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
 
 '''
 ''' stdout = 
@@ -27432,65 +27491,6 @@ class Problem {
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
         var result = new List<long>();
-        long currentMax = numbers[0];
-        result.Add(currentMax);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > currentMax) {
-                currentMax = numbers[i];
-            }
-            result.Add(currentMax);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <0e4f59b96fc64a33a0f069fa974055fc>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
-        var result = new List<long>();
         long max = numbers[0];
         result.Add(max);
         for (int i = 1; i < numbers.Count; i++) {
@@ -27535,7 +27535,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 190 ---- 
+# ---- HumanEval_9_rolling_max --- completion 189 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27594,7 +27594,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 191 ---- 
+# ---- HumanEval_9_rolling_max --- completion 190 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27653,7 +27653,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 192 ---- 
+# ---- HumanEval_9_rolling_max --- completion 191 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27712,7 +27712,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 193 ---- 
+# ---- HumanEval_9_rolling_max --- completion 192 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27761,6 +27761,65 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
   at Problem.Main (System.String[] args) [0x00006] in <5c400f7eca7a4f7d9b70132bb6f1bb74>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 193 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // From a given list of integers, generate a list of rolling maximum element found until given moment
+    // in the sequence.
+    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
+    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
+    public static List<long> RollingMax(List<long> numbers) {
+        var result = new List<long>();
+        var max = numbers[0];
+        result.Add(max);
+        for (int i = 1; i < numbers.Count; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+            result.Add(max);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
+    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
 
 '''
 ''' stdout = 
@@ -27786,65 +27845,6 @@ class Problem {
     // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
     public static List<long> RollingMax(List<long> numbers) {
         var result = new List<long>();
-        var max = numbers[0];
-        result.Add(max);
-        for (int i = 1; i < numbers.Count; i++) {
-            if (numbers[i] > max) {
-                max = numbers[i];
-            }
-            result.Add(max);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(RollingMax((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))).Equals((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)4L, (long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)4L, (long)4L, (long)4L, (long)4L}))));
-    Debug.Assert(RollingMax((new List<long>(new long[]{(long)3L, (long)2L, (long)3L, (long)100L, (long)3L}))).Equals((new List<long>(new long[]{(long)3L, (long)3L, (long)3L, (long)100L, (long)100L}))));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
-Parameter name: index
-  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.RollingMax (System.Collections.Generic.List`1[T] numbers) [0x00007] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <df9c9b22efcd4cb3b0cc9c9355de2301>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 195 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // From a given list of integers, generate a list of rolling maximum element found until given moment
-    // in the sequence.
-    // >>> RollingMax((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)3L, (long)4L, (long)2L})))
-    // (new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)3L, (long)3L, (long)4L, (long)4L}))
-    public static List<long> RollingMax(List<long> numbers) {
-        var result = new List<long>();
         long max = numbers[0];
         result.Add(max);
         for (int i = 1; i < numbers.Count; i++) {
@@ -27889,7 +27889,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 196 ---- 
+# ---- HumanEval_9_rolling_max --- completion 195 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -27948,7 +27948,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 197 ---- 
+# ---- HumanEval_9_rolling_max --- completion 196 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -28007,7 +28007,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 198 ---- 
+# ---- HumanEval_9_rolling_max --- completion 197 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -28066,7 +28066,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 199 ---- 
+# ---- HumanEval_9_rolling_max --- completion 198 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -28890,6 +28890,65 @@ Parameter name: length
 
 
 
+# ---- HumanEval_18_how_many_times --- completion 13 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_18_how_many_times --- completion 14 ---- 
 using System;
 using System.Numerics;
@@ -28966,6 +29025,65 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
+        long result = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 16 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
         long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
@@ -29008,7 +29126,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_18_how_many_times --- completion 16 ---- 
+# ---- HumanEval_18_how_many_times --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -29025,13 +29143,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -29050,13 +29168,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -29202,13 +29320,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
+        long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                count++;
+                result++;
             }
         }
-        return count;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -29227,13 +29345,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -29320,13 +29438,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -29345,13 +29463,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -29497,13 +29615,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
+        long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                count++;
+                result++;
             }
         }
-        return count;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -29522,13 +29640,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -29733,13 +29851,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -29758,13 +29876,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -29893,7 +30011,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_18_how_many_times --- completion 33 ---- 
+# ---- HumanEval_18_how_many_times --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -29942,6 +30060,65 @@ Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
   at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 33 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long result = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -30087,13 +30264,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -30112,13 +30289,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -30130,6 +30307,65 @@ Parameter name: length
 
 
 # ---- HumanEval_18_how_many_times --- completion 37 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -30248,6 +30484,65 @@ Parameter name: length
 
 
 # ---- HumanEval_18_how_many_times --- completion 40 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -31267,13 +31562,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
+        long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                count++;
+                result++;
             }
         }
-        return count;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -31292,13 +31587,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -31562,13 +31857,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -31587,13 +31882,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -31899,6 +32194,65 @@ Parameter name: length
 
 
 
+# ---- HumanEval_18_how_many_times --- completion 69 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_18_how_many_times --- completion 70 ---- 
 using System;
 using System.Numerics;
@@ -32077,6 +32431,65 @@ Parameter name: length
 
 
 # ---- HumanEval_18_how_many_times --- completion 73 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 74 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -32430,6 +32843,65 @@ Parameter name: length
 
 
 
+# ---- HumanEval_18_how_many_times --- completion 80 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_18_how_many_times --- completion 81 ---- 
 using System;
 using System.Numerics;
@@ -32666,7 +33138,125 @@ Parameter name: length
 
 
 
+# ---- HumanEval_18_how_many_times --- completion 85 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_18_how_many_times --- completion 86 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 87 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -32903,6 +33493,65 @@ Parameter name: length
 
 
 # ---- HumanEval_18_how_many_times --- completion 91 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long result = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 92 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -33246,6 +33895,65 @@ Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
   at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 98 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long result = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -33728,7 +34436,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_18_how_many_times --- completion 108 ---- 
+# ---- HumanEval_18_how_many_times --- completion 107 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -33777,6 +34485,65 @@ Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
   at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 108 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long result = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -33922,13 +34689,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -33947,13 +34714,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -34217,13 +34984,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -34242,13 +35009,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -34512,13 +35279,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -34537,13 +35304,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -36206,6 +36973,66 @@ Parameter name: length
 
 
 
+# ---- HumanEval_18_how_many_times --- completion 150 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        int len = substring.Length;
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, len) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00010] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00010] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_18_how_many_times --- completion 151 ---- 
 using System;
 using System.Numerics;
@@ -36341,13 +37168,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
+        long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                count++;
+                result++;
             }
         }
-        return count;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -36366,13 +37193,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -36459,13 +37286,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
+        long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                count++;
+                result++;
             }
         }
-        return count;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -36484,13 +37311,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -36577,13 +37404,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
+        long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                count++;
+                result++;
             }
         }
-        return count;
+        return result;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -36602,13 +37429,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -36990,10 +37817,9 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        int len = substring.Length;
         long count = 0;
         for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, len) == substring) {
+            if (str.Substring(i, substring.Length) == substring) {
                 count++;
             }
         }
@@ -37016,13 +37842,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00010] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00010] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <0a42c0c37c914e5192dea2d1a3c2237a>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -37109,65 +37935,6 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 167 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
         long result = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
@@ -37200,6 +37967,65 @@ Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
   at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 167 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long count = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                count++;
+            }
+        }
+        return count;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -37286,13 +38112,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -37311,13 +38137,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -37404,13 +38230,13 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
+        long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
-                result++;
+                count++;
             }
         }
-        return result;
+        return count;
     }
     public static void Main(string[] args) {
     Debug.Assert(HowManyTimes((""), ("x")) == (0L));
@@ -37429,13 +38255,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
 
 '''
 ''' stdout = 
@@ -37935,65 +38761,6 @@ class Problem {
     // >>> HowManyTimes(("aaaa"), ("aa"))
     // (3L)
     public static long HowManyTimes(string str, string substring) {
-        long result = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                result++;
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 181 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
         long count = 0;
         for (int i = 0; i < str.Length; i++) {
             if (str.Substring(i, substring.Length) == substring) {
@@ -38026,6 +38793,65 @@ Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
   at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_18_how_many_times --- completion 181 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Find how many times a given substring can be found in the original string. Count overlaping cases.
+    // >>> HowManyTimes((""), ("a"))
+    // (0L)
+    // >>> HowManyTimes(("aaa"), ("a"))
+    // (3L)
+    // >>> HowManyTimes(("aaaa"), ("aa"))
+    // (3L)
+    public static long HowManyTimes(string str, string substring) {
+        long result = 0;
+        for (int i = 0; i < str.Length; i++) {
+            if (str.Substring(i, substring.Length) == substring) {
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
+    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
+    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
+    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
+  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
 
 '''
 ''' stdout = 
@@ -38154,833 +38980,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_18_how_many_times --- completion 184 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 185 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 186 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 187 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 188 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 190 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 191 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 192 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 193 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 194 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 195 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long result = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                result++;
-            }
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <98bff9aa765e4b0e94b684246c0d33e0>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 196 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_18_how_many_times --- completion 198 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Find how many times a given substring can be found in the original string. Count overlaping cases.
-    // >>> HowManyTimes((""), ("a"))
-    // (0L)
-    // >>> HowManyTimes(("aaa"), ("a"))
-    // (3L)
-    // >>> HowManyTimes(("aaaa"), ("aa"))
-    // (3L)
-    public static long HowManyTimes(string str, string substring) {
-        long count = 0;
-        for (int i = 0; i < str.Length; i++) {
-            if (str.Substring(i, substring.Length) == substring) {
-                count++;
-            }
-        }
-        return count;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(HowManyTimes((""), ("x")) == (0L));
-    Debug.Assert(HowManyTimes(("xyxyxyx"), ("x")) == (4L));
-    Debug.Assert(HowManyTimes(("cacacacac"), ("cac")) == (4L));
-    Debug.Assert(HowManyTimes(("john doe"), ("john")) == (1L));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.HowManyTimes (System.String str, System.String substring) [0x00011] in <3516e2c026d549a19648a2f52a33c29c>:0 
-  at Problem.Main (System.String[] args) [0x00033] in <3516e2c026d549a19648a2f52a33c29c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_70_strange_sort_list --- completion 31 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39063,7 +39063,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 93 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39146,7 +39146,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 38 ---- 
+# ---- HumanEval_90_next_smallest --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39219,7 +39219,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 42 ---- 
+# ---- HumanEval_90_next_smallest --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39292,7 +39292,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 44 ---- 
+# ---- HumanEval_90_next_smallest --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39365,7 +39365,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 59 ---- 
+# ---- HumanEval_90_next_smallest --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39438,7 +39438,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 66 ---- 
+# ---- HumanEval_90_next_smallest --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39511,7 +39511,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 124 ---- 
+# ---- HumanEval_90_next_smallest --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39584,7 +39584,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 158 ---- 
+# ---- HumanEval_90_next_smallest --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39657,7 +39657,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 165 ---- 
+# ---- HumanEval_90_next_smallest --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39730,7 +39730,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 182 ---- 
+# ---- HumanEval_90_next_smallest --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -39793,6 +39793,907 @@ Parameter name: index
   at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at Problem.NextSmallest (System.Collections.Generic.List`1[T] lst) [0x00001] in <1c8b7302fa3d4e28ad5aace43cd83822>:0 
   at Problem.Main (System.String[] args) [0x00072] in <1c8b7302fa3d4e28ad5aace43cd83822>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 1 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        int i = 0;
+        while (i < a.Length) {
+            if (a.Substring(i, b.Length) == b) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 2 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        for (int i = 0; i < a.Length; i++) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 3 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        for (int i = 0; i < a.Length; i++) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 4 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) return false;
+        for (int i = 0; i < a.Length; i++) {
+            if (a.Substring(i, b.Length) == b) return true;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 5 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        for (int i = 0; i < a.Length; i++) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 6 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) return false;
+        for (int i = 0; i < a.Length; i++) {
+            if (a.Substring(i, b.Length) == b) return true;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) return false;
+        for (int i = 0; i < a.Length; i++) {
+            if (a.Substring(i, b.Length) == b) return true;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 8 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        int i = 0;
+        while (i < a.Length) {
+            if (a.Substring(i, b.Length) == b) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 9 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        int i = 0;
+        while (i < a.Length) {
+            if (a.Substring(i, b.Length) == b) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 10 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) return false;
+        if (a.Length == b.Length) return a == b;
+        for (int i = 0; i < a.Length; i++) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) return true;
+            }
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <6c9913641e254555933c1fc56dd348a9>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <6c9913641e254555933c1fc56dd348a9>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <6c9913641e254555933c1fc56dd348a9>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <6c9913641e254555933c1fc56dd348a9>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 12 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        for (int i = 0; i < a.Length; i++) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 14 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) return false;
+        if (a.Length == b.Length) return a == b;
+        int i = 0;
+        while (i < a.Length) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) return true;
+            }
+            i++;
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <96eb16e5f535478fafffcd6cc391976e>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <96eb16e5f535478fafffcd6cc391976e>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <96eb16e5f535478fafffcd6cc391976e>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <96eb16e5f535478fafffcd6cc391976e>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 15 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
+    // >>> CycpatternCheck(("abcd"), ("abd"))
+    // (false)
+    // >>> CycpatternCheck(("hello"), ("ell"))
+    // (true)
+    // >>> CycpatternCheck(("whassup"), ("psus"))
+    // (false)
+    // >>> CycpatternCheck(("abab"), ("baa"))
+    // (true)
+    // >>> CycpatternCheck(("efef"), ("eeff"))
+    // (false)
+    // >>> CycpatternCheck(("himenss"), ("simen"))
+    // (true)
+    public static bool CycpatternCheck(string a, string b) {
+        if (a.Length < b.Length) {
+            return false;
+        }
+        for (int i = 0; i < a.Length; i++) {
+            if (a[i] == b[0]) {
+                if (a.Substring(i, b.Length) == b) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
+    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
+    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
+    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
+    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
+    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
+Parameter name: length
+  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
 
 '''
 ''' stdout = 
@@ -39826,86 +40727,9 @@ class Problem {
     // >>> CycpatternCheck(("himenss"), ("simen"))
     // (true)
     public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        int i = 0;
-        while (i < a.Length) {
-            if (a.Substring(i, b.Length) == b) {
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 31 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
+        if (a.Length < b.Length) return false;
         for (int i = 0; i < a.Length; i++) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) {
-                    return true;
-                }
-            }
+            if (a.Substring(i, b.Length) == b) return true;
         }
         return false;
     }
@@ -39928,13 +40752,13 @@ Unhandled Exception:
 System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
 Parameter name: length
   at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
+  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
 
 '''
 ''' stdout = 
@@ -39945,78 +40769,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 38 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        for (int i = 0; i < a.Length; i++) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 40 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -40081,760 +40834,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 44 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        for (int i = 0; i < a.Length; i++) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 45 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) return false;
-        for (int i = 0; i < a.Length; i++) {
-            if (a.Substring(i, b.Length) == b) return true;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 50 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) return false;
-        for (int i = 0; i < a.Length; i++) {
-            if (a.Substring(i, b.Length) == b) return true;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 52 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        int i = 0;
-        while (i < a.Length) {
-            if (a.Substring(i, b.Length) == b) {
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 75 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        int i = 0;
-        while (i < a.Length) {
-            if (a.Substring(i, b.Length) == b) {
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00025] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <9605dbdc1d71459ba4874ae89d483f2c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 80 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) return false;
-        if (a.Length == b.Length) return a == b;
-        for (int i = 0; i < a.Length; i++) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) return true;
-            }
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <6c9913641e254555933c1fc56dd348a9>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <6c9913641e254555933c1fc56dd348a9>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <6c9913641e254555933c1fc56dd348a9>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <6c9913641e254555933c1fc56dd348a9>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 89 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        for (int i = 0; i < a.Length; i++) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 112 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) return false;
-        if (a.Length == b.Length) return a == b;
-        int i = 0;
-        while (i < a.Length) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) return true;
-            }
-            i++;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <96eb16e5f535478fafffcd6cc391976e>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <96eb16e5f535478fafffcd6cc391976e>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00057] in <96eb16e5f535478fafffcd6cc391976e>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <96eb16e5f535478fafffcd6cc391976e>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 123 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) {
-            return false;
-        }
-        for (int i = 0; i < a.Length; i++) {
-            if (a[i] == b[0]) {
-                if (a.Substring(i, b.Length) == b) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x0003a] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-  at Problem.Main (System.String[] args) [0x0002e] in <29407a34e8aa477fb2fb23abbdd3b385>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 146 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) return false;
-        for (int i = 0; i < a.Length; i++) {
-            if (a.Substring(i, b.Length) == b) return true;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 160 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // You are given 2 words. You need to return true if the second word or any of its rotations is a substring in the first word
-    // >>> CycpatternCheck(("abcd"), ("abd"))
-    // (false)
-    // >>> CycpatternCheck(("hello"), ("ell"))
-    // (true)
-    // >>> CycpatternCheck(("whassup"), ("psus"))
-    // (false)
-    // >>> CycpatternCheck(("abab"), ("baa"))
-    // (true)
-    // >>> CycpatternCheck(("efef"), ("eeff"))
-    // (false)
-    // >>> CycpatternCheck(("himenss"), ("simen"))
-    // (true)
-    public static bool CycpatternCheck(string a, string b) {
-        if (a.Length < b.Length) return false;
-        for (int i = 0; i < a.Length; i++) {
-            if (a.Substring(i, b.Length) == b) return true;
-        }
-        return false;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CycpatternCheck(("xyzw"), ("xyw")) == (false));
-    Debug.Assert(CycpatternCheck(("yello"), ("ell")) == (true));
-    Debug.Assert(CycpatternCheck(("whattup"), ("ptut")) == (false));
-    Debug.Assert(CycpatternCheck(("efef"), ("fee")) == (true));
-    Debug.Assert(CycpatternCheck(("abab"), ("aabb")) == (false));
-    Debug.Assert(CycpatternCheck(("winemtt"), ("tinem")) == (true));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.ArgumentOutOfRangeException: Index and length must refer to a location within the string.
-Parameter name: length
-  at System.String.Substring (System.Int32 startIndex, System.Int32 length) [0x0004c] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.CycpatternCheck (System.String a, System.String b) [0x00024] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <494a2994f3a2437ab8f844effd27d4fe>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_154_cycpattern_check --- completion 161 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -40912,7 +40912,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 181 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -40977,7 +40977,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 193 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41042,7 +41042,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 196 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 22 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41113,7 +41113,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 197 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41184,7 +41184,7 @@ Parameter name: length
 
 
 
-# ---- HumanEval_37_sort_even --- completion 1 ---- 
+# ---- HumanEval_37_sort_even --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41251,7 +41251,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 33 ---- 
+# ---- HumanEval_37_sort_even --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41318,7 +41318,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 44 ---- 
+# ---- HumanEval_37_sort_even --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41385,7 +41385,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 97 ---- 
+# ---- HumanEval_37_sort_even --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41452,7 +41452,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 135 ---- 
+# ---- HumanEval_37_sort_even --- completion 46 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41519,7 +41519,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 165 ---- 
+# ---- HumanEval_37_sort_even --- completion 58 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41586,7 +41586,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 178 ---- 
+# ---- HumanEval_37_sort_even --- completion 63 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -41653,7 +41653,7 @@ Parameter name: index
 
 
 
-# ---- HumanEval_37_sort_even --- completion 193 ---- 
+# ---- HumanEval_37_sort_even --- completion 74 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

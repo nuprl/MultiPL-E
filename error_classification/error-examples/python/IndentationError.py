@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 84 ---- 
+# ---- HumanEval_129_minPath --- completion 7 ---- 
 from typing import List
 
 def minPath(grid: List[List[int]], k: int) -> List[int]:
@@ -104,7 +104,7 @@ IndentationError: expected an indented block after 'for' statement on line 71
 
 
 
-# ---- HumanEval_129_minPath --- completion 172 ---- 
+# ---- HumanEval_129_minPath --- completion 27 ---- 
 from typing import List
 
 def minPath(grid: List[List[int]], k: int) -> List[int]:
@@ -204,7 +204,7 @@ IndentationError: expected an indented block after 'if' statement on line 64
 
 
 
-# ---- HumanEval_129_minPath --- completion 185 ---- 
+# ---- HumanEval_129_minPath --- completion 30 ---- 
 from typing import List
 
 def minPath(grid: List[List[int]], k: int) -> List[int]:
@@ -300,7 +300,7 @@ IndentationError: expected an indented block after 'if' statement on line 61
 
 
 
-# ---- HumanEval_75_is_multiply_prime --- completion 47 ---- 
+# ---- HumanEval_75_is_multiply_prime --- completion 15 ---- 
 def is_multiply_prime(a: int) -> bool:
     """Write a function that returns true if the given number is the multiplication of 3 prime numbers
     and false otherwise.
@@ -429,7 +429,7 @@ IndentationError: expected an indented block after 'elif' statement on line 94
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 130 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 0 ---- 
 from typing import List
 
 def triples_sum_to_zero(l: List[int]) -> bool:
@@ -535,7 +535,7 @@ IndentationError: expected an indented block after 'if' statement on line 72
 
 
 
-# ---- HumanEval_110_exchange --- completion 9 ---- 
+# ---- HumanEval_110_exchange --- completion 1 ---- 
 from typing import List
 
 def exchange(lst1: List[int], lst2: List[int]) -> str:
@@ -612,7 +612,7 @@ IndentationError: expected an indented block after 'if' statement on line 46
 
 
 
-# ---- HumanEval_110_exchange --- completion 57 ---- 
+# ---- HumanEval_110_exchange --- completion 8 ---- 
 from typing import List
 
 def exchange(lst1: List[int], lst2: List[int]) -> str:
@@ -714,7 +714,7 @@ IndentationError: expected an indented block after 'if' statement on line 70
 
 
 
-# ---- HumanEval_110_exchange --- completion 83 ---- 
+# ---- HumanEval_110_exchange --- completion 13 ---- 
 from typing import List
 
 def exchange(lst1: List[int], lst2: List[int]) -> str:
@@ -791,7 +791,7 @@ IndentationError: expected an indented block after 'if' statement on line 46
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 26 ---- 
+# ---- HumanEval_39_prime_fib --- completion 0 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -891,7 +891,7 @@ IndentationError: expected an indented block after 'if' statement on line 65
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 37 ---- 
+# ---- HumanEval_39_prime_fib --- completion 2 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -994,7 +994,7 @@ IndentationError: expected an indented block after 'if' statement on line 69
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 90 ---- 
+# ---- HumanEval_39_prime_fib --- completion 10 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1098,7 +1098,7 @@ IndentationError: expected an indented block after 'if' statement on line 69
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 94 ---- 
+# ---- HumanEval_39_prime_fib --- completion 11 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1201,7 +1201,7 @@ IndentationError: expected an indented block after 'if' statement on line 69
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 104 ---- 
+# ---- HumanEval_39_prime_fib --- completion 14 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1306,7 +1306,7 @@ IndentationError: expected an indented block after 'if' statement on line 71
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 125 ---- 
+# ---- HumanEval_39_prime_fib --- completion 17 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1409,7 +1409,7 @@ IndentationError: expected an indented block after 'if' statement on line 69
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 127 ---- 
+# ---- HumanEval_39_prime_fib --- completion 18 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1510,7 +1510,7 @@ IndentationError: expected an indented block after 'if' statement on line 67
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 143 ---- 
+# ---- HumanEval_39_prime_fib --- completion 19 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1613,7 +1613,7 @@ IndentationError: expected an indented block after 'if' statement on line 69
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 148 ---- 
+# ---- HumanEval_39_prime_fib --- completion 20 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1716,7 +1716,7 @@ IndentationError: expected an indented block after 'if' statement on line 69
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 170 ---- 
+# ---- HumanEval_39_prime_fib --- completion 23 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1810,7 +1810,7 @@ IndentationError: expected an indented block after 'if' statement on line 59
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 180 ---- 
+# ---- HumanEval_39_prime_fib --- completion 25 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -1909,7 +1909,7 @@ IndentationError: expected an indented block after 'if' statement on line 65
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 193 ---- 
+# ---- HumanEval_39_prime_fib --- completion 27 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -2146,7 +2146,7 @@ IndentationError: expected an indented block after 'if' statement on line 104
 
 
 
-# ---- HumanEval_109_move_one_ball --- completion 92 ---- 
+# ---- HumanEval_109_move_one_ball --- completion 33 ---- 
 from typing import List
 
 def move_one_ball(arr: List[int]) -> bool:
@@ -2280,7 +2280,7 @@ IndentationError: expected an indented block after 'if' statement on line 104
 
 
 
-# ---- HumanEval_109_move_one_ball --- completion 108 ---- 
+# ---- HumanEval_109_move_one_ball --- completion 43 ---- 
 from typing import List
 
 def move_one_ball(arr: List[int]) -> bool:
@@ -2414,7 +2414,7 @@ IndentationError: expected an indented block after 'if' statement on line 104
 
 
 
-# ---- HumanEval_109_move_one_ball --- completion 109 ---- 
+# ---- HumanEval_109_move_one_ball --- completion 44 ---- 
 from typing import List
 
 def move_one_ball(arr: List[int]) -> bool:
@@ -2548,7 +2548,7 @@ IndentationError: expected an indented block after 'if' statement on line 104
 
 
 
-# ---- HumanEval_109_move_one_ball --- completion 135 ---- 
+# ---- HumanEval_109_move_one_ball --- completion 53 ---- 
 from typing import List
 
 def move_one_ball(arr: List[int]) -> bool:
@@ -2682,7 +2682,7 @@ IndentationError: expected an indented block after 'if' statement on line 104
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 188 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 93 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -2795,7 +2795,7 @@ IndentationError: expected an indented block after 'if' statement on line 78
 
 
 
-# ---- HumanEval_46_fib4 --- completion 48 ---- 
+# ---- HumanEval_46_fib4 --- completion 0 ---- 
 def fib4(n: int) -> int:
     """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
@@ -2920,7 +2920,7 @@ IndentationError: expected an indented block after 'if' statement on line 96
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 41 ---- 
+# ---- HumanEval_73_smallest_change --- completion 10 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:
@@ -3018,7 +3018,7 @@ IndentationError: expected an indented block after 'if' statement on line 66
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 45 ---- 
+# ---- HumanEval_73_smallest_change --- completion 11 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:
@@ -3159,7 +3159,7 @@ IndentationError: expected an indented block after 'if' statement on line 108
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 69 ---- 
+# ---- HumanEval_73_smallest_change --- completion 15 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:
@@ -3231,7 +3231,7 @@ IndentationError: expected an indented block after 'else' statement on line 39
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 102 ---- 
+# ---- HumanEval_73_smallest_change --- completion 21 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:
@@ -3329,7 +3329,7 @@ IndentationError: expected an indented block after 'if' statement on line 66
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 149 ---- 
+# ---- HumanEval_73_smallest_change --- completion 37 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:

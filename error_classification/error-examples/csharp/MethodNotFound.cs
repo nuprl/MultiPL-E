@@ -1,4 +1,4 @@
-# ---- HumanEval_150_x_or_y --- completion 35 ---- 
+# ---- HumanEval_150_x_or_y --- completion 31 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -49,7 +49,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_82_prime_length --- completion 33 ---- 
+# ---- HumanEval_82_prime_length --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -110,7 +110,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_82_prime_length --- completion 68 ---- 
+# ---- HumanEval_82_prime_length --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -171,7 +171,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_82_prime_length --- completion 122 ---- 
+# ---- HumanEval_82_prime_length --- completion 25 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -232,7 +232,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_82_prime_length --- completion 167 ---- 
+# ---- HumanEval_82_prime_length --- completion 39 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -293,7 +293,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_82_prime_length --- completion 174 ---- 
+# ---- HumanEval_82_prime_length --- completion 43 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -354,1070 +354,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 2 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 12 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ans = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ans.append(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp86qs9ii7.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp86qs9ii7.cs(21,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp86qs9ii7.cs(21,17): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 22 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 47 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 48 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 60 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 65 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.append(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp66rhi5j4.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp66rhi5j4.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp66rhi5j4.cs(20,17): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 92 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 94 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 99 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 112 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 129 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 136 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i += 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpdzw8tk6y.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpdzw8tk6y.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpdzw8tk6y.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 166 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 176 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 178 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 185 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 186 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 193 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp7h9mgen0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp7h9mgen0.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp7h9mgen0.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_10_make_palindrome --- completion 53 ---- 
+# ---- HumanEval_10_make_palindrome --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1508,7 +445,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_161_solve --- completion 110 ---- 
+# ---- HumanEval_161_solve --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1575,7 +512,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 59 ---- 
+# ---- HumanEval_39_prime_fib --- completion 57 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1642,7 +579,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 144 ---- 
+# ---- HumanEval_39_prime_fib --- completion 140 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1709,7 +646,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 146 ---- 
+# ---- HumanEval_39_prime_fib --- completion 142 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1776,79 +713,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 70 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function which sorts the given list of integers
-    // in ascending order according to the sum of their digits.
-    // Note: if there are several items with similar sum of their digits,
-    // order them based on their index in original list.
-    // For example:
-    // >>> OrderByPoints((new List<long>(new long[]{(long)1L, (long)11L, (long)-1L, (long)-11L, (long)-12L})))
-    // (new List<long>(new long[]{(long)-1L, (long)-11L, (long)1L, (long)-12L, (long)11L}))
-    // >>> OrderByPoints((new List<long>()))
-    // (new List<long>())
-    public static List<long> OrderByPoints(List<long> nums) {
-        var result = new List<long>();
-        var dict = new Dictionary<long, long>();
-        for (int i = 0; i < nums.Count; i++) {
-            var sum = 0L;
-            var num = nums[i];
-            while (num != 0) {
-                sum += num % 10;
-                num /= 10;
-            }
-            if (!dict.ContainsKey(sum)) {
-                dict[sum] = new List<long>();
-            }
-            dict[sum].Add(nums[i]);
-        }
-        var keys = dict.Keys.ToList();
-        keys.Sort();
-        foreach (var key in keys) {
-            dict[key].Sort();
-            result.AddRange(dict[key]);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(OrderByPoints((new List<long>(new long[]{(long)1L, (long)11L, (long)-1L, (long)-11L, (long)-12L}))).Equals((new List<long>(new long[]{(long)-1L, (long)-11L, (long)1L, (long)-12L, (long)11L}))));
-    Debug.Assert(OrderByPoints((new List<long>(new long[]{(long)1234L, (long)423L, (long)463L, (long)145L, (long)2L, (long)423L, (long)423L, (long)53L, (long)6L, (long)37L, (long)3457L, (long)3L, (long)56L, (long)0L, (long)46L}))).Equals((new List<long>(new long[]{(long)0L, (long)2L, (long)3L, (long)6L, (long)53L, (long)423L, (long)423L, (long)423L, (long)1234L, (long)145L, (long)37L, (long)46L, (long)56L, (long)463L, (long)3457L}))));
-    Debug.Assert(OrderByPoints((new List<long>())).Equals((new List<long>())));
-    Debug.Assert(OrderByPoints((new List<long>(new long[]{(long)1L, (long)-11L, (long)-32L, (long)43L, (long)54L, (long)-98L, (long)2L, (long)-3L}))).Equals((new List<long>(new long[]{(long)-3L, (long)-32L, (long)-98L, (long)-11L, (long)1L, (long)2L, (long)43L, (long)54L}))));
-    Debug.Assert(OrderByPoints((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L, (long)11L}))).Equals((new List<long>(new long[]{(long)1L, (long)10L, (long)2L, (long)11L, (long)3L, (long)4L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L}))));
-    Debug.Assert(OrderByPoints((new List<long>(new long[]{(long)0L, (long)6L, (long)6L, (long)-76L, (long)-21L, (long)23L, (long)4L}))).Equals((new List<long>(new long[]{(long)-76L, (long)-21L, (long)0L, (long)4L, (long)23L, (long)6L, (long)6L}))));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp6sslwd39.cs(29,29): error CS0029: Cannot implicitly convert type 'System.Collections.Generic.List<long>' to 'long'
-/tmp/tmp6sslwd39.cs(31,23): error CS1061: 'long' does not contain a definition for 'Add' and no accessible extension method 'Add' accepting a first argument of type 'long' could be found (are you missing a using directive or an assembly reference?)
-/tmp/tmp6sslwd39.cs(36,23): error CS1061: 'long' does not contain a definition for 'Sort' and no accessible extension method 'Sort' accepting a first argument of type 'long' could be found (are you missing a using directive or an assembly reference?)
-/tmp/tmp6sslwd39.cs(37,29): error CS1503: Argument 1: cannot convert from 'long' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_49_modp --- completion 57 ---- 
+# ---- HumanEval_49_modp --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1900,7 +765,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 34 ---- 
+# ---- HumanEval_37_sort_even --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1953,7 +818,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 40 ---- 
+# ---- HumanEval_37_sort_even --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2006,7 +871,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 91 ---- 
+# ---- HumanEval_37_sort_even --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2059,7 +924,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 150 ---- 
+# ---- HumanEval_37_sort_even --- completion 50 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2112,7 +977,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 188 ---- 
+# ---- HumanEval_37_sort_even --- completion 69 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2165,7 +1030,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_156_int_to_mini_roman --- completion 95 ---- 
+# ---- HumanEval_156_int_to_mini_roman --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2241,7 +1106,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_156_int_to_mini_roman --- completion 140 ---- 
+# ---- HumanEval_156_int_to_mini_roman --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2329,7 +1194,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_156_int_to_mini_roman --- completion 164 ---- 
+# ---- HumanEval_156_int_to_mini_roman --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

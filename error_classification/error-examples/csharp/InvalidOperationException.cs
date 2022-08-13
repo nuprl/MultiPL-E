@@ -1,4 +1,4 @@
-# ---- HumanEval_6_parse_nested_parens --- completion 99 ---- 
+# ---- HumanEval_6_parse_nested_parens --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -67,7 +67,7 @@ System.InvalidOperationException: Stack empty.
 
 
 
-# ---- HumanEval_6_parse_nested_parens --- completion 127 ---- 
+# ---- HumanEval_6_parse_nested_parens --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -129,7 +129,7 @@ System.InvalidOperationException: Stack empty.
 
 
 
-# ---- HumanEval_94_skjkasdkd --- completion 191 ---- 
+# ---- HumanEval_94_skjkasdkd --- completion 137 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -183,6 +183,150 @@ System.InvalidOperationException: Sequence contains no elements
   at System.Linq.Enumerable.Max (System.Collections.Generic.IEnumerable`1[T] source) [0x00022] in <e540098dd111461e919c5863f6975c29>:0 
   at Problem.Skjkasdkd (System.Collections.Generic.List`1[T] lst) [0x00049] in <8315cd2e1e8246e4b824d2f14a4c04df>:0 
   at Problem.Main (System.String[] args) [0x00018] in <8315cd2e1e8246e4b824d2f14a4c04df>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 0 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 1 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 2 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
 
 '''
 ''' stdout = 
@@ -289,6 +433,390 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 5 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 6 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 8 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 9 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 10 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 11 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 12 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 13 ---- 
 using System;
 using System.Numerics;
@@ -337,7 +865,247 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 14 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((x, y) => x + y);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <6d31dbb798e04e719b48577f433c09b1>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <6d31dbb798e04e719b48577f433c09b1>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <6d31dbb798e04e719b48577f433c09b1>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <6d31dbb798e04e719b48577f433c09b1>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 15 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 16 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 17 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 18 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -433,6 +1201,198 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 21 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 22 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 23 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a,b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <61fbd45d68334890aa115b70a0beaa64>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <61fbd45d68334890aa115b70a0beaa64>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <61fbd45d68334890aa115b70a0beaa64>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <61fbd45d68334890aa115b70a0beaa64>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 24 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 25 ---- 
 using System;
 using System.Numerics;
@@ -481,7 +1441,103 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 26 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 27 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 28 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -625,6 +1681,150 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 31 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 32 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 33 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 34 ---- 
 using System;
 using System.Numerics;
@@ -674,6 +1874,246 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 # ---- HumanEval_28_concatenate --- completion 35 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 36 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 37 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 38 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 39 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 40 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -880,7 +2320,7 @@ class Problem {
     // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
     // ("abc")
     public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((x, y) => x + y);
+        return strings.Aggregate((a, b) => a + b);
     }
     public static void Main(string[] args) {
     Debug.Assert(Concatenate((new List<string>())).Equals(("")));
@@ -897,12 +2337,60 @@ class Problem {
 Unhandled Exception:
 System.InvalidOperationException: Sequence contains no elements
   at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <6d31dbb798e04e719b48577f433c09b1>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <6d31dbb798e04e719b48577f433c09b1>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
   at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <6d31dbb798e04e719b48577f433c09b1>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <6d31dbb798e04e719b48577f433c09b1>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 45 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
 
 '''
 ''' stdout = 
@@ -961,7 +2449,103 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 47 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 48 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 49 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1297,7 +2881,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_28_concatenate --- completion 57 ---- 
+# ---- HumanEval_28_concatenate --- completion 56 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1312,7 +2896,7 @@ class Problem {
     // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
     // ("abc")
     public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a,b) => a + b);
+        return strings.Aggregate((a, b) => a + b);
     }
     public static void Main(string[] args) {
     Debug.Assert(Concatenate((new List<string>())).Equals(("")));
@@ -1329,12 +2913,60 @@ class Problem {
 Unhandled Exception:
 System.InvalidOperationException: Sequence contains no elements
   at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <61fbd45d68334890aa115b70a0beaa64>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <61fbd45d68334890aa115b70a0beaa64>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
   at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <61fbd45d68334890aa115b70a0beaa64>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <61fbd45d68334890aa115b70a0beaa64>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 57 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
 
 '''
 ''' stdout = 
@@ -1346,6 +2978,102 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 # ---- HumanEval_28_concatenate --- completion 58 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 59 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 60 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1489,7 +3217,151 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 63 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 64 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 65 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 66 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1633,7 +3505,199 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 69 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 70 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 71 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 72 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1729,7 +3793,103 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
+# ---- HumanEval_28_concatenate --- completion 75 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_28_concatenate --- completion 76 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Concatenate list of strings into a single string
+    // >>> Concatenate((new List<string>()))
+    // ("")
+    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
+    // ("abc")
+    public static string Concatenate(List<string> strings) {
+        return strings.Aggregate((a, b) => a + b);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
+    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
+  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_28_concatenate --- completion 77 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1825,7 +3985,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_28_concatenate --- completion 80 ---- 
+# ---- HumanEval_28_concatenate --- completion 79 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1873,2167 +4033,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_28_concatenate --- completion 83 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 84 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 86 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 88 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 89 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 92 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 95 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 106 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 107 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 108 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 111 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 112 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 115 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 116 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 119 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 121 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 125 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 126 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 127 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 128 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 130 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 136 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 138 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 139 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 140 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 142 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 146 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 147 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 151 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 157 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 158 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 159 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 162 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 163 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 164 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 166 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 168 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 170 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 172 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 173 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 176 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 179 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 188 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_28_concatenate --- completion 193 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Concatenate list of strings into a single string
-    // >>> Concatenate((new List<string>()))
-    // ("")
-    // >>> Concatenate((new List<string>(new string[]{(string)"a", (string)"b", (string)"c"})))
-    // ("abc")
-    public static string Concatenate(List<string> strings) {
-        return strings.Aggregate((a, b) => a + b);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Concatenate((new List<string>())).Equals(("")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z"}))).Equals(("xyz")));
-    Debug.Assert(Concatenate((new List<string>(new string[]{(string)"x", (string)"y", (string)"z", (string)"w", (string)"k"}))).Equals(("xyzwk")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.InvalidOperationException: Sequence contains no elements
-  at System.Linq.Enumerable.Aggregate[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`3[T1,T2,TResult] func) [0x00030] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.Concatenate (System.Collections.Generic.List`1[T] strings) [0x00001] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-  at Problem.Main (System.String[] args) [0x00006] in <726dd5b4561b4f93b8332c45aa01b939>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_8_sum_product --- completion 40 ---- 
+# ---- HumanEval_8_sum_product --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4084,7 +4084,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_8_sum_product --- completion 42 ---- 
+# ---- HumanEval_8_sum_product --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4135,7 +4135,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_8_sum_product --- completion 56 ---- 
+# ---- HumanEval_8_sum_product --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4186,7 +4186,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_8_sum_product --- completion 62 ---- 
+# ---- HumanEval_8_sum_product --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4237,7 +4237,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_8_sum_product --- completion 101 ---- 
+# ---- HumanEval_8_sum_product --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4288,7 +4288,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_8_sum_product --- completion 108 ---- 
+# ---- HumanEval_8_sum_product --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4339,7 +4339,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_8_sum_product --- completion 186 ---- 
+# ---- HumanEval_8_sum_product --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4468,7 +4468,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 78 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4546,7 +4546,7 @@ System.InvalidOperationException: Sequence contains no elements
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 109 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

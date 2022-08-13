@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 112 ---- 
+# ---- HumanEval_129_minPath --- completion 15 ---- 
 from typing import List
 
 def minPath(grid: List[List[int]], k: int) -> List[int]:
@@ -91,7 +91,7 @@ TypeError: argument of type 'NoneType' is not iterable
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 126 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 113 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -142,7 +142,7 @@ TypeError: sequence item 0: expected str instance, int found
 
 
 
-# ---- HumanEval_137_compare_one --- completion 23 ---- 
+# ---- HumanEval_137_compare_one --- completion 1 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -206,7 +206,7 @@ TypeError: '>' not supported between instances of 'int' and 'str'
 
 
 
-# ---- HumanEval_137_compare_one --- completion 116 ---- 
+# ---- HumanEval_137_compare_one --- completion 2 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -270,7 +270,7 @@ TypeError: '>' not supported between instances of 'int' and 'str'
 
 
 
-# ---- HumanEval_137_compare_one --- completion 146 ---- 
+# ---- HumanEval_137_compare_one --- completion 3 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -334,7 +334,7 @@ TypeError: '>' not supported between instances of 'int' and 'str'
 
 
 
-# ---- HumanEval_137_compare_one --- completion 152 ---- 
+# ---- HumanEval_137_compare_one --- completion 4 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -398,7 +398,7 @@ TypeError: '>' not supported between instances of 'int' and 'str'
 
 
 
-# ---- HumanEval_137_compare_one --- completion 168 ---- 
+# ---- HumanEval_137_compare_one --- completion 5 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -477,7 +477,7 @@ TypeError: '>' not supported between instances of 'int' and 'str'
 
 
 
-# ---- HumanEval_137_compare_one --- completion 186 ---- 
+# ---- HumanEval_137_compare_one --- completion 6 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -541,7 +541,7 @@ TypeError: '>' not supported between instances of 'int' and 'str'
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 4 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 0 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -598,7 +598,7 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 6 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 1 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -655,7 +655,7 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 8 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 2 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -712,7 +712,748 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
+# ---- HumanEval_86_anti_shuffle --- completion 3 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 4 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 5 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 6 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbq0vpfyg.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpbq0vpfyg.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/tmp/tmpbq0vpfyg.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/tmp/tmpbq0vpfyg.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 7 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 8 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 9 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 10 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 11 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 12 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 13 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 14 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_86_anti_shuffle --- completion 15 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 16 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -786,6 +1527,63 @@ def anti_shuffle(s: str) -> str:
     >>> anti_shuffle('Hello World!!!')
     'Hello !!!Wdlor'
     """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 18 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
     return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
 
 
@@ -815,6 +1613,120 @@ Traceback (most recent call last):
     assert candidate('Hi') == 'Hi'
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
     return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 19 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 20 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
 TypeError: sequence item 0: expected str instance, list found
 
 '''
@@ -900,6 +1812,63 @@ def anti_shuffle(s: str) -> str:
     >>> anti_shuffle('Hello World!!!')
     'Hello !!!Wdlor'
     """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 23 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
     return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
 
 
@@ -940,7 +1909,178 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 23 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 24 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbq0vpfyg.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpbq0vpfyg.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/tmp/tmpbq0vpfyg.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/tmp/tmpbq0vpfyg.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 25 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 26 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 27 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -1168,7 +2308,121 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
+# ---- HumanEval_86_anti_shuffle --- completion 31 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_86_anti_shuffle --- completion 32 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 33 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -1225,7 +2479,235 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 33 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 34 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 35 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbq0vpfyg.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpbq0vpfyg.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/tmp/tmpbq0vpfyg.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/tmp/tmpbq0vpfyg.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 36 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word != " " else word for word in s)
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmg7ov6qk.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpmg7ov6qk.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/tmp/tmpmg7ov6qk.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/tmp/tmpmg7ov6qk.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word != " " else word for word in s)
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 37 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 38 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -1527,6 +3009,63 @@ def anti_shuffle(s: str) -> str:
     >>> anti_shuffle('Hello World!!!')
     'Hello !!!Wdlor'
     """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 44 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
     return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
 
 
@@ -1567,7 +3106,7 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 44 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 45 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -1624,7 +3163,64 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 45 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 46 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 47 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -1727,6 +3323,234 @@ Traceback (most recent call last):
     assert candidate('Hi') == 'Hi'
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
     return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 49 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 50 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 51 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 52 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
 TypeError: sequence item 0: expected str instance, list found
 
 '''
@@ -1852,7 +3676,7 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 57 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 55 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -1869,7 +3693,7 @@ def anti_shuffle(s: str) -> str:
     >>> anti_shuffle('Hello World!!!')
     'Hello !!!Wdlor'
     """
-    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
 
 
 def check(candidate):
@@ -1890,14 +3714,185 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpbq0vpfyg.py", line 32, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
     test_check()
-  File "/tmp/tmpbq0vpfyg.py", line 30, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
     check(anti_shuffle)
-  File "/tmp/tmpbq0vpfyg.py", line 21, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
     assert candidate('Hi') == 'Hi'
-  File "/tmp/tmpbq0vpfyg.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 56 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 57 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return " ".join(sorted(word) for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpuvv_z3nr.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpuvv_z3nr.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/tmp/tmpuvv_z3nr.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/tmp/tmpuvv_z3nr.py", line 17, in anti_shuffle
+    return " ".join(sorted(word) for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 58 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
 TypeError: sequence item 0: expected str instance, list found
 
 '''
@@ -1926,7 +3921,7 @@ def anti_shuffle(s: str) -> str:
     >>> anti_shuffle('Hello World!!!')
     'Hello !!!Wdlor'
     """
-    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
 
 
 def check(candidate):
@@ -1947,14 +3942,356 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpbq0vpfyg.py", line 32, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
     test_check()
-  File "/tmp/tmpbq0vpfyg.py", line 30, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
     check(anti_shuffle)
-  File "/tmp/tmpbq0vpfyg.py", line 21, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
     assert candidate('Hi') == 'Hi'
-  File "/tmp/tmpbq0vpfyg.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 60 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 61 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 62 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 63 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 64 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 65 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
 TypeError: sequence item 0: expected str instance, list found
 
 '''
@@ -2040,7 +4377,7 @@ def anti_shuffle(s: str) -> str:
     >>> anti_shuffle('Hello World!!!')
     'Hello !!!Wdlor'
     """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
 
 
 def check(candidate):
@@ -2061,14 +4398,71 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
     check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
     assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 68 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(w, key=lambda x: x.lower()) if w.isalpha() else w for w in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpblhfcj3t.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpblhfcj3t.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/tmp/tmpblhfcj3t.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/tmp/tmpblhfcj3t.py", line 17, in anti_shuffle
+    return ' '.join(sorted(w, key=lambda x: x.lower()) if w.isalpha() else w for w in s.split())
 TypeError: sequence item 0: expected str instance, list found
 
 '''
@@ -2137,6 +4531,120 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
+# ---- HumanEval_86_anti_shuffle --- completion 70 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
+    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_86_anti_shuffle --- completion 71 ---- 
+def anti_shuffle(s: str) -> str:
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    >>> anti_shuffle('Hi')
+    'Hi'
+    >>> anti_shuffle('hello')
+    'ehllo'
+    >>> anti_shuffle('Hello World!!!')
+    'Hello !!!Wdlor'
+    """
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+
+
+def check(candidate):
+    assert candidate('Hi') == 'Hi'
+    assert candidate('hello') == 'ehllo'
+    assert candidate('number') == 'bemnru'
+    assert candidate('abcd') == 'abcd'
+    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
+    assert candidate('') == ''
+    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
+
+def test_check():
+    check(anti_shuffle)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
+    check(anti_shuffle)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
+    assert candidate('Hi') == 'Hi'
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
+    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
+TypeError: sequence item 0: expected str instance, list found
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_86_anti_shuffle --- completion 72 ---- 
 def anti_shuffle(s: str) -> str:
     """
@@ -2194,7 +4702,7 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 74 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 73 ---- 
 def anti_shuffle(s: str) -> str:
     """
     Write a function that takes a string and returns an ordered version of it.
@@ -2251,2515 +4759,7 @@ TypeError: sequence item 0: expected str instance, list found
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 80 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 85 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 97 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 99 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 102 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 105 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbq0vpfyg.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmpbq0vpfyg.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/tmp/tmpbq0vpfyg.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/tmp/tmpbq0vpfyg.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda c: ord(c)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 107 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word != " " else word for word in s)
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmg7ov6qk.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmpmg7ov6qk.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/tmp/tmpmg7ov6qk.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/tmp/tmpmg7ov6qk.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word != " " else word for word in s)
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 109 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 111 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 112 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 116 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 118 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 120 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 122 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 125 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 127 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 128 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 133 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 134 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 136 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 138 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 141 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 145 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 149 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 153 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 156 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 161 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 163 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return " ".join(sorted(word) for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpuvv_z3nr.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmpuvv_z3nr.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/tmp/tmpuvv_z3nr.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/tmp/tmpuvv_z3nr.py", line 17, in anti_shuffle
-    return " ".join(sorted(word) for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 165 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 166 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 168 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 169 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 170 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 171 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 177 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 178 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 187 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 188 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 189 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(w, key=lambda x: x.lower()) if w.isalpha() else w for w in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpblhfcj3t.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmpblhfcj3t.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/tmp/tmpblhfcj3t.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/tmp/tmpblhfcj3t.py", line 17, in anti_shuffle
-    return ' '.join(sorted(w, key=lambda x: x.lower()) if w.isalpha() else w for w in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 190 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 193 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 194 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp6qvv5rm3.py", line 17, in anti_shuffle
-    return "".join(sorted(word, key=lambda x: ord(x)) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 196 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_86_anti_shuffle --- completion 197 ---- 
-def anti_shuffle(s: str) -> str:
-    """
-    Write a function that takes a string and returns an ordered version of it.
-    Ordered version of string, is a string where all words (separated by space)
-    are replaced by a new word where all the characters arranged in
-    ascending order based on ascii value.
-    Note: You should keep the order of words and blank spaces in the sentence.
-
-    For example:
-    >>> anti_shuffle('Hi')
-    'Hi'
-    >>> anti_shuffle('hello')
-    'ehllo'
-    >>> anti_shuffle('Hello World!!!')
-    'Hello !!!Wdlor'
-    """
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-
-
-def check(candidate):
-    assert candidate('Hi') == 'Hi'
-    assert candidate('hello') == 'ehllo'
-    assert candidate('number') == 'bemnru'
-    assert candidate('abcd') == 'abcd'
-    assert candidate('Hello World!!!') == 'Hello !!!Wdlor'
-    assert candidate('') == ''
-    assert candidate('Hi. My name is Mister Robot. How are you?') == '.Hi My aemn is Meirst .Rboot How aer ?ouy'
-
-def test_check():
-    check(anti_shuffle)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 32, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 30, in test_check
-    check(anti_shuffle)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 21, in check
-    assert candidate('Hi') == 'Hi'
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfi_6v_l6.py", line 17, in anti_shuffle
-    return ' '.join(sorted(word) if word.isalpha() else word for word in s.split())
-TypeError: sequence item 0: expected str instance, list found
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_77_iscube --- completion 49 ---- 
+# ---- HumanEval_77_iscube --- completion 3 ---- 
 def iscube(a: int) -> bool:
     """
     Write a function that takes an integer a and returns True 
@@ -4820,7 +4820,7 @@ TypeError: int() argument must be a string, a bytes-like object or a real number
 
 
 
-# ---- HumanEval_77_iscube --- completion 126 ---- 
+# ---- HumanEval_77_iscube --- completion 9 ---- 
 def iscube(a: int) -> bool:
     """
     Write a function that takes an integer a and returns True 
@@ -4881,7 +4881,7 @@ TypeError: int() argument must be a string, a bytes-like object or a real number
 
 
 
-# ---- HumanEval_77_iscube --- completion 182 ---- 
+# ---- HumanEval_77_iscube --- completion 12 ---- 
 def iscube(a: int) -> bool:
     """
     Write a function that takes an integer a and returns True 
@@ -4942,7 +4942,7 @@ TypeError: type complex doesn't define __round__ method
 
 
 
-# ---- HumanEval_88_sort_array --- completion 95 ---- 
+# ---- HumanEval_88_sort_array --- completion 0 ---- 
 from typing import List
 
 def sort_array(array: List[int]) -> List[int]:
@@ -5009,7 +5009,7 @@ TypeError: 'int' object is not iterable
 
 
 
-# ---- HumanEval_88_sort_array --- completion 116 ---- 
+# ---- HumanEval_88_sort_array --- completion 1 ---- 
 from typing import List
 
 def sort_array(array: List[int]) -> List[int]:
@@ -5075,7 +5075,7 @@ TypeError: 'int' object is not iterable
 
 
 
-# ---- HumanEval_88_sort_array --- completion 187 ---- 
+# ---- HumanEval_88_sort_array --- completion 2 ---- 
 from typing import List
 
 def sort_array(array: List[int]) -> List[int]:
@@ -5142,7 +5142,7 @@ TypeError: 'int' object is not iterable
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 1 ---- 
+# ---- HumanEval_90_next_smallest --- completion 0 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -5208,7 +5208,7 @@ TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 5 ---- 
+# ---- HumanEval_90_next_smallest --- completion 1 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -5274,7 +5274,7 @@ TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 16 ---- 
+# ---- HumanEval_90_next_smallest --- completion 2 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -5340,7 +5340,1659 @@ TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
 
 
+# ---- HumanEval_90_next_smallest --- completion 3 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 6 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 7 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 8 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 10 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 11 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmplh5ioyhw.py", line 42, in <module>
+    test_check()
+  File "/tmp/tmplh5ioyhw.py", line 40, in test_check
+    check(next_smallest)
+  File "/tmp/tmplh5ioyhw.py", line 31, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/tmp/tmplh5ioyhw.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 12 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 13 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 14 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    else:
+        smallest = lst[0]
+        second_smallest = None
+        for i in range(1, len(lst)):
+            if lst[i] < smallest:
+                second_smallest = smallest
+                smallest = lst[i]
+            elif lst[i] < second_smallest or second_smallest is None:
+                second_smallest = lst[i]
+        return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpjmfupmie.py", line 42, in <module>
+    test_check()
+  File "/tmp/tmpjmfupmie.py", line 40, in test_check
+    check(next_smallest)
+  File "/tmp/tmpjmfupmie.py", line 31, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/tmp/tmpjmfupmie.py", line 26, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 15 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 16 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 17 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_90_next_smallest --- completion 18 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 19 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 20 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 21 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 22 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 23 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 24 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 25 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 26 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 27 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 28 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 29 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 30 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    second_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            second_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 31 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -5426,14 +7078,14 @@ def next_smallest(lst: List[int]) -> Optional[int]:
     if len(lst) < 2:
         return None
     smallest = lst[0]
-    next_smallest = None
+    second_smallest = None
     for i in range(1, len(lst)):
         if lst[i] < smallest:
-            next_smallest = smallest
+            second_smallest = smallest
             smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
 
 def check(candidate):
     assert candidate([1, 2, 3, 4, 5]) == 2
@@ -5453,14 +7105,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
     check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
     assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
+    elif lst[i] < second_smallest or second_smallest is None:
 TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
 '''
@@ -5492,14 +7144,14 @@ def next_smallest(lst: List[int]) -> Optional[int]:
     if len(lst) < 2:
         return None
     smallest = lst[0]
-    next_smallest = None
+    second_smallest = None
     for i in range(1, len(lst)):
         if lst[i] < smallest:
-            next_smallest = smallest
+            second_smallest = smallest
             smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
+        elif lst[i] < second_smallest or second_smallest is None:
+            second_smallest = lst[i]
+    return second_smallest
 
 def check(candidate):
     assert candidate([1, 2, 3, 4, 5]) == 2
@@ -5519,411 +7171,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
     check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
     assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 39 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 47 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 60 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplh5ioyhw.py", line 42, in <module>
-    test_check()
-  File "/tmp/tmplh5ioyhw.py", line 40, in test_check
-    check(next_smallest)
-  File "/tmp/tmplh5ioyhw.py", line 31, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/tmp/tmplh5ioyhw.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 64 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 74 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 79 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    else:
-        smallest = lst[0]
-        second_smallest = None
-        for i in range(1, len(lst)):
-            if lst[i] < smallest:
-                second_smallest = smallest
-                smallest = lst[i]
-            elif lst[i] < second_smallest or second_smallest is None:
-                second_smallest = lst[i]
-        return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpjmfupmie.py", line 42, in <module>
-    test_check()
-  File "/tmp/tmpjmfupmie.py", line 40, in test_check
-    check(next_smallest)
-  File "/tmp/tmpjmfupmie.py", line 31, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/tmp/tmpjmfupmie.py", line 26, in next_smallest
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
     elif lst[i] < second_smallest or second_smallest is None:
 TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
@@ -5936,7 +7190,139 @@ TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 80 ---- 
+# ---- HumanEval_90_next_smallest --- completion 34 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 35 ---- 
+from typing import List, Optional
+
+def next_smallest(lst: List[int]) -> Optional[int]:
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    >>> next_smallest([1, 2, 3, 4, 5])
+    2
+    >>> next_smallest([5, 1, 4, 3, 2])
+    2
+    >>> next_smallest([])
+    None
+    >>> next_smallest([1, 1])
+    None
+    """
+    if len(lst) < 2:
+        return None
+    smallest = lst[0]
+    next_smallest = None
+    for i in range(1, len(lst)):
+        if lst[i] < smallest:
+            next_smallest = smallest
+            smallest = lst[i]
+        elif lst[i] < next_smallest or next_smallest is None:
+            next_smallest = lst[i]
+    return next_smallest
+
+def check(candidate):
+    assert candidate([1, 2, 3, 4, 5]) == 2
+    assert candidate([5, 1, 4, 3, 2]) == 2
+    assert candidate([]) == None
+    assert candidate([1, 1]) == None
+    assert candidate([1, 1, 1, 1, 0]) == 1
+    assert candidate([1, 1]) == None
+    assert candidate([-35, 34, 12, -45]) == -35
+
+def test_check():
+    check(next_smallest)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
+    check(next_smallest)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
+    assert candidate([1, 2, 3, 4, 5]) == 2
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
+    elif lst[i] < next_smallest or next_smallest is None:
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_90_next_smallest --- completion 36 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -6002,1393 +7388,7 @@ TypeError: '<' not supported between instances of 'int' and 'NoneType'
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 82 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 86 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 95 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 98 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 104 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 109 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 120 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 122 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 130 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 134 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 135 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 145 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 148 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 151 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 152 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 160 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 171 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 176 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 181 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 188 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    next_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            next_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < next_smallest or next_smallest is None:
-            next_smallest = lst[i]
-    return next_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp74vufjxe.py", line 25, in next_smallest
-    elif lst[i] < next_smallest or next_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_90_next_smallest --- completion 194 ---- 
-from typing import List, Optional
-
-def next_smallest(lst: List[int]) -> Optional[int]:
-    """
-    You are given a list of integers.
-    Write a function next_smallest() that returns the 2nd smallest element of the list.
-    Return None if there is no such element.
-    >>> next_smallest([1, 2, 3, 4, 5])
-    2
-    >>> next_smallest([5, 1, 4, 3, 2])
-    2
-    >>> next_smallest([])
-    None
-    >>> next_smallest([1, 1])
-    None
-    """
-    if len(lst) < 2:
-        return None
-    smallest = lst[0]
-    second_smallest = None
-    for i in range(1, len(lst)):
-        if lst[i] < smallest:
-            second_smallest = smallest
-            smallest = lst[i]
-        elif lst[i] < second_smallest or second_smallest is None:
-            second_smallest = lst[i]
-    return second_smallest
-
-def check(candidate):
-    assert candidate([1, 2, 3, 4, 5]) == 2
-    assert candidate([5, 1, 4, 3, 2]) == 2
-    assert candidate([]) == None
-    assert candidate([1, 1]) == None
-    assert candidate([1, 1, 1, 1, 0]) == 1
-    assert candidate([1, 1]) == None
-    assert candidate([-35, 34, 12, -45]) == -35
-
-def test_check():
-    check(next_smallest)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 41, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 39, in test_check
-    check(next_smallest)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 30, in check
-    assert candidate([1, 2, 3, 4, 5]) == 2
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdf_39h5u.py", line 25, in next_smallest
-    elif lst[i] < second_smallest or second_smallest is None:
-TypeError: '<' not supported between instances of 'int' and 'NoneType'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_37_sort_even --- completion 75 ---- 
+# ---- HumanEval_37_sort_even --- completion 2 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:

@@ -1,4 +1,4 @@
-# ---- HumanEval_6_parse_nested_parens --- completion 43 ---- 
+# ---- HumanEval_6_parse_nested_parens --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -56,7 +56,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_6_parse_nested_parens --- completion 44 ---- 
+# ---- HumanEval_6_parse_nested_parens --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -129,7 +129,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_127_intersection --- completion 48 ---- 
+# ---- HumanEval_127_intersection --- completion 27 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -259,7 +259,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_68_pluck --- completion 42 ---- 
+# ---- HumanEval_68_pluck --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -371,7 +371,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_68_pluck --- completion 192 ---- 
+# ---- HumanEval_68_pluck --- completion 34 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -476,7 +476,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 18 ---- 
+# ---- HumanEval_129_minPath --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -566,7 +566,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 33 ---- 
+# ---- HumanEval_129_minPath --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -670,7 +670,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 68 ---- 
+# ---- HumanEval_129_minPath --- completion 63 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -738,7 +738,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 80 ---- 
+# ---- HumanEval_129_minPath --- completion 75 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -806,7 +806,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 97 ---- 
+# ---- HumanEval_129_minPath --- completion 91 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -874,7 +874,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 122 ---- 
+# ---- HumanEval_129_minPath --- completion 116 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -989,7 +989,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 127 ---- 
+# ---- HumanEval_129_minPath --- completion 120 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1089,7 +1089,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 151 ---- 
+# ---- HumanEval_129_minPath --- completion 144 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1157,7 +1157,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 174 ---- 
+# ---- HumanEval_129_minPath --- completion 167 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1263,7 +1263,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_116_sort_array --- completion 129 ---- 
+# ---- HumanEval_116_sort_array --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1348,7 +1348,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_116_sort_array --- completion 137 ---- 
+# ---- HumanEval_116_sort_array --- completion 25 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1433,7 +1433,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_116_sort_array --- completion 179 ---- 
+# ---- HumanEval_116_sort_array --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1517,7 +1517,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_20_find_closest_elements --- completion 112 ---- 
+# ---- HumanEval_20_find_closest_elements --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1572,7 +1572,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_69_search --- completion 74 ---- 
+# ---- HumanEval_69_search --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1648,7 +1648,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_69_search --- completion 192 ---- 
+# ---- HumanEval_69_search --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1718,7 +1718,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_105_by_length --- completion 23 ---- 
+# ---- HumanEval_105_by_length --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1792,7 +1792,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_75_is_multiply_prime --- completion 110 ---- 
+# ---- HumanEval_75_is_multiply_prime --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1843,7 +1843,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_79_decimal_to_binary --- completion 6 ---- 
+# ---- HumanEval_79_decimal_to_binary --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1928,7 +1928,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_79_decimal_to_binary --- completion 174 ---- 
+# ---- HumanEval_79_decimal_to_binary --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1995,7 +1995,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 90 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 35 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2110,7 +2110,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 134 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 60 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2187,7 +2187,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_143_words_in_sentence --- completion 143 ---- 
+# ---- HumanEval_143_words_in_sentence --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2242,7 +2242,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_33_sort_third --- completion 85 ---- 
+# ---- HumanEval_33_sort_third --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2295,7 +2295,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_33_sort_third --- completion 173 ---- 
+# ---- HumanEval_33_sort_third --- completion 45 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2348,7 +2348,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_16_count_distinct_characters --- completion 168 ---- 
+# ---- HumanEval_16_count_distinct_characters --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2416,7 +2416,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_26_remove_duplicates --- completion 184 ---- 
+# ---- HumanEval_26_remove_duplicates --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2467,7 +2467,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 50 ---- 
+# ---- HumanEval_120_maximum --- completion 28 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2539,7 +2539,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_119_match_parens --- completion 100 ---- 
+# ---- HumanEval_119_match_parens --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2637,7 +2637,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_110_exchange --- completion 50 ---- 
+# ---- HumanEval_110_exchange --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2727,7 +2727,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_110_exchange --- completion 52 ---- 
+# ---- HumanEval_110_exchange --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2806,7 +2806,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_110_exchange --- completion 174 ---- 
+# ---- HumanEval_110_exchange --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2892,7 +2892,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_110_exchange --- completion 176 ---- 
+# ---- HumanEval_110_exchange --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2969,7 +2969,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_102_choose_num --- completion 30 ---- 
+# ---- HumanEval_102_choose_num --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3089,7 +3089,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_0_has_close_elements --- completion 36 ---- 
+# ---- HumanEval_0_has_close_elements --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3148,7 +3148,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_0_has_close_elements --- completion 49 ---- 
+# ---- HumanEval_0_has_close_elements --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3207,7 +3207,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_0_has_close_elements --- completion 120 ---- 
+# ---- HumanEval_0_has_close_elements --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3274,7 +3274,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_0_has_close_elements --- completion 141 ---- 
+# ---- HumanEval_0_has_close_elements --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3338,7 +3338,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_0_has_close_elements --- completion 167 ---- 
+# ---- HumanEval_0_has_close_elements --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3405,7 +3405,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 16 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3492,7 +3492,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 145 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3577,7 +3577,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 5 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3653,7 +3653,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 6 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3729,7 +3729,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 11 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3798,7 +3798,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 39 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3851,7 +3851,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 40 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3938,7 +3938,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 44 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4007,7 +4007,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 49 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4087,7 +4087,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 58 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 28 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4163,7 +4163,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 60 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 29 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4249,7 +4249,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 64 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 31 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4334,7 +4334,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 65 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4400,7 +4400,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 66 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4460,7 +4460,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 71 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 35 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4538,7 +4538,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 78 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 36 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4604,7 +4604,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 79 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 37 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4682,7 +4682,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 87 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 39 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4745,7 +4745,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 98 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 44 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4831,7 +4831,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 99 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 45 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4909,7 +4909,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 101 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 46 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4976,7 +4976,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 102 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 47 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5084,7 +5084,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 105 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 48 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5154,7 +5154,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 109 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 50 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5229,7 +5229,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 115 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 51 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5302,7 +5302,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 127 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 55 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5379,7 +5379,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 129 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 56 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5443,7 +5443,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 130 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 57 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5530,7 +5530,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 137 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 59 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5599,7 +5599,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 139 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 60 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5687,7 +5687,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 143 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 61 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5763,7 +5763,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 150 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 64 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5852,7 +5852,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 153 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 65 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5929,7 +5929,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 158 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 68 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6004,7 +6004,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 170 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 72 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6081,7 +6081,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 173 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6156,7 +6156,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 176 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 75 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6240,7 +6240,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 179 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 76 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6325,7 +6325,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 183 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 77 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6414,7 +6414,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 186 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 79 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6503,7 +6503,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 189 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 80 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6584,7 +6584,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 195 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 82 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6673,7 +6673,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 197 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 83 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6729,7 +6729,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 198 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 84 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6818,7 +6818,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_83_starts_one_ends --- completion 199 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 85 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6903,7 +6903,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_94_skjkasdkd --- completion 26 ---- 
+# ---- HumanEval_94_skjkasdkd --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6967,7 +6967,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_63_fibfib --- completion 19 ---- 
+# ---- HumanEval_63_fibfib --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7037,7 +7037,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_153_Strongest_Extension --- completion 78 ---- 
+# ---- HumanEval_153_Strongest_Extension --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7108,7 +7108,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_153_Strongest_Extension --- completion 116 ---- 
+# ---- HumanEval_153_Strongest_Extension --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7179,7 +7179,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_153_Strongest_Extension --- completion 193 ---- 
+# ---- HumanEval_153_Strongest_Extension --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7252,7 +7252,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 4 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7338,7 +7338,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 5 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7406,7 +7406,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 7 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7487,7 +7487,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 13 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7564,7 +7564,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 21 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7645,7 +7645,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 23 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7709,7 +7709,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 26 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7792,7 +7792,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 27 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7864,7 +7864,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 28 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7938,7 +7938,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 31 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8001,7 +8001,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 55 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8088,7 +8088,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 67 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8152,7 +8152,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 84 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8242,7 +8242,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 89 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8323,7 +8323,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 90 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8388,7 +8388,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 96 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8468,7 +8468,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 106 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8537,7 +8537,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 107 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8606,7 +8606,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 108 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8672,7 +8672,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 115 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8740,7 +8740,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 117 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8810,7 +8810,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 131 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 22 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8878,7 +8878,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 146 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8977,7 +8977,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 147 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 24 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9056,7 +9056,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 168 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 26 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9125,7 +9125,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 169 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 27 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9195,7 +9195,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 170 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 28 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9262,7 +9262,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 172 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 29 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9330,7 +9330,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 175 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9413,7 +9413,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 176 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 31 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9480,7 +9480,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 181 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9564,7 +9564,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 197 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 34 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9639,7 +9639,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_77_iscube --- completion 11 ---- 
+# ---- HumanEval_77_iscube --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9757,7 +9757,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_77_iscube --- completion 90 ---- 
+# ---- HumanEval_77_iscube --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9873,7 +9873,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 87 ---- 
+# ---- HumanEval_154_cycpattern_check --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9958,7 +9958,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_99_closest_integer --- completion 8 ---- 
+# ---- HumanEval_99_closest_integer --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -10050,6 +10050,950 @@ Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmpw9t9074m.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 1 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.0"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.1"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.2"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.3"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.7"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.8"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.9"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.1"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.2"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.4"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.5"))
+        // (-16L)
+        // >>> ClosestInteger(("-15.6"))
+        // (-16L)
+        // >>> ClosestInteger(("-
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpdjokyv_z.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 2 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.6"))
+        // (-16L)
+        // >>> ClosestInteger(("-15.5"))
+        // (-16L)
+        // >>> ClosestInteger(("-15.4"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.0"))
+        // (-14L)
+        // >>> ClosestInteger(("-13.5"))
+        // (-14L)
+        // >>> ClosestInteger(("-13.0"))
+        // (-13L)
+        // >>> ClosestInteger(("-12.5"))
+        // (-13L)
+        // >>> ClosestInteger(("-12.0"))
+        // (-12L)
+        // >>> ClosestInteger(("-11.5"))
+        // (-12L)
+        // >>> ClosestInteger(("-11.0"))
+        // (-11L)
+        // >>> ClosestInteger(("-10.5"))
+        // (-11L)
+        // >>> ClosestInteger(("-10.0"))
+        // (-10L)
+        // >>> ClosestInteger(("-9.5"))
+        // (-10L)
+        // >>> ClosestInteger(("-9.0"))
+        // (-9L)
+        // >>> ClosestInteger(("-8.5"))
+        // (-9L)
+        // >>> ClosestInteger(("-8.0"))
+        // (-8L)
+        // >>> ClosestInteger(("-7.5"))
+        // (-8L)
+        // >>> ClosestInteger(("-7.0"))
+        // (-7L)
+        // >>> ClosestInteger(("
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpw_lznnxe.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 3 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp15hgh1dv.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 4 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("14.4"))
+        // (14L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("14.6"))
+        // (15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("14.4"))
+        // (14L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("14.6"))
+        // (15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("14.4"))
+        // (14L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("14.6"))
+        // (15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("14.4"))
+        // (14L
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpw8xgqe3o.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 5 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // Your code goes here.
+        // You may use the built-in round function.
+        // You may use the built-in abs function.
+        // You may use the built-in int function.
+        // You may use the built-in float function.
+        // You may use the built-in str function.
+        // You may use the built-in len function.
+        // You may use the built-in ord function.
+        // You may use the built-in chr function.
+        // You may use the built-in range function.
+        // You may use the built-in zip function.
+        // You may use the built-in map function.
+        // You may use the built-in reduce function.
+        // You may use the built-in filter function.
+        // You may use the built-in all function.
+        // You may use the built-in any function.
+        // You may use the built-in min function.
+        // You may use the built-in max function.
+        // You may use the built-in sum function.
+        // You may use the built-in sorted function.
+        // You may use the built-in reversed function.
+        // You may use the built-in enumerate function.
+        // You may use the built-in reversed function.
+        // You may use the built-in enumerate function.
+        // You may use the built-in pow function.
+        // You may use the built-in divmod function.
+        // You may use the built-in complex function.
+        // You may use the built-in pow function.
+        // You may use the built-in divmod function.
+        // You may use the built-in complex function.
+        // You may use the built-in pow function.
+        // You may use the built-in divmod function.
+        // You may use the built-in complex function.
+        // You may use the built-in pow function.
+        // You may use the built-in divmod function.
+        // You may use the built-in complex function.
+        // You may use the built-in pow function.
+        // You may use the built-in divmod function.
+        // You may use the built-in complex function.
+       
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmph0i0o8we.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 6 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("15.6"))
+        // (16L)
+        // >>> ClosestInteger(("-15.6"))
+        // (-16L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.1"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.1"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.6"))
+        // (-16L)
+        // >>> ClosestInteger(("15.6"))
+        // (16L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("15.0"))
+        // (15L)
+        // >>> ClosestInteger(("15.1"))
+        // (15L)
+        // >>> ClosestInteger(("15.0"))
+        // (15L)
+        // >>> ClosestInteger(("15.1"))
+        // (15L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("15.6"))
+        // (16L)
+        // >>> ClosestInteger(("-15.6"))
+        // (-16L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.1"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp2pha_6fm.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // Note:
+        // Rounding away from zero means that if the given number is equidistant
+        // from two integers, the one you should return is the one that is the
+        // farthest from zero. For example closest_integer("14.5") should
+        // return 15 and closest_integer("-14.5") should return -15.
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // Note:
+        // Rounding away from zero means that if the given number is equidistant
+        // from two integers, the one you should return is the one that is the
+        // farthest from zero. For example closest_integer("14.5") should
+        // return 15 and closest_integer("-14.5") should return -15.
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // Note:
+        // Rounding away from zero means that if the given number is equidistant
+        // from two integers, the one you should return is the one that is the
+        // farthest from zero. For example closest_integer("14.5") should
+        // return 15 and closest_integer("-14.5") should return -15.
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // Note:
+        // Rounding away from zero means that if the given number is equidistant
+        // from two integers, the one you should return is the one that is the
+        // farthest from zero. For example closest_integer("14.5") should
+        // return 15 and closest_integer("-14.5") should return -15.
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps6h8gz0q.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 8 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // Your code goes here.
+        // You may use the built-in BigInteger class.
+        // You may not use any other built-in classes.
+        // You may not use any external libraries.
+        // You may not use any built-in functions.
+        // You may not use any built-in operators.
+        // You may not use any built-in types.
+        // You may not use any built-in constants.
+        // You may not use any built-in variables.
+        // You may not use any built-in methods.
+        // You may not use any built-in properties.
+        // You may not use any built-in events.
+        // You may not use any built-in delegates.
+        // You may not use any built-in enumerations.
+        // You may not use any built-in structures.
+        // You may not use any built-in interfaces.
+        // You may not use any built-in classes.
+        // You may not use any built-in namespaces.
+        // You may not use any built-in keywords.
+        // You may not use any built-in preprocessor directives.
+        // You may not use any built-in directives.
+        // You may not use any built-in statements.
+        // You may not use any built-in expressions.
+        // You may not use any built-in operators.
+        // You may not use any built-in functions.
+        // You may not use any built-in types.
+        // You may not use any built-in constants.
+        // You may not use any built-in variables.
+        // You may not use any built-in methods.
+        // You may not use any built-in properties.
+        // You may not use any built-in events.
+        // You may not use any built-in delegates.
+        // You may not use any built-in enumerations.
+        // You may not use any built-in structures.
+        // You may not use any built-in interfaces.
+        // You may not use any built-in classes.
+        // You may not use any built-in namespaces.
+        // You may not use any built-in keywords.
+        // You may not use any built-in preprocessor directives.
+       
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpbzd290iy.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 9 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // Your code goes here.
+        // You can add other functions to this file, if you need to.
+        // You can add other files to this project, if you need to.
+        // You can add other projects to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution, if you need to.
+        // You can add other solutions to this solution
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps5ux4d5k.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
+
+'''
+
+
+
+
+
+# ---- HumanEval_99_closest_integer --- completion 10 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function that takes a value (string) representing a number
+    // and returns the closest integer to it. If the number is equidistant
+    // from two integers, round it away from zero.
+    // Examples
+    // >>> ClosestInteger(("10"))
+    // (10L)
+    // >>> ClosestInteger(("15.3"))
+    // (15L)
+    // Note:
+    // Rounding away from zero means that if the given number is equidistant
+    // from two integers, the one you should return is the one that is the
+    // farthest from zero. For example closest_integer("14.5") should
+    // return 15 and closest_integer("-14.5") should return -15.
+    public static long ClosestInteger(string value) {
+        // >>> ClosestInteger(("10"))
+        // (10L)
+        // >>> ClosestInteger(("15.3"))
+        // (15L)
+        // >>> ClosestInteger(("14.5"))
+        // (15L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.0"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.1"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.2"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.3"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.4"))
+        // (-14L)
+        // >>> ClosestInteger(("-14.5"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.6"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.7"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.8"))
+        // (-15L)
+        // >>> ClosestInteger(("-14.9"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.0"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.1"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.2"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.3"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.4"))
+        // (-15L)
+        // >>> ClosestInteger(("-15.5"))
+        // (-16L)
+        // >>> ClosestInteger(("-15.6"))
+        // (-16L)
+        // >>> ClosestInteger(("-
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(ClosestInteger(("10")) == (10L));
+    Debug.Assert(ClosestInteger(("14.5")) == (15L));
+    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
+    Debug.Assert(ClosestInteger(("15.3")) == (15L));
+    Debug.Assert(ClosestInteger(("0")) == (0L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpdjokyv_z.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
 
 '''
 
@@ -10155,951 +11099,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_99_closest_integer --- completion 25 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.6"))
-        // (-16L)
-        // >>> ClosestInteger(("-15.5"))
-        // (-16L)
-        // >>> ClosestInteger(("-15.4"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.0"))
-        // (-14L)
-        // >>> ClosestInteger(("-13.5"))
-        // (-14L)
-        // >>> ClosestInteger(("-13.0"))
-        // (-13L)
-        // >>> ClosestInteger(("-12.5"))
-        // (-13L)
-        // >>> ClosestInteger(("-12.0"))
-        // (-12L)
-        // >>> ClosestInteger(("-11.5"))
-        // (-12L)
-        // >>> ClosestInteger(("-11.0"))
-        // (-11L)
-        // >>> ClosestInteger(("-10.5"))
-        // (-11L)
-        // >>> ClosestInteger(("-10.0"))
-        // (-10L)
-        // >>> ClosestInteger(("-9.5"))
-        // (-10L)
-        // >>> ClosestInteger(("-9.0"))
-        // (-9L)
-        // >>> ClosestInteger(("-8.5"))
-        // (-9L)
-        // >>> ClosestInteger(("-8.0"))
-        // (-8L)
-        // >>> ClosestInteger(("-7.5"))
-        // (-8L)
-        // >>> ClosestInteger(("-7.0"))
-        // (-7L)
-        // >>> ClosestInteger(("
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpw_lznnxe.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 30 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp15hgh1dv.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 41 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("14.4"))
-        // (14L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("14.6"))
-        // (15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("14.4"))
-        // (14L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("14.6"))
-        // (15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("14.4"))
-        // (14L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("14.6"))
-        // (15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("14.4"))
-        // (14L
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpw8xgqe3o.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 45 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // Your code goes here.
-        // You may use the built-in round function.
-        // You may use the built-in abs function.
-        // You may use the built-in int function.
-        // You may use the built-in float function.
-        // You may use the built-in str function.
-        // You may use the built-in len function.
-        // You may use the built-in ord function.
-        // You may use the built-in chr function.
-        // You may use the built-in range function.
-        // You may use the built-in zip function.
-        // You may use the built-in map function.
-        // You may use the built-in reduce function.
-        // You may use the built-in filter function.
-        // You may use the built-in all function.
-        // You may use the built-in any function.
-        // You may use the built-in min function.
-        // You may use the built-in max function.
-        // You may use the built-in sum function.
-        // You may use the built-in sorted function.
-        // You may use the built-in reversed function.
-        // You may use the built-in enumerate function.
-        // You may use the built-in reversed function.
-        // You may use the built-in enumerate function.
-        // You may use the built-in pow function.
-        // You may use the built-in divmod function.
-        // You may use the built-in complex function.
-        // You may use the built-in pow function.
-        // You may use the built-in divmod function.
-        // You may use the built-in complex function.
-        // You may use the built-in pow function.
-        // You may use the built-in divmod function.
-        // You may use the built-in complex function.
-        // You may use the built-in pow function.
-        // You may use the built-in divmod function.
-        // You may use the built-in complex function.
-        // You may use the built-in pow function.
-        // You may use the built-in divmod function.
-        // You may use the built-in complex function.
-       
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmph0i0o8we.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 47 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("15.6"))
-        // (16L)
-        // >>> ClosestInteger(("-15.6"))
-        // (-16L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.1"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.1"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.6"))
-        // (-16L)
-        // >>> ClosestInteger(("15.6"))
-        // (16L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("15.0"))
-        // (15L)
-        // >>> ClosestInteger(("15.1"))
-        // (15L)
-        // >>> ClosestInteger(("15.0"))
-        // (15L)
-        // >>> ClosestInteger(("15.1"))
-        // (15L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("15.6"))
-        // (16L)
-        // >>> ClosestInteger(("-15.6"))
-        // (-16L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.1"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp2pha_6fm.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 76 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // Note:
-        // Rounding away from zero means that if the given number is equidistant
-        // from two integers, the one you should return is the one that is the
-        // farthest from zero. For example closest_integer("14.5") should
-        // return 15 and closest_integer("-14.5") should return -15.
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // Note:
-        // Rounding away from zero means that if the given number is equidistant
-        // from two integers, the one you should return is the one that is the
-        // farthest from zero. For example closest_integer("14.5") should
-        // return 15 and closest_integer("-14.5") should return -15.
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // Note:
-        // Rounding away from zero means that if the given number is equidistant
-        // from two integers, the one you should return is the one that is the
-        // farthest from zero. For example closest_integer("14.5") should
-        // return 15 and closest_integer("-14.5") should return -15.
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // Note:
-        // Rounding away from zero means that if the given number is equidistant
-        // from two integers, the one you should return is the one that is the
-        // farthest from zero. For example closest_integer("14.5") should
-        // return 15 and closest_integer("-14.5") should return -15.
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps6h8gz0q.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 90 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // Your code goes here.
-        // You may use the built-in BigInteger class.
-        // You may not use any other built-in classes.
-        // You may not use any external libraries.
-        // You may not use any built-in functions.
-        // You may not use any built-in operators.
-        // You may not use any built-in types.
-        // You may not use any built-in constants.
-        // You may not use any built-in variables.
-        // You may not use any built-in methods.
-        // You may not use any built-in properties.
-        // You may not use any built-in events.
-        // You may not use any built-in delegates.
-        // You may not use any built-in enumerations.
-        // You may not use any built-in structures.
-        // You may not use any built-in interfaces.
-        // You may not use any built-in classes.
-        // You may not use any built-in namespaces.
-        // You may not use any built-in keywords.
-        // You may not use any built-in preprocessor directives.
-        // You may not use any built-in directives.
-        // You may not use any built-in statements.
-        // You may not use any built-in expressions.
-        // You may not use any built-in operators.
-        // You may not use any built-in functions.
-        // You may not use any built-in types.
-        // You may not use any built-in constants.
-        // You may not use any built-in variables.
-        // You may not use any built-in methods.
-        // You may not use any built-in properties.
-        // You may not use any built-in events.
-        // You may not use any built-in delegates.
-        // You may not use any built-in enumerations.
-        // You may not use any built-in structures.
-        // You may not use any built-in interfaces.
-        // You may not use any built-in classes.
-        // You may not use any built-in namespaces.
-        // You may not use any built-in keywords.
-        // You may not use any built-in preprocessor directives.
-       
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbzd290iy.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 92 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // Your code goes here.
-        // You can add other functions to this file, if you need to.
-        // You can add other files to this project, if you need to.
-        // You can add other projects to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution, if you need to.
-        // You can add other solutions to this solution
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps5ux4d5k.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 106 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.0"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.1"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.2"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.3"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.7"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.8"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.9"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.1"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.2"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.4"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.5"))
-        // (-16L)
-        // >>> ClosestInteger(("-15.6"))
-        // (-16L)
-        // >>> ClosestInteger(("-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpdjokyv_z.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 145 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function that takes a value (string) representing a number
-    // and returns the closest integer to it. If the number is equidistant
-    // from two integers, round it away from zero.
-    // Examples
-    // >>> ClosestInteger(("10"))
-    // (10L)
-    // >>> ClosestInteger(("15.3"))
-    // (15L)
-    // Note:
-    // Rounding away from zero means that if the given number is equidistant
-    // from two integers, the one you should return is the one that is the
-    // farthest from zero. For example closest_integer("14.5") should
-    // return 15 and closest_integer("-14.5") should return -15.
-    public static long ClosestInteger(string value) {
-        // >>> ClosestInteger(("10"))
-        // (10L)
-        // >>> ClosestInteger(("15.3"))
-        // (15L)
-        // >>> ClosestInteger(("14.5"))
-        // (15L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.0"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.1"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.2"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.3"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.4"))
-        // (-14L)
-        // >>> ClosestInteger(("-14.5"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.6"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.7"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.8"))
-        // (-15L)
-        // >>> ClosestInteger(("-14.9"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.0"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.1"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.2"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.3"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.4"))
-        // (-15L)
-        // >>> ClosestInteger(("-15.5"))
-        // (-16L)
-        // >>> ClosestInteger(("-15.6"))
-        // (-16L)
-        // >>> ClosestInteger(("-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(ClosestInteger(("10")) == (10L));
-    Debug.Assert(ClosestInteger(("14.5")) == (15L));
-    Debug.Assert(ClosestInteger(("-15.5")) == (-16L));
-    Debug.Assert(ClosestInteger(("15.3")) == (15L));
-    Debug.Assert(ClosestInteger(("0")) == (0L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpdjokyv_z.cs(22,24): error CS0161: 'Problem.ClosestInteger(string)': not all code paths return a value
-
-'''
-
-
-
-
-
-# ---- HumanEval_99_closest_integer --- completion 162 ---- 
+# ---- HumanEval_99_closest_integer --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11195,7 +11195,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_99_closest_integer --- completion 169 ---- 
+# ---- HumanEval_99_closest_integer --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11294,7 +11294,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 100 ---- 
+# ---- HumanEval_37_sort_even --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11346,7 +11346,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_37_sort_even --- completion 187 ---- 
+# ---- HumanEval_37_sort_even --- completion 68 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11398,7 +11398,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_46_fib4 --- completion 12 ---- 
+# ---- HumanEval_46_fib4 --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11488,7 +11488,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_46_fib4 --- completion 106 ---- 
+# ---- HumanEval_46_fib4 --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11556,7 +11556,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_46_fib4 --- completion 138 ---- 
+# ---- HumanEval_46_fib4 --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11647,7 +11647,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_46_fib4 --- completion 160 ---- 
+# ---- HumanEval_46_fib4 --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11737,7 +11737,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_11_string_xor --- completion 61 ---- 
+# ---- HumanEval_11_string_xor --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11798,7 +11798,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_11_string_xor --- completion 73 ---- 
+# ---- HumanEval_11_string_xor --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11864,7 +11864,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 13 ---- 
+# ---- HumanEval_73_smallest_change --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11953,7 +11953,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 56 ---- 
+# ---- HumanEval_73_smallest_change --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12037,7 +12037,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 74 ---- 
+# ---- HumanEval_73_smallest_change --- completion 47 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12129,7 +12129,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 92 ---- 
+# ---- HumanEval_73_smallest_change --- completion 56 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -12210,7 +12210,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 124 ---- 
+# ---- HumanEval_73_smallest_change --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

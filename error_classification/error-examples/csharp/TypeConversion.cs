@@ -1,4 +1,4 @@
-# ---- HumanEval_6_parse_nested_parens --- completion 22 ---- 
+# ---- HumanEval_6_parse_nested_parens --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -62,7 +62,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_155_even_odd_count --- completion 30 ---- 
+# ---- HumanEval_155_even_odd_count --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -120,7 +120,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 13 ---- 
+# ---- HumanEval_129_minPath --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -232,7 +232,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_129_minPath --- completion 78 ---- 
+# ---- HumanEval_129_minPath --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -340,7 +340,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_65_circular_shift --- completion 63 ---- 
+# ---- HumanEval_65_circular_shift --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -447,7 +447,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 2 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -537,7 +537,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 5 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -595,7 +595,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 7 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -653,7 +653,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 44 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -711,7 +711,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 66 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 34 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -767,7 +767,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 73 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -825,7 +825,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 80 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -881,7 +881,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 81 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 42 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -961,7 +961,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 99 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 50 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1035,7 +1035,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 102 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 52 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1110,7 +1110,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 114 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 56 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1168,7 +1168,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 119 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 58 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1226,7 +1226,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 127 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 61 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1284,7 +1284,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 137 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 66 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1342,7 +1342,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 170 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 78 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1416,7 +1416,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 178 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 82 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1474,7 +1474,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 186 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 86 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1530,7 +1530,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 192 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 90 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1678,7 +1678,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 7 ---- 
+# ---- HumanEval_87_get_row --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1747,7 +1747,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 34 ---- 
+# ---- HumanEval_87_get_row --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1817,7 +1817,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 41 ---- 
+# ---- HumanEval_87_get_row --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1886,7 +1886,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 44 ---- 
+# ---- HumanEval_87_get_row --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1955,7 +1955,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 51 ---- 
+# ---- HumanEval_87_get_row --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2024,7 +2024,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 52 ---- 
+# ---- HumanEval_87_get_row --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2093,7 +2093,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 53 ---- 
+# ---- HumanEval_87_get_row --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2171,7 +2171,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 59 ---- 
+# ---- HumanEval_87_get_row --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2240,7 +2240,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 82 ---- 
+# ---- HumanEval_87_get_row --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2309,7 +2309,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 84 ---- 
+# ---- HumanEval_87_get_row --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2378,7 +2378,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 89 ---- 
+# ---- HumanEval_87_get_row --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2447,7 +2447,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 90 ---- 
+# ---- HumanEval_87_get_row --- completion 22 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2510,7 +2510,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 92 ---- 
+# ---- HumanEval_87_get_row --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2579,7 +2579,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 93 ---- 
+# ---- HumanEval_87_get_row --- completion 24 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2648,7 +2648,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 108 ---- 
+# ---- HumanEval_87_get_row --- completion 26 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2717,7 +2717,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 116 ---- 
+# ---- HumanEval_87_get_row --- completion 28 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2787,7 +2787,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 125 ---- 
+# ---- HumanEval_87_get_row --- completion 29 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2856,7 +2856,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 127 ---- 
+# ---- HumanEval_87_get_row --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2926,7 +2926,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 133 ---- 
+# ---- HumanEval_87_get_row --- completion 31 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -2995,7 +2995,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 149 ---- 
+# ---- HumanEval_87_get_row --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3073,7 +3073,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 152 ---- 
+# ---- HumanEval_87_get_row --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3142,7 +3142,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 155 ---- 
+# ---- HumanEval_87_get_row --- completion 34 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3211,7 +3211,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 162 ---- 
+# ---- HumanEval_87_get_row --- completion 36 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3280,7 +3280,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 164 ---- 
+# ---- HumanEval_87_get_row --- completion 37 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3349,7 +3349,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 165 ---- 
+# ---- HumanEval_87_get_row --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3418,7 +3418,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 168 ---- 
+# ---- HumanEval_87_get_row --- completion 39 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3496,7 +3496,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 170 ---- 
+# ---- HumanEval_87_get_row --- completion 40 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3565,7 +3565,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 183 ---- 
+# ---- HumanEval_87_get_row --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3635,7 +3635,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 185 ---- 
+# ---- HumanEval_87_get_row --- completion 42 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3702,7 +3702,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 187 ---- 
+# ---- HumanEval_87_get_row --- completion 43 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3772,7 +3772,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 188 ---- 
+# ---- HumanEval_87_get_row --- completion 44 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3841,7 +3841,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 190 ---- 
+# ---- HumanEval_87_get_row --- completion 45 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3910,7 +3910,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_87_get_row --- completion 199 ---- 
+# ---- HumanEval_87_get_row --- completion 47 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3979,7 +3979,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_115_max_fill --- completion 171 ---- 
+# ---- HumanEval_115_max_fill --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4061,7 +4061,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 35 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4141,7 +4141,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 105 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4219,7 +4219,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 133 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4292,7 +4292,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 142 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4372,7 +4372,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 174 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4452,7 +4452,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_33_sort_third --- completion 176 ---- 
+# ---- HumanEval_33_sort_third --- completion 46 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4552,6 +4552,108 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
+# ---- HumanEval_5_intersperse --- completion 1 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    // >>> Intersperse((new List<long>()), (4L))
+    // (new List<long>())
+    // >>> Intersperse((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (4L))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)4L, (long)3L}))
+    public static List<long> Intersperse(List<long> numbers, long delimeter) {
+        List<long> result = new List<long>();
+        if ((numbers.Count) == (0L)) {
+            return result;
+        }
+        result.Add(numbers[0]);
+        for (long i = 1L; i < numbers.Count; i++) {
+            result.Add(delimeter);
+            result.Add(numbers[i]);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Intersperse((new List<long>()), (7L)).Equals((new List<long>())));
+    Debug.Assert(Intersperse((new List<long>(new long[]{(long)5L, (long)6L, (long)3L, (long)2L})), (8L)).Equals((new List<long>(new long[]{(long)5L, (long)8L, (long)6L, (long)8L, (long)3L, (long)8L, (long)2L}))));
+    Debug.Assert(Intersperse((new List<long>(new long[]{(long)2L, (long)2L, (long)2L})), (2L)).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)2L, (long)2L, (long)2L}))));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpwfajehyd.cs(22,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_5_intersperse --- completion 2 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
+    // >>> Intersperse((new List<long>()), (4L))
+    // (new List<long>())
+    // >>> Intersperse((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (4L))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)4L, (long)3L}))
+    public static List<long> Intersperse(List<long> numbers, long delimeter) {
+        if ((numbers.Count == 0)) {
+            return numbers;
+        }
+        List<long> result = new List<long>();
+        result.Add(numbers[0]);
+        for (long i = 1; (i < numbers.Count); i++) {
+            result.Add(delimeter);
+            result.Add(numbers[i]);
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Intersperse((new List<long>()), (7L)).Equals((new List<long>())));
+    Debug.Assert(Intersperse((new List<long>(new long[]{(long)5L, (long)6L, (long)3L, (long)2L})), (8L)).Equals((new List<long>(new long[]{(long)5L, (long)8L, (long)6L, (long)8L, (long)3L, (long)8L, (long)2L}))));
+    Debug.Assert(Intersperse((new List<long>(new long[]{(long)2L, (long)2L, (long)2L})), (2L)).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)2L, (long)2L, (long)2L}))));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpj_91rptp.cs(22,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
 # ---- HumanEval_5_intersperse --- completion 3 ---- 
 using System;
 using System.Numerics;
@@ -4603,7 +4705,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_5_intersperse --- completion 32 ---- 
+# ---- HumanEval_5_intersperse --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4654,109 +4756,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_5_intersperse --- completion 40 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
-    // >>> Intersperse((new List<long>()), (4L))
-    // (new List<long>())
-    // >>> Intersperse((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (4L))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)4L, (long)3L}))
-    public static List<long> Intersperse(List<long> numbers, long delimeter) {
-        List<long> result = new List<long>();
-        if ((numbers.Count) == (0L)) {
-            return result;
-        }
-        result.Add(numbers[0]);
-        for (long i = 1L; i < numbers.Count; i++) {
-            result.Add(delimeter);
-            result.Add(numbers[i]);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Intersperse((new List<long>()), (7L)).Equals((new List<long>())));
-    Debug.Assert(Intersperse((new List<long>(new long[]{(long)5L, (long)6L, (long)3L, (long)2L})), (8L)).Equals((new List<long>(new long[]{(long)5L, (long)8L, (long)6L, (long)8L, (long)3L, (long)8L, (long)2L}))));
-    Debug.Assert(Intersperse((new List<long>(new long[]{(long)2L, (long)2L, (long)2L})), (2L)).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)2L, (long)2L, (long)2L}))));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpwfajehyd.cs(22,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_5_intersperse --- completion 51 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Insert a number 'delimeter' between every two consecutive elements of input list `numbers'
-    // >>> Intersperse((new List<long>()), (4L))
-    // (new List<long>())
-    // >>> Intersperse((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (4L))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)4L, (long)3L}))
-    public static List<long> Intersperse(List<long> numbers, long delimeter) {
-        if ((numbers.Count == 0)) {
-            return numbers;
-        }
-        List<long> result = new List<long>();
-        result.Add(numbers[0]);
-        for (long i = 1; (i < numbers.Count); i++) {
-            result.Add(delimeter);
-            result.Add(numbers[i]);
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Intersperse((new List<long>()), (7L)).Equals((new List<long>())));
-    Debug.Assert(Intersperse((new List<long>(new long[]{(long)5L, (long)6L, (long)3L, (long)2L})), (8L)).Equals((new List<long>(new long[]{(long)5L, (long)8L, (long)6L, (long)8L, (long)3L, (long)8L, (long)2L}))));
-    Debug.Assert(Intersperse((new List<long>(new long[]{(long)2L, (long)2L, (long)2L})), (2L)).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)2L, (long)2L, (long)2L}))));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpj_91rptp.cs(22,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_5_intersperse --- completion 94 ---- 
+# ---- HumanEval_5_intersperse --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4807,7 +4807,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_5_intersperse --- completion 128 ---- 
+# ---- HumanEval_5_intersperse --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4858,7 +4858,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_5_intersperse --- completion 166 ---- 
+# ---- HumanEval_5_intersperse --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4909,7 +4909,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 57 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4961,7 +4961,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 103 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5013,7 +5013,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 130 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5073,7 +5073,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 179 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5125,7 +5125,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 24 ---- 
+# ---- HumanEval_120_maximum --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5202,7 +5202,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 94 ---- 
+# ---- HumanEval_120_maximum --- completion 56 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5273,7 +5273,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 138 ---- 
+# ---- HumanEval_120_maximum --- completion 80 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5351,7 +5351,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 1 ---- 
+# ---- HumanEval_62_derivative --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5407,7 +5407,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 2 ---- 
+# ---- HumanEval_62_derivative --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5464,7 +5464,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 3 ---- 
+# ---- HumanEval_62_derivative --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5518,7 +5518,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 4 ---- 
+# ---- HumanEval_62_derivative --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5567,6 +5567,60 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
 /tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 4 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -5645,60 +5699,6 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 7 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
         var i = 1L;
@@ -5738,7 +5738,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 8 ---- 
+# ---- HumanEval_62_derivative --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5792,7 +5792,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 9 ---- 
+# ---- HumanEval_62_derivative --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5846,7 +5846,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 10 ---- 
+# ---- HumanEval_62_derivative --- completion 9 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5902,7 +5902,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 11 ---- 
+# ---- HumanEval_62_derivative --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -5956,7 +5956,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 12 ---- 
+# ---- HumanEval_62_derivative --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6012,7 +6012,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 13 ---- 
+# ---- HumanEval_62_derivative --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6066,7 +6066,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 14 ---- 
+# ---- HumanEval_62_derivative --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6122,7 +6122,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 15 ---- 
+# ---- HumanEval_62_derivative --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6179,7 +6179,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 16 ---- 
+# ---- HumanEval_62_derivative --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6233,7 +6233,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 17 ---- 
+# ---- HumanEval_62_derivative --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6283,7 +6283,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 19 ---- 
+# ---- HumanEval_62_derivative --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6346,7 +6346,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 20 ---- 
+# ---- HumanEval_62_derivative --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6400,7 +6400,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 21 ---- 
+# ---- HumanEval_62_derivative --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6455,7 +6455,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 22 ---- 
+# ---- HumanEval_62_derivative --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6512,7 +6512,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 23 ---- 
+# ---- HumanEval_62_derivative --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6559,6 +6559,168 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
 /tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 22 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 23 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 24 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> result = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            result.Add(xs[i] * i);
+        }
+
+        return result;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmptyg48lwx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmptyg48lwx.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -6637,168 +6799,6 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 27 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> result = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            result.Add(xs[i] * i);
-        }
-
-        return result;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmptyg48lwx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmptyg48lwx.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 28 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 33 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
         var ys = new List<long>();
         for (long i = (long)1L; i < len(xs); i++)
         {
@@ -6836,7 +6836,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 36 ---- 
+# ---- HumanEval_62_derivative --- completion 27 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6891,7 +6891,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 37 ---- 
+# ---- HumanEval_62_derivative --- completion 28 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6944,7 +6944,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 38 ---- 
+# ---- HumanEval_62_derivative --- completion 29 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -6999,7 +6999,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 39 ---- 
+# ---- HumanEval_62_derivative --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7046,6 +7046,508 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmpqrhkyqpr.cs(18,37): error CS0103: The name 'len' does not exist in the current context
 /tmp/tmpqrhkyqpr.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 31 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i++;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 32 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> res = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            res.Add(xs[i] * i);
+        }
+
+        return res;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp557o2nvt.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp557o2nvt.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 33 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 34 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        for (long i = (long)1L; i < (long)len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpdjiy776m.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpdjiy776m.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 35 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 36 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        {
+            var i__prev1 = i;
+
+            for (var i = 1L; i < n; i++)
+            {
+                ys.Add(xs[i] * i);
+            }
+
+
+            i = i__prev1;
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp6x0zqq6p.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp6x0zqq6p.cs(20,28): error CS0103: The name 'i' does not exist in the current context
+/tmp/tmp6x0zqq6p.cs(24,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp6x0zqq6p.cs(28,13): error CS0103: The name 'i' does not exist in the current context
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 37 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
+            i = i + 1L;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 38 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.append(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 39 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        long i = (long)1L;
+        while (i < len(xs))
+        {
+            ans.Add(xs[i] * i);
+            i++;
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmph7hdlpbu.cs(19,20): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmph7hdlpbu.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -7126,13 +7628,15 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        List<long> res = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            res.Add(xs[i] * i);
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i++;
         }
 
-        return res;
+        return ys;
 
     }
     public static void Main(string[] args) {
@@ -7154,8 +7658,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmp557o2nvt.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp557o2nvt.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -7164,6 +7668,390 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_62_derivative --- completion 42 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpcu_znx1t.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpcu_znx1t.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 43 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ys = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 44 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ys = new List<long>();
+        for (var i = (long)1L; i < (long)len(xs); i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 45 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 46 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.append(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 47 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 0L;
+        while (true) {
+            if (!(i < n - 1L)) {
+                break;
+            }
+
+            ys.Add(xs[i + 1L] * (i + 1L));
+            i++;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp1647_n7q.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp1647_n7q.cs(25,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 48 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i += 1L;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpxe9gu9iy.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpxe9gu9iy.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 49 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7217,7 +8105,390 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 43 ---- 
+# ---- HumanEval_62_derivative --- completion 50 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ans.append(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp66rhi5j4.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp66rhi5j4.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp66rhi5j4.cs(20,17): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 51 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 52 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i += 1L;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpxe9gu9iy.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpxe9gu9iy.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 53 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 54 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        long i = 1L;
+        while (i < n)
+        {
+            ys.Add(xs[i] * i);
+            i++;
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpjbmzxl0v.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjbmzxl0v.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 55 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 56 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 57 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7271,7 +8542,68 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 44 ---- 
+# ---- HumanEval_62_derivative --- completion 58 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        if (n == 0L)
+        {
+            return xs;
+        }
+
+        var ys = make_slice<long>(n - 1L);
+        for (long i = 0L; i < n - 1L; i++)
+        {
+            ys[i] = (i + 1L) * xs[i + 1L];
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8yoliwd9.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp8yoliwd9.cs(23,18): error CS0103: The name 'make_slice' does not exist in the current context
+/tmp/tmp8yoliwd9.cs(26,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 59 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7325,7 +8657,495 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 45 ---- 
+# ---- HumanEval_62_derivative --- completion 60 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var res = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            res.Add(xs[i] * i);
+        }
+
+        return res;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp972wnbgp.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp972wnbgp.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 61 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ans = new List<long>();
+        for (long i = (long)1L; i < (long)len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpxuscu5pr.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpxuscu5pr.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 62 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 63 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 64 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var res = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            res.Add(xs[i] * i);
+        }
+
+        return res;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpnnz98x4_.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpnnz98x4_.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 65 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 66 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (long i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4vhvnf7o.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp4vhvnf7o.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 67 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 68 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i++;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 69 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -7388,942 +9208,6 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 47 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 48 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 51 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        long i = (long)1L;
-        while (i < len(xs))
-        {
-            ans.Add(xs[i] * i);
-            i++;
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmph7hdlpbu.cs(19,20): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmph7hdlpbu.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 52 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.Add(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 53 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.Add(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 54 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpcu_znx1t.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpcu_znx1t.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 55 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ys = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 56 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ys = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 59 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 60 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 62 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 0L;
-        while (true) {
-            if (!(i < n - 1L)) {
-                break;
-            }
-
-            ys.Add(xs[i + 1L] * (i + 1L));
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp1647_n7q.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp1647_n7q.cs(25,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 63 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.Add(xs[i] * i);
-            i += 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpxe9gu9iy.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpxe9gu9iy.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 64 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 65 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.append(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp66rhi5j4.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp66rhi5j4.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp66rhi5j4.cs(20,17): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 66 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 68 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.Add(xs[i] * i);
-            i += 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpxe9gu9iy.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpxe9gu9iy.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 69 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
 # ---- HumanEval_62_derivative --- completion 70 ---- 
 using System;
 using System.Numerics;
@@ -8342,13 +9226,68 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
-        var ys = new List<long>();
-        long i = 1L;
-        while (i < n)
+        var ans = new List<long>();
+        for (var i = (long)1L; i < n; i++)
         {
-            ys.Add(xs[i] * i);
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 71 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
             i++;
         }
+
         return ys;
 
     }
@@ -8371,8 +9310,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpjbmzxl0v.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjbmzxl0v.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -8434,7 +9374,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 74 ---- 
+# ---- HumanEval_62_derivative --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8453,9 +9393,8 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
+        for (var i = 1L; i < n; i++) {
+            ys.append(xs[i] * i);
         }
         return ys;
 
@@ -8479,8 +9418,65 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 74 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        long i = (long)1L;
+        while (i < len(xs))
+        {
+            ans.Add(xs[i] * i);
+            i++;
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmph7hdlpbu.cs(19,20): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmph7hdlpbu.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -8489,6 +9485,72 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_62_derivative --- completion 75 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 0L;
+        while (true) {
+            var v = xs[i];
+            if (i > 0L) {
+                v *= i;
+            }
+
+            ys.Add(v);
+            i++;
+            if (i >= n)
+            {
+                break;
+            }
+
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpxm2feeln.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpxm2feeln.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 76 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8542,7 +9604,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 76 ---- 
+# ---- HumanEval_62_derivative --- completion 77 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8560,15 +9622,11 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
-        if (n == 0L)
-        {
-            return xs;
-        }
-
-        var ys = make_slice<long>(n - 1L);
-        for (long i = 0L; i < n - 1L; i++)
-        {
-            ys[i] = (i + 1L) * xs[i + 1L];
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
+            i++;
         }
 
         return ys;
@@ -8593,9 +9651,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmp8yoliwd9.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp8yoliwd9.cs(23,18): error CS0103: The name 'make_slice' does not exist in the current context
-/tmp/tmp8yoliwd9.cs(26,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -8603,7 +9661,113 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 77 ---- 
+# ---- HumanEval_62_derivative --- completion 78 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ys = new List<long>();
+        for (var i = (long)1L; i < (long)len(xs); i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 79 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ys = new List<long>();
+        for (long i = (long)1L; i < (long)len(xs); i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmprgm_zjm_.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmprgm_zjm_.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 80 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -8650,115 +9814,6 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
 /tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 79 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var res = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            res.Add(xs[i] * i);
-        }
-
-        return res;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp972wnbgp.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp972wnbgp.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 80 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ans = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpxuscu5pr.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpxuscu5pr.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -8837,9 +9892,62 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
         {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 83 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ans = new List<long>();
+        for (var i = (long)1L; i < (long)len(xs); i++) {
             ans.Add(xs[i] * i);
         }
 
@@ -8865,8 +9973,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpwtofupdw.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpwtofupdw.cs(19,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -8892,12 +10000,12 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
-        var res = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            res.Add(xs[i] * i);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
         }
-
-        return res;
+        return ys;
 
     }
     public static void Main(string[] args) {
@@ -8919,8 +10027,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpnnz98x4_.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpnnz98x4_.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -8999,13 +10107,13 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (long i = (long)1L; i < n; i++)
+        var ans = new List<long>();
+        for (long i = (long)1L; i < (long)len(xs); i++)
         {
-            ys.Add(xs[i] * i);
+            ans.Add(xs[i] * i);
         }
-        return ys;
+
+        return ans;
 
     }
     public static void Main(string[] args) {
@@ -9027,8 +10135,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmp4vhvnf7o.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp4vhvnf7o.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpxuscu5pr.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpxuscu5pr.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9056,6 +10164,60 @@ class Problem {
         var n = len(xs);
         var ys = new List<long>();
         for (var i = 1L; i < n; i++) {
+            ys.append(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 88 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ys = new List<long>();
+        for (var i = (long)1L; i < (long)len(xs); i++)
+        {
             ys.Add(xs[i] * i);
         }
         return ys;
@@ -9080,8 +10242,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9106,12 +10268,10 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
         var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
+        for (long i = (long)1L; i < len(xs); i++)
+        {
             ys.Add(xs[i] * i);
-            i++;
         }
 
         return ys;
@@ -9136,8 +10296,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9164,16 +10324,11 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
+        long i = 1L;
+        while (i < n)
         {
-            var i__prev1 = i;
-
-            for (var i = 1L; i < n; i++)
-            {
-                ys.Add(xs[i] * i);
-            }
-
-
-            i = i__prev1;
+            ys.Add(xs[i] * i);
+            i++;
         }
         return ys;
 
@@ -9197,10 +10352,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmp6x0zqq6p.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp6x0zqq6p.cs(20,28): error CS0103: The name 'i' does not exist in the current context
-/tmp/tmp6x0zqq6p.cs(24,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp6x0zqq6p.cs(28,13): error CS0103: The name 'i' does not exist in the current context
+/tmp/tmpjbmzxl0v.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjbmzxl0v.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9209,6 +10362,116 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_62_derivative --- completion 91 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 92 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i += 1L;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpxe9gu9iy.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpxe9gu9iy.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 93 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9263,7 +10526,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 92 ---- 
+# ---- HumanEval_62_derivative --- completion 94 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9280,15 +10543,13 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
+        List<long> ret = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ret.Add(xs[i] * i);
         }
 
-        return ys;
+        return ret;
 
     }
     public static void Main(string[] args) {
@@ -9310,9 +10571,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+/tmp/tmp760k0_fl.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp760k0_fl.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9320,7 +10580,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 93 ---- 
+# ---- HumanEval_62_derivative --- completion 95 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9374,7 +10634,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 94 ---- 
+# ---- HumanEval_62_derivative --- completion 96 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9392,65 +10652,9 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
-        var ys = new List<long>();
+        var ans = new List<long>();
         for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 95 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        long i = (long)1L;
-        while (i < len(xs))
-        {
             ans.Add(xs[i] * i);
-            i++;
         }
 
         return ans;
@@ -9475,74 +10679,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmph7hdlpbu.cs(19,20): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmph7hdlpbu.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 96 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 0L;
-        while (true) {
-            var v = xs[i];
-            if (i > 0L) {
-                v *= i;
-            }
-
-            ys.Add(v);
-            i++;
-            if (i >= n)
-            {
-                break;
-            }
-
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpxm2feeln.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpxm2feeln.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpkn4ng4_1.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpkn4ng4_1.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9567,8 +10705,61 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++)
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 98 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ans = new List<long>();
+        for (var i = (long)1L; i < (long)len(xs); i++)
         {
             ans.Add(xs[i] * i);
         }
@@ -9595,8 +10786,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpdjiy776m.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpdjiy776m.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8ikai1s3.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp8ikai1s3.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9623,10 +10814,63 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 100 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
         var i = 1L;
         while (i < n) {
             ys.append(xs[i] * i);
-            i++;
+            i = i + 1L;
         }
 
         return ys;
@@ -9651,9 +10895,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -9662,6 +10906,167 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_62_derivative --- completion 101 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 102 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 103 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ys = new List<long>();
+        for (long i = 1L; i < len(xs); i++) {
+            ys.Add(xs[i] * i);
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpw0njjsrp.cs(18,31): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpw0njjsrp.cs(19,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 104 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9707,113 +11112,6 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
 /tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 102 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ys = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmprgm_zjm_.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmprgm_zjm_.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 103 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -9894,10 +11192,12 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
+            i += 1L;
         }
+
         return ys;
 
     }
@@ -9920,8 +11220,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpdzw8tk6y.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpdzw8tk6y.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpdzw8tk6y.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -9929,7 +11230,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 108 ---- 
+# ---- HumanEval_62_derivative --- completion 107 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -9946,8 +11247,9 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var ans = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++) {
+        List<long> ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
             ans.Add(xs[i] * i);
         }
 
@@ -9973,8 +11275,63 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpwtofupdw.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpwtofupdw.cs(19,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 108 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ans = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10107,8 +11464,9 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ans = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++)
+        for (var i = (long)1L; i < n; i++)
         {
             ans.Add(xs[i] * i);
         }
@@ -10135,8 +11493,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpxuscu5pr.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpxuscu5pr.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10161,10 +11519,10 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
         var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
+        for (long i = (long)1L; i < (long)len(xs); i++)
+        {
+            ys.Add(xs[i] * i);
         }
         return ys;
 
@@ -10188,9 +11546,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+/tmp/tmprgm_zjm_.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmprgm_zjm_.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10215,8 +11572,9 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++)
+        for (var i = (long)1L; i < n; i++)
         {
             ys.Add(xs[i] * i);
         }
@@ -10242,8 +11600,62 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 114 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10268,12 +11680,12 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ys = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
+        for (var i = (long)1L; i < n; i++)
         {
             ys.Add(xs[i] * i);
         }
-
         return ys;
 
     }
@@ -10296,8 +11708,62 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 116 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10323,12 +11789,22 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
-        var ys = new List<long>();
-        long i = 1L;
-        while (i < n)
+        if (n == 0L)
         {
-            ys.Add(xs[i] * i);
-            i++;
+            return xs;
+        }
+
+        var ys = make_slice<long>(n - 1L);
+        {
+            long i__prev1 = i;
+
+            for (long i = 0L; i < n - 1L; i++)
+            {
+                ys[i] = (i + 1L) * xs[i + 1L];
+            }
+
+
+            i = i__prev1;
         }
         return ys;
 
@@ -10352,8 +11828,11 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpjbmzxl0v.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjbmzxl0v.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp49qo1gth.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp49qo1gth.cs(23,18): error CS0103: The name 'make_slice' does not exist in the current context
+/tmp/tmp49qo1gth.cs(25,29): error CS0103: The name 'i' does not exist in the current context
+/tmp/tmp49qo1gth.cs(29,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp49qo1gth.cs(33,13): error CS0103: The name 'i' does not exist in the current context
 
 '''
 
@@ -10432,14 +11911,11 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
         var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
+        for (var i = (long)1L; i < (long)len(xs); i++)
+        {
             ys.Add(xs[i] * i);
-            i += 1L;
         }
-
         return ys;
 
     }
@@ -10462,8 +11938,64 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpxe9gu9iy.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpxe9gu9iy.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 120 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ans = new List<long>();
+        long i = (long)1L;
+        while (i < len(xs))
+        {
+            ans.Add(xs[i] * i);
+            i++;
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmph7hdlpbu.cs(19,20): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmph7hdlpbu.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10489,8 +12021,63 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
+        var ys = new List<long>();
+        var i = 1L;
+        while (i < n) {
+            ys.Add(xs[i] * i);
+            i++;
+        }
+
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 122 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
         var ans = new List<long>();
-        for (var i = (long)1L; i < n; i++)
+        for (long i = (long)1L; i < len(xs); i++)
         {
             ans.Add(xs[i] * i);
         }
@@ -10517,62 +12104,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 122 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ret = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ret.Add(xs[i] * i);
-        }
-
-        return ret;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp760k0_fl.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp760k0_fl.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpcu_znx1t.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpcu_znx1t.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10705,12 +12238,13 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.Add(xs[i] * i);
+        List<long> result = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            result.Add(xs[i] * i);
         }
-        return ys;
+
+        return result;
 
     }
     public static void Main(string[] args) {
@@ -10732,8 +12266,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmptyg48lwx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmptyg48lwx.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10758,8 +12292,9 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ans = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++)
+        for (var i = (long)1L; i < n; i++)
         {
             ans.Add(xs[i] * i);
         }
@@ -10786,8 +12321,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmp8ikai1s3.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp8ikai1s3.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10812,11 +12347,68 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var res = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            res.Add(xs[i] * i);
+        }
+
+        return res;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp2mgp0xdc.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp2mgp0xdc.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 128 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.Add(xs[i] * i);
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
+            i++;
         }
+
         return ys;
 
     }
@@ -10839,8 +12431,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -10867,12 +12460,10 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.Add(xs[i] * i);
         }
-
         return ys;
 
     }
@@ -10895,9 +12486,61 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 130 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = 1L; i < n; i++) {
+            ys.Add(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -10922,13 +12565,13 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
+        var ys = new List<long>();
         for (long i = (long)1L; i < len(xs); i++)
         {
-            ans.Add(xs[i] * i);
+            ys.Add(xs[i] * i);
         }
 
-        return ans;
+        return ys;
 
     }
     public static void Main(string[] args) {
@@ -10950,8 +12593,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -11030,11 +12673,14 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ys = new List<long>();
-        for (long i = 1L; i < len(xs); i++) {
+        long i = (long)1L;
+        while (i < n)
+        {
             ys.Add(xs[i] * i);
+            i++;
         }
-
         return ys;
 
     }
@@ -11057,8 +12703,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpw0njjsrp.cs(18,31): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpw0njjsrp.cs(19,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpec22rx85.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpec22rx85.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -11083,11 +12729,14 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
+            i = i + 1L;
         }
+
         return ys;
 
     }
@@ -11110,8 +12759,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -11136,13 +12786,13 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
+        List<long> ret = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
         {
-            ys.Add(xs[i] * i);
+            ret.Add(xs[i] * i);
         }
-        return ys;
+
+        return ret;
 
     }
     public static void Main(string[] args) {
@@ -11164,8 +12814,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp760k0_fl.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp760k0_fl.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -11195,7 +12845,7 @@ class Problem {
         var i = 1L;
         while (i < n) {
             ys.append(xs[i] * i);
-            i += 1L;
+            i = i + 1L;
         }
 
         return ys;
@@ -11220,9 +12870,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpdzw8tk6y.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpdzw8tk6y.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpdzw8tk6y.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
+/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -11230,7 +12880,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 138 ---- 
+# ---- HumanEval_62_derivative --- completion 137 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11284,7 +12934,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 140 ---- 
+# ---- HumanEval_62_derivative --- completion 138 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11303,8 +12953,7 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ans = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
+        for (var i = 1L; i < n; i++) {
             ans.Add(xs[i] * i);
         }
 
@@ -11330,8 +12979,124 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpkn4ng4_1.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpkn4ng4_1.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 139 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> ret = new List<long>();
+        for (long i = (long)1L; i < (long)len(xs); i++) {
+            ret.Add(i * xs[i]);
+        }
+
+        return ret;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpp8h0xk8z.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpp8h0xk8z.cs(19,28): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 140 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        {
+            var i__prev1 = i;
+
+            for (var i = (long)1L; i < n; i++)
+            {
+                ys.Add(xs[i] * i);
+            }
+
+
+            i = i__prev1;
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp6933alxf.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp6933alxf.cs(20,28): error CS0103: The name 'i' does not exist in the current context
+/tmp/tmp6933alxf.cs(24,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp6933alxf.cs(28,13): error CS0103: The name 'i' does not exist in the current context
 
 '''
 
@@ -11358,10 +13123,12 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
+        var i = 1L;
+        while (i < n) {
+            ys.append(xs[i] * i);
+            i = i + 1L;
         }
+
         return ys;
 
     }
@@ -11384,8 +13151,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -11412,9 +13180,8 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
+        for (var i = 1L; i < n; i++) {
+            ys.append(xs[i] * i);
         }
         return ys;
 
@@ -11438,8 +13205,9 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -11448,6 +13216,59 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_62_derivative --- completion 143 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        List<long> res = new List<long>();
+        for (long i = (long)1L; i < (long)len(xs); i++) {
+            res.Add(xs[i] * i);
+        }
+
+        return res;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp81z3v5js.cs(18,43): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp81z3v5js.cs(19,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 144 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11502,7 +13323,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 148 ---- 
+# ---- HumanEval_62_derivative --- completion 145 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -11519,8 +13340,119 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
         var ys = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++)
+        long i = 1L;
+        while (i < n)
+        {
+            ys.Add(xs[i] * i);
+            i++;
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpjbmzxl0v.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpjbmzxl0v.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 146 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var ans = new List<long>();
+        for (var i = (long)1L; i < (long)len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8ikai1s3.cs(18,42): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp8ikai1s3.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 147 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
         {
             ys.Add(xs[i] * i);
         }
@@ -11546,8 +13478,63 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmprgm_zjm_.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmprgm_zjm_.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 148 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
+        var n = len(xs);
+        var ys = new List<long>();
+        for (var i = (long)1L; i < n; i++)
+        {
+            ys.append(xs[i] * i);
+        }
+        return ys;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp7h9mgen0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmp7h9mgen0.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp7h9mgen0.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
 
 '''
 
@@ -11626,12 +13613,66 @@ class Problem {
     // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
+        var ans = new List<long>();
+        for (long i = (long)1L; i < len(xs); i++)
+        {
+            ans.Add(xs[i] * i);
+        }
+
+        return ans;
+
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
+    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpcu_znx1t.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpcu_znx1t.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_62_derivative --- completion 151 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // xs represent coefficients of a polynomial.
+    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
+    // Return derivative of this polynomial in the same form.
+    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
+    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
+    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (new List<long>(new long[]{(long)2L, (long)6L}))
+    public static List<long> Derivative(List<long> xs) {
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
+        for (long i = (long)1L; i < len(xs); i++)
         {
             ys.Add(xs[i] * i);
         }
+
         return ys;
 
     }
@@ -11654,8 +13695,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -11682,10 +13723,12 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
+        var i = 1L;
+        while (i < n) {
             ys.Add(xs[i] * i);
+            i++;
         }
+
         return ys;
 
     }
@@ -11708,8 +13751,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -11736,8 +13779,7 @@ class Problem {
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
         var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
+        for (var i = 1L; i < n; i++) {
             ys.Add(xs[i] * i);
         }
         return ys;
@@ -11762,8 +13804,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
+/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -11789,75 +13831,6 @@ class Problem {
     // (new List<long>(new long[]{(long)2L, (long)6L}))
     public static List<long> Derivative(List<long> xs) {
         var n = len(xs);
-        if (n == 0L)
-        {
-            return xs;
-        }
-
-        var ys = make_slice<long>(n - 1L);
-        {
-            long i__prev1 = i;
-
-            for (long i = 0L; i < n - 1L; i++)
-            {
-                ys[i] = (i + 1L) * xs[i + 1L];
-            }
-
-
-            i = i__prev1;
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp49qo1gth.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp49qo1gth.cs(23,18): error CS0103: The name 'make_slice' does not exist in the current context
-/tmp/tmp49qo1gth.cs(25,29): error CS0103: The name 'i' does not exist in the current context
-/tmp/tmp49qo1gth.cs(29,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp49qo1gth.cs(33,13): error CS0103: The name 'i' does not exist in the current context
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 155 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
         var ys = new List<long>();
         for (var i = (long)1L; i < n; i++)
         {
@@ -11894,1980 +13867,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_62_derivative --- completion 156 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ys = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpsg1xj6p8.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpsg1xj6p8.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 157 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        long i = (long)1L;
-        while (i < len(xs))
-        {
-            ans.Add(xs[i] * i);
-            i++;
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmph7hdlpbu.cs(19,20): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmph7hdlpbu.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 158 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.Add(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 159 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpcu_znx1t.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpcu_znx1t.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 160 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 161 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ans = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpkn4ng4_1.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpkn4ng4_1.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 163 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> result = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            result.Add(xs[i] * i);
-        }
-
-        return result;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmptyg48lwx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmptyg48lwx.cs(20,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 164 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ans = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 165 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var res = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            res.Add(xs[i] * i);
-        }
-
-        return res;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp2mgp0xdc.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp2mgp0xdc.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 166 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbqeolgdv.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpbqeolgdv.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbqeolgdv.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 168 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 170 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 171 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ys = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 172 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 175 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        long i = (long)1L;
-        while (i < n)
-        {
-            ys.Add(xs[i] * i);
-            i++;
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpec22rx85.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpec22rx85.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 176 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 177 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ret = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ret.Add(xs[i] * i);
-        }
-
-        return ret;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp760k0_fl.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp760k0_fl.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 178 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 179 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmptukobtw5.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmptukobtw5.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 180 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ans = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpkn4ng4_1.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpkn4ng4_1.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 183 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> ret = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++) {
-            ret.Add(i * xs[i]);
-        }
-
-        return ret;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpp8h0xk8z.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpp8h0xk8z.cs(19,28): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 184 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        {
-            var i__prev1 = i;
-
-            for (var i = (long)1L; i < n; i++)
-            {
-                ys.Add(xs[i] * i);
-            }
-
-
-            i = i__prev1;
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp6933alxf.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp6933alxf.cs(20,28): error CS0103: The name 'i' does not exist in the current context
-/tmp/tmp6933alxf.cs(24,27): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp6933alxf.cs(28,13): error CS0103: The name 'i' does not exist in the current context
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 185 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.append(xs[i] * i);
-            i = i + 1L;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmbdlgwtn.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmbdlgwtn.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmbdlgwtn.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 186 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpmh53wc5c.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpmh53wc5c.cs(20,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpmh53wc5c.cs(20,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 187 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        List<long> res = new List<long>();
-        for (long i = (long)1L; i < (long)len(xs); i++) {
-            res.Add(xs[i] * i);
-        }
-
-        return res;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp81z3v5js.cs(18,43): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp81z3v5js.cs(19,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ans = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpjgx_qm3m.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjgx_qm3m.cs(21,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 190 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        long i = 1L;
-        while (i < n)
-        {
-            ys.Add(xs[i] * i);
-            i++;
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpjbmzxl0v.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpjbmzxl0v.cs(22,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 191 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ans = new List<long>();
-        for (var i = (long)1L; i < (long)len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8ikai1s3.cs(18,42): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp8ikai1s3.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 192 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 193 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.append(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp7h9mgen0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmp7h9mgen0.cs(21,26): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp7h9mgen0.cs(21,16): error CS1061: 'List<long>' does not contain a definition for 'append' and no accessible extension method 'append' accepting a first argument of type 'List<long>' could be found (are you missing a using directive or an assembly reference?)
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 194 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 195 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ans = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ans.Add(xs[i] * i);
-        }
-
-        return ans;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpcu_znx1t.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpcu_znx1t.cs(20,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 196 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var ys = new List<long>();
-        for (long i = (long)1L; i < len(xs); i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpd7brtdfx.cs(18,37): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpd7brtdfx.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 197 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        var i = 1L;
-        while (i < n) {
-            ys.Add(xs[i] * i);
-            i++;
-        }
-
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpazkxgfu0.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpazkxgfu0.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 198 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = 1L; i < n; i++) {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpx8kxm46r.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpx8kxm46r.cs(20,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_62_derivative --- completion 199 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // xs represent coefficients of a polynomial.
-    // xs[0] + xs[1] * x + xs[2] * x^2 + ....
-    // Return derivative of this polynomial in the same form.
-    // >>> Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L})))
-    // (new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))
-    // >>> Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (new List<long>(new long[]{(long)2L, (long)6L}))
-    public static List<long> Derivative(List<long> xs) {
-        var n = len(xs);
-        var ys = new List<long>();
-        for (var i = (long)1L; i < n; i++)
-        {
-            ys.Add(xs[i] * i);
-        }
-        return ys;
-
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)1L, (long)2L, (long)4L, (long)5L}))).Equals((new List<long>(new long[]{(long)1L, (long)4L, (long)12L, (long)20L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L, (long)2L, (long)3L}))).Equals((new List<long>(new long[]{(long)2L, (long)6L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)3L, (long)2L, (long)1L, (long)0L, (long)4L}))).Equals((new List<long>(new long[]{(long)2L, (long)2L, (long)0L, (long)16L}))));
-    Debug.Assert(Derivative((new List<long>(new long[]{(long)1L}))).Equals((new List<long>())));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr19f9r10.cs(17,17): error CS0103: The name 'len' does not exist in the current context
-/tmp/tmpr19f9r10.cs(21,23): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_83_starts_one_ends --- completion 63 ---- 
+# ---- HumanEval_83_starts_one_ends --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -13969,7 +13969,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_128_prod_signs --- completion 122 ---- 
+# ---- HumanEval_128_prod_signs --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14032,7 +14032,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_47_median --- completion 18 ---- 
+# ---- HumanEval_47_median --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14084,7 +14084,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_47_median --- completion 39 ---- 
+# ---- HumanEval_47_median --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14136,7 +14136,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_47_median --- completion 92 ---- 
+# ---- HumanEval_47_median --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14188,7 +14188,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_47_median --- completion 103 ---- 
+# ---- HumanEval_47_median --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14240,7 +14240,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_47_median --- completion 168 ---- 
+# ---- HumanEval_47_median --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14292,7 +14292,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_47_median --- completion 176 ---- 
+# ---- HumanEval_47_median --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14344,7 +14344,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_93_encode --- completion 117 ---- 
+# ---- HumanEval_93_encode --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14411,7 +14411,447 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
+# ---- HumanEval_72_will_it_fly --- completion 0 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 1 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 2 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 3 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 4 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 5 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
 # ---- HumanEval_72_will_it_fly --- completion 8 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Write a function that returns true if the object q will fly, and false otherwise.
+    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    // Example:
+    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
+    // (false)
+    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
+    // (false)
+    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
+    // (true)
+    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
+    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
+    // (true)
+    // # 3 is less than the maximum possible weight, and it's balanced.
+    public static bool WillItFly(List<long> q, long w) {
+        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
+    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
+
+'''
+
+
+
+
+
+# ---- HumanEval_72_will_it_fly --- completion 9 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14521,7 +14961,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 23 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14576,7 +15016,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 24 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14631,7 +15071,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 62 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 13 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14686,7 +15126,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 67 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14741,7 +15181,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 72 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14796,7 +15236,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 81 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14851,7 +15291,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 93 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14906,7 +15346,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 94 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -14961,7 +15401,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 104 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15016,7 +15456,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 106 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15071,7 +15511,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 140 ---- 
+# ---- HumanEval_72_will_it_fly --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15126,447 +15566,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_72_will_it_fly --- completion 142 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 157 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 164 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 166 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 168 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 174 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 183 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_72_will_it_fly --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Write a function that returns true if the object q will fly, and false otherwise.
-    // The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
-    // Example:
-    // >>> WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L))
-    // (false)
-    // # 1+2 is less than the maximum possible weight, but it's unbalanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L))
-    // (false)
-    // # it's balanced, but 3+2+3 is more than the maximum possible weight.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L))
-    // (true)
-    // # 3+2+3 is less than the maximum possible weight, and it's balanced.
-    // >>> WillItFly((new List<long>(new long[]{(long)3L})), (5L))
-    // (true)
-    // # 3 is less than the maximum possible weight, and it's balanced.
-    public static bool WillItFly(List<long> q, long w) {
-        return q.Sum() <= w && q.SequenceEqual(q.Reverse());
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (9L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L})), (5L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L})), (5L)) == (true));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)3L, (long)2L, (long)3L})), (1L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})), (6L)) == (false));
-    Debug.Assert(WillItFly((new List<long>(new long[]{(long)5L})), (5L)) == (true));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp0er2q2s0.cs(25,48): error CS1503: Argument 2: cannot convert from 'void' to 'System.Collections.Generic.IEnumerable<long>'
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 42 ---- 
+# ---- HumanEval_130_tri --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15630,7 +15630,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_130_tri --- completion 52 ---- 
+# ---- HumanEval_130_tri --- completion 48 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15694,7 +15694,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_130_tri --- completion 96 ---- 
+# ---- HumanEval_130_tri --- completion 88 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15758,7 +15758,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_130_tri --- completion 103 ---- 
+# ---- HumanEval_130_tri --- completion 92 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15822,7 +15822,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_130_tri --- completion 109 ---- 
+# ---- HumanEval_130_tri --- completion 98 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15886,7 +15886,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_130_tri --- completion 123 ---- 
+# ---- HumanEval_130_tri --- completion 112 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -15950,7 +15950,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 7 ---- 
+# ---- HumanEval_135_can_arrange --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16007,7 +16007,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 9 ---- 
+# ---- HumanEval_135_can_arrange --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16056,6 +16056,504 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 /tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 /tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 2 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 3 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 4 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 5 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 6 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i >= 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp3ycyztiy.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp3ycyztiy.cs(21,40): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 8 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 9 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 10 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -16087,6 +16585,62 @@ class Problem {
             if (arr[i] < arr[i - 1]) {
                 return i - 1;
             }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 12 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
             i = i - 1;
         }
         return -1;
@@ -16119,7 +16673,230 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 14 ---- 
+# ---- HumanEval_135_can_arrange --- completion 15 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long max = -1;
+        long prev = arr[0];
+        for (long i = 1; i < arr.Count; i++) {
+            if (arr[i] <= prev) {
+                max = i;
+            }
+            prev = arr[i];
+        }
+        return max;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpj2gtcidp.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpj2gtcidp.cs(25,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 16 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 17 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 19 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16176,7 +16953,343 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 16 ---- 
+# ---- HumanEval_135_can_arrange --- completion 21 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 22 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                break;
+            }
+            i = i - 1;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpm853pc76.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpm853pc76.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 23 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 24 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 25 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 26 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 27 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16253,10 +17366,13 @@ class Problem {
     public static long CanArrange(List<long> arr) {
         long n = arr.Count;
         long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
         }
-        return i - 1;
+        return -1;
     }
     public static void Main(string[] args) {
     Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
@@ -16277,8 +17393,8 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -16307,116 +17423,6 @@ class Problem {
     public static long CanArrange(List<long> arr) {
         long n = arr.Count;
         long i = n - 1;
-        while (i >= 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp3ycyztiy.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp3ycyztiy.cs(21,40): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 30 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 34 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
         while (i > 0 && arr[i] >= arr[i - 1]) {
             i--;
         }
@@ -16450,7 +17456,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 39 ---- 
+# ---- HumanEval_135_can_arrange --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16507,7 +17513,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 41 ---- 
+# ---- HumanEval_135_can_arrange --- completion 31 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16561,63 +17567,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 42 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 44 ---- 
+# ---- HumanEval_135_can_arrange --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16673,7 +17623,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 48 ---- 
+# ---- HumanEval_135_can_arrange --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16692,15 +17642,14 @@ class Problem {
     // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (-1L)
     public static long CanArrange(List<long> arr) {
-        long max = -1;
-        long prev = arr[0];
-        for (long i = 1; i < arr.Count; i++) {
-            if (arr[i] <= prev) {
-                max = i;
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
             }
-            prev = arr[i];
+            i--;
         }
-        return max;
+        return -1;
     }
     public static void Main(string[] args) {
     Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
@@ -16721,8 +17670,794 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpj2gtcidp.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpj2gtcidp.cs(25,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 34 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i >= 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmppmsqgqjd.cs(20,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppmsqgqjd.cs(20,40): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 35 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long max = -1;
+        long maxIndex = -1;
+        for (long i = 0; i < arr.Count; i++) {
+            if (i == 0) {
+                max = arr[0];
+                maxIndex = 0;
+            } else {
+                if (arr[i] < max) {
+                    max = arr[i];
+                    maxIndex = i;
+                }
+            }
+        }
+        return maxIndex;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpry76q109.cs(26,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpry76q109.cs(27,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 36 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 37 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i = i - 1;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpo_jpzapl.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpo_jpzapl.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 38 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 39 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 40 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 42 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 43 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 44 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i = i - 1;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpo_jpzapl.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpo_jpzapl.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 45 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] >= arr[i - 1]) {
+                i--;
+            } else {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmprsxxdjgf.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmprsxxdjgf.cs(21,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 46 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 47 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 48 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i = i - 1;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpo_jpzapl.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpo_jpzapl.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -16731,6 +18466,234 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_135_can_arrange --- completion 49 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 50 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i >= 0) {
+            if (arr[i] >= arr[i - 1]) {
+                i = i - 1;
+            } else {
+                break;
+            }
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp2lb43t7h.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp2lb43t7h.cs(22,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 51 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 52 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 53 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16808,6 +18771,229 @@ class Problem {
             if (arr[i] < arr[i - 1]) {
                 return i - 1;
             }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 55 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 56 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long result = -1;
+        long prev = arr[0];
+        for (long i = 1; i < arr.Count; i++) {
+            if (arr[i] <= prev) {
+                result = i;
+            }
+            prev = arr[i];
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp527bux50.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp527bux50.cs(25,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 58 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 59 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
             i--;
         }
         return -1;
@@ -16840,7 +19026,286 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
+# ---- HumanEval_135_can_arrange --- completion 60 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
 # ---- HumanEval_135_can_arrange --- completion 61 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i = i - 1;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 62 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long n = arr.Count;
+        long i = n - 1;
+        while (i > 0 && arr[i] >= arr[i - 1]) {
+            i--;
+        }
+        return i - 1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 63 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 64 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Create a function which returns the largest index of an element which
+    // is not greater than or equal to the element immediately preceding it. If
+    // no such element exists then return -1. The given list will not contain
+    // duplicate values.
+    // Examples:
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
+    // (3L)
+    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
+    // (-1L)
+    public static long CanArrange(List<long> arr) {
+        long i = arr.Count - 1;
+        while (i > 0) {
+            if (arr[i] < arr[i - 1]) {
+                return i - 1;
+            }
+            i--;
+        }
+        return -1;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
+    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
+    Debug.Assert(CanArrange((new List<long>())) == (-1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_135_can_arrange --- completion 65 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -16915,2471 +19380,6 @@ class Problem {
     // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
     // (-1L)
     public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 69 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 70 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                break;
-            }
-            i = i - 1;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpm853pc76.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpm853pc76.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 76 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 78 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 81 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 86 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 87 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 88 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 91 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 94 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 99 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 102 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 103 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 107 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i >= 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmppmsqgqjd.cs(20,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppmsqgqjd.cs(20,40): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 111 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long max = -1;
-        long maxIndex = -1;
-        for (long i = 0; i < arr.Count; i++) {
-            if (i == 0) {
-                max = arr[0];
-                maxIndex = 0;
-            } else {
-                if (arr[i] < max) {
-                    max = arr[i];
-                    maxIndex = i;
-                }
-            }
-        }
-        return maxIndex;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpry76q109.cs(26,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpry76q109.cs(27,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 112 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 115 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i = i - 1;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpo_jpzapl.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpo_jpzapl.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 116 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 119 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 120 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 123 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 127 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 135 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i = i - 1;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpo_jpzapl.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpo_jpzapl.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 138 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] >= arr[i - 1]) {
-                i--;
-            } else {
-                return i;
-            }
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmprsxxdjgf.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmprsxxdjgf.cs(21,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 142 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 144 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 145 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i = i - 1;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpo_jpzapl.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpo_jpzapl.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 146 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 147 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i >= 0) {
-            if (arr[i] >= arr[i - 1]) {
-                i = i - 1;
-            } else {
-                break;
-            }
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp2lb43t7h.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp2lb43t7h.cs(22,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 153 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 154 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 155 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 167 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 168 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 169 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long result = -1;
-        long prev = arr[0];
-        for (long i = 1; i < arr.Count; i++) {
-            if (arr[i] <= prev) {
-                result = i;
-            }
-            prev = arr[i];
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp527bux50.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp527bux50.cs(25,24): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 171 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 172 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 176 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4fgfpfh6.cs(22,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4fgfpfh6.cs(22,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 177 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 182 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long n = arr.Count;
-        long i = n - 1;
-        while (i > 0 && arr[i] >= arr[i - 1]) {
-            i--;
-        }
-        return i - 1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmps56v4l9e.cs(21,29): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmps56v4l9e.cs(21,39): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 186 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 189 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i--;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpy7mj0fbw.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpy7mj0fbw.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 194 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
-        long i = arr.Count - 1;
-        while (i > 0) {
-            if (arr[i] < arr[i - 1]) {
-                return i - 1;
-            }
-            i = i - 1;
-        }
-        return -1;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L}))) == (3L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)5L}))) == (-1L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L, (long)5L, (long)6L, (long)7L, (long)8L, (long)9L, (long)10L}))) == (2L));
-    Debug.Assert(CanArrange((new List<long>(new long[]{(long)4L, (long)8L, (long)5L, (long)7L, (long)3L}))) == (4L));
-    Debug.Assert(CanArrange((new List<long>())) == (-1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp8612gu6v.cs(21,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp8612gu6v.cs(21,30): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_135_can_arrange --- completion 195 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Create a function which returns the largest index of an element which
-    // is not greater than or equal to the element immediately preceding it. If
-    // no such element exists then return -1. The given list will not contain
-    // duplicate values.
-    // Examples:
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)4L, (long)3L, (long)5L})))
-    // (3L)
-    // >>> CanArrange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L})))
-    // (-1L)
-    public static long CanArrange(List<long> arr) {
         long ret = -1L;
         long i = 0L;
         while (i < arr.Count) {
@@ -19420,7 +19420,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 39 ---- 
+# ---- HumanEval_145_order_by_points --- completion 9 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19487,7 +19487,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 70 ---- 
+# ---- HumanEval_145_order_by_points --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19559,7 +19559,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 162 ---- 
+# ---- HumanEval_145_order_by_points --- completion 33 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19626,7 +19626,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_156_int_to_mini_roman --- completion 120 ---- 
+# ---- HumanEval_156_int_to_mini_roman --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19701,7 +19701,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_57_monotonic --- completion 65 ---- 
+# ---- HumanEval_57_monotonic --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19765,7 +19765,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 3 ---- 
+# ---- HumanEval_73_smallest_change --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19849,7 +19849,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 6 ---- 
+# ---- HumanEval_73_smallest_change --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19917,7 +19917,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 10 ---- 
+# ---- HumanEval_73_smallest_change --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -19994,7 +19994,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 20 ---- 
+# ---- HumanEval_73_smallest_change --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20068,7 +20068,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 22 ---- 
+# ---- HumanEval_73_smallest_change --- completion 12 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20152,7 +20152,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 26 ---- 
+# ---- HumanEval_73_smallest_change --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20229,7 +20229,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 31 ---- 
+# ---- HumanEval_73_smallest_change --- completion 16 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20307,7 +20307,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 34 ---- 
+# ---- HumanEval_73_smallest_change --- completion 17 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20385,7 +20385,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 35 ---- 
+# ---- HumanEval_73_smallest_change --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20459,7 +20459,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 36 ---- 
+# ---- HumanEval_73_smallest_change --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20543,7 +20543,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 38 ---- 
+# ---- HumanEval_73_smallest_change --- completion 20 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20627,7 +20627,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 40 ---- 
+# ---- HumanEval_73_smallest_change --- completion 21 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20711,7 +20711,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 42 ---- 
+# ---- HumanEval_73_smallest_change --- completion 23 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20795,7 +20795,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 43 ---- 
+# ---- HumanEval_73_smallest_change --- completion 24 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20873,7 +20873,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 44 ---- 
+# ---- HumanEval_73_smallest_change --- completion 25 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -20957,7 +20957,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 45 ---- 
+# ---- HumanEval_73_smallest_change --- completion 26 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21041,7 +21041,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 52 ---- 
+# ---- HumanEval_73_smallest_change --- completion 30 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21125,7 +21125,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 55 ---- 
+# ---- HumanEval_73_smallest_change --- completion 32 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21209,7 +21209,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 58 ---- 
+# ---- HumanEval_73_smallest_change --- completion 35 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21287,7 +21287,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 59 ---- 
+# ---- HumanEval_73_smallest_change --- completion 36 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21363,7 +21363,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 61 ---- 
+# ---- HumanEval_73_smallest_change --- completion 38 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21437,7 +21437,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 64 ---- 
+# ---- HumanEval_73_smallest_change --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21515,7 +21515,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 68 ---- 
+# ---- HumanEval_73_smallest_change --- completion 44 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21578,7 +21578,1346 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 69 ---- 
+# ---- HumanEval_73_smallest_change --- completion 45 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i <= n - len; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 46 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = 0;
+            }
+            else {
+                dp[i, i + 1] = 1;
+            }
+        }
+        for (long l = 3; l <= n; l++) {
+            for (long i = 0; i < n - l + 1; i++) {
+                long j = i + l - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpbq8dq0tn.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 49 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i < n - len + 1; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp85yzxwum.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp85yzxwum.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp85yzxwum.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp85yzxwum.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 50 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = (long)arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = (long)0L;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = (long)0L;
+            }
+            else {
+                dp[i, i + 1] = (long)1L;
+            }
+        }
+        for (long len = (long)3L; len <= n; len++) {
+            for (long i = 0; i + len - 1 < n; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + (long)1L;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpewv66ul1.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpewv66ul1.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpewv66ul1.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpewv66ul1.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 52 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = 0;
+            }
+            else {
+                dp[i, i + 1] = 1;
+            }
+        }
+        for (long l = 3; l <= n; l++) {
+            for (long i = 0; i < n - l + 1; i++) {
+                long j = i + l - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpbq8dq0tn.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 53 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = 0;
+            }
+            else {
+                dp[i, i + 1] = 1;
+            }
+        }
+        for (long l = 3; l <= n; l++) {
+            for (long i = 0; i < n - l + 1; i++) {
+                long j = i + l - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpbq8dq0tn.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpbq8dq0tn.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 54 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i < n - len + 1; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp85yzxwum.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp85yzxwum.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp85yzxwum.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp85yzxwum.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 57 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i < n - len + 1; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp2z3hm7m2.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp2z3hm7m2.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp2z3hm7m2.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp2z3hm7m2.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 58 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = (arr[i] == arr[i + 1]) ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i < n - len + 1; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpasazq4uy.cs(31,33): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpasazq4uy.cs(31,43): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpasazq4uy.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpasazq4uy.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 59 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = (long)arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1L << (long)60L;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = (long)0L;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? (long)0L : (long)1L;
+        }
+        for (long len = (long)2L; len < n; len++) {
+            for (long i = 0; i < n - len; i++) {
+                long j = i + len;
+                dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + (long)1L;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = Math.Min(dp[i, j], dp[i + 1, j - 1]);
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmppx2nvrli.cs(24,28): error CS0019: Operator '<<' cannot be applied to operands of type 'long' and 'long'
+/tmp/tmppx2nvrli.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppx2nvrli.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppx2nvrli.cs(37,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppx2nvrli.cs(37,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 60 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long len = 1; len < n; len++) {
+            for (long i = 0; i < n - len; i++) {
+                long j = i + len;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp9pcsme8m.cs(33,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp9pcsme8m.cs(33,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 61 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = (long)arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1000000000L;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = (long)0L;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = (long)0L;
+            }
+            else {
+                dp[i, i + 1] = (long)1L;
+            }
+        }
+        for (long len = (long)3L; len <= n; len++) {
+            for (long i = 0; i < n - len + 1; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + (long)1L;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpr1nwt8ev.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr1nwt8ev.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr1nwt8ev.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpr1nwt8ev.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 62 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = n - 1; i >= 0; i--) {
+            for (long j = i; j < n; j++) {
+                if (i == j) {
+                    dp[i, j] = 0;
+                } else if (i + 1 == j) {
+                    dp[i, j] = Math.Abs(arr[i] - arr[j]);
+                } else {
+                    dp[i, j] = Math.Min(Math.Abs(arr[i] - arr[j]) + dp[i + 1, j - 1], Math.Min(dp[i + 1, j], dp[i, j - 1]));
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmppdp7v92q.cs(27,45): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppdp7v92q.cs(27,54): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppdp7v92q.cs(29,54): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppdp7v92q.cs(29,63): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 63 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = 0;
+            }
+            else {
+                dp[i, i + 1] = 1;
+            }
+        }
+        for (long k = 3; k <= n; k++) {
+            for (long i = 0; i < n - k + 1; i++) {
+                long j = i + k - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp4hxuucf6.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4hxuucf6.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4hxuucf6.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmp4hxuucf6.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 65 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long k = 3; k <= n; k++) {
+            for (long i = 0; i < n - k + 1; i++) {
+                long j = i + k - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpwni097nf.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpwni097nf.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpwni097nf.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpwni097nf.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 66 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[] dp = new long[n];
+        for (long i = 0; i < n; i++) {
+            dp[i] = long.MaxValue;
+        }
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j <= i; j++) {
+                if (i == j) {
+                    dp[i] = Math.Min(dp[i], 0);
+                } else if (arr[i] == arr[j]) {
+                    dp[i] = Math.Min(dp[i], dp[j - 1] + 1);
+                } else {
+                    dp[i] = Math.Min(dp[i], dp[j - 1] + 2);
+                }
+            }
+        }
+        return dp[n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpf_6uwa_j.cs(29,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpf_6uwa_j.cs(29,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 68 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i <= n - len; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 70 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21687,20 +23026,14 @@ class Problem {
             dp[i, i] = 0;
         }
         for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = 0;
-            }
-            else {
-                dp[i, i + 1] = 1;
-            }
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
         }
-        for (long l = 3; l <= n; l++) {
-            for (long i = 0; i < n - l + 1; i++) {
-                long j = i + l - 1;
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i <= n - len; i++) {
+                long j = i + len - 1;
                 if (arr[i] == arr[j]) {
                     dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
+                } else {
                     dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
                 }
             }
@@ -21729,10 +23062,10 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpbq8dq0tn.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -21740,7 +23073,85 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 79 ---- 
+# ---- HumanEval_73_smallest_change --- completion 72 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 2; len < n; len++) {
+            for (long i = 0; i < n - len; i++) {
+                long j = i + len;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmppfs5uccw.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppfs5uccw.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppfs5uccw.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppfs5uccw.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 74 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21818,7 +23229,85 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 80 ---- 
+# ---- HumanEval_73_smallest_change --- completion 77 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long l = 3; l <= n; l++) {
+            for (long i = 0; i < n - l + 1; i++) {
+                long j = i + l - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpu7zs0yrw.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpu7zs0yrw.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpu7zs0yrw.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpu7zs0yrw.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 78 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -21849,21 +23338,14 @@ class Problem {
             dp[i, i] = (long)0L;
         }
         for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = (long)0L;
-            }
-            else {
-                dp[i, i + 1] = (long)1L;
-            }
+            dp[i, i + 1] = (long)Math.Abs((double)(arr[i] - arr[i + 1]));
         }
-        for (long len = (long)3L; len <= n; len++) {
-            for (long i = 0; i + len - 1 < n; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + (long)1L;
+        for (long len = (long)2L; len < n; len++) {
+            for (long i = 0; i < n - len; i++) {
+                long j = i + len;
+                dp[i, j] = (long)Math.Min((double)(dp[i + 1, j] + Math.Abs((double)(arr[i] - arr[i + 1]))), (double)(dp[i, j - 1] + Math.Abs((double)(arr[j] - arr[j - 1]))));
+                for (long k = i + 1; k < j; k++) {
+                    dp[i, j] = (long)Math.Min((double)(dp[i, j]), (double)(dp[i, k] + dp[k + 1, j] + Math.Abs((double)(arr[i] - arr[j]))));
                 }
             }
         }
@@ -21891,10 +23373,250 @@ class Problem {
 Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-/tmp/tmpewv66ul1.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpewv66ul1.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpewv66ul1.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpewv66ul1.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(31,56): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(31,65): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(36,89): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(36,98): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(36,155): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(36,164): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(38,124): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmppc6kpr44.cs(38,133): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 79 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
+        }
+        for (long len = 3; len <= n; len++) {
+            for (long i = 0; i <= n - len; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                } else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 81 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = (long)1e18;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long len = 2; len <= n; len++) {
+            for (long i = 0; i < n - len + 1; i++) {
+                long j = i + len - 1;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmptlwlvo4w.cs(33,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmptlwlvo4w.cs(33,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 85 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long[,] dp = new long[n, n];
+        for (long i = 0; i < n; i++) {
+            for (long j = 0; j < n; j++) {
+                dp[i, j] = long.MaxValue;
+            }
+        }
+        for (long i = 0; i < n; i++) {
+            dp[i, i] = 0;
+        }
+        for (long i = 0; i < n - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                dp[i, i + 1] = 0;
+            }
+            else {
+                dp[i, i + 1] = 1;
+            }
+        }
+        for (long k = 2; k < n; k++) {
+            for (long i = 0; i < n - k; i++) {
+                long j = i + k;
+                if (arr[i] == arr[j]) {
+                    dp[i, j] = dp[i + 1, j - 1];
+                }
+                else {
+                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
+                }
+            }
+        }
+        return dp[0, n - 1];
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpyilk_u5o.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpyilk_u5o.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpyilk_u5o.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpyilk_u5o.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
 
 '''
 
@@ -21903,6 +23625,70 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 # ---- HumanEval_73_smallest_change --- completion 86 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Given a list arr of integers, find the minimum number of elements that
+    // need to be changed to make the list palindromic. A palindromic list is a list that
+    // is read the same backwards and forwards. In one change, you can change one element to any other element.
+    // For example:
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
+    // (4L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
+    // (1L)
+    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
+    // (0L)
+    public static long SmallestChange(List<long> arr) {
+        long n = arr.Count;
+        long ans = 0;
+        long i = 0;
+        long j = n - 1;
+        while (i < j) {
+            if (arr[i] != arr[j]) {
+                ans++;
+            }
+            i++;
+            j--;
+        }
+        return ans;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
+    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmpdb1k73kg.cs(25,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+/tmp/tmpdb1k73kg.cs(25,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
+
+'''
+
+
+
+
+
+# ---- HumanEval_73_smallest_change --- completion 87 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -22006,1792 +23792,6 @@ class Problem {
     // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
     // (0L)
     public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = 0;
-            }
-            else {
-                dp[i, i + 1] = 1;
-            }
-        }
-        for (long l = 3; l <= n; l++) {
-            for (long i = 0; i < n - l + 1; i++) {
-                long j = i + l - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbq8dq0tn.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 90 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i < n - len + 1; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp85yzxwum.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp85yzxwum.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp85yzxwum.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp85yzxwum.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 93 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i < n - len + 1; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp2z3hm7m2.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp2z3hm7m2.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp2z3hm7m2.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp2z3hm7m2.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 96 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = (arr[i] == arr[i + 1]) ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i < n - len + 1; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpasazq4uy.cs(31,33): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpasazq4uy.cs(31,43): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpasazq4uy.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpasazq4uy.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 97 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = (long)arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1L << (long)60L;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = (long)0L;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? (long)0L : (long)1L;
-        }
-        for (long len = (long)2L; len < n; len++) {
-            for (long i = 0; i < n - len; i++) {
-                long j = i + len;
-                dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + (long)1L;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = Math.Min(dp[i, j], dp[i + 1, j - 1]);
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmppx2nvrli.cs(24,28): error CS0019: Operator '<<' cannot be applied to operands of type 'long' and 'long'
-/tmp/tmppx2nvrli.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppx2nvrli.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppx2nvrli.cs(37,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppx2nvrli.cs(37,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 100 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long len = 1; len < n; len++) {
-            for (long i = 0; i < n - len; i++) {
-                long j = i + len;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp9pcsme8m.cs(33,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp9pcsme8m.cs(33,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 103 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = (long)arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1000000000L;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = (long)0L;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = (long)0L;
-            }
-            else {
-                dp[i, i + 1] = (long)1L;
-            }
-        }
-        for (long len = (long)3L; len <= n; len++) {
-            for (long i = 0; i < n - len + 1; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + (long)1L;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpr1nwt8ev.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpr1nwt8ev.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpr1nwt8ev.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpr1nwt8ev.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 104 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = n - 1; i >= 0; i--) {
-            for (long j = i; j < n; j++) {
-                if (i == j) {
-                    dp[i, j] = 0;
-                } else if (i + 1 == j) {
-                    dp[i, j] = Math.Abs(arr[i] - arr[j]);
-                } else {
-                    dp[i, j] = Math.Min(Math.Abs(arr[i] - arr[j]) + dp[i + 1, j - 1], Math.Min(dp[i + 1, j], dp[i, j - 1]));
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmppdp7v92q.cs(27,45): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppdp7v92q.cs(27,54): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppdp7v92q.cs(29,54): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppdp7v92q.cs(29,63): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 107 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = 0;
-            }
-            else {
-                dp[i, i + 1] = 1;
-            }
-        }
-        for (long k = 3; k <= n; k++) {
-            for (long i = 0; i < n - k + 1; i++) {
-                long j = i + k - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp4hxuucf6.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4hxuucf6.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4hxuucf6.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp4hxuucf6.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 112 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long k = 3; k <= n; k++) {
-            for (long i = 0; i < n - k + 1; i++) {
-                long j = i + k - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpwni097nf.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpwni097nf.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpwni097nf.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpwni097nf.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 113 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[] dp = new long[n];
-        for (long i = 0; i < n; i++) {
-            dp[i] = long.MaxValue;
-        }
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j <= i; j++) {
-                if (i == j) {
-                    dp[i] = Math.Min(dp[i], 0);
-                } else if (arr[i] == arr[j]) {
-                    dp[i] = Math.Min(dp[i], dp[j - 1] + 1);
-                } else {
-                    dp[i] = Math.Min(dp[i], dp[j - 1] + 2);
-                }
-            }
-        }
-        return dp[n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpf_6uwa_j.cs(29,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpf_6uwa_j.cs(29,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 116 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i <= n - len; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 119 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i <= n - len; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 120 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i <= n - len; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 123 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 2; len < n; len++) {
-            for (long i = 0; i < n - len; i++) {
-                long j = i + len;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmppfs5uccw.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppfs5uccw.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppfs5uccw.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppfs5uccw.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 125 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i < n - len + 1; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmp85yzxwum.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp85yzxwum.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp85yzxwum.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmp85yzxwum.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 132 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long l = 3; l <= n; l++) {
-            for (long i = 0; i < n - l + 1; i++) {
-                long j = i + l - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpu7zs0yrw.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpu7zs0yrw.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpu7zs0yrw.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpu7zs0yrw.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 133 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = (long)arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = (long)0L;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = (long)Math.Abs((double)(arr[i] - arr[i + 1]));
-        }
-        for (long len = (long)2L; len < n; len++) {
-            for (long i = 0; i < n - len; i++) {
-                long j = i + len;
-                dp[i, j] = (long)Math.Min((double)(dp[i + 1, j] + Math.Abs((double)(arr[i] - arr[i + 1]))), (double)(dp[i, j - 1] + Math.Abs((double)(arr[j] - arr[j - 1]))));
-                for (long k = i + 1; k < j; k++) {
-                    dp[i, j] = (long)Math.Min((double)(dp[i, j]), (double)(dp[i, k] + dp[k + 1, j] + Math.Abs((double)(arr[i] - arr[j]))));
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmppc6kpr44.cs(31,56): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(31,65): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(36,89): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(36,98): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(36,155): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(36,164): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(38,124): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmppc6kpr44.cs(38,133): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 134 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            dp[i, i + 1] = arr[i] == arr[i + 1] ? 0 : 1;
-        }
-        for (long len = 3; len <= n; len++) {
-            for (long i = 0; i <= n - len; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                } else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpuostsoe4.cs(31,32): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(31,42): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpuostsoe4.cs(36,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 137 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = (long)1e18;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long len = 2; len <= n; len++) {
-            for (long i = 0; i < n - len + 1; i++) {
-                long j = i + len - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmptlwlvo4w.cs(33,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmptlwlvo4w.cs(33,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 147 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = 0;
-            }
-            else {
-                dp[i, i + 1] = 1;
-            }
-        }
-        for (long k = 2; k < n; k++) {
-            for (long i = 0; i < n - k; i++) {
-                long j = i + k;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpyilk_u5o.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpyilk_u5o.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpyilk_u5o.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpyilk_u5o.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 149 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long ans = 0;
-        long i = 0;
-        long j = n - 1;
-        while (i < j) {
-            if (arr[i] != arr[j]) {
-                ans++;
-            }
-            i++;
-            j--;
-        }
-        return ans;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpdb1k73kg.cs(25,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpdb1k73kg.cs(25,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 150 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
-        long n = arr.Count;
-        long[,] dp = new long[n, n];
-        for (long i = 0; i < n; i++) {
-            for (long j = 0; j < n; j++) {
-                dp[i, j] = long.MaxValue;
-            }
-        }
-        for (long i = 0; i < n; i++) {
-            dp[i, i] = 0;
-        }
-        for (long i = 0; i < n - 1; i++) {
-            if (arr[i] == arr[i + 1]) {
-                dp[i, i + 1] = 0;
-            }
-            else {
-                dp[i, i + 1] = 1;
-            }
-        }
-        for (long l = 3; l <= n; l++) {
-            for (long i = 0; i < n - l + 1; i++) {
-                long j = i + l - 1;
-                if (arr[i] == arr[j]) {
-                    dp[i, j] = dp[i + 1, j - 1];
-                }
-                else {
-                    dp[i, j] = Math.Min(dp[i + 1, j], dp[i, j - 1]) + 1;
-                }
-            }
-        }
-        return dp[0, n - 1];
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L}))) == (4L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)4L, (long)4L, (long)2L}))) == (1L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)3L, (long)1L, (long)1L, (long)3L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)1L}))) == (0L));
-    Debug.Assert(SmallestChange((new List<long>(new long[]{(long)0L, (long)1L}))) == (1L));
-    }
-
-}
-
-# status = SyntaxError
-# exit_code = 1
-''' stderr = 
-
-'''
-''' stdout = 
-Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-/tmp/tmpbq8dq0tn.cs(31,21): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(31,31): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(41,25): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-/tmp/tmpbq8dq0tn.cs(41,35): error CS1503: Argument 1: cannot convert from 'long' to 'int'
-
-'''
-
-
-
-
-
-# ---- HumanEval_73_smallest_change --- completion 151 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Given a list arr of integers, find the minimum number of elements that
-    // need to be changed to make the list palindromic. A palindromic list is a list that
-    // is read the same backwards and forwards. In one change, you can change one element to any other element.
-    // For example:
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)5L, (long)4L, (long)7L, (long)9L, (long)6L})))
-    // (4L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)4L, (long)3L, (long)2L, (long)2L})))
-    // (1L)
-    // >>> SmallestChange((new List<long>(new long[]{(long)1L, (long)2L, (long)3L, (long)2L, (long)1L})))
-    // (0L)
-    public static long SmallestChange(List<long> arr) {
         long ans = 0;
         long n = arr.Count;
         long i = 0;
@@ -23836,7 +23836,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 155 ---- 
+# ---- HumanEval_73_smallest_change --- completion 90 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23899,7 +23899,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 156 ---- 
+# ---- HumanEval_73_smallest_change --- completion 91 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -23977,7 +23977,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 158 ---- 
+# ---- HumanEval_73_smallest_change --- completion 92 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24055,7 +24055,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 162 ---- 
+# ---- HumanEval_73_smallest_change --- completion 94 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24129,7 +24129,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 172 ---- 
+# ---- HumanEval_73_smallest_change --- completion 98 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24213,7 +24213,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 175 ---- 
+# ---- HumanEval_73_smallest_change --- completion 99 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24287,7 +24287,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 176 ---- 
+# ---- HumanEval_73_smallest_change --- completion 100 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24371,7 +24371,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 178 ---- 
+# ---- HumanEval_73_smallest_change --- completion 101 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24455,7 +24455,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 179 ---- 
+# ---- HumanEval_73_smallest_change --- completion 102 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24529,7 +24529,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 182 ---- 
+# ---- HumanEval_73_smallest_change --- completion 104 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24607,7 +24607,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 185 ---- 
+# ---- HumanEval_73_smallest_change --- completion 106 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24685,7 +24685,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 188 ---- 
+# ---- HumanEval_73_smallest_change --- completion 107 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24763,7 +24763,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 190 ---- 
+# ---- HumanEval_73_smallest_change --- completion 108 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24841,7 +24841,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 192 ---- 
+# ---- HumanEval_73_smallest_change --- completion 109 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24921,7 +24921,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 194 ---- 
+# ---- HumanEval_73_smallest_change --- completion 110 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -24995,7 +24995,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 195 ---- 
+# ---- HumanEval_73_smallest_change --- completion 111 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25073,7 +25073,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 196 ---- 
+# ---- HumanEval_73_smallest_change --- completion 112 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25151,7 +25151,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 197 ---- 
+# ---- HumanEval_73_smallest_change --- completion 113 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -25235,7 +25235,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 198 ---- 
+# ---- HumanEval_73_smallest_change --- completion 114 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

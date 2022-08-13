@@ -1,4 +1,4 @@
-# ---- HumanEval_136_largest_smallest_integers --- completion 134 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 64 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -56,7 +56,7 @@ System.NotImplementedException: The method or operation is not implemented.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 164 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 76 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -114,7 +114,7 @@ System.NotImplementedException: The method or operation is not implemented.
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 172 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 79 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -172,7 +172,7 @@ System.NotImplementedException: The method or operation is not implemented.
 
 
 
-# ---- HumanEval_40_triples_sum_to_zero --- completion 112 ---- 
+# ---- HumanEval_40_triples_sum_to_zero --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -230,7 +230,7 @@ System.NotImplementedException: The method or operation is not implemented.
 
 
 
-# ---- HumanEval_46_fib4 --- completion 54 ---- 
+# ---- HumanEval_46_fib4 --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

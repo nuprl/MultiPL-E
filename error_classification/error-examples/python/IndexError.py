@@ -1,4 +1,4 @@
-# ---- HumanEval_69_search --- completion 146 ---- 
+# ---- HumanEval_69_search --- completion 0 ---- 
 from typing import List
 
 def search(lst: List[int]) -> int:
@@ -92,7 +92,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_89_encrypt --- completion 85 ---- 
+# ---- HumanEval_89_encrypt --- completion 7 ---- 
 def encrypt(s: str) -> str:
     """Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
@@ -153,7 +153,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_89_encrypt --- completion 127 ---- 
+# ---- HumanEval_89_encrypt --- completion 11 ---- 
 def encrypt(s: str) -> str:
     """Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
@@ -224,7 +224,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_89_encrypt --- completion 192 ---- 
+# ---- HumanEval_89_encrypt --- completion 16 ---- 
 def encrypt(s: str) -> str:
     """Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
@@ -288,7 +288,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_115_max_fill --- completion 119 ---- 
+# ---- HumanEval_115_max_fill --- completion 13 ---- 
 from typing import List
 
 def max_fill(grid: List[List[int]], capacity: int) -> int:
@@ -373,7 +373,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 1 ---- 
+# ---- HumanEval_33_sort_third --- completion 0 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -425,7 +425,267 @@ IndexError: list index out of range
 
 
 
+# ---- HumanEval_33_sort_third --- completion 1 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 23, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 21, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 15, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in sort_third
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in <listcomp>
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 2 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 3 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 4 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_vr0b6gr.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
+    l_copy[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_33_sort_third --- completion 5 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = []
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime.append(sorted(l[i:i+3])[1])
+        else:
+            l_prime.append(l[i])
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
+    test_check()
+  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
+    check(sort_third)
+  File "/tmp/tmpbv86aqwy.py", line 21, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
+    l_prime.append(sorted(l[i:i+3])[1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 6 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -508,58 +768,6 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz80oxy9l.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 17 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
     test_check()
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
@@ -579,7 +787,57 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 22 ---- 
+# ---- HumanEval_33_sort_third --- completion 8 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 23, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 21, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 15, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in sort_third
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in <listcomp>
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 9 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -631,7 +889,163 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 23 ---- 
+# ---- HumanEval_33_sort_third --- completion 10 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 11 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 12 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 13 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -685,7 +1099,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 25 ---- 
+# ---- HumanEval_33_sort_third --- completion 14 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -697,7 +1111,13 @@ def sort_third(l: List[int]) -> List[int]:
     >>> sort_third([5, 6, 3, 4, 8, 9, 2])
     [2, 6, 3, 4, 8, 9, 5]
     """
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+    l_prime = []
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime.append(sorted(l[i:i+3])[1])
+        else:
+            l_prime.append(l[i])
+    return l_prime
 
 def check(candidate):
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
@@ -714,16 +1134,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 23, in <module>
+  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 21, in test_check
+  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
     check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 15, in check
+  File "/tmp/tmpbv86aqwy.py", line 21, in check
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in sort_third
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in <listcomp>
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
+    l_prime.append(sorted(l[i:i+3])[1])
 IndexError: list index out of range
 
 '''
@@ -735,7 +1153,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 28 ---- 
+# ---- HumanEval_33_sort_third --- completion 15 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -787,7 +1205,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 30 ---- 
+# ---- HumanEval_33_sort_third --- completion 16 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -799,7 +1217,13 @@ def sort_third(l: List[int]) -> List[int]:
     >>> sort_third([5, 6, 3, 4, 8, 9, 2])
     [2, 6, 3, 4, 8, 9, 5]
     """
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+    l_prime = []
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime.append(sorted(l[i:i+3])[1])
+        else:
+            l_prime.append(l[i])
+    return l_prime
 
 def check(candidate):
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
@@ -816,16 +1240,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 23, in <module>
+  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 21, in test_check
+  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
     check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 15, in check
+  File "/tmp/tmpbv86aqwy.py", line 21, in check
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in sort_third
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in <listcomp>
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
+    l_prime.append(sorted(l[i:i+3])[1])
 IndexError: list index out of range
 
 '''
@@ -837,7 +1259,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 33 ---- 
+# ---- HumanEval_33_sort_third --- completion 17 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -889,59 +1311,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 35 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 36 ---- 
+# ---- HumanEval_33_sort_third --- completion 18 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -993,7 +1363,1048 @@ IndexError: list index out of range
 
 
 
+# ---- HumanEval_33_sort_third --- completion 19 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 20 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_vr0b6gr.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
+    l_copy[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 21 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 22 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 23 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 24 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 25 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpovhvhm29.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmpovhvhm29.py", line 24, in test_check
+    check(sort_third)
+  File "/tmp/tmpovhvhm29.py", line 18, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmpovhvhm29.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 26 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 27 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_new = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_new[i] = sorted(l[i:i+3])[1]
+    return l_new
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_aouw3eo.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_aouw3eo.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_aouw3eo.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_aouw3eo.py", line 15, in sort_third
+    l_new[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 28 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_vr0b6gr.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
+    l_copy[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 29 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 30 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 31 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 23, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 21, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 15, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in sort_third
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in <listcomp>
+    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 32 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = []
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime.append(sorted(l[i:i+3])[1])
+        else:
+            l_prime.append(l[i])
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
+    test_check()
+  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
+    check(sort_third)
+  File "/tmp/tmpbv86aqwy.py", line 21, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
+    l_prime.append(sorted(l[i:i+3])[1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 33 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 34 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 35 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_vr0b6gr.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
+    l_copy[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 36 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = []
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime.append(sorted(l[i:i+3])[1])
+        else:
+            l_prime.append(l[i])
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
+    test_check()
+  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
+    check(sort_third)
+  File "/tmp/tmpbv86aqwy.py", line 21, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
+    l_prime.append(sorted(l[i:i+3])[1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 37 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
+    for i in range(len(l)):
+        if i % 3 == 0:
+            l_prime[i] = sorted(l[i:i+3])[1]
+    return l_prime
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_33_sort_third --- completion 38 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_vr0b6gr.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
+    l_copy[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 39 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -1057,12 +2468,114 @@ def sort_third(l: List[int]) -> List[int]:
     >>> sort_third([5, 6, 3, 4, 8, 9, 2])
     [2, 6, 3, 4, 8, 9, 5]
     """
-    l_prime = []
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 41 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 42 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_prime = l[:]
     for i in range(len(l)):
         if i % 3 == 0:
-            l_prime.append(sorted(l[i:i+3])[1])
-        else:
-            l_prime.append(l[i])
+            l_prime[i] = sorted(l[i:i+3])[1]
     return l_prime
 
 def check(candidate):
@@ -1080,14 +2593,66 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
     test_check()
-  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
     check(sort_third)
-  File "/tmp/tmpbv86aqwy.py", line 21, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
-    l_prime.append(sorted(l[i:i+3])[1])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
+    l_prime[i] = sorted(l[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 43 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
+    check(sort_third)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
 IndexError: list index out of range
 
 '''
@@ -1111,13 +2676,11 @@ def sort_third(l: List[int]) -> List[int]:
     >>> sort_third([5, 6, 3, 4, 8, 9, 2])
     [2, 6, 3, 4, 8, 9, 5]
     """
-    l_prime = []
-    for i in range(len(l)):
+    l_copy = l[:]
+    for i in range(len(l_copy)):
         if i % 3 == 0:
-            l_prime.append(sorted(l[i:i+3])[1])
-        else:
-            l_prime.append(l[i])
-    return l_prime
+            l_copy[i] = sorted(l_copy[i:i+3])[1]
+    return l_copy
 
 def check(candidate):
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
@@ -1134,14 +2697,66 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
     test_check()
-  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
     check(sort_third)
-  File "/tmp/tmpbv86aqwy.py", line 21, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
     assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
-    l_prime.append(sorted(l[i:i+3])[1])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
+    l_copy[i] = sorted(l_copy[i:i+3])[1]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_33_sort_third --- completion 45 ---- 
+from typing import List
+
+def sort_third(l: List[int]) -> List[int]:
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    l_copy = l[:]
+    for i in range(len(l_copy)):
+        if i % 3 == 0:
+            l_copy[i] = sorted(l[i:i+3])[1]
+    return l_copy
+
+def check(candidate):
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
+    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
+    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
+
+def test_check():
+    check(sort_third)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
+    test_check()
+  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
+    check(sort_third)
+  File "/tmp/tmp_vr0b6gr.py", line 19, in check
+    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
+  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
+    l_copy[i] = sorted(l[i:i+3])[1]
 IndexError: list index out of range
 
 '''
@@ -1205,113 +2820,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 55 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = []
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime.append(sorted(l[i:i+3])[1])
-        else:
-            l_prime.append(l[i])
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
-    test_check()
-  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
-    check(sort_third)
-  File "/tmp/tmpbv86aqwy.py", line 21, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
-    l_prime.append(sorted(l[i:i+3])[1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 61 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_vr0b6gr.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
-    l_copy[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 62 ---- 
+# ---- HumanEval_33_sort_third --- completion 47 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -1363,1516 +2872,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 66 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 68 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_vr0b6gr.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
-    l_copy[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 69 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 72 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 75 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 80 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 81 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpovhvhm29.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmpovhvhm29.py", line 24, in test_check
-    check(sort_third)
-  File "/tmp/tmpovhvhm29.py", line 18, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmpovhvhm29.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 83 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 84 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_new = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_new[i] = sorted(l[i:i+3])[1]
-    return l_new
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_aouw3eo.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_aouw3eo.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_aouw3eo.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_aouw3eo.py", line 15, in sort_third
-    l_new[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 94 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_vr0b6gr.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
-    l_copy[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 96 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 97 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 99 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 23, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 21, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 15, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in sort_third
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp485kuikw.py", line 12, in <listcomp>
-    return [l[i] if i % 3 != 0 else sorted(l[i:i+3])[1] for i in range(len(l))]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 100 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = []
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime.append(sorted(l[i:i+3])[1])
-        else:
-            l_prime.append(l[i])
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
-    test_check()
-  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
-    check(sort_third)
-  File "/tmp/tmpbv86aqwy.py", line 21, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
-    l_prime.append(sorted(l[i:i+3])[1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 102 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 103 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 105 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_vr0b6gr.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
-    l_copy[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 108 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = []
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime.append(sorted(l[i:i+3])[1])
-        else:
-            l_prime.append(l[i])
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbv86aqwy.py", line 29, in <module>
-    test_check()
-  File "/tmp/tmpbv86aqwy.py", line 27, in test_check
-    check(sort_third)
-  File "/tmp/tmpbv86aqwy.py", line 21, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmpbv86aqwy.py", line 15, in sort_third
-    l_prime.append(sorted(l[i:i+3])[1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 111 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 113 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_vr0b6gr.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
-    l_copy[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 121 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 122 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 126 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 127 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 132 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 133 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 142 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_vr0b6gr.py", line 27, in <module>
-    test_check()
-  File "/tmp/tmp_vr0b6gr.py", line 25, in test_check
-    check(sort_third)
-  File "/tmp/tmp_vr0b6gr.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/tmp/tmp_vr0b6gr.py", line 15, in sort_third
-    l_copy[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 143 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_prime = l[:]
-    for i in range(len(l)):
-        if i % 3 == 0:
-            l_prime[i] = sorted(l[i:i+3])[1]
-    return l_prime
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1phjmse2.py", line 15, in sort_third
-    l_prime[i] = sorted(l[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 144 ---- 
-from typing import List
-
-def sort_third(l: List[int]) -> List[int]:
-    """This function takes a list l and returns a list l' such that
-    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
-    to the values of the corresponding indicies of l, but sorted.
-    >>> sort_third([1, 2, 3])
-    [1, 2, 3]
-    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
-    [2, 6, 3, 4, 8, 9, 5]
-    """
-    l_copy = l[:]
-    for i in range(len(l_copy)):
-        if i % 3 == 0:
-            l_copy[i] = sorted(l_copy[i:i+3])[1]
-    return l_copy
-
-def check(candidate):
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-    assert candidate([5, 8, 3, 4, 6, 9, 2]) == [2, 8, 3, 4, 6, 9, 5]
-    assert candidate([5, 6, 9, 4, 8, 3, 2]) == [2, 6, 9, 4, 8, 3, 5]
-    assert candidate([5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1]
-
-def test_check():
-    check(sort_third)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 27, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 25, in test_check
-    check(sort_third)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 19, in check
-    assert candidate([5, 6, 3, 4, 8, 9, 2]) == [2, 6, 3, 4, 8, 9, 5]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2ii_fwta.py", line 15, in sort_third
-    l_copy[i] = sorted(l_copy[i:i+3])[1]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_33_sort_third --- completion 146 ---- 
+# ---- HumanEval_33_sort_third --- completion 48 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -2925,7 +2925,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 147 ---- 
+# ---- HumanEval_33_sort_third --- completion 49 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -2977,7 +2977,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 150 ---- 
+# ---- HumanEval_33_sort_third --- completion 50 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3029,7 +3029,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 152 ---- 
+# ---- HumanEval_33_sort_third --- completion 51 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3081,7 +3081,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 154 ---- 
+# ---- HumanEval_33_sort_third --- completion 52 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3135,7 +3135,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 158 ---- 
+# ---- HumanEval_33_sort_third --- completion 53 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3187,7 +3187,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 161 ---- 
+# ---- HumanEval_33_sort_third --- completion 54 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3241,7 +3241,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 170 ---- 
+# ---- HumanEval_33_sort_third --- completion 55 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3293,7 +3293,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 174 ---- 
+# ---- HumanEval_33_sort_third --- completion 56 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3345,7 +3345,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 175 ---- 
+# ---- HumanEval_33_sort_third --- completion 57 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3395,7 +3395,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 180 ---- 
+# ---- HumanEval_33_sort_third --- completion 58 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3449,7 +3449,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 181 ---- 
+# ---- HumanEval_33_sort_third --- completion 59 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3503,7 +3503,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 183 ---- 
+# ---- HumanEval_33_sort_third --- completion 60 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3555,7 +3555,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 185 ---- 
+# ---- HumanEval_33_sort_third --- completion 61 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3607,7 +3607,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 187 ---- 
+# ---- HumanEval_33_sort_third --- completion 62 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3659,7 +3659,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 189 ---- 
+# ---- HumanEval_33_sort_third --- completion 63 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3711,7 +3711,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 190 ---- 
+# ---- HumanEval_33_sort_third --- completion 64 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3765,7 +3765,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 194 ---- 
+# ---- HumanEval_33_sort_third --- completion 65 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3817,7 +3817,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 197 ---- 
+# ---- HumanEval_33_sort_third --- completion 66 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3871,7 +3871,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_33_sort_third --- completion 198 ---- 
+# ---- HumanEval_33_sort_third --- completion 67 ---- 
 from typing import List
 
 def sort_third(l: List[int]) -> List[int]:
@@ -3923,7 +3923,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_119_match_parens --- completion 52 ---- 
+# ---- HumanEval_119_match_parens --- completion 4 ---- 
 from typing import List
 
 def match_parens(lst: List[str]) -> str:
@@ -4001,7 +4001,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_119_match_parens --- completion 88 ---- 
+# ---- HumanEval_119_match_parens --- completion 7 ---- 
 from typing import List
 
 def match_parens(lst: List[str]) -> str:
@@ -4166,7 +4166,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 3 ---- 
+# ---- HumanEval_130_tri --- completion 2 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4241,7 +4241,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 5 ---- 
+# ---- HumanEval_130_tri --- completion 3 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4316,7 +4316,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 8 ---- 
+# ---- HumanEval_130_tri --- completion 4 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4391,7 +4391,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 11 ---- 
+# ---- HumanEval_130_tri --- completion 5 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4466,7 +4466,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 14 ---- 
+# ---- HumanEval_130_tri --- completion 7 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4541,7 +4541,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 16 ---- 
+# ---- HumanEval_130_tri --- completion 8 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4616,7 +4616,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 17 ---- 
+# ---- HumanEval_130_tri --- completion 9 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4691,7 +4691,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 20 ---- 
+# ---- HumanEval_130_tri --- completion 11 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4755,6 +4755,681 @@ Traceback (most recent call last):
     assert candidate(3) == [1, 3, 2, 8]
   File "/tmp/tmpsxr35lo_.py", line 33, in tri
     seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 14 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 16 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 18 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 19 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        result = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                result.append(1 + i / 2)
+            else:
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 20 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        result = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                result.append(1 + i / 2)
+            else:
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 22 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        result = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                result.append(1 + i / 2)
+            else:
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 23 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 24 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 25 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        l = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                l.append(1 + i / 2)
+            else:
+                l.append(l[i - 1] + l[i - 2] + l[i + 1])
+        return l
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
+    l.append(l[i - 1] + l[i - 2] + l[i + 1])
 IndexError: list index out of range
 
 '''
@@ -4841,7 +5516,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 28 ---- 
+# ---- HumanEval_130_tri --- completion 29 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -4869,13 +5544,13 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        lst = [1, 3, 2]
+        result = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                lst.append(1 + i / 2)
+                result.append(1 + i / 2)
             else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -4897,14 +5572,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
 IndexError: list index out of range
 
 '''
@@ -4944,6 +5619,231 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
+        res = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                res.append(1 + i / 2)
+            else:
+                res.append(res[i - 1] + res[i - 2] + res[i + 1])
+        return res
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
+    res.append(res[i - 1] + res[i - 2] + res[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 31 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        l = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                l.append(1 + i / 2)
+            else:
+                l.append(l[i - 1] + l[i - 2] + l[i + 1])
+        return l
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
+    l.append(l[i - 1] + l[i - 2] + l[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 33 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        l = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                l.append(1 + i / 2)
+            else:
+                l.append(l[i - 1] + l[i - 2] + l[i + 1])
+        return l
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
+    l.append(l[i - 1] + l[i - 2] + l[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 34 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
         lst = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
@@ -4991,81 +5891,6 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 32 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        result = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                result.append(1 + i / 2)
-            else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_130_tri --- completion 35 ---- 
 from typing import List
 
@@ -5094,13 +5919,13 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        result = [1, 3, 2]
+        seq = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                result.append(1 + i / 2)
+                seq.append(1 + i / 2)
             else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
+                seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
+        return seq
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -5122,14 +5947,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+  File "/tmp/tmpsxr35lo_.py", line 50, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+  File "/tmp/tmpsxr35lo_.py", line 48, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+  File "/tmp/tmpsxr35lo_.py", line 36, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
+  File "/tmp/tmpsxr35lo_.py", line 33, in tri
+    seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
 IndexError: list index out of range
 
 '''
@@ -5141,7 +5966,158 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 37 ---- 
+# ---- HumanEval_130_tri --- completion 36 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
+    test_check()
+  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
+    check(tri)
+  File "/tmp/tmp2xm1nkvb.py", line 37, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 38 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 39 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -5244,13 +6220,14 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        lst = [1, 3, 2]
+        res = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                lst.append(1 + i / 2)
+                res.append(1 + i / 2)
             else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
+                res.append(res[i - 1] + res[i - 2] + res[i + 1])
+        return res
+
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -5272,14 +6249,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 51, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 49, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 37, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 33, in tri
+    res.append(res[i - 1] + res[i - 2] + res[i + 1])
 IndexError: list index out of range
 
 '''
@@ -5366,6 +6343,82 @@ IndexError: list index out of range
 
 
 
+# ---- HumanEval_130_tri --- completion 43 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        t = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                t.append(1 + i / 2)
+            else:
+                t.append(t[i - 1] + t[i - 2] + t[i + 1])
+        return t
+
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp46ev4e9w.py", line 51, in <module>
+    test_check()
+  File "/tmp/tmp46ev4e9w.py", line 49, in test_check
+    check(tri)
+  File "/tmp/tmp46ev4e9w.py", line 37, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/tmp/tmp46ev4e9w.py", line 33, in tri
+    t.append(t[i - 1] + t[i - 2] + t[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_130_tri --- completion 44 ---- 
 from typing import List
 
@@ -5401,6 +6454,7 @@ def tri(n: int) -> List[int]:
             else:
                 l.append(l[i - 1] + l[i - 2] + l[i + 1])
         return l
+
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -5422,13 +6476,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+  File "/tmp/tmpv1ozmlea.py", line 51, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+  File "/tmp/tmpv1ozmlea.py", line 49, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+  File "/tmp/tmpv1ozmlea.py", line 37, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
+  File "/tmp/tmpv1ozmlea.py", line 33, in tri
     l.append(l[i - 1] + l[i - 2] + l[i + 1])
 IndexError: list index out of range
 
@@ -5442,6 +6496,82 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_130_tri --- completion 46 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        l = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                l.append(1 + i / 2)
+            else:
+                l.append(l[i - 1] + l[i - 2] + l[i + 1])
+        return l
+
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpv1ozmlea.py", line 51, in <module>
+    test_check()
+  File "/tmp/tmpv1ozmlea.py", line 49, in test_check
+    check(tri)
+  File "/tmp/tmpv1ozmlea.py", line 37, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/tmp/tmpv1ozmlea.py", line 33, in tri
+    l.append(l[i - 1] + l[i - 2] + l[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 47 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -5505,6 +6635,81 @@ Traceback (most recent call last):
     assert candidate(3) == [1, 3, 2, 8]
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
     lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 48 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        result = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                result.append(1 + i / 2)
+            else:
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
 IndexError: list index out of range
 
 '''
@@ -5694,13 +6899,13 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        l = [1, 3, 2]
+        res = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                l.append(1 + i / 2)
+                res.append(1 + i / 2)
             else:
-                l.append(l[i - 1] + l[i - 2] + l[i + 1])
-        return l
+                res.append(res[i - 1] + res[i - 2] + res[i + 1])
+        return res
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -5722,14 +6927,89 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
-    l.append(l[i - 1] + l[i - 2] + l[i + 1])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
+    res.append(res[i - 1] + res[i - 2] + res[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 52 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        result = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                result.append(1 + i / 2)
+            else:
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
 IndexError: list index out of range
 
 '''
@@ -5769,13 +7049,13 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        l = [1, 3, 2]
+        res = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                l.append(1 + i / 2)
+                res.append(1 + i / 2)
             else:
-                l.append(l[i - 1] + l[i - 2] + l[i + 1])
-        return l
+                res.append(res[i - 1] + res[i - 2] + res[i + 1])
+        return res
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -5797,14 +7077,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
-    l.append(l[i - 1] + l[i - 2] + l[i + 1])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
+    res.append(res[i - 1] + res[i - 2] + res[i + 1])
 IndexError: list index out of range
 
 '''
@@ -5816,7 +7096,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 55 ---- 
+# ---- HumanEval_130_tri --- completion 54 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -5851,6 +7131,7 @@ def tri(n: int) -> List[int]:
             else:
                 lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
         return lst
+
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -5872,13 +7153,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+  File "/tmp/tmp2xm1nkvb.py", line 37, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
     lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
 IndexError: list index out of range
 
@@ -5994,6 +7275,156 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
+        result = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                result.append(1 + i / 2)
+            else:
+                result.append(result[i - 1] + result[i - 2] + result[i + 1])
+        return result
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
+    result.append(result[i - 1] + result[i - 2] + result[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 59 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        seq = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                seq.append(1 + i / 2)
+            else:
+                seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
+        return seq
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpsxr35lo_.py", line 50, in <module>
+    test_check()
+  File "/tmp/tmpsxr35lo_.py", line 48, in test_check
+    check(tri)
+  File "/tmp/tmpsxr35lo_.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/tmp/tmpsxr35lo_.py", line 33, in tri
+    seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 61 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
         lst = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
@@ -6042,7 +7473,82 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 61 ---- 
+# ---- HumanEval_130_tri --- completion 63 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        res = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                res.append(1 + i / 2)
+            else:
+                res.append(res[i - 1] + res[i - 2] + res[i + 1])
+        return res
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
+    res.append(res[i - 1] + res[i - 2] + res[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 65 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -6117,81 +7623,6 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 63 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        result = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                result.append(1 + i / 2)
-            else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_130_tri --- completion 66 ---- 
 from typing import List
 
@@ -6220,13 +7651,88 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        res = [1, 3, 2]
+        l = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                res.append(1 + i / 2)
+                l.append(1 + i / 2)
             else:
-                res.append(res[i - 1] + res[i - 2] + res[i + 1])
-        return res
+                l.append(l[i - 1] + l[i - 2] + l[i + 1])
+        return l
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
+    l.append(l[i - 1] + l[i - 2] + l[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 67 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
 
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
@@ -6249,14 +7755,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 51, in <module>
+  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 49, in test_check
+  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 37, in check
+  File "/tmp/tmp2xm1nkvb.py", line 37, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv2hj16kk.py", line 33, in tri
-    res.append(res[i - 1] + res[i - 2] + res[i + 1])
+  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
 IndexError: list index out of range
 
 '''
@@ -6343,235 +7849,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 70 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        t = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                t.append(1 + i / 2)
-            else:
-                t.append(t[i - 1] + t[i - 2] + t[i + 1])
-        return t
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp46ev4e9w.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmp46ev4e9w.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmp46ev4e9w.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmp46ev4e9w.py", line 33, in tri
-    t.append(t[i - 1] + t[i - 2] + t[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_130_tri --- completion 71 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        l = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                l.append(1 + i / 2)
-            else:
-                l.append(l[i - 1] + l[i - 2] + l[i + 1])
-        return l
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpv1ozmlea.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmpv1ozmlea.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmpv1ozmlea.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmpv1ozmlea.py", line 33, in tri
-    l.append(l[i - 1] + l[i - 2] + l[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 74 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        l = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                l.append(1 + i / 2)
-            else:
-                l.append(l[i - 1] + l[i - 2] + l[i + 1])
-        return l
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpv1ozmlea.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmpv1ozmlea.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmpv1ozmlea.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmpv1ozmlea.py", line 33, in tri
-    l.append(l[i - 1] + l[i - 2] + l[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 75 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -6646,7 +7924,82 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 77 ---- 
+# ---- HumanEval_130_tri --- completion 72 ---- 
+from typing import List
+
+def tri(n: int) -> List[int]:
+    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
+    the last couple centuries. However, what people don't know is Tribonacci sequence.
+    Tribonacci sequence is defined by the recurrence:
+    tri(1) = 3
+    tri(n) = 1 + n / 2, if n is even.
+    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
+    For example:
+    tri(2) = 1 + (2 / 2) = 2
+    tri(4) = 3
+    tri(3) = tri(2) + tri(1) + tri(4)
+           = 2 + 3 + 3 = 8 
+    You are given a non-negative integer number n, you have to a return a list of the 
+    first n + 1 numbers of the Tribonacci sequence.
+    Examples:
+    >>> tri(3)
+    [1, 3, 2, 8]
+    """
+    if n == 0:
+        return [1]
+    elif n == 1:
+        return [1, 3]
+    elif n == 2:
+        return [1, 3, 2]
+    else:
+        lst = [1, 3, 2]
+        for i in range(3, n + 1):
+            if i % 2 == 0:
+                lst.append(1 + i / 2)
+            else:
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+def check(candidate):
+    assert candidate(3) == [1, 3, 2, 8]
+    assert candidate(4) == [1, 3, 2, 8, 3]
+    assert candidate(5) == [1, 3, 2, 8, 3, 15]
+    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
+    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
+    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
+    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
+    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
+    assert candidate(0) == [1]
+    assert candidate(1) == [1, 3]
+
+def test_check():
+    check(tri)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
+    check(tri)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
+    assert candidate(3) == [1, 3, 2, 8]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_130_tri --- completion 74 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -6749,13 +8102,14 @@ def tri(n: int) -> List[int]:
     elif n == 2:
         return [1, 3, 2]
     else:
-        result = [1, 3, 2]
+        lst = [1, 3, 2]
         for i in range(3, n + 1):
             if i % 2 == 0:
-                result.append(1 + i / 2)
+                lst.append(1 + i / 2)
             else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
+                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
+        return lst
+
 def check(candidate):
     assert candidate(3) == [1, 3, 2, 8]
     assert candidate(4) == [1, 3, 2, 8, 3]
@@ -6777,89 +8131,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
+  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
+  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
     check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
+  File "/tmp/tmp2xm1nkvb.py", line 37, in check
     assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 79 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        res = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                res.append(1 + i / 2)
-            else:
-                res.append(res[i - 1] + res[i - 2] + res[i + 1])
-        return res
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
-    res.append(res[i - 1] + res[i - 2] + res[i + 1])
+  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
+    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
 IndexError: list index out of range
 
 '''
@@ -6872,1285 +8151,6 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_130_tri --- completion 81 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        res = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                res.append(1 + i / 2)
-            else:
-                res.append(res[i - 1] + res[i - 2] + res[i + 1])
-        return res
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
-    res.append(res[i - 1] + res[i - 2] + res[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 82 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        result = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                result.append(1 + i / 2)
-            else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 83 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        res = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                res.append(1 + i / 2)
-            else:
-                res.append(res[i - 1] + res[i - 2] + res[i + 1])
-        return res
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
-    res.append(res[i - 1] + res[i - 2] + res[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 84 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmp2xm1nkvb.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 90 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        seq = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                seq.append(1 + i / 2)
-            else:
-                seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
-        return seq
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpsxr35lo_.py", line 50, in <module>
-    test_check()
-  File "/tmp/tmpsxr35lo_.py", line 48, in test_check
-    check(tri)
-  File "/tmp/tmpsxr35lo_.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmpsxr35lo_.py", line 33, in tri
-    seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 93 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        result = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                result.append(1 + i / 2)
-            else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 94 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        seq = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                seq.append(1 + i / 2)
-            else:
-                seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
-        return seq
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpsxr35lo_.py", line 50, in <module>
-    test_check()
-  File "/tmp/tmpsxr35lo_.py", line 48, in test_check
-    check(tri)
-  File "/tmp/tmpsxr35lo_.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmpsxr35lo_.py", line 33, in tri
-    seq.append(seq[i - 1] + seq[i - 2] + seq[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 97 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmp2xm1nkvb.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 104 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        res = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                res.append(1 + i / 2)
-            else:
-                res.append(res[i - 1] + res[i - 2] + res[i + 1])
-        return res
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphd5zyu4b.py", line 33, in tri
-    res.append(res[i - 1] + res[i - 2] + res[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 106 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 107 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        l = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                l.append(1 + i / 2)
-            else:
-                l.append(l[i - 1] + l[i - 2] + l[i + 1])
-        return l
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmppoy3bdvx.py", line 33, in tri
-    l.append(l[i - 1] + l[i - 2] + l[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 109 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmp2xm1nkvb.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 112 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 117 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 120 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpa7uusu6g.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 126 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        result = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                result.append(1 + i / 2)
-            else:
-                result.append(result[i - 1] + result[i - 2] + result[i + 1])
-        return result
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 50, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 48, in test_check
-    check(tri)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 36, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph80o84bl.py", line 33, in tri
-    result.append(result[i - 1] + result[i - 2] + result[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 131 ---- 
-from typing import List
-
-def tri(n: int) -> List[int]:
-    """Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in 
-    the last couple centuries. However, what people don't know is Tribonacci sequence.
-    Tribonacci sequence is defined by the recurrence:
-    tri(1) = 3
-    tri(n) = 1 + n / 2, if n is even.
-    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.
-    For example:
-    tri(2) = 1 + (2 / 2) = 2
-    tri(4) = 3
-    tri(3) = tri(2) + tri(1) + tri(4)
-           = 2 + 3 + 3 = 8 
-    You are given a non-negative integer number n, you have to a return a list of the 
-    first n + 1 numbers of the Tribonacci sequence.
-    Examples:
-    >>> tri(3)
-    [1, 3, 2, 8]
-    """
-    if n == 0:
-        return [1]
-    elif n == 1:
-        return [1, 3]
-    elif n == 2:
-        return [1, 3, 2]
-    else:
-        lst = [1, 3, 2]
-        for i in range(3, n + 1):
-            if i % 2 == 0:
-                lst.append(1 + i / 2)
-            else:
-                lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-        return lst
-
-def check(candidate):
-    assert candidate(3) == [1, 3, 2, 8]
-    assert candidate(4) == [1, 3, 2, 8, 3]
-    assert candidate(5) == [1, 3, 2, 8, 3, 15]
-    assert candidate(6) == [1, 3, 2, 8, 3, 15, 4]
-    assert candidate(7) == [1, 3, 2, 8, 3, 15, 4, 24]
-    assert candidate(8) == [1, 3, 2, 8, 3, 15, 4, 24, 5]
-    assert candidate(9) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35]
-    assert candidate(20) == [1, 3, 2, 8, 3, 15, 4, 24, 5, 35, 6, 48, 7, 63, 8, 80, 9, 99, 10, 120, 11]
-    assert candidate(0) == [1]
-    assert candidate(1) == [1, 3]
-
-def test_check():
-    check(tri)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp2xm1nkvb.py", line 51, in <module>
-    test_check()
-  File "/tmp/tmp2xm1nkvb.py", line 49, in test_check
-    check(tri)
-  File "/tmp/tmp2xm1nkvb.py", line 37, in check
-    assert candidate(3) == [1, 3, 2, 8]
-  File "/tmp/tmp2xm1nkvb.py", line 33, in tri
-    lst.append(lst[i - 1] + lst[i - 2] + lst[i + 1])
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_130_tri --- completion 134 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8226,7 +8226,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 135 ---- 
+# ---- HumanEval_130_tri --- completion 82 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8302,7 +8302,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 137 ---- 
+# ---- HumanEval_130_tri --- completion 83 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8377,7 +8377,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 140 ---- 
+# ---- HumanEval_130_tri --- completion 84 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8452,7 +8452,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 143 ---- 
+# ---- HumanEval_130_tri --- completion 85 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8527,7 +8527,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 147 ---- 
+# ---- HumanEval_130_tri --- completion 87 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8602,7 +8602,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 148 ---- 
+# ---- HumanEval_130_tri --- completion 88 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8677,7 +8677,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 151 ---- 
+# ---- HumanEval_130_tri --- completion 89 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8752,7 +8752,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 162 ---- 
+# ---- HumanEval_130_tri --- completion 92 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8827,7 +8827,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 163 ---- 
+# ---- HumanEval_130_tri --- completion 93 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8901,7 +8901,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 164 ---- 
+# ---- HumanEval_130_tri --- completion 94 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -8977,7 +8977,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 168 ---- 
+# ---- HumanEval_130_tri --- completion 95 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9052,7 +9052,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 171 ---- 
+# ---- HumanEval_130_tri --- completion 96 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9127,7 +9127,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 172 ---- 
+# ---- HumanEval_130_tri --- completion 97 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9202,7 +9202,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 173 ---- 
+# ---- HumanEval_130_tri --- completion 98 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9278,7 +9278,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 177 ---- 
+# ---- HumanEval_130_tri --- completion 99 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9353,7 +9353,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 178 ---- 
+# ---- HumanEval_130_tri --- completion 100 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9428,7 +9428,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 180 ---- 
+# ---- HumanEval_130_tri --- completion 102 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9504,7 +9504,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 184 ---- 
+# ---- HumanEval_130_tri --- completion 106 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9580,7 +9580,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 185 ---- 
+# ---- HumanEval_130_tri --- completion 107 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9655,7 +9655,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 187 ---- 
+# ---- HumanEval_130_tri --- completion 108 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9731,7 +9731,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 190 ---- 
+# ---- HumanEval_130_tri --- completion 109 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9806,7 +9806,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 193 ---- 
+# ---- HumanEval_130_tri --- completion 111 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9881,7 +9881,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 194 ---- 
+# ---- HumanEval_130_tri --- completion 112 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -9957,7 +9957,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_130_tri --- completion 198 ---- 
+# ---- HumanEval_130_tri --- completion 115 ---- 
 from typing import List
 
 def tri(n: int) -> List[int]:
@@ -10032,7 +10032,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_135_can_arrange --- completion 94 ---- 
+# ---- HumanEval_135_can_arrange --- completion 0 ---- 
 from typing import List
 
 def can_arrange(arr: List[int]) -> int:
@@ -10450,7 +10450,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 8 ---- 
+# ---- HumanEval_9_rolling_max --- completion 7 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10501,7 +10501,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 9 ---- 
+# ---- HumanEval_9_rolling_max --- completion 8 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10552,7 +10552,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 10 ---- 
+# ---- HumanEval_9_rolling_max --- completion 9 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10602,7 +10602,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 12 ---- 
+# ---- HumanEval_9_rolling_max --- completion 10 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10653,7 +10653,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 13 ---- 
+# ---- HumanEval_9_rolling_max --- completion 11 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10703,7 +10703,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 14 ---- 
+# ---- HumanEval_9_rolling_max --- completion 12 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10754,7 +10754,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 15 ---- 
+# ---- HumanEval_9_rolling_max --- completion 13 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10805,7 +10805,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 16 ---- 
+# ---- HumanEval_9_rolling_max --- completion 14 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10855,7 +10855,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 17 ---- 
+# ---- HumanEval_9_rolling_max --- completion 15 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -10894,6 +10894,108 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 16 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 17 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for num in numbers[1:]:
+        if num > max_so_far:
+            max_so_far = num
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -10967,12 +11069,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    result = [max_so_far]
-    for num in numbers[1:]:
-        if num > max_so_far:
-            max_so_far = num
-        result.append(max_so_far)
-    return result
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
 
 def check(candidate):
     assert candidate([]) == []
@@ -10989,13 +11091,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpakjrjadp.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11018,12 +11120,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    result = [max_so_far]
+    max_list = [max_so_far]
     for i in range(1, len(numbers)):
         if numbers[i] > max_so_far:
             max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
+        max_list.append(max_so_far)
+    return max_list
 
 def check(candidate):
     assert candidate([]) == []
@@ -11040,13 +11142,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11060,108 +11162,6 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_9_rolling_max --- completion 21 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 22 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 23 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -11211,7 +11211,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 24 ---- 
+# ---- HumanEval_9_rolling_max --- completion 22 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -11262,7 +11262,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 25 ---- 
+# ---- HumanEval_9_rolling_max --- completion 23 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -11313,7 +11313,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 26 ---- 
+# ---- HumanEval_9_rolling_max --- completion 24 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -11365,7 +11365,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 27 ---- 
+# ---- HumanEval_9_rolling_max --- completion 25 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -11404,6 +11404,159 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 26 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 27 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for number in numbers[1:]:
+        if number > max_so_far:
+            max_so_far = number
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 28 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    max_list = [max_so_far]
+    for number in numbers[1:]:
+        if number > max_so_far:
+            max_so_far = number
+        max_list.append(max_so_far)
+    return max_list
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpf2gtz9kr.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmpf2gtz9kr.py", line 24, in test_check
+    check(rolling_max)
+  File "/tmp/tmpf2gtz9kr.py", line 18, in check
+    assert candidate([]) == []
+  File "/tmp/tmpf2gtz9kr.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11477,12 +11630,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    result = [max_so_far]
-    for number in numbers[1:]:
-        if number > max_so_far:
-            max_so_far = number
-        result.append(max_so_far)
-    return result
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
 
 def check(candidate):
     assert candidate([]) == []
@@ -11499,13 +11652,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11527,13 +11680,13 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
+    result = []
     max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for number in numbers[1:]:
-        if number > max_so_far:
-            max_so_far = number
-        max_list.append(max_so_far)
-    return max_list
+    for n in numbers:
+        if n > max_so_far:
+            max_so_far = n
+        result.append(max_so_far)
+    return result
 
 def check(candidate):
     assert candidate([]) == []
@@ -11550,13 +11703,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpf2gtz9kr.py", line 26, in <module>
+  File "/tmp/tmpxph4mfya.py", line 26, in <module>
     test_check()
-  File "/tmp/tmpf2gtz9kr.py", line 24, in test_check
+  File "/tmp/tmpxph4mfya.py", line 24, in test_check
     check(rolling_max)
-  File "/tmp/tmpf2gtz9kr.py", line 18, in check
+  File "/tmp/tmpxph4mfya.py", line 18, in check
     assert candidate([]) == []
-  File "/tmp/tmpf2gtz9kr.py", line 9, in rolling_max
+  File "/tmp/tmpxph4mfya.py", line 10, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11630,12 +11783,11 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    max_list = [max_so_far]
+    result = [max_so_far]
     for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
+        max_so_far = max(max_so_far, numbers[i])
+        result.append(max_so_far)
+    return result
 
 def check(candidate):
     assert candidate([]) == []
@@ -11652,13 +11804,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 25, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 23, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 17, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11680,11 +11832,10 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    result = []
     max_so_far = numbers[0]
-    for n in numbers:
-        if n > max_so_far:
-            max_so_far = n
+    result = [max_so_far]
+    for number in numbers[1:]:
+        max_so_far = max(max_so_far, number)
         result.append(max_so_far)
     return result
 
@@ -11703,13 +11854,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpxph4mfya.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 25, in <module>
     test_check()
-  File "/tmp/tmpxph4mfya.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 23, in test_check
     check(rolling_max)
-  File "/tmp/tmpxph4mfya.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 17, in check
     assert candidate([]) == []
-  File "/tmp/tmpxph4mfya.py", line 10, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11723,6 +11874,57 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_9_rolling_max --- completion 35 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for number in numbers[1:]:
+        if number > max_so_far:
+            max_so_far = number
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 36 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -11773,56 +11975,6 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 36 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        max_so_far = max(max_so_far, numbers[i])
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 23, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 17, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpbkqv5gn5.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_9_rolling_max --- completion 37 ---- 
 from typing import List
 
@@ -11832,10 +11984,10 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
+    result = []
     max_so_far = numbers[0]
-    result = [max_so_far]
-    for number in numbers[1:]:
-        max_so_far = max(max_so_far, number)
+    for n in numbers:
+        max_so_far = max(max_so_far, n)
         result.append(max_so_far)
     return result
 
@@ -11854,13 +12006,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 25, in <module>
+  File "/tmp/tmppkzz8n54.py", line 25, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 23, in test_check
+  File "/tmp/tmppkzz8n54.py", line 23, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 17, in check
+  File "/tmp/tmppkzz8n54.py", line 17, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 9, in rolling_max
+  File "/tmp/tmppkzz8n54.py", line 10, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11883,12 +12035,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    result = [max_so_far]
-    for number in numbers[1:]:
-        if number > max_so_far:
-            max_so_far = number
-        result.append(max_so_far)
-    return result
+    rolling_max = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        rolling_max.append(max_so_far)
+    return rolling_max
 
 def check(candidate):
     assert candidate([]) == []
@@ -11905,13 +12057,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -11984,12 +12136,13 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    result = []
     max_so_far = numbers[0]
-    for n in numbers:
-        max_so_far = max(max_so_far, n)
-        result.append(max_so_far)
-    return result
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
 
 def check(candidate):
     assert candidate([]) == []
@@ -12006,13 +12159,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmppkzz8n54.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
     test_check()
-  File "/tmp/tmppkzz8n54.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
     check(rolling_max)
-  File "/tmp/tmppkzz8n54.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
-  File "/tmp/tmppkzz8n54.py", line 10, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -12034,13 +12187,13 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
+    result = []
     max_so_far = numbers[0]
-    rolling_max = [max_so_far]
-    for i in range(1, len(numbers)):
+    for i in range(len(numbers)):
         if numbers[i] > max_so_far:
             max_so_far = numbers[i]
-        rolling_max.append(max_so_far)
-    return rolling_max
+        result.append(max_so_far)
+    return result
 
 def check(candidate):
     assert candidate([]) == []
@@ -12057,13 +12210,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpnzaf3bvl.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -12085,12 +12238,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
+    result = []
+    current_max = numbers[0]
+    for number in numbers:
+        if number > current_max:
+            current_max = number
+        result.append(current_max)
     return result
 
 def check(candidate):
@@ -12108,14 +12261,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+  File "/tmp/tmp65kh5efs.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+  File "/tmp/tmp65kh5efs.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+  File "/tmp/tmp65kh5efs.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
+  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
+    current_max = numbers[0]
 IndexError: list index out of range
 
 '''
@@ -12187,159 +12340,6 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    result = []
-    max_so_far = numbers[0]
-    for i in range(len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 45 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    current_max = numbers[0]
-    for number in numbers:
-        if number > current_max:
-            current_max = number
-        result.append(current_max)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp65kh5efs.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmp65kh5efs.py", line 24, in test_check
-    check(rolling_max)
-  File "/tmp/tmp65kh5efs.py", line 18, in check
-    assert candidate([]) == []
-  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
-    current_max = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 46 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 47 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
     max_so_far = numbers[0]
     result = [max_so_far]
     for n in numbers[1:]:
@@ -12382,7 +12382,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 48 ---- 
+# ---- HumanEval_9_rolling_max --- completion 45 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12433,7 +12433,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 49 ---- 
+# ---- HumanEval_9_rolling_max --- completion 46 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12484,7 +12484,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 50 ---- 
+# ---- HumanEval_9_rolling_max --- completion 47 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12535,7 +12535,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 51 ---- 
+# ---- HumanEval_9_rolling_max --- completion 48 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12586,7 +12586,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 52 ---- 
+# ---- HumanEval_9_rolling_max --- completion 49 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12637,7 +12637,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 53 ---- 
+# ---- HumanEval_9_rolling_max --- completion 50 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12687,7 +12687,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 54 ---- 
+# ---- HumanEval_9_rolling_max --- completion 51 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -12726,6 +12726,158 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 52 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for number in numbers[1:]:
+        max_so_far = max(max_so_far, number)
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 23, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 17, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 53 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 54 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    max_so_far = numbers[0]
+    for i in range(len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -12749,8 +12901,9 @@ def rolling_max(numbers: List[int]) -> List[int]:
     """
     max_so_far = numbers[0]
     result = [max_so_far]
-    for number in numbers[1:]:
-        max_so_far = max(max_so_far, number)
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
         result.append(max_so_far)
     return result
 
@@ -12769,13 +12922,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmplnubdgpw.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -12798,12 +12951,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    max_list = [max_so_far]
+    result = [max_so_far]
     for i in range(1, len(numbers)):
         if numbers[i] > max_so_far:
             max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
+        result.append(max_so_far)
+    return result
 
 def check(candidate):
     assert candidate([]) == []
@@ -12820,13 +12973,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -12840,159 +12993,6 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_9_rolling_max --- completion 57 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    max_so_far = numbers[0]
-    for i in range(len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 58 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 59 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 60 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13042,7 +13042,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 61 ---- 
+# ---- HumanEval_9_rolling_max --- completion 58 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13093,7 +13093,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 62 ---- 
+# ---- HumanEval_9_rolling_max --- completion 59 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13144,7 +13144,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 63 ---- 
+# ---- HumanEval_9_rolling_max --- completion 60 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13195,7 +13195,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 64 ---- 
+# ---- HumanEval_9_rolling_max --- completion 61 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13246,7 +13246,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 65 ---- 
+# ---- HumanEval_9_rolling_max --- completion 62 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13285,6 +13285,159 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 63 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 64 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    current_max = numbers[0]
+    for number in numbers:
+        if number > current_max:
+            current_max = number
+        result.append(current_max)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp65kh5efs.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmp65kh5efs.py", line 24, in test_check
+    check(rolling_max)
+  File "/tmp/tmp65kh5efs.py", line 18, in check
+    assert candidate([]) == []
+  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
+    current_max = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 65 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    max_so_far = numbers[0]
+    for number in numbers:
+        if number > max_so_far:
+            max_so_far = number
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 10, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -13357,159 +13510,6 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    result = []
-    current_max = numbers[0]
-    for number in numbers:
-        if number > current_max:
-            current_max = number
-        result.append(current_max)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp65kh5efs.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmp65kh5efs.py", line 24, in test_check
-    check(rolling_max)
-  File "/tmp/tmp65kh5efs.py", line 18, in check
-    assert candidate([]) == []
-  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
-    current_max = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 68 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    max_so_far = numbers[0]
-    for number in numbers:
-        if number > max_so_far:
-            max_so_far = number
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 10, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 69 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 70 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
     rolling_max = []
     max_so_far = numbers[0]
     for number in numbers:
@@ -13551,7 +13551,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 71 ---- 
+# ---- HumanEval_9_rolling_max --- completion 68 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13602,7 +13602,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 72 ---- 
+# ---- HumanEval_9_rolling_max --- completion 69 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13652,7 +13652,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 73 ---- 
+# ---- HumanEval_9_rolling_max --- completion 70 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13702,7 +13702,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 74 ---- 
+# ---- HumanEval_9_rolling_max --- completion 71 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13753,7 +13753,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 75 ---- 
+# ---- HumanEval_9_rolling_max --- completion 72 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -13793,6 +13793,159 @@ Traceback (most recent call last):
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
     max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 73 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 74 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    current_max = numbers[0]
+    for number in numbers:
+        if number > current_max:
+            current_max = number
+        result.append(current_max)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp65kh5efs.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmp65kh5efs.py", line 24, in test_check
+    check(rolling_max)
+  File "/tmp/tmp65kh5efs.py", line 18, in check
+    assert candidate([]) == []
+  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
+    current_max = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 75 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    current_max = numbers[0]
+    for number in numbers:
+        if number > current_max:
+            current_max = number
+        result.append(current_max)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp65kh5efs.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmp65kh5efs.py", line 24, in test_check
+    check(rolling_max)
+  File "/tmp/tmp65kh5efs.py", line 18, in check
+    assert candidate([]) == []
+  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
+    current_max = numbers[0]
 IndexError: list index out of range
 
 '''
@@ -13805,159 +13958,6 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_9_rolling_max --- completion 76 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 77 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    current_max = numbers[0]
-    for number in numbers:
-        if number > current_max:
-            current_max = number
-        result.append(current_max)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp65kh5efs.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmp65kh5efs.py", line 24, in test_check
-    check(rolling_max)
-  File "/tmp/tmp65kh5efs.py", line 18, in check
-    assert candidate([]) == []
-  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
-    current_max = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 78 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    current_max = numbers[0]
-    for number in numbers:
-        if number > current_max:
-            current_max = number
-        result.append(current_max)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp65kh5efs.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmp65kh5efs.py", line 24, in test_check
-    check(rolling_max)
-  File "/tmp/tmp65kh5efs.py", line 18, in check
-    assert candidate([]) == []
-  File "/tmp/tmp65kh5efs.py", line 10, in rolling_max
-    current_max = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 79 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14008,7 +14008,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 80 ---- 
+# ---- HumanEval_9_rolling_max --- completion 77 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14059,7 +14059,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 81 ---- 
+# ---- HumanEval_9_rolling_max --- completion 78 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14110,7 +14110,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 82 ---- 
+# ---- HumanEval_9_rolling_max --- completion 79 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14161,7 +14161,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 83 ---- 
+# ---- HumanEval_9_rolling_max --- completion 80 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14212,7 +14212,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 84 ---- 
+# ---- HumanEval_9_rolling_max --- completion 81 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14263,7 +14263,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 85 ---- 
+# ---- HumanEval_9_rolling_max --- completion 82 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14314,7 +14314,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 86 ---- 
+# ---- HumanEval_9_rolling_max --- completion 83 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14365,7 +14365,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 87 ---- 
+# ---- HumanEval_9_rolling_max --- completion 84 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14416,7 +14416,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 88 ---- 
+# ---- HumanEval_9_rolling_max --- completion 85 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14466,7 +14466,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 89 ---- 
+# ---- HumanEval_9_rolling_max --- completion 86 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14517,7 +14517,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 90 ---- 
+# ---- HumanEval_9_rolling_max --- completion 87 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14568,7 +14568,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 91 ---- 
+# ---- HumanEval_9_rolling_max --- completion 88 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14619,7 +14619,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 92 ---- 
+# ---- HumanEval_9_rolling_max --- completion 89 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14670,7 +14670,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 93 ---- 
+# ---- HumanEval_9_rolling_max --- completion 90 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14721,7 +14721,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 94 ---- 
+# ---- HumanEval_9_rolling_max --- completion 91 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14773,7 +14773,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 95 ---- 
+# ---- HumanEval_9_rolling_max --- completion 92 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14824,7 +14824,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 96 ---- 
+# ---- HumanEval_9_rolling_max --- completion 93 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14863,6 +14863,159 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 18, in check
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpv43sfoyo.py", line 10, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 94 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 95 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 96 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    max_so_far = numbers[0]
+    for i in range(len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -14926,7 +15079,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 99 ---- 
+# ---- HumanEval_9_rolling_max --- completion 98 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14977,7 +15130,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 101 ---- 
+# ---- HumanEval_9_rolling_max --- completion 99 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -14986,13 +15139,13 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    result = []
     max_so_far = numbers[0]
-    for i in range(len(numbers)):
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
         if numbers[i] > max_so_far:
             max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
+        max_list.append(max_so_far)
+    return max_list
 
 def check(candidate):
     assert candidate([]) == []
@@ -15009,13 +15162,115 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp5lm0caxg.py", line 10, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 100 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_list = []
+    max_so_far = numbers[0]
+    for i in range(len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpc8kvcu84.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmpc8kvcu84.py", line 24, in test_check
+    check(rolling_max)
+  File "/tmp/tmpc8kvcu84.py", line 18, in check
+    assert candidate([]) == []
+  File "/tmp/tmpc8kvcu84.py", line 10, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 101 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -15089,12 +15344,12 @@ def rolling_max(numbers: List[int]) -> List[int]:
     [1, 2, 3, 3, 3, 4, 4]
     """
     max_so_far = numbers[0]
-    result = [max_so_far]
+    max_list = [max_so_far]
     for i in range(1, len(numbers)):
         if numbers[i] > max_so_far:
             max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
+        max_list.append(max_so_far)
+    return max_list
 
 def check(candidate):
     assert candidate([]) == []
@@ -15111,13 +15366,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
     check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
     assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
     max_so_far = numbers[0]
 IndexError: list index out of range
 
@@ -15131,261 +15386,6 @@ IndexError: list index out of range
 
 
 # ---- HumanEval_9_rolling_max --- completion 104 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 105 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_list = []
-    max_so_far = numbers[0]
-    for i in range(len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpc8kvcu84.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmpc8kvcu84.py", line 24, in test_check
-    check(rolling_max)
-  File "/tmp/tmpc8kvcu84.py", line 18, in check
-    assert candidate([]) == []
-  File "/tmp/tmpc8kvcu84.py", line 10, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 106 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 107 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 108 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 109 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15435,7 +15435,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 110 ---- 
+# ---- HumanEval_9_rolling_max --- completion 105 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15486,7 +15486,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 111 ---- 
+# ---- HumanEval_9_rolling_max --- completion 106 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15538,7 +15538,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 112 ---- 
+# ---- HumanEval_9_rolling_max --- completion 107 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15589,7 +15589,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 113 ---- 
+# ---- HumanEval_9_rolling_max --- completion 108 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15640,7 +15640,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 114 ---- 
+# ---- HumanEval_9_rolling_max --- completion 109 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15691,7 +15691,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 115 ---- 
+# ---- HumanEval_9_rolling_max --- completion 110 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15742,7 +15742,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 116 ---- 
+# ---- HumanEval_9_rolling_max --- completion 111 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15792,7 +15792,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 117 ---- 
+# ---- HumanEval_9_rolling_max --- completion 112 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15843,7 +15843,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 118 ---- 
+# ---- HumanEval_9_rolling_max --- completion 113 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15891,7 +15891,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 119 ---- 
+# ---- HumanEval_9_rolling_max --- completion 114 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15942,7 +15942,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 120 ---- 
+# ---- HumanEval_9_rolling_max --- completion 115 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -15993,7 +15993,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 121 ---- 
+# ---- HumanEval_9_rolling_max --- completion 116 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16044,7 +16044,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 122 ---- 
+# ---- HumanEval_9_rolling_max --- completion 117 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16094,7 +16094,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 123 ---- 
+# ---- HumanEval_9_rolling_max --- completion 118 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16145,7 +16145,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 124 ---- 
+# ---- HumanEval_9_rolling_max --- completion 119 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16196,7 +16196,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 125 ---- 
+# ---- HumanEval_9_rolling_max --- completion 120 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16248,7 +16248,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 126 ---- 
+# ---- HumanEval_9_rolling_max --- completion 121 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16299,7 +16299,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 127 ---- 
+# ---- HumanEval_9_rolling_max --- completion 122 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16350,7 +16350,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 128 ---- 
+# ---- HumanEval_9_rolling_max --- completion 123 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16401,7 +16401,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 129 ---- 
+# ---- HumanEval_9_rolling_max --- completion 124 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16449,7 +16449,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 131 ---- 
+# ---- HumanEval_9_rolling_max --- completion 125 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16500,7 +16500,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 132 ---- 
+# ---- HumanEval_9_rolling_max --- completion 126 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16551,7 +16551,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 133 ---- 
+# ---- HumanEval_9_rolling_max --- completion 127 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16602,7 +16602,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 134 ---- 
+# ---- HumanEval_9_rolling_max --- completion 128 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16652,7 +16652,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 135 ---- 
+# ---- HumanEval_9_rolling_max --- completion 129 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16703,7 +16703,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 137 ---- 
+# ---- HumanEval_9_rolling_max --- completion 130 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16753,7 +16753,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 138 ---- 
+# ---- HumanEval_9_rolling_max --- completion 131 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16804,7 +16804,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 139 ---- 
+# ---- HumanEval_9_rolling_max --- completion 132 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16855,7 +16855,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 140 ---- 
+# ---- HumanEval_9_rolling_max --- completion 133 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16906,7 +16906,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 141 ---- 
+# ---- HumanEval_9_rolling_max --- completion 134 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -16957,7 +16957,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 142 ---- 
+# ---- HumanEval_9_rolling_max --- completion 135 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17008,7 +17008,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 143 ---- 
+# ---- HumanEval_9_rolling_max --- completion 136 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17059,7 +17059,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 144 ---- 
+# ---- HumanEval_9_rolling_max --- completion 137 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17110,7 +17110,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 145 ---- 
+# ---- HumanEval_9_rolling_max --- completion 138 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17161,7 +17161,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 146 ---- 
+# ---- HumanEval_9_rolling_max --- completion 139 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17212,7 +17212,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 147 ---- 
+# ---- HumanEval_9_rolling_max --- completion 140 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17263,7 +17263,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 148 ---- 
+# ---- HumanEval_9_rolling_max --- completion 141 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17314,7 +17314,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 149 ---- 
+# ---- HumanEval_9_rolling_max --- completion 142 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17365,7 +17365,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 150 ---- 
+# ---- HumanEval_9_rolling_max --- completion 143 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17415,7 +17415,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 151 ---- 
+# ---- HumanEval_9_rolling_max --- completion 144 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17465,7 +17465,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 152 ---- 
+# ---- HumanEval_9_rolling_max --- completion 145 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17516,7 +17516,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 153 ---- 
+# ---- HumanEval_9_rolling_max --- completion 146 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -17556,6 +17556,362 @@ Traceback (most recent call last):
     assert candidate([]) == []
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
     max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 147 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    max_list = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        max_list.append(max_so_far)
+    return max_list
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 148 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for number in numbers[1:]:
+        if number > max_so_far:
+            max_so_far = number
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 149 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 150 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 151 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    max_so_far = numbers[0]
+    result = [max_so_far]
+    for i in range(1, len(numbers)):
+        if numbers[i] > max_so_far:
+            max_so_far = numbers[i]
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 152 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    max_so_far = numbers[0]
+    for number in numbers:
+        max_so_far = max(max_so_far, number)
+        result.append(max_so_far)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 23, in test_check
+    check(rolling_max)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 17, in check
+    assert candidate([]) == []
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 10, in rolling_max
+    max_so_far = numbers[0]
+IndexError: list index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_9_rolling_max --- completion 153 ---- 
+from typing import List
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    result = []
+    current_max = numbers[0]
+    for i in range(len(numbers)):
+        if numbers[i] > current_max:
+            current_max = numbers[i]
+        result.append(current_max)
+    return result
+
+def check(candidate):
+    assert candidate([]) == []
+    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
+    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
+    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
+
+def test_check():
+    check(rolling_max)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpd3w05b2m.py", line 26, in <module>
+    test_check()
+  File "/tmp/tmpd3w05b2m.py", line 24, in test_check
+    check(rolling_max)
+  File "/tmp/tmpd3w05b2m.py", line 18, in check
+    assert candidate([]) == []
+  File "/tmp/tmpd3w05b2m.py", line 10, in rolling_max
+    current_max = numbers[0]
 IndexError: list index out of range
 
 '''
@@ -17627,362 +17983,6 @@ def rolling_max(numbers: List[int]) -> List[int]:
     >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
     [1, 2, 3, 3, 3, 4, 4]
     """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for number in numbers[1:]:
-        if number > max_so_far:
-            max_so_far = number
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpz6xibz5y.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 156 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 157 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 158 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    result = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1t57x93j.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 159 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    max_so_far = numbers[0]
-    for number in numbers:
-        max_so_far = max(max_so_far, number)
-        result.append(max_so_far)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 23, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 17, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr0hdak9v.py", line 10, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 160 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    result = []
-    current_max = numbers[0]
-    for i in range(len(numbers)):
-        if numbers[i] > current_max:
-            current_max = numbers[i]
-        result.append(current_max)
-    return result
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpd3w05b2m.py", line 26, in <module>
-    test_check()
-  File "/tmp/tmpd3w05b2m.py", line 24, in test_check
-    check(rolling_max)
-  File "/tmp/tmpd3w05b2m.py", line 18, in check
-    assert candidate([]) == []
-  File "/tmp/tmpd3w05b2m.py", line 10, in rolling_max
-    current_max = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 161 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
-    max_so_far = numbers[0]
-    max_list = [max_so_far]
-    for i in range(1, len(numbers)):
-        if numbers[i] > max_so_far:
-            max_so_far = numbers[i]
-        max_list.append(max_so_far)
-    return max_list
-
-def check(candidate):
-    assert candidate([]) == []
-    assert candidate([1, 2, 3, 4]) == [1, 2, 3, 4]
-    assert candidate([4, 3, 2, 1]) == [4, 4, 4, 4]
-    assert candidate([3, 2, 3, 100, 3]) == [3, 3, 3, 100, 100]
-
-def test_check():
-    check(rolling_max)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 24, in test_check
-    check(rolling_max)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 18, in check
-    assert candidate([]) == []
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp55vrvqdn.py", line 9, in rolling_max
-    max_so_far = numbers[0]
-IndexError: list index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_9_rolling_max --- completion 162 ---- 
-from typing import List
-
-def rolling_max(numbers: List[int]) -> List[int]:
-    """ From a given list of integers, generate a list of rolling maximum element found until given moment
-    in the sequence.
-    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
-    [1, 2, 3, 3, 3, 4, 4]
-    """
     result = []
     max_so_far = numbers[0]
     for number in numbers:
@@ -18025,7 +18025,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 163 ---- 
+# ---- HumanEval_9_rolling_max --- completion 156 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18075,7 +18075,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 165 ---- 
+# ---- HumanEval_9_rolling_max --- completion 157 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18126,7 +18126,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 166 ---- 
+# ---- HumanEval_9_rolling_max --- completion 158 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18177,7 +18177,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 168 ---- 
+# ---- HumanEval_9_rolling_max --- completion 159 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18228,7 +18228,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 169 ---- 
+# ---- HumanEval_9_rolling_max --- completion 160 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18279,7 +18279,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 170 ---- 
+# ---- HumanEval_9_rolling_max --- completion 161 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18330,7 +18330,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 171 ---- 
+# ---- HumanEval_9_rolling_max --- completion 162 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18382,7 +18382,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 172 ---- 
+# ---- HumanEval_9_rolling_max --- completion 163 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18433,7 +18433,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 173 ---- 
+# ---- HumanEval_9_rolling_max --- completion 164 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18484,7 +18484,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 174 ---- 
+# ---- HumanEval_9_rolling_max --- completion 165 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18535,7 +18535,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 175 ---- 
+# ---- HumanEval_9_rolling_max --- completion 166 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18586,7 +18586,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 176 ---- 
+# ---- HumanEval_9_rolling_max --- completion 167 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18637,7 +18637,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 177 ---- 
+# ---- HumanEval_9_rolling_max --- completion 168 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18688,7 +18688,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 178 ---- 
+# ---- HumanEval_9_rolling_max --- completion 169 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18738,7 +18738,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 179 ---- 
+# ---- HumanEval_9_rolling_max --- completion 170 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18788,7 +18788,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 181 ---- 
+# ---- HumanEval_9_rolling_max --- completion 171 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18839,7 +18839,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 182 ---- 
+# ---- HumanEval_9_rolling_max --- completion 172 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18889,7 +18889,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 183 ---- 
+# ---- HumanEval_9_rolling_max --- completion 173 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18939,7 +18939,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 184 ---- 
+# ---- HumanEval_9_rolling_max --- completion 174 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -18990,7 +18990,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 185 ---- 
+# ---- HumanEval_9_rolling_max --- completion 175 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19040,7 +19040,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 186 ---- 
+# ---- HumanEval_9_rolling_max --- completion 176 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19091,7 +19091,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 188 ---- 
+# ---- HumanEval_9_rolling_max --- completion 177 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19142,7 +19142,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 189 ---- 
+# ---- HumanEval_9_rolling_max --- completion 178 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19192,7 +19192,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 190 ---- 
+# ---- HumanEval_9_rolling_max --- completion 179 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19243,7 +19243,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 191 ---- 
+# ---- HumanEval_9_rolling_max --- completion 180 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19294,7 +19294,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 192 ---- 
+# ---- HumanEval_9_rolling_max --- completion 181 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19345,7 +19345,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 193 ---- 
+# ---- HumanEval_9_rolling_max --- completion 182 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19393,7 +19393,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 194 ---- 
+# ---- HumanEval_9_rolling_max --- completion 183 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19444,7 +19444,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 196 ---- 
+# ---- HumanEval_9_rolling_max --- completion 184 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19495,7 +19495,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 197 ---- 
+# ---- HumanEval_9_rolling_max --- completion 185 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19545,7 +19545,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_9_rolling_max --- completion 198 ---- 
+# ---- HumanEval_9_rolling_max --- completion 186 ---- 
 from typing import List
 
 def rolling_max(numbers: List[int]) -> List[int]:
@@ -19595,7 +19595,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 29 ---- 
+# ---- HumanEval_141_file_name_check --- completion 24 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -19678,7 +19678,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 64 ---- 
+# ---- HumanEval_141_file_name_check --- completion 53 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -19764,7 +19764,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 88 ---- 
+# ---- HumanEval_141_file_name_check --- completion 74 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -19854,7 +19854,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 91 ---- 
+# ---- HumanEval_141_file_name_check --- completion 77 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -19941,7 +19941,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 136 ---- 
+# ---- HumanEval_141_file_name_check --- completion 109 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -20027,7 +20027,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 141 ---- 
+# ---- HumanEval_141_file_name_check --- completion 113 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -20110,7 +20110,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 172 ---- 
+# ---- HumanEval_141_file_name_check --- completion 140 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -20195,7 +20195,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_141_file_name_check --- completion 186 ---- 
+# ---- HumanEval_141_file_name_check --- completion 149 ---- 
 def file_name_check(file_name: str) -> str:
     """Create a function which takes a string representing a file's name, and returns
     'Yes' if the the file's name is valid, and returns 'No' otherwise.
@@ -20278,7 +20278,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 116 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 22 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -20344,7 +20344,7 @@ IndexError: pop from empty list
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 155 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 27 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -20410,7 +20410,7 @@ IndexError: pop from empty list
 
 
 
-# ---- HumanEval_37_sort_even --- completion 39 ---- 
+# ---- HumanEval_37_sort_even --- completion 0 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20462,7 +20462,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 67 ---- 
+# ---- HumanEval_37_sort_even --- completion 1 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20515,7 +20515,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 102 ---- 
+# ---- HumanEval_37_sort_even --- completion 3 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20570,7 +20570,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 113 ---- 
+# ---- HumanEval_37_sort_even --- completion 4 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20623,7 +20623,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 141 ---- 
+# ---- HumanEval_37_sort_even --- completion 5 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20681,7 +20681,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 143 ---- 
+# ---- HumanEval_37_sort_even --- completion 6 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20734,7 +20734,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 148 ---- 
+# ---- HumanEval_37_sort_even --- completion 7 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20786,7 +20786,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_37_sort_even --- completion 160 ---- 
+# ---- HumanEval_37_sort_even --- completion 8 ---- 
 from typing import List
 
 def sort_even(l: List[int]) -> List[int]:
@@ -20838,7 +20838,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 4 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 0 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -20892,6 +20892,254 @@ Traceback (most recent call last):
     assert candidate('A') == True
   File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
     if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 1 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 2 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2].isspace()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpj_ib2y0u.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpj_ib2y0u.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpj_ib2y0u.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpj_ib2y0u.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2].isspace()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 3 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 4 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
 IndexError: string index out of range
 
 '''
@@ -20982,7 +21230,11 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt[-1].isalpha() and txt[-2].isspace()
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
 
 
 def check(candidate):
@@ -21006,14 +21258,81 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpj_ib2y0u.py", line 36, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmpj_ib2y0u.py", line 34, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpj_ib2y0u.py", line 25, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmpj_ib2y0u.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2].isspace()
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 7 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    else:
+        if txt[-1].isalpha() and txt[-2] == ' ':
+            return True
+        else:
+            return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpnthgd8l2.py", line 42, in <module>
+    test_check()
+  File "/tmp/tmpnthgd8l2.py", line 40, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpnthgd8l2.py", line 31, in check
+    assert candidate('A') == True
+  File "/tmp/tmpnthgd8l2.py", line 21, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -21090,7 +21409,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 10 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 9 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -21108,6 +21427,8 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
+    if not txt:
+        return False
     return txt[-1].isalpha() and txt[-2] == ' '
 
 
@@ -21132,14 +21453,79 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
     test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
+  File "/tmp/tmpqr_71_r7.py", line 27, in check
     assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
     return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 10 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -21169,7 +21555,11 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt[-1].isalpha() and txt[-2] == ' '
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
 
 
 def check(candidate):
@@ -21193,14 +21583,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -21295,13 +21685,13 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    if txt == '':
+    if not txt:
         return False
-    else:
-        if txt[-1].isalpha() and txt[-2] == ' ':
-            return True
-        else:
-            return False
+    if not txt[-1].isalpha():
+        return False
+    if txt[-2].isalpha():
+        return False
+    return True
 
 
 def check(candidate):
@@ -21325,14 +21715,136 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpnthgd8l2.py", line 42, in <module>
+  File "/tmp/tmpvhnwnbh6.py", line 42, in <module>
     test_check()
-  File "/tmp/tmpnthgd8l2.py", line 40, in test_check
+  File "/tmp/tmpvhnwnbh6.py", line 40, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpnthgd8l2.py", line 31, in check
+  File "/tmp/tmpvhnwnbh6.py", line 31, in check
     assert candidate('A') == True
-  File "/tmp/tmpnthgd8l2.py", line 21, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
+  File "/tmp/tmpvhnwnbh6.py", line 22, in check_if_last_char_is_a_letter
+    if txt[-2].isalpha():
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 14 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpb1hxnw35.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 15 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
 IndexError: string index out of range
 
 '''
@@ -21429,7 +21941,9 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     if not txt:
         return False
-    return txt[-1].isalpha() and txt[-2] == ' '
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
 
 
 def check(candidate):
@@ -21453,14 +21967,80 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpqr_71_r7.py", line 27, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 18 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    elif txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    else:
+        return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmaqgoany.py", line 41, in <module>
+    test_check()
+  File "/tmp/tmpmaqgoany.py", line 39, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmaqgoany.py", line 30, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmaqgoany.py", line 20, in check_if_last_char_is_a_letter
+    elif txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -21537,7 +22117,129 @@ IndexError: string index out of range
 
 
 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 20 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 21 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 22 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -21685,134 +22387,6 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    if not txt:
-        return False
-    if not txt[-1].isalpha():
-        return False
-    if txt[-2].isalpha():
-        return False
-    return True
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpvhnwnbh6.py", line 42, in <module>
-    test_check()
-  File "/tmp/tmpvhnwnbh6.py", line 40, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpvhnwnbh6.py", line 31, in check
-    assert candidate('A') == True
-  File "/tmp/tmpvhnwnbh6.py", line 22, in check_if_last_char_is_a_letter
-    if txt[-2].isalpha():
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 26 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpb1hxnw35.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 30 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
     return txt[-1].isalpha() and txt[-2] == ' '
 
 
@@ -21845,6 +22419,382 @@ Traceback (most recent call last):
     assert candidate('A') == True
   File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
     return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 25 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
+    test_check()
+  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpqr_71_r7.py", line 27, in check
+    assert candidate('A') == True
+  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 26 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpv3kgi53u.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 27 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 28 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and (txt[-2] == ' ' or txt[-2] == '')
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpgt2ooed8.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpgt2ooed8.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpgt2ooed8.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpgt2ooed8.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and (txt[-2] == ' ' or txt[-2] == '')
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 29 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpv3kgi53u.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 30 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -21986,7 +22936,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 35 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 33 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22004,12 +22954,11 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    if txt == '':
+    if not txt:
         return False
-    elif txt[-1].isalpha() and txt[-2] == ' ':
+    if txt[-1].isalpha() and txt[-2] == ' ':
         return True
-    else:
-        return False
+    return False
 
 
 def check(candidate):
@@ -22033,14 +22982,144 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpmaqgoany.py", line 41, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmpmaqgoany.py", line 39, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmaqgoany.py", line 30, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmpmaqgoany.py", line 20, in check_if_last_char_is_a_letter
-    elif txt[-1].isalpha() and txt[-2] == ' ':
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 34 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 35 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -22196,7 +23275,11 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt[-1].isalpha() and txt[-2] == ' '
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
 
 
 def check(candidate):
@@ -22220,14 +23303,79 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 39 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -22304,72 +23452,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 42 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 43 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 41 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22430,7 +23513,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 46 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 42 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22450,7 +23533,10 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     if not txt:
         return False
-    return txt[-1].isalpha() and txt[-2] == ' '
+    elif txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    else:
+        return False
 
 
 def check(candidate):
@@ -22474,14 +23560,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
+  File "/tmp/tmp55sy7owv.py", line 41, in <module>
     test_check()
-  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
+  File "/tmp/tmp55sy7owv.py", line 39, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpqr_71_r7.py", line 27, in check
+  File "/tmp/tmp55sy7owv.py", line 30, in check
     assert candidate('A') == True
-  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmp55sy7owv.py", line 20, in check_if_last_char_is_a_letter
+    elif txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -22493,7 +23579,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 48 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 43 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22511,7 +23597,12 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
+    if txt == '':
+        return False
+    elif txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    else:
+        return False
 
 
 def check(candidate):
@@ -22535,14 +23626,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
+  File "/tmp/tmpmaqgoany.py", line 41, in <module>
     test_check()
-  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
+  File "/tmp/tmpmaqgoany.py", line 39, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpv3kgi53u.py", line 25, in check
+  File "/tmp/tmpmaqgoany.py", line 30, in check
     assert candidate('A') == True
-  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmpmaqgoany.py", line 20, in check_if_last_char_is_a_letter
+    elif txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -22554,7 +23645,70 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 49 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 44 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp4cv1gp5d.py", line 38, in <module>
+    test_check()
+  File "/tmp/tmp4cv1gp5d.py", line 36, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmp4cv1gp5d.py", line 27, in check
+    assert candidate('A') == True
+  File "/tmp/tmp4cv1gp5d.py", line 20, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 45 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22619,7 +23773,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 50 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 46 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22637,7 +23791,7 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt[-1].isalpha() and (txt[-2] == ' ' or txt[-2] == '')
+    return txt[-1].isalpha() and txt[-2] == ' '
 
 
 def check(candidate):
@@ -22661,14 +23815,330 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpgt2ooed8.py", line 36, in <module>
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
     test_check()
-  File "/tmp/tmpgt2ooed8.py", line 34, in test_check
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpgt2ooed8.py", line 25, in check
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
     assert candidate('A') == True
-  File "/tmp/tmpgt2ooed8.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and (txt[-2] == ' ' or txt[-2] == '')
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 47 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 48 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    elif txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    else:
+        return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp55sy7owv.py", line 41, in <module>
+    test_check()
+  File "/tmp/tmp55sy7owv.py", line 39, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmp55sy7owv.py", line 30, in check
+    assert candidate('A') == True
+  File "/tmp/tmp55sy7owv.py", line 20, in check_if_last_char_is_a_letter
+    elif txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 49 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 50 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 51 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmps6uvt2q3.py", line 38, in <module>
+    test_check()
+  File "/tmp/tmps6uvt2q3.py", line 36, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmps6uvt2q3.py", line 27, in check
+    assert candidate('A') == True
+  File "/tmp/tmps6uvt2q3.py", line 20, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
 IndexError: string index out of range
 
 '''
@@ -22698,7 +24168,7 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
+    return txt[-1].isalpha() and txt[-2] == ' '
 
 
 def check(candidate):
@@ -22722,14 +24192,212 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
     test_check()
-  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpv3kgi53u.py", line 25, in check
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
     assert candidate('A') == True
-  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 53 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 54 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt:
+        if txt[-1].isalpha():
+            if txt[-2].isspace():
+                return True
+            else:
+                return False
+        else:
+            return False
+    else:
+        return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmppbveetox.py", line 45, in <module>
+    test_check()
+  File "/tmp/tmppbveetox.py", line 43, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmppbveetox.py", line 34, in check
+    assert candidate('A') == True
+  File "/tmp/tmppbveetox.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-2].isspace():
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 55 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    else:
+        if txt[-1].isalpha() and txt[-2] == ' ':
+            return True
+        else:
+            return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpnthgd8l2.py", line 42, in <module>
+    test_check()
+  File "/tmp/tmpnthgd8l2.py", line 40, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpnthgd8l2.py", line 31, in check
+    assert candidate('A') == True
+  File "/tmp/tmpnthgd8l2.py", line 21, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -22742,6 +24410,132 @@ IndexError: string index out of range
 
 
 # ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 56 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn0up8wvz.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpn0up8wvz.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpn0up8wvz.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 57 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpmv6ymktx.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 58 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -22824,6 +24618,67 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpb1hxnw35.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 60 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
     if not txt:
         return False
     if txt[-1].isalpha() and txt[-2] == ' ':
@@ -22871,7 +24726,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 60 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 61 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -23001,7 +24856,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 64 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 63 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -23054,6 +24909,71 @@ Traceback (most recent call last):
   File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
   File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 64 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn0up8wvz.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpn0up8wvz.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpn0up8wvz.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
     if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
@@ -23149,6 +25069,67 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpb1hxnw35.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 67 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
     if not txt:
         return False
     if txt[-1].isalpha() and txt[-2] == ' ':
@@ -23214,7 +25195,11 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    return txt[-1].isalpha() and txt[-2] == ' '
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
 
 
 def check(candidate):
@@ -23238,14 +25223,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -23258,6 +25243,134 @@ IndexError: string index out of range
 
 
 # ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 69 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    else:
+        if txt[-1].isalpha() and txt[-2] == ' ':
+            return True
+        else:
+            return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpnthgd8l2.py", line 42, in <module>
+    test_check()
+  File "/tmp/tmpnthgd8l2.py", line 40, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpnthgd8l2.py", line 31, in check
+    assert candidate('A') == True
+  File "/tmp/tmpnthgd8l2.py", line 21, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 70 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpb1hxnw35.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and not txt[-2].isalpha()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 71 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -23311,6 +25424,195 @@ Traceback (most recent call last):
     assert candidate('A') == True
   File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
     if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 72 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
+    test_check()
+  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpqr_71_r7.py", line 27, in check
+    assert candidate('A') == True
+  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 73 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 74 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2].isspace()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpj_ib2y0u.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpj_ib2y0u.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpj_ib2y0u.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpj_ib2y0u.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2].isspace()
 IndexError: string index out of range
 
 '''
@@ -23405,6 +25707,195 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpv3kgi53u.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 77 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if txt == '':
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn0up8wvz.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpn0up8wvz.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpn0up8wvz.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 78 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    return txt[-1].isalpha() and txt[-2] == ' '
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
+    test_check()
+  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpqr_71_r7.py", line 27, in check
+    assert candidate('A') == True
+  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 79 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
     if not txt:
         return False
     if txt[-1].isalpha() and txt[-2] == ' ':
@@ -23452,7 +25943,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 79 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 80 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -23513,7 +26004,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 80 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 81 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -23533,10 +26024,9 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     if not txt:
         return False
-    elif txt[-1].isalpha() and txt[-2] == ' ':
+    if txt[-1].isalpha() and txt[-2] == ' ':
         return True
-    else:
-        return False
+    return False
 
 
 def check(candidate):
@@ -23560,80 +26050,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmp55sy7owv.py", line 41, in <module>
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
     test_check()
-  File "/tmp/tmp55sy7owv.py", line 39, in test_check
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmp55sy7owv.py", line 30, in check
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
     assert candidate('A') == True
-  File "/tmp/tmp55sy7owv.py", line 20, in check_if_last_char_is_a_letter
-    elif txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 81 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    elif txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    else:
-        return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmaqgoany.py", line 41, in <module>
-    test_check()
-  File "/tmp/tmpmaqgoany.py", line 39, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmaqgoany.py", line 30, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmaqgoany.py", line 20, in check_if_last_char_is_a_letter
-    elif txt[-1].isalpha() and txt[-2] == ' ':
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -23663,9 +26087,7 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
-    if not txt:
-        return False
-    return txt[-1].isalpha() and not txt[-2].isalpha()
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
 
 
 def check(candidate):
@@ -23689,14 +26111,79 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmp4cv1gp5d.py", line 38, in <module>
+  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
     test_check()
-  File "/tmp/tmp4cv1gp5d.py", line 36, in test_check
+  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmp4cv1gp5d.py", line 27, in check
+  File "/tmp/tmpv3kgi53u.py", line 25, in check
     assert candidate('A') == True
-  File "/tmp/tmp4cv1gp5d.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and not txt[-2].isalpha()
+  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
+    return txt and txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 83 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -23773,6 +26260,132 @@ IndexError: string index out of range
 
 
 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 85 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 86 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    return txt[-1].isalpha() and txt[-2].isspace()
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpj_ib2y0u.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpj_ib2y0u.py", line 34, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpj_ib2y0u.py", line 25, in check
+    assert candidate('A') == True
+  File "/tmp/tmpj_ib2y0u.py", line 18, in check_if_last_char_is_a_letter
+    return txt[-1].isalpha() and txt[-2].isspace()
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 87 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
@@ -23791,6 +26404,8 @@ def check_if_last_char_is_a_letter(txt: str) -> bool:
     >>> check_if_last_char_is_a_letter('')
     False
     """
+    if not txt:
+        return False
     return txt[-1].isalpha() and txt[-2] == ' '
 
 
@@ -23815,14 +26430,79 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
+  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
     test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
+  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
     check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
+  File "/tmp/tmpqr_71_r7.py", line 27, in check
     assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
+  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
     return txt[-1].isalpha() and txt[-2] == ' '
+IndexError: string index out of range
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 88 ---- 
+def check_if_last_char_is_a_letter(txt: str) -> bool:
+    """
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    >>> check_if_last_char_is_a_letter('apple pie')
+    False
+    >>> check_if_last_char_is_a_letter('apple pi e')
+    True
+    >>> check_if_last_char_is_a_letter('apple pi e ')
+    False
+    >>> check_if_last_char_is_a_letter('')
+    False
+    """
+    if not txt:
+        return False
+    if txt[-1].isalpha() and txt[-2] == ' ':
+        return True
+    return False
+
+
+def check(candidate):
+    assert candidate('apple') == False
+    assert candidate('apple pi e') == True
+    assert candidate('eeeee') == False
+    assert candidate('A') == True
+    assert candidate('Pumpkin pie ') == False
+    assert candidate('Pumpkin pie 1') == False
+    assert candidate('') == False
+    assert candidate('eeeee e ') == False
+    assert candidate('apple pie') == False
+    assert candidate('apple pi e ') == False
+
+def test_check():
+    check(check_if_last_char_is_a_letter)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
+    test_check()
+  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
+    check(check_if_last_char_is_a_letter)
+  File "/tmp/tmpbgbhtwby.py", line 29, in check
+    assert candidate('A') == True
+  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
+    if txt[-1].isalpha() and txt[-2] == ' ':
 IndexError: string index out of range
 
 '''
@@ -23835,2686 +26515,6 @@ IndexError: string index out of range
 
 
 # ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 89 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 93 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    elif txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    else:
-        return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp55sy7owv.py", line 41, in <module>
-    test_check()
-  File "/tmp/tmp55sy7owv.py", line 39, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmp55sy7owv.py", line 30, in check
-    assert candidate('A') == True
-  File "/tmp/tmp55sy7owv.py", line 20, in check_if_last_char_is_a_letter
-    elif txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 99 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 100 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 101 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmps6uvt2q3.py", line 38, in <module>
-    test_check()
-  File "/tmp/tmps6uvt2q3.py", line 36, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmps6uvt2q3.py", line 27, in check
-    assert candidate('A') == True
-  File "/tmp/tmps6uvt2q3.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 104 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 106 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 109 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt:
-        if txt[-1].isalpha():
-            if txt[-2].isspace():
-                return True
-            else:
-                return False
-        else:
-            return False
-    else:
-        return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmppbveetox.py", line 45, in <module>
-    test_check()
-  File "/tmp/tmppbveetox.py", line 43, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmppbveetox.py", line 34, in check
-    assert candidate('A') == True
-  File "/tmp/tmppbveetox.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-2].isspace():
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 110 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    else:
-        if txt[-1].isalpha() and txt[-2] == ' ':
-            return True
-        else:
-            return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpnthgd8l2.py", line 42, in <module>
-    test_check()
-  File "/tmp/tmpnthgd8l2.py", line 40, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpnthgd8l2.py", line 31, in check
-    assert candidate('A') == True
-  File "/tmp/tmpnthgd8l2.py", line 21, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 111 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn0up8wvz.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpn0up8wvz.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpn0up8wvz.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 112 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 113 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 115 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpb1hxnw35.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 116 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 117 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 118 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 119 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 121 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn0up8wvz.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpn0up8wvz.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpn0up8wvz.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 125 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 126 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpb1hxnw35.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 127 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 128 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 131 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    else:
-        if txt[-1].isalpha() and txt[-2] == ' ':
-            return True
-        else:
-            return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpnthgd8l2.py", line 42, in <module>
-    test_check()
-  File "/tmp/tmpnthgd8l2.py", line 40, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpnthgd8l2.py", line 31, in check
-    assert candidate('A') == True
-  File "/tmp/tmpnthgd8l2.py", line 21, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 136 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpb1hxnw35.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpb1hxnw35.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpb1hxnw35.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpb1hxnw35.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and not txt[-2].isalpha()
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 138 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 141 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
-    test_check()
-  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpqr_71_r7.py", line 27, in check
-    assert candidate('A') == True
-  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 142 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 143 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2].isspace()
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpj_ib2y0u.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpj_ib2y0u.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpj_ib2y0u.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpj_ib2y0u.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2].isspace()
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 144 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 148 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpv3kgi53u.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 150 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if txt == '':
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn0up8wvz.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpn0up8wvz.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpn0up8wvz.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpn0up8wvz.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 151 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
-    test_check()
-  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpqr_71_r7.py", line 27, in check
-    assert candidate('A') == True
-  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 154 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 157 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpmv6ymktx.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpmv6ymktx.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpmv6ymktx.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpmv6ymktx.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 158 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 159 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpv3kgi53u.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpv3kgi53u.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpv3kgi53u.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpv3kgi53u.py", line 18, in check_if_last_char_is_a_letter
-    return txt and txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 160 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 161 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 162 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 163 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    return txt[-1].isalpha() and txt[-2].isspace()
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpj_ib2y0u.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpj_ib2y0u.py", line 34, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpj_ib2y0u.py", line 25, in check
-    assert candidate('A') == True
-  File "/tmp/tmpj_ib2y0u.py", line 18, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2].isspace()
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 164 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    return txt[-1].isalpha() and txt[-2] == ' '
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpqr_71_r7.py", line 38, in <module>
-    test_check()
-  File "/tmp/tmpqr_71_r7.py", line 36, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpqr_71_r7.py", line 27, in check
-    assert candidate('A') == True
-  File "/tmp/tmpqr_71_r7.py", line 20, in check_if_last_char_is_a_letter
-    return txt[-1].isalpha() and txt[-2] == ' '
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 166 ---- 
-def check_if_last_char_is_a_letter(txt: str) -> bool:
-    """
-    Create a function that returns True if the last character
-    of a given string is an alphabetical character and is not
-    a part of a word, and False otherwise.
-    Note: "word" is a group of characters separated by space.
-
-    Examples:
-    >>> check_if_last_char_is_a_letter('apple pie')
-    False
-    >>> check_if_last_char_is_a_letter('apple pi e')
-    True
-    >>> check_if_last_char_is_a_letter('apple pi e ')
-    False
-    >>> check_if_last_char_is_a_letter('')
-    False
-    """
-    if not txt:
-        return False
-    if txt[-1].isalpha() and txt[-2] == ' ':
-        return True
-    return False
-
-
-def check(candidate):
-    assert candidate('apple') == False
-    assert candidate('apple pi e') == True
-    assert candidate('eeeee') == False
-    assert candidate('A') == True
-    assert candidate('Pumpkin pie ') == False
-    assert candidate('Pumpkin pie 1') == False
-    assert candidate('') == False
-    assert candidate('eeeee e ') == False
-    assert candidate('apple pie') == False
-    assert candidate('apple pi e ') == False
-
-def test_check():
-    check(check_if_last_char_is_a_letter)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpbgbhtwby.py", line 40, in <module>
-    test_check()
-  File "/tmp/tmpbgbhtwby.py", line 38, in test_check
-    check(check_if_last_char_is_a_letter)
-  File "/tmp/tmpbgbhtwby.py", line 29, in check
-    assert candidate('A') == True
-  File "/tmp/tmpbgbhtwby.py", line 20, in check_if_last_char_is_a_letter
-    if txt[-1].isalpha() and txt[-2] == ' ':
-IndexError: string index out of range
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 173 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26575,7 +26575,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 176 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 90 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26638,7 +26638,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 181 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 91 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26699,7 +26699,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 185 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 92 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26762,7 +26762,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 191 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 94 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26826,7 +26826,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 193 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 95 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26887,7 +26887,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 194 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 96 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -26950,7 +26950,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 196 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 97 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -27011,7 +27011,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 197 ---- 
+# ---- HumanEval_134_check_if_last_char_is_a_letter --- completion 98 ---- 
 def check_if_last_char_is_a_letter(txt: str) -> bool:
     """
     Create a function that returns True if the last character
@@ -27072,7 +27072,7 @@ IndexError: string index out of range
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 25 ---- 
+# ---- HumanEval_73_smallest_change --- completion 5 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:
@@ -27157,7 +27157,7 @@ IndexError: list index out of range
 
 
 
-# ---- HumanEval_73_smallest_change --- completion 73 ---- 
+# ---- HumanEval_73_smallest_change --- completion 16 ---- 
 from typing import List
 
 def smallest_change(arr: List[int]) -> int:

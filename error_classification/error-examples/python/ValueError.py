@@ -6490,6 +6490,65 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
+# ---- HumanEval_155_even_odd_count --- completion 115 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
+    even_count = 0
+    odd_count = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+    check(even_odd_count)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_155_even_odd_count --- completion 116 ---- 
 from typing import Tuple
 
@@ -7021,6 +7080,65 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
+# ---- HumanEval_155_even_odd_count --- completion 125 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
+    even_count = 0
+    odd_count = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+    check(even_odd_count)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_155_even_odd_count --- completion 126 ---- 
 from typing import Tuple
 
@@ -7094,8 +7212,8 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     """
     even_count = 0
     odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
+    for i in str(num):
+        if int(i) % 2 == 0:
             even_count += 1
         else:
             odd_count += 1
@@ -7120,14 +7238,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/tmp/tmpvi3md2e2.py", line 34, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/tmp/tmpvi3md2e2.py", line 32, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/tmp/tmpvi3md2e2.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
+  File "/tmp/tmpvi3md2e2.py", line 15, in even_odd_count
+    if int(i) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
 '''
@@ -7139,7 +7257,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_155_even_odd_count --- completion 129 ---- 
+# ---- HumanEval_155_even_odd_count --- completion 128 ---- 
 from typing import Tuple
 
 def even_odd_count(num: int) -> Tuple[int, int]:
@@ -7212,8 +7330,8 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     """
     even_count = 0
     odd_count = 0
-    for i in str(num):
-        if int(i) % 2 == 0:
+    for digit in str(num):
+        if int(digit) % 2 == 0:
             even_count += 1
         else:
             odd_count += 1
@@ -7238,14 +7356,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpvi3md2e2.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/tmp/tmpvi3md2e2.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/tmp/tmpvi3md2e2.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/tmp/tmpvi3md2e2.py", line 15, in even_odd_count
-    if int(i) % 2 == 0:
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
 '''
@@ -7258,6 +7376,65 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 # ---- HumanEval_155_even_odd_count --- completion 131 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
+    even_count = 0
+    odd_count = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+    check(even_odd_count)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_155_even_odd_count --- completion 132 ---- 
 from typing import Tuple
 
 def even_odd_count(num: int) -> Tuple[int, int]:
@@ -7868,6 +8045,7 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
+
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -7887,13 +8065,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 35, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 33, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 24, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -8045,7 +8223,6 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
-
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -8065,13 +8242,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 35, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 33, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 24, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -8164,6 +8341,7 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
+
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -8183,13 +8361,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 35, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 33, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 24, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -8341,7 +8519,6 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
-
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -8361,13 +8538,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 35, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 33, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 24, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -8734,65 +8911,6 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_155_even_odd_count --- completion 157 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
-        else:
-            odd_count += 1
-    return even_count, odd_count
-
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
-    check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
-    assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_155_even_odd_count --- completion 158 ---- 
 from typing import Tuple
 
@@ -8866,8 +8984,8 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     """
     even_count = 0
     odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
+    for i in str(num):
+        if int(i) % 2 == 0:
             even_count += 1
         else:
             odd_count += 1
@@ -8892,13 +9010,72 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/tmp/tmpvi3md2e2.py", line 34, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/tmp/tmpvi3md2e2.py", line 32, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/tmp/tmpvi3md2e2.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/tmp/tmpvi3md2e2.py", line 15, in even_odd_count
+    if int(i) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_155_even_odd_count --- completion 160 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
+    even = 0
+    odd = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even += 1
+        else:
+            odd += 1
+    return even, odd
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp2sxdy8kb.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmp2sxdy8kb.py", line 32, in test_check
+    check(even_odd_count)
+  File "/tmp/tmp2sxdy8kb.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/tmp/tmp2sxdy8kb.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -8984,8 +9161,8 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     """
     even_count = 0
     odd_count = 0
-    for i in str(num):
-        if int(i) % 2 == 0:
+    for digit in str(num):
+        if int(digit) % 2 == 0:
             even_count += 1
         else:
             odd_count += 1
@@ -9010,14 +9187,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpvi3md2e2.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/tmp/tmpvi3md2e2.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/tmp/tmpvi3md2e2.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/tmp/tmpvi3md2e2.py", line 15, in even_odd_count
-    if int(i) % 2 == 0:
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
 '''
@@ -9041,14 +9218,14 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
-    even = 0
-    odd = 0
+    even_count = 0
+    odd_count = 0
     for digit in str(num):
         if int(digit) % 2 == 0:
-            even += 1
+            even_count += 1
         else:
-            odd += 1
-    return even, odd
+            odd_count += 1
+    return even_count, odd_count
 
 def check(candidate):
     assert candidate(7) == (0, 1)
@@ -9069,13 +9246,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmp2sxdy8kb.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/tmp/tmp2sxdy8kb.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/tmp/tmp2sxdy8kb.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/tmp/tmp2sxdy8kb.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -9159,14 +9336,13 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
-    even_count = 0
-    odd_count = 0
+    even, odd = 0, 0
     for digit in str(num):
         if int(digit) % 2 == 0:
-            even_count += 1
+            even += 1
         else:
-            odd_count += 1
-    return even_count, odd_count
+            odd += 1
+    return even, odd
 
 def check(candidate):
     assert candidate(7) == (0, 1)
@@ -9187,13 +9363,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/tmp/tmpkelmibe4.py", line 33, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/tmp/tmpkelmibe4.py", line 31, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/tmp/tmpkelmibe4.py", line 22, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/tmp/tmpkelmibe4.py", line 14, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -9336,13 +9512,14 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
-    even, odd = 0, 0
+    even_count = 0
+    odd_count = 0
     for digit in str(num):
         if int(digit) % 2 == 0:
-            even += 1
+            even_count += 1
         else:
-            odd += 1
-    return even, odd
+            odd_count += 1
+    return even_count, odd_count
 
 def check(candidate):
     assert candidate(7) == (0, 1)
@@ -9363,13 +9540,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpkelmibe4.py", line 33, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/tmp/tmpkelmibe4.py", line 31, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/tmp/tmpkelmibe4.py", line 22, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/tmp/tmpkelmibe4.py", line 14, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -9500,7 +9677,125 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
+# ---- HumanEval_155_even_odd_count --- completion 172 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
+    even_count = 0
+    odd_count = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+    check(even_odd_count)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_155_even_odd_count --- completion 173 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
+    even_count = 0
+    odd_count = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return even_count, odd_count
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+    check(even_odd_count)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_155_even_odd_count --- completion 174 ---- 
 from typing import Tuple
 
 def even_odd_count(num: int) -> Tuple[int, int]:
@@ -9580,6 +9875,7 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
+
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -9599,13 +9895,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 35, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 33, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 24, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -9807,6 +10103,65 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
+    even = 0
+    odd = 0
+    for digit in str(num):
+        if int(digit) % 2 == 0:
+            even += 1
+        else:
+            odd += 1
+    return (even, odd)
+
+def check(candidate):
+    assert candidate(7) == (0, 1)
+    assert candidate(-78) == (1, 1)
+    assert candidate(3452) == (2, 2)
+    assert candidate(346211) == (3, 3)
+    assert candidate(-345821) == (3, 3)
+    assert candidate(-2) == (1, 0)
+    assert candidate(-45347) == (2, 3)
+    assert candidate(0) == (1, 0)
+
+def test_check():
+    check(even_odd_count)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpzhov5hor.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpzhov5hor.py", line 32, in test_check
+    check(even_odd_count)
+  File "/tmp/tmpzhov5hor.py", line 23, in check
+    assert candidate(-78) == (1, 1)
+  File "/tmp/tmpzhov5hor.py", line 15, in even_odd_count
+    if int(digit) % 2 == 0:
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_155_even_odd_count --- completion 180 ---- 
+from typing import Tuple
+
+def even_odd_count(num: int) -> Tuple[int, int]:
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+    >>> even_odd_count(-12)
+    (1, 1)
+    >>> even_odd_count(123)
+    (1, 2)
+    """
     even_count = 0
     odd_count = 0
     for digit in str(num):
@@ -9842,66 +10197,6 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_155_even_odd_count --- completion 180 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
-        else:
-            odd_count += 1
-    return even_count, odd_count
-
-
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 35, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 33, in test_check
-    check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 24, in check
-    assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp_xj71cb1.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -10103,14 +10398,14 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
-    even = 0
-    odd = 0
+    even_count = 0
+    odd_count = 0
     for digit in str(num):
         if int(digit) % 2 == 0:
-            even += 1
+            even_count += 1
         else:
-            odd += 1
-    return (even, odd)
+            odd_count += 1
+    return even_count, odd_count
 
 def check(candidate):
     assert candidate(7) == (0, 1)
@@ -10131,13 +10426,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpzhov5hor.py", line 34, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
     test_check()
-  File "/tmp/tmpzhov5hor.py", line 32, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
     check(even_odd_count)
-  File "/tmp/tmpzhov5hor.py", line 23, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
     assert candidate(-78) == (1, 1)
-  File "/tmp/tmpzhov5hor.py", line 15, in even_odd_count
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -10398,14 +10693,13 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
+    even, odd = 0, 0
+    for i in str(num):
+        if int(i) % 2 == 0:
+            even += 1
         else:
-            odd_count += 1
-    return even_count, odd_count
+            odd += 1
+    return even, odd
 
 def check(candidate):
     assert candidate(7) == (0, 1)
@@ -10426,14 +10720,14 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
+  File "/tmp/tmp4urskaz7.py", line 33, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
+  File "/tmp/tmp4urskaz7.py", line 31, in test_check
     check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
+  File "/tmp/tmp4urskaz7.py", line 22, in check
     assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
+  File "/tmp/tmp4urskaz7.py", line 14, in even_odd_count
+    if int(i) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
 '''
@@ -10466,6 +10760,8 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
+print(even_odd_count(-12))
+print(even_odd_count(123))
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -10485,13 +10781,9 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
-    check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
-    assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/tmp/tmphi2wo7ye.py", line 21, in <module>
+    print(even_odd_count(-12))
+  File "/tmp/tmphi2wo7ye.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -10643,6 +10935,8 @@ def even_odd_count(num: int) -> Tuple[int, int]:
             odd_count += 1
     return even_count, odd_count
 
+print(even_odd_count(-12))
+print(even_odd_count(123))
 def check(candidate):
     assert candidate(7) == (0, 1)
     assert candidate(-78) == (1, 1)
@@ -10662,13 +10956,9 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
-    check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
-    assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
+  File "/tmp/tmphi2wo7ye.py", line 21, in <module>
+    print(even_odd_count(-12))
+  File "/tmp/tmphi2wo7ye.py", line 15, in even_odd_count
     if int(digit) % 2 == 0:
 ValueError: invalid literal for int() with base 10: '-'
 
@@ -10693,121 +10983,6 @@ def even_odd_count(num: int) -> Tuple[int, int]:
     >>> even_odd_count(123)
     (1, 2)
     """
-    even, odd = 0, 0
-    for i in str(num):
-        if int(i) % 2 == 0:
-            even += 1
-        else:
-            odd += 1
-    return even, odd
-
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp4urskaz7.py", line 33, in <module>
-    test_check()
-  File "/tmp/tmp4urskaz7.py", line 31, in test_check
-    check(even_odd_count)
-  File "/tmp/tmp4urskaz7.py", line 22, in check
-    assert candidate(-78) == (1, 1)
-  File "/tmp/tmp4urskaz7.py", line 14, in even_odd_count
-    if int(i) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_155_even_odd_count --- completion 195 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
-        else:
-            odd_count += 1
-    return even_count, odd_count
-
-print(even_odd_count(-12))
-print(even_odd_count(123))
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmphi2wo7ye.py", line 21, in <module>
-    print(even_odd_count(-12))
-  File "/tmp/tmphi2wo7ye.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_155_even_odd_count --- completion 196 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
     even_count = 0
     odd_count = 0
     for digit in str(num):
@@ -10855,182 +11030,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_155_even_odd_count --- completion 197 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
-        else:
-            odd_count += 1
-    return even_count, odd_count
-
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
-    check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
-    assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_155_even_odd_count --- completion 198 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
-        else:
-            odd_count += 1
-    return even_count, odd_count
-
-print(even_odd_count(-12))
-print(even_odd_count(123))
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmphi2wo7ye.py", line 21, in <module>
-    print(even_odd_count(-12))
-  File "/tmp/tmphi2wo7ye.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_155_even_odd_count --- completion 199 ---- 
-from typing import Tuple
-
-def even_odd_count(num: int) -> Tuple[int, int]:
-    """Given an integer. return a tuple that has the number of even and odd digits respectively.
-
-     Example:
-    >>> even_odd_count(-12)
-    (1, 1)
-    >>> even_odd_count(123)
-    (1, 2)
-    """
-    even_count = 0
-    odd_count = 0
-    for digit in str(num):
-        if int(digit) % 2 == 0:
-            even_count += 1
-        else:
-            odd_count += 1
-    return even_count, odd_count
-
-def check(candidate):
-    assert candidate(7) == (0, 1)
-    assert candidate(-78) == (1, 1)
-    assert candidate(3452) == (2, 2)
-    assert candidate(346211) == (3, 3)
-    assert candidate(-345821) == (3, 3)
-    assert candidate(-2) == (1, 0)
-    assert candidate(-45347) == (2, 3)
-    assert candidate(0) == (1, 0)
-
-def test_check():
-    check(even_odd_count)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 32, in test_check
-    check(even_odd_count)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 23, in check
-    assert candidate(-78) == (1, 1)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpt6o9puow.py", line 15, in even_odd_count
-    if int(digit) % 2 == 0:
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_136_largest_smallest_integers --- completion 6 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 0 ---- 
 from typing import List, Tuple, Optional
 
 def largest_smallest_integers(lst: List[int]) -> Tuple[Optional[int], Optional[int]]:
@@ -11106,7 +11106,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 167 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 2 ---- 
 from typing import List, Tuple, Optional
 
 def largest_smallest_integers(lst: List[int]) -> Tuple[Optional[int], Optional[int]]:
@@ -11177,7 +11177,7 @@ ValueError: min() arg is an empty sequence
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 23 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 21 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11227,7 +11227,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 35 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 31 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11277,7 +11277,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 46 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 42 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11327,7 +11327,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 61 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 56 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11377,7 +11377,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 82 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 73 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11427,7 +11427,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 96 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 87 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11477,7 +11477,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 99 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 90 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11527,7 +11527,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 100 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 91 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11577,7 +11577,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 111 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 101 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11627,7 +11627,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 120 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 109 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11677,7 +11677,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 149 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 132 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11727,7 +11727,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 169 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 148 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11777,7 +11777,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 186 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 163 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11827,7 +11827,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 192 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 168 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -11877,7 +11877,7 @@ ValueError: invalid literal for int() with base 10: 'three'
 
 
 
-# ---- HumanEval_108_count_nums --- completion 3 ---- 
+# ---- HumanEval_108_count_nums --- completion 0 ---- 
 from typing import List
 
 def count_nums(arr: List[int]) -> int:
@@ -11935,7 +11935,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_108_count_nums --- completion 7 ---- 
+# ---- HumanEval_108_count_nums --- completion 1 ---- 
 from typing import List
 
 def count_nums(arr: List[int]) -> int:
@@ -11993,7 +11993,992 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
+# ---- HumanEval_108_count_nums --- completion 2 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 3 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 4 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 5 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmpn8xy33t6.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 6 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 8 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return len([x for x in arr if sum(map(abs, map(int, str(x)))) > 0])
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpezlk82ft.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmpezlk82ft.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmpezlk82ft.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpezlk82ft.py", line 16, in count_nums
+    return len([x for x in arr if sum(map(abs, map(int, str(x)))) > 0])
+  File "/tmp/tmpezlk82ft.py", line 16, in <listcomp>
+    return len([x for x in arr if sum(map(abs, map(int, str(x)))) > 0])
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 9 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 10 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmptce8cy7n.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmptce8cy7n.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmptce8cy7n.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 11 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 12 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 13 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 14 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_108_count_nums --- completion 15 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 16 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpoxr6ln36.py", line 30, in <module>
+    test_check()
+  File "/tmp/tmpoxr6ln36.py", line 28, in test_check
+    check(count_nums)
+  File "/tmp/tmpoxr6ln36.py", line 19, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpoxr6ln36.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/tmp/tmpoxr6ln36.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 17 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmpn8xy33t6.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 18 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 19 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 20 ---- 
 from typing import List
 
 def count_nums(arr: List[int]) -> int:
@@ -12109,6 +13094,237 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
+# ---- HumanEval_108_count_nums --- completion 22 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmptce8cy7n.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmptce8cy7n.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmptce8cy7n.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 24 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpoxr6ln36.py", line 30, in <module>
+    test_check()
+  File "/tmp/tmpoxr6ln36.py", line 28, in test_check
+    check(count_nums)
+  File "/tmp/tmpoxr6ln36.py", line 19, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpoxr6ln36.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/tmp/tmpoxr6ln36.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 25 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 26 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmpn8xy33t6.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_108_count_nums --- completion 27 ---- 
 from typing import List
 
@@ -12183,6 +13399,528 @@ def count_nums(arr: List[int]) -> int:
     >>> count_nums([1, 1, 2])
     3
     """
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmptce8cy7n.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmptce8cy7n.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmptce8cy7n.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 29 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmptce8cy7n.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmptce8cy7n.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmptce8cy7n.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
+    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 30 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 31 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 32 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 33 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 34 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 35 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 37 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 39 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
     return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
 
 def check(candidate):
@@ -12225,7 +13963,181 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_108_count_nums --- completion 35 ---- 
+# ---- HumanEval_108_count_nums --- completion 40 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 41 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
+    test_check()
+  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
+    check(count_nums)
+  File "/tmp/tmpn8xy33t6.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
+    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 42 ---- 
+from typing import List
+
+def count_nums(arr: List[int]) -> int:
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([])
+    0
+    >>> count_nums([-1, 11, -11])
+    1
+    >>> count_nums([1, 1, 2])
+    3
+    """
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([-1, -2, 0]) == 0
+    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
+    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
+    assert candidate([1, 100, 98, -7, 1, -1]) == 4
+    assert candidate([12, 23, 34, -45, -56, 0]) == 5
+    assert candidate([0, 1]) == 1
+    assert candidate([1]) == 1
+
+def test_check():
+    check(count_nums)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
+    check(count_nums)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
+    assert candidate([-1, -2, 0]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+ValueError: invalid literal for int() with base 10: '-'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_108_count_nums --- completion 43 ---- 
 from typing import List
 
 def count_nums(arr: List[int]) -> int:
@@ -12299,7 +14211,7 @@ def count_nums(arr: List[int]) -> int:
     >>> count_nums([1, 1, 2])
     3
     """
-    return len([x for x in arr if sum(map(abs, map(int, str(x)))) > 0])
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
 
 def check(candidate):
     assert candidate([]) == 0
@@ -12320,16 +14232,16 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpezlk82ft.py", line 31, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
     test_check()
-  File "/tmp/tmpezlk82ft.py", line 29, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
     check(count_nums)
-  File "/tmp/tmpezlk82ft.py", line 20, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
     assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpezlk82ft.py", line 16, in count_nums
-    return len([x for x in arr if sum(map(abs, map(int, str(x)))) > 0])
-  File "/tmp/tmpezlk82ft.py", line 16, in <listcomp>
-    return len([x for x in arr if sum(map(abs, map(int, str(x)))) > 0])
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
+    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
 ValueError: invalid literal for int() with base 10: '-'
 
 '''
@@ -12399,355 +14311,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_108_count_nums --- completion 51 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmptce8cy7n.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmptce8cy7n.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmptce8cy7n.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 54 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 57 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 64 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 65 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 73 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 83 ---- 
+# ---- HumanEval_108_count_nums --- completion 47 ---- 
 from typing import List
 
 def count_nums(arr: List[int]) -> int:
@@ -12804,65 +14368,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_108_count_nums --- completion 89 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmpn8xy33t6.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 90 ---- 
+# ---- HumanEval_108_count_nums --- completion 48 ---- 
 from typing import List
 
 def count_nums(arr: List[int]) -> int:
@@ -12920,1592 +14426,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_108_count_nums --- completion 92 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 98 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 111 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 113 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmptce8cy7n.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmptce8cy7n.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmptce8cy7n.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 127 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpoxr6ln36.py", line 30, in <module>
-    test_check()
-  File "/tmp/tmpoxr6ln36.py", line 28, in test_check
-    check(count_nums)
-  File "/tmp/tmpoxr6ln36.py", line 19, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpoxr6ln36.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/tmp/tmpoxr6ln36.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 135 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 136 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmpn8xy33t6.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 137 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 138 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmptce8cy7n.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmptce8cy7n.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmptce8cy7n.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 139 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmptce8cy7n.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmptce8cy7n.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmptce8cy7n.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmptce8cy7n.py", line 16, in count_nums
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-  File "/tmp/tmptce8cy7n.py", line 16, in <genexpr>
-    return sum(1 for n in arr if sum(map(abs, map(int, str(n)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 140 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 141 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 147 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 152 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 155 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 157 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 161 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 175 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmpn8xy33t6.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 177 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 178 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpn8xy33t6.py", line 31, in <module>
-    test_check()
-  File "/tmp/tmpn8xy33t6.py", line 29, in test_check
-    check(count_nums)
-  File "/tmp/tmpn8xy33t6.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpn8xy33t6.py", line 16, in count_nums
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-  File "/tmp/tmpn8xy33t6.py", line 16, in <genexpr>
-    return sum(1 for x in arr if sum(map(abs, map(int, str(x)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 184 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 185 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 186 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 196 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 197 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpoxr6ln36.py", line 30, in <module>
-    test_check()
-  File "/tmp/tmpoxr6ln36.py", line 28, in test_check
-    check(count_nums)
-  File "/tmp/tmpoxr6ln36.py", line 19, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/tmp/tmpoxr6ln36.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/tmp/tmpoxr6ln36.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 199 ---- 
-from typing import List
-
-def count_nums(arr: List[int]) -> int:
-    """
-    Write a function count_nums which takes an array of integers and returns
-    the number of elements which has a sum of digits > 0.
-    If a number is negative, then its first signed digit will be negative:
-    e.g. -123 has signed digits -1, 2, and 3.
-    >>> count_nums([])
-    0
-    >>> count_nums([-1, 11, -11])
-    1
-    >>> count_nums([1, 1, 2])
-    3
-    """
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([-1, -2, 0]) == 0
-    assert candidate([1, 1, 2, -2, 3, 4, 5]) == 6
-    assert candidate([1, 6, 9, -6, 0, 1, 5]) == 5
-    assert candidate([1, 100, 98, -7, 1, -1]) == 4
-    assert candidate([12, 23, 34, -45, -56, 0]) == 5
-    assert candidate([0, 1]) == 1
-    assert candidate([1]) == 1
-
-def test_check():
-    check(count_nums)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 31, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 29, in test_check
-    check(count_nums)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 20, in check
-    assert candidate([-1, -2, 0]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in count_nums
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfha7gc8z.py", line 16, in <genexpr>
-    return sum(1 for num in arr if sum(map(abs, map(int, str(num)))) > 0)
-ValueError: invalid literal for int() with base 10: '-'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_137_compare_one --- completion 168 ---- 
-from typing import Union
-
-def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
-    """
-    Create a function that takes integers, floats, or strings representing
-    real numbers, and returns the larger variable in its given variable type.
-    Return None if the values are equal.
-    Note: If a real number is represented as a string, the floating point might be . or ,
-
-    >>> compare_one(1, 2.5)
-    2.5
-    >>> compare_one(1, '2,3')
-    '2,3'
-    >>> compare_one('5,1', '6')
-    '6'
-    >>> compare_one('1', 1)
-    None
-    """
-    try:
-        if float(a) > float(b):
-            return a
-        elif float(a) < float(b):
-            return b
-        else:
-            return None
-    except ValueError:
-        if a > b:
-            return a
-        elif a < b:
-            return b
-        else:
-            return None
-
-def check(candidate):
-    assert candidate(1, 2) == 2
-    assert candidate(1, 2.5) == 2.5
-    assert candidate(2, 3) == 3
-    assert candidate(5, 6) == 6
-    assert candidate(1, '2,3') == '2,3'
-    assert candidate('5,1', '6') == '6'
-    assert candidate('1', '2') == '2'
-    assert candidate('1', 1) == None
-
-def test_check():
-    check(compare_one)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_z7_ayf7.py", line 20, in compare_one
-    if float(a) > float(b):
-ValueError: could not convert string to float: '2,3'
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/tmp/tmp_z7_ayf7.py", line 47, in <module>
-    test_check()
-  File "/tmp/tmp_z7_ayf7.py", line 45, in test_check
-    check(compare_one)
-  File "/tmp/tmp_z7_ayf7.py", line 39, in check
-    assert candidate(1, '2,3') == '2,3'
-  File "/tmp/tmp_z7_ayf7.py", line 27, in compare_one
-    if a > b:
-TypeError: '>' not supported between instances of 'int' and 'str'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_17_parse_music --- completion 2 ---- 
+# ---- HumanEval_17_parse_music --- completion 0 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14566,7 +14487,7 @@ ValueError: invalid literal for int() with base 10: ''
 
 
 
-# ---- HumanEval_17_parse_music --- completion 3 ---- 
+# ---- HumanEval_17_parse_music --- completion 1 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14623,7 +14544,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 11 ---- 
+# ---- HumanEval_17_parse_music --- completion 2 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14682,7 +14603,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 19 ---- 
+# ---- HumanEval_17_parse_music --- completion 3 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14743,7 +14664,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 32 ---- 
+# ---- HumanEval_17_parse_music --- completion 4 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14803,7 +14724,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 37 ---- 
+# ---- HumanEval_17_parse_music --- completion 5 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14862,7 +14783,7 @@ ValueError: invalid literal for int() with base 10: ''
 
 
 
-# ---- HumanEval_17_parse_music --- completion 66 ---- 
+# ---- HumanEval_17_parse_music --- completion 6 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14924,7 +14845,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 80 ---- 
+# ---- HumanEval_17_parse_music --- completion 7 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -14985,7 +14906,7 @@ ValueError: invalid literal for int() with base 10: ''
 
 
 
-# ---- HumanEval_17_parse_music --- completion 109 ---- 
+# ---- HumanEval_17_parse_music --- completion 8 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15046,7 +14967,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 119 ---- 
+# ---- HumanEval_17_parse_music --- completion 9 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15106,7 +15027,7 @@ ValueError: invalid literal for int() with base 10: '|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 130 ---- 
+# ---- HumanEval_17_parse_music --- completion 10 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15166,7 +15087,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 136 ---- 
+# ---- HumanEval_17_parse_music --- completion 11 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15222,7 +15143,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 143 ---- 
+# ---- HumanEval_17_parse_music --- completion 12 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15283,7 +15204,7 @@ ValueError: invalid literal for int() with base 10: ''
 
 
 
-# ---- HumanEval_17_parse_music --- completion 170 ---- 
+# ---- HumanEval_17_parse_music --- completion 13 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15343,7 +15264,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 182 ---- 
+# ---- HumanEval_17_parse_music --- completion 14 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15401,7 +15322,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_17_parse_music --- completion 188 ---- 
+# ---- HumanEval_17_parse_music --- completion 15 ---- 
 from typing import List
 
 def parse_music(music_string: str) -> List[int]:
@@ -15461,7 +15382,7 @@ ValueError: invalid literal for int() with base 10: '4|'
 
 
 
-# ---- HumanEval_21_rescale_to_unit --- completion 96 ---- 
+# ---- HumanEval_21_rescale_to_unit --- completion 0 ---- 
 from typing import List
 
 def rescale_to_unit(numbers: List[float]) -> List[float]:
@@ -15516,7 +15437,7 @@ ValueError: Only numbers between 0 and 1 are allowed
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 82 ---- 
+# ---- HumanEval_39_prime_fib --- completion 8 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -15584,7 +15505,7 @@ ValueError: n must be between 1 and 5
 
 
 
-# ---- HumanEval_159_eat --- completion 89 ---- 
+# ---- HumanEval_159_eat --- completion 0 ---- 
 from typing import List
 
 def eat(number: int, need: int, remaining: int) -> List[int]:
@@ -15674,7 +15595,7 @@ SyntaxError: unterminated string literal (detected at line 59)
 
 
 
-# ---- HumanEval_159_eat --- completion 97 ---- 
+# ---- HumanEval_159_eat --- completion 1 ---- 
 from typing import List
 
 def eat(number: int, need: int, remaining: int) -> List[int]:
@@ -15757,7 +15678,7 @@ ValueError: remaining should be greater than number
 
 
 
-# ---- HumanEval_159_eat --- completion 127 ---- 
+# ---- HumanEval_159_eat --- completion 2 ---- 
 from typing import List
 
 def eat(number: int, need: int, remaining: int) -> List[int]:
@@ -15843,7 +15764,7 @@ SyntaxError: unterminated string literal (detected at line 55)
 
 
 
-# ---- HumanEval_111_histogram --- completion 8 ---- 
+# ---- HumanEval_111_histogram --- completion 0 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -15911,7 +15832,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 26 ---- 
+# ---- HumanEval_111_histogram --- completion 1 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -15988,7 +15909,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 29 ---- 
+# ---- HumanEval_111_histogram --- completion 2 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16063,7 +15984,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 34 ---- 
+# ---- HumanEval_111_histogram --- completion 3 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16140,7 +16061,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 45 ---- 
+# ---- HumanEval_111_histogram --- completion 4 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16217,7 +16138,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 54 ---- 
+# ---- HumanEval_111_histogram --- completion 5 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16295,7 +16216,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 59 ---- 
+# ---- HumanEval_111_histogram --- completion 6 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16372,7 +16293,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 88 ---- 
+# ---- HumanEval_111_histogram --- completion 7 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16448,7 +16369,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 89 ---- 
+# ---- HumanEval_111_histogram --- completion 8 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16521,7 +16442,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 97 ---- 
+# ---- HumanEval_111_histogram --- completion 9 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16595,7 +16516,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 120 ---- 
+# ---- HumanEval_111_histogram --- completion 10 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16673,7 +16594,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 126 ---- 
+# ---- HumanEval_111_histogram --- completion 11 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16750,7 +16671,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 140 ---- 
+# ---- HumanEval_111_histogram --- completion 12 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16828,7 +16749,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 154 ---- 
+# ---- HumanEval_111_histogram --- completion 13 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16906,7 +16827,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 169 ---- 
+# ---- HumanEval_111_histogram --- completion 14 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -16979,7 +16900,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 171 ---- 
+# ---- HumanEval_111_histogram --- completion 15 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -17056,7 +16977,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_111_histogram --- completion 181 ---- 
+# ---- HumanEval_111_histogram --- completion 16 ---- 
 from typing import Dict
 
 def histogram(test: str) -> Dict[str, int]:
@@ -17129,7 +17050,7 @@ ValueError: max() arg is an empty sequence
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 176 ---- 
+# ---- HumanEval_145_order_by_points --- completion 0 ---- 
 from typing import List
 
 def order_by_points(nums: List[int]) -> List[int]:
@@ -17196,7 +17117,7 @@ ValueError: invalid literal for int() with base 10: '-'
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 35 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 5 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -17264,7 +17185,7 @@ ValueError: list.remove(x): x not in list
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 61 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 9 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -17333,7 +17254,7 @@ ValueError: list.remove(x): x not in list
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 73 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 13 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -17401,7 +17322,7 @@ ValueError: list.remove(x): x not in list
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 81 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 16 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -17476,7 +17397,7 @@ ValueError: list.remove(x): x not in list
 
 
 
-# ---- HumanEval_70_strange_sort_list --- completion 138 ---- 
+# ---- HumanEval_70_strange_sort_list --- completion 24 ---- 
 from typing import List
 
 def strange_sort_list(lst: List[int]) -> List[int]:
@@ -17544,7 +17465,7 @@ ValueError: list.remove(x): x not in list
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 19 ---- 
+# ---- HumanEval_90_next_smallest --- completion 4 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -17604,7 +17525,7 @@ ValueError: min() arg is an empty sequence
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 29 ---- 
+# ---- HumanEval_90_next_smallest --- completion 5 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -17664,7 +17585,7 @@ ValueError: min() arg is an empty sequence
 
 
 
-# ---- HumanEval_90_next_smallest --- completion 46 ---- 
+# ---- HumanEval_90_next_smallest --- completion 9 ---- 
 from typing import List, Optional
 
 def next_smallest(lst: List[int]) -> Optional[int]:
@@ -17724,7 +17645,479 @@ ValueError: min() arg is an empty sequence
 
 
 
+# ---- HumanEval_67_fruit_distribution --- completion 0 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 1 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    # get the number of apples and oranges
+    apples, oranges = map(int, s.split()[::2])
+    # return the number of mangoes
+    return n - apples - oranges
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 35, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 33, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 24, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 19, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 2 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    return sum(map(int, s.split())) - n
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 33, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 31, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 22, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 18, in fruit_distribution
+    return sum(map(int, s.split())) - n
+ValueError: invalid literal for int() with base 10: 'apples'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 3 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split(' and '))
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split(' and '))
+ValueError: invalid literal for int() with base 10: '5 apples'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_67_fruit_distribution --- completion 4 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 5 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 6 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    # get the number of apples and oranges
+    apples, oranges = map(int, s.split()[::2])
+    # return the number of mango fruits
+    return n - apples - oranges
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpbqal1fdp.py", line 35, in <module>
+    test_check()
+  File "/tmp/tmpbqal1fdp.py", line 33, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpbqal1fdp.py", line 24, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpbqal1fdp.py", line 19, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 7 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmplvqm1jsh.py", line 33, in <module>
+    test_check()
+  File "/tmp/tmplvqm1jsh.py", line 31, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmplvqm1jsh.py", line 22, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmplvqm1jsh.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 8 ---- 
 def fruit_distribution(s: str, n: int) -> int:
     """
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -17801,10 +18194,9 @@ def fruit_distribution(s: str, n: int) -> int:
     >>> fruit_distribution('100 apples and 1 oranges', 120)
     19
     """
-    # get the number of apples and oranges
     apples, oranges = map(int, s.split()[::2])
-    # return the number of mangoes
     return n - apples - oranges
+
 
 def check(candidate):
     assert candidate('5 apples and 6 oranges', 19) == 8
@@ -17824,13 +18216,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 35, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 33, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
     check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 24, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
     assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpfkcpwnla.py", line 19, in fruit_distribution
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
     apples, oranges = map(int, s.split()[::2])
 ValueError: invalid literal for int() with base 10: 'and'
 
@@ -17843,65 +18235,7 @@ ValueError: invalid literal for int() with base 10: 'and'
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 14 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    return sum(map(int, s.split())) - n
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 33, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 31, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 22, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpdo8yf5jn.py", line 18, in fruit_distribution
-    return sum(map(int, s.split())) - n
-ValueError: invalid literal for int() with base 10: 'apples'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 17 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 10 ---- 
 def fruit_distribution(s: str, n: int) -> int:
     """
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -17948,6 +18282,542 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 23, in check
     assert candidate('5 apples and 6 oranges', 19) == 8
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split(' and '))
+ValueError: invalid literal for int() with base 10: '5 apples'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 11 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 12 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    # get the number of the apples and oranges
+    apples, oranges = map(int, s.split()[::2])
+    # return the number of the mango fruits
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp19p5knrk.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmp19p5knrk.py", line 34, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmp19p5knrk.py", line 25, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmp19p5knrk.py", line 19, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 13 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    return int(s.split()[0]) + int(s.split()[4]) - n
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpyw3vni8e.py", line 33, in <module>
+    test_check()
+  File "/tmp/tmpyw3vni8e.py", line 31, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpyw3vni8e.py", line 22, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpyw3vni8e.py", line 18, in fruit_distribution
+    return int(s.split()[0]) + int(s.split()[4]) - n
+ValueError: invalid literal for int() with base 10: 'oranges'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 14 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    # get the number of apples and oranges
+    apples, oranges = [int(s.split()[i]) for i in range(0, len(s.split()), 2)]
+    # return the number of mango fruits
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpzxsq4y0x.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpzxsq4y0x.py", line 34, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpzxsq4y0x.py", line 25, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpzxsq4y0x.py", line 19, in fruit_distribution
+    apples, oranges = [int(s.split()[i]) for i in range(0, len(s.split()), 2)]
+  File "/tmp/tmpzxsq4y0x.py", line 19, in <listcomp>
+    apples, oranges = [int(s.split()[i]) for i in range(0, len(s.split()), 2)]
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 15 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 16 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 17 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 18 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split(' and '))
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split(' and '))
+ValueError: invalid literal for int() with base 10: '5 apples'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 19 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split(' and '))
+    return n - (apples + oranges)
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpgk8fz9v2.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpgk8fz9v2.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpgk8fz9v2.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpgk8fz9v2.py", line 18, in fruit_distribution
     apples, oranges = map(int, s.split(' and '))
 ValueError: invalid literal for int() with base 10: '5 apples'
 
@@ -18019,7 +18889,483 @@ ValueError: invalid literal for int() with base 10: 'and'
 
 
 
+# ---- HumanEval_67_fruit_distribution --- completion 21 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples = int(s.split()[0])
+    oranges = int(s.split()[-1])
+    return n - apples - oranges
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp7_ijk3mt.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmp7_ijk3mt.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmp7_ijk3mt.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmp7_ijk3mt.py", line 19, in fruit_distribution
+    oranges = int(s.split()[-1])
+ValueError: invalid literal for int() with base 10: 'oranges'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 22 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmplvqm1jsh.py", line 33, in <module>
+    test_check()
+  File "/tmp/tmplvqm1jsh.py", line 31, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmplvqm1jsh.py", line 22, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmplvqm1jsh.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 23 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split(' apples and ')[1].split(' oranges')[0].split())
+    return n - (apples + oranges)
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp970spxbt.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmp970spxbt.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmp970spxbt.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmp970spxbt.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split(' apples and ')[1].split(' oranges')[0].split())
+ValueError: not enough values to unpack (expected 2, got 1)
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_67_fruit_distribution --- completion 24 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    total_apples = int(s.split()[0])
+    total_oranges = int(s.split()[-1])
+    return n - total_apples - total_oranges
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpna2ztzqj.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpna2ztzqj.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpna2ztzqj.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpna2ztzqj.py", line 19, in fruit_distribution
+    total_oranges = int(s.split()[-1])
+ValueError: invalid literal for int() with base 10: 'oranges'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 25 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 26 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 27 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    # split the string into two parts
+    # the first part is the number of apples
+    # the second part is the number of oranges
+    # convert the string to integer
+    # return the difference between the total number of fruits and the sum of the apples and oranges
+    apples, oranges = s.split(' and ')
+    return n - (int(apples[:-1]) + int(oranges[:-1]))
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpngu584un.py", line 39, in <module>
+    test_check()
+  File "/tmp/tmpngu584un.py", line 37, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpngu584un.py", line 28, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpngu584un.py", line 24, in fruit_distribution
+    return n - (int(apples[:-1]) + int(oranges[:-1]))
+ValueError: invalid literal for int() with base 10: '5 apple'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 28 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 29 ---- 
 def fruit_distribution(s: str, n: int) -> int:
     """
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -18096,10 +19442,9 @@ def fruit_distribution(s: str, n: int) -> int:
     >>> fruit_distribution('100 apples and 1 oranges', 120)
     19
     """
-    # get the number of apples and oranges
     apples, oranges = map(int, s.split()[::2])
-    # return the number of mango fruits
     return n - apples - oranges
+
 
 def check(candidate):
     assert candidate('5 apples and 6 oranges', 19) == 8
@@ -18119,13 +19464,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmpbqal1fdp.py", line 35, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
     test_check()
-  File "/tmp/tmpbqal1fdp.py", line 33, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
     check(fruit_distribution)
-  File "/tmp/tmpbqal1fdp.py", line 24, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
     assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpbqal1fdp.py", line 19, in fruit_distribution
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
     apples, oranges = map(int, s.split()[::2])
 ValueError: invalid literal for int() with base 10: 'and'
 
@@ -18159,6 +19504,7 @@ def fruit_distribution(s: str, n: int) -> int:
     apples, oranges = map(int, s.split()[::2])
     return n - apples - oranges
 
+
 def check(candidate):
     assert candidate('5 apples and 6 oranges', 19) == 8
     assert candidate('5 apples and 6 oranges', 21) == 10
@@ -18177,13 +19523,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/tmp/tmplvqm1jsh.py", line 33, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
     test_check()
-  File "/tmp/tmplvqm1jsh.py", line 31, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
     check(fruit_distribution)
-  File "/tmp/tmplvqm1jsh.py", line 22, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
     assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmplvqm1jsh.py", line 18, in fruit_distribution
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
     apples, oranges = map(int, s.split()[::2])
 ValueError: invalid literal for int() with base 10: 'and'
 
@@ -18196,7 +19542,242 @@ ValueError: invalid literal for int() with base 10: 'and'
 
 
 
+# ---- HumanEval_67_fruit_distribution --- completion 32 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    return int(s.split()[-1]) - n
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpjzr0k1vk.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpjzr0k1vk.py", line 30, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpjzr0k1vk.py", line 21, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpjzr0k1vk.py", line 18, in fruit_distribution
+    return int(s.split()[-1]) - n
+ValueError: invalid literal for int() with base 10: 'oranges'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_67_fruit_distribution --- completion 33 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    # get the number of apples and oranges
+    apples, oranges = map(int, s.split()[::2])
+    # return the number of mango fruits
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp4efgq2jq.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmp4efgq2jq.py", line 34, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmp4efgq2jq.py", line 25, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmp4efgq2jq.py", line 19, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 34 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    apples, oranges = map(int, s.split()[::2])
+    return n - apples - oranges
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
+    check(fruit_distribution)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
+    apples, oranges = map(int, s.split()[::2])
+ValueError: invalid literal for int() with base 10: 'and'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 35 ---- 
+def fruit_distribution(s: str, n: int) -> int:
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    >>> fruit_distribution('5 apples and 6 oranges', 19)
+    8
+    >>> fruit_distribution('0 apples and 1 oranges', 3)
+    2
+    >>> fruit_distribution('2 apples and 3 oranges', 100)
+    95
+    >>> fruit_distribution('100 apples and 1 oranges', 120)
+    19
+    """
+    return int(s.split()[0]) + int(s.split()[4]) - n
+
+
+def check(candidate):
+    assert candidate('5 apples and 6 oranges', 19) == 8
+    assert candidate('5 apples and 6 oranges', 21) == 10
+    assert candidate('0 apples and 1 oranges', 3) == 2
+    assert candidate('1 apples and 0 oranges', 3) == 2
+    assert candidate('2 apples and 3 oranges', 100) == 95
+    assert candidate('2 apples and 3 oranges', 5) == 0
+    assert candidate('1 apples and 100 oranges', 120) == 19
+
+def test_check():
+    check(fruit_distribution)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpyw3vni8e.py", line 33, in <module>
+    test_check()
+  File "/tmp/tmpyw3vni8e.py", line 31, in test_check
+    check(fruit_distribution)
+  File "/tmp/tmpyw3vni8e.py", line 22, in check
+    assert candidate('5 apples and 6 oranges', 19) == 8
+  File "/tmp/tmpyw3vni8e.py", line 18, in fruit_distribution
+    return int(s.split()[0]) + int(s.split()[4]) - n
+ValueError: invalid literal for int() with base 10: 'oranges'
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_67_fruit_distribution --- completion 36 ---- 
 def fruit_distribution(s: str, n: int) -> int:
     """
     In this task, you will be given a string that represents a number of apples and oranges 
@@ -18276,778 +19857,6 @@ def fruit_distribution(s: str, n: int) -> int:
     apples, oranges = map(int, s.split()[::2])
     return n - apples - oranges
 
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 50 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split(' and '))
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split(' and '))
-ValueError: invalid literal for int() with base 10: '5 apples'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 56 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 58 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    # get the number of the apples and oranges
-    apples, oranges = map(int, s.split()[::2])
-    # return the number of the mango fruits
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp19p5knrk.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmp19p5knrk.py", line 34, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmp19p5knrk.py", line 25, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmp19p5knrk.py", line 19, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 59 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    return int(s.split()[0]) + int(s.split()[4]) - n
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpyw3vni8e.py", line 33, in <module>
-    test_check()
-  File "/tmp/tmpyw3vni8e.py", line 31, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpyw3vni8e.py", line 22, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpyw3vni8e.py", line 18, in fruit_distribution
-    return int(s.split()[0]) + int(s.split()[4]) - n
-ValueError: invalid literal for int() with base 10: 'oranges'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 66 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    # get the number of apples and oranges
-    apples, oranges = [int(s.split()[i]) for i in range(0, len(s.split()), 2)]
-    # return the number of mango fruits
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpzxsq4y0x.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpzxsq4y0x.py", line 34, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpzxsq4y0x.py", line 25, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpzxsq4y0x.py", line 19, in fruit_distribution
-    apples, oranges = [int(s.split()[i]) for i in range(0, len(s.split()), 2)]
-  File "/tmp/tmpzxsq4y0x.py", line 19, in <listcomp>
-    apples, oranges = [int(s.split()[i]) for i in range(0, len(s.split()), 2)]
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 74 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 75 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 77 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 85 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split(' and '))
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp1gj91v7r.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split(' and '))
-ValueError: invalid literal for int() with base 10: '5 apples'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 92 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split(' and '))
-    return n - (apples + oranges)
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpgk8fz9v2.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpgk8fz9v2.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpgk8fz9v2.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpgk8fz9v2.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split(' and '))
-ValueError: invalid literal for int() with base 10: '5 apples'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 93 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 98 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples = int(s.split()[0])
-    oranges = int(s.split()[-1])
-    return n - apples - oranges
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp7_ijk3mt.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmp7_ijk3mt.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmp7_ijk3mt.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmp7_ijk3mt.py", line 19, in fruit_distribution
-    oranges = int(s.split()[-1])
-ValueError: invalid literal for int() with base 10: 'oranges'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 101 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
 def check(candidate):
     assert candidate('5 apples and 6 oranges', 19) == 8
     assert candidate('5 apples and 6 oranges', 21) == 10
@@ -19085,895 +19894,7 @@ ValueError: invalid literal for int() with base 10: 'and'
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 107 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split(' apples and ')[1].split(' oranges')[0].split())
-    return n - (apples + oranges)
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp970spxbt.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmp970spxbt.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmp970spxbt.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmp970spxbt.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split(' apples and ')[1].split(' oranges')[0].split())
-ValueError: not enough values to unpack (expected 2, got 1)
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 122 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    total_apples = int(s.split()[0])
-    total_oranges = int(s.split()[-1])
-    return n - total_apples - total_oranges
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpna2ztzqj.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpna2ztzqj.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpna2ztzqj.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpna2ztzqj.py", line 19, in fruit_distribution
-    total_oranges = int(s.split()[-1])
-ValueError: invalid literal for int() with base 10: 'oranges'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 125 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 127 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 128 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    # split the string into two parts
-    # the first part is the number of apples
-    # the second part is the number of oranges
-    # convert the string to integer
-    # return the difference between the total number of fruits and the sum of the apples and oranges
-    apples, oranges = s.split(' and ')
-    return n - (int(apples[:-1]) + int(oranges[:-1]))
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpngu584un.py", line 39, in <module>
-    test_check()
-  File "/tmp/tmpngu584un.py", line 37, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpngu584un.py", line 28, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpngu584un.py", line 24, in fruit_distribution
-    return n - (int(apples[:-1]) + int(oranges[:-1]))
-ValueError: invalid literal for int() with base 10: '5 apple'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 137 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 141 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 143 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 146 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 148 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    return int(s.split()[-1]) - n
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpjzr0k1vk.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmpjzr0k1vk.py", line 30, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpjzr0k1vk.py", line 21, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpjzr0k1vk.py", line 18, in fruit_distribution
-    return int(s.split()[-1]) - n
-ValueError: invalid literal for int() with base 10: 'oranges'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 154 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    # get the number of apples and oranges
-    apples, oranges = map(int, s.split()[::2])
-    # return the number of mango fruits
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp4efgq2jq.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmp4efgq2jq.py", line 34, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmp4efgq2jq.py", line 25, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmp4efgq2jq.py", line 19, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 162 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 176 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    return int(s.split()[0]) + int(s.split()[4]) - n
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpyw3vni8e.py", line 33, in <module>
-    test_check()
-  File "/tmp/tmpyw3vni8e.py", line 31, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmpyw3vni8e.py", line 22, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmpyw3vni8e.py", line 18, in fruit_distribution
-    return int(s.split()[0]) + int(s.split()[4]) - n
-ValueError: invalid literal for int() with base 10: 'oranges'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 183 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 32, in test_check
-    check(fruit_distribution)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 23, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr8_qeibw.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 192 ---- 
-def fruit_distribution(s: str, n: int) -> int:
-    """
-    In this task, you will be given a string that represents a number of apples and oranges 
-    that are distributed in a basket of fruit this basket contains 
-    apples, oranges, and mango fruits. Given the string that represents the total number of 
-    the oranges and apples and an integer that represent the total number of the fruits 
-    in the basket return the number of the mango fruits in the basket.
-    for examble:
-    >>> fruit_distribution('5 apples and 6 oranges', 19)
-    8
-    >>> fruit_distribution('0 apples and 1 oranges', 3)
-    2
-    >>> fruit_distribution('2 apples and 3 oranges', 100)
-    95
-    >>> fruit_distribution('100 apples and 1 oranges', 120)
-    19
-    """
-    apples, oranges = map(int, s.split()[::2])
-    return n - apples - oranges
-
-def check(candidate):
-    assert candidate('5 apples and 6 oranges', 19) == 8
-    assert candidate('5 apples and 6 oranges', 21) == 10
-    assert candidate('0 apples and 1 oranges', 3) == 2
-    assert candidate('1 apples and 0 oranges', 3) == 2
-    assert candidate('2 apples and 3 oranges', 100) == 95
-    assert candidate('2 apples and 3 oranges', 5) == 0
-    assert candidate('1 apples and 100 oranges', 120) == 19
-
-def test_check():
-    check(fruit_distribution)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplvqm1jsh.py", line 33, in <module>
-    test_check()
-  File "/tmp/tmplvqm1jsh.py", line 31, in test_check
-    check(fruit_distribution)
-  File "/tmp/tmplvqm1jsh.py", line 22, in check
-    assert candidate('5 apples and 6 oranges', 19) == 8
-  File "/tmp/tmplvqm1jsh.py", line 18, in fruit_distribution
-    apples, oranges = map(int, s.split()[::2])
-ValueError: invalid literal for int() with base 10: 'and'
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_67_fruit_distribution --- completion 194 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 38 ---- 
 def fruit_distribution(s: str, n: int) -> int:
     """
     In this task, you will be given a string that represents a number of apples and oranges 

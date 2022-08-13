@@ -1,4 +1,4 @@
-# ---- HumanEval_155_even_odd_count --- completion 29 ---- 
+# ---- HumanEval_155_even_odd_count --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -65,7 +65,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_116_sort_array --- completion 67 ---- 
+# ---- HumanEval_116_sort_array --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -129,7 +129,497 @@ System.FormatException: Format specifier was invalid.
 
 
 
+# ---- HumanEval_19_sort_numbers --- completion 4 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 5 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++) {
+            result += nums2[i] + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 7 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ');
+        var nums2 = nums.Select(x => int.Parse(x)).ToArray();
+        Array.Sort(nums2);
+        return string.Join(" ", nums2);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00030] in <47d5267524014de5940c4552c95c2cea>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <47d5267524014de5940c4552c95c2cea>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 8 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(n => int.Parse(n)).OrderBy(n => n).Select(n => n.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String n) [0x00000] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 9 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 11 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_19_sort_numbers --- completion 13 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        // TODO: implement this method
+        // throw new NotImplementedException();
+        string[] nums = numbers.Split(' ');
+        int[] numsInt = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            numsInt[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(numsInt);
+        string result = "";
+        for (int i = 0; i < numsInt.Length; i++) {
+            result += numsInt[i] + " ";
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 14 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++) {
+            result += nums2[i] + " ";
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -202,70 +692,6 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++) {
-            result += nums2[i] + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 19 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
         var nums = numbers.Split(' ');
         var nums2 = nums.Select(x => int.Parse(x)).ToArray();
         Array.Sort(nums2);
@@ -311,7 +737,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 23 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 18 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -326,7 +752,260 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(n => int.Parse(n)).OrderBy(n => n).Select(n => n.ToString()).ToArray();
+        var nums = numbers.Split(' ');
+        var nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(nums2);
+        var sb = new StringBuilder();
+        for (int i = 0; i < nums2.Length; i++) {
+            sb.Append(nums2[i]);
+            if (i < nums2.Length - 1) {
+                sb.Append(' ');
+            }
+        }
+        return sb.ToString();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 20 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++) {
+            result += nums2[i].ToString() + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <4e1e978a51854655af718d5cb459e94c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4e1e978a51854655af718d5cb459e94c>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <4e1e978a51854655af718d5cb459e94c>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <4e1e978a51854655af718d5cb459e94c>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 21 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => Int32.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return String.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 22 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums_int = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums_int[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(nums_int);
+        string output = "";
+        for (int i = 0; i < nums_int.Length; i++) {
+            output += nums_int[i].ToString() + " ";
+        }
+        return output.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 24 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
         return string.Join(" ", nums);
     }
     public static void Main(string[] args) {
@@ -348,15 +1027,15 @@ System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String n) [0x00000] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
   at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
@@ -370,6 +1049,64 @@ System.FormatException: Input string was not in a correct format.
 
 
 # ---- HumanEval_19_sort_numbers --- completion 25 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => Int32.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return String.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 26 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -500,19 +1237,8 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        // TODO: implement this method
-        // throw new NotImplementedException();
-        string[] nums = numbers.Split(' ');
-        int[] numsInt = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            numsInt[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(numsInt);
-        string result = "";
-        for (int i = 0; i < numsInt.Length; i++) {
-            result += numsInt[i] + " ";
-        }
-        return result;
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
     }
     public static void Main(string[] args) {
     Debug.Assert(SortNumbers(("")).Equals(("")));
@@ -532,18 +1258,19 @@ Unhandled Exception:
 System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8e77dbd58fac46d59d92c15b4558f4fd>:0 
-
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
 '''
 ''' stdout = 
 
@@ -568,17 +1295,8 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++) {
-            result += nums2[i] + " ";
-        }
-        return result;
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
     }
     public static void Main(string[] args) {
     Debug.Assert(SortNumbers(("")).Equals(("")));
@@ -598,18 +1316,19 @@ Unhandled Exception:
 System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
 '''
 ''' stdout = 
 
@@ -619,7 +1338,65 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 35 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 34 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 37 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -692,6 +1469,382 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 40 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++) {
+            result += nums2[i].ToString() + " ";
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <8f43759fdf294003a5467eca0277dbd1>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8f43759fdf294003a5467eca0277dbd1>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <8f43759fdf294003a5467eca0277dbd1>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8f43759fdf294003a5467eca0277dbd1>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 41 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++) {
+            result += nums2[i] + " ";
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 42 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        // TODO: Implement this function
+        //throw new NotImplementedException();
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++)
+        {
+            nums2[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++)
+        {
+            result += nums2[i] + " ";
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <3438bc735d4347d495854c0d04d34364>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <3438bc735d4347d495854c0d04d34364>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <3438bc735d4347d495854c0d04d34364>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <3438bc735d4347d495854c0d04d34364>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 43 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 44 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 47 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
         var nums = numbers.Split(' ');
         var nums2 = nums.Select(x => int.Parse(x)).ToArray();
         Array.Sort(nums2);
@@ -737,260 +1890,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 44 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ');
-        var nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(nums2);
-        var sb = new StringBuilder();
-        for (int i = 0; i < nums2.Length; i++) {
-            sb.Append(nums2[i]);
-            if (i < nums2.Length - 1) {
-                sb.Append(' ');
-            }
-        }
-        return sb.ToString();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <0c2b00b9810f492986cff3f5bf8a8e32>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 51 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++) {
-            result += nums2[i].ToString() + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <4e1e978a51854655af718d5cb459e94c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4e1e978a51854655af718d5cb459e94c>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <4e1e978a51854655af718d5cb459e94c>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <4e1e978a51854655af718d5cb459e94c>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 57 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => Int32.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return String.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <69d63f9c6a4f4d08b576679162e505ae>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <69d63f9c6a4f4d08b576679162e505ae>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <69d63f9c6a4f4d08b576679162e505ae>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 58 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums_int = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums_int[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(nums_int);
-        string output = "";
-        for (int i = 0; i < nums_int.Length; i++) {
-            output += nums_int[i].ToString() + " ";
-        }
-        return output.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <0a4787f3c5bb44cb96c9006f2f791be1>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 67 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 48 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1048,7 +1948,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 68 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 49 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1063,8 +1963,17 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => Int32.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return String.Join(" ", nums);
+        string[] nums = numbers.Split(' ');
+        int[] numsInt = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            numsInt[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(numsInt);
+        string result = "";
+        for (int i = 0; i < numsInt.Length; i++) {
+            result += numsInt[i].ToString() + " ";
+        }
+        return result.Trim();
     }
     public static void Main(string[] args) {
     Debug.Assert(SortNumbers(("")).Equals(("")));
@@ -1085,15 +1994,70 @@ System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 50 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
   at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <69d63f9c6a4f4d08b576679162e505ae>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <69d63f9c6a4f4d08b576679162e505ae>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
@@ -1106,7 +2070,489 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 69 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 51 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(n => int.Parse(n)).OrderBy(n => n).Select(n => n.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String n) [0x00000] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 53 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ');
+        var nums2 = nums.Select(x => Convert.ToInt32(x)).ToArray();
+        Array.Sort(nums2);
+        return string.Join(" ", nums2);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <2cc98f1d467841a1a9e9ecda68375894>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00030] in <2cc98f1d467841a1a9e9ecda68375894>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <2cc98f1d467841a1a9e9ecda68375894>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <2cc98f1d467841a1a9e9ecda68375894>:0 
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 54 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 56 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 58 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ');
+        var nums2 = nums.Select(x => int.Parse(x)).ToArray();
+        Array.Sort(nums2);
+        return string.Join(" ", nums2);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00030] in <47d5267524014de5940c4552c95c2cea>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <47d5267524014de5940c4552c95c2cea>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 59 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
+        return string.Join(" ", nums);
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
+  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 62 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] numsInt = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            numsInt[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(numsInt);
+        string result = "";
+        for (int i = 0; i < numsInt.Length; i++) {
+            result += numsInt[i].ToString() + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 65 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ');
+        var numsInt = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            numsInt[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(numsInt);
+        var result = "";
+        for (int i = 0; i < numsInt.Length; i++) {
+            result += numsInt[i].ToString() + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 70 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1179,7 +2625,267 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
+        var nums = numbers.Split(' ');
+        var numsInt = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            numsInt[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(numsInt);
+        var result = "";
+        for (int i = 0; i < numsInt.Length; i++) {
+            result += numsInt[i].ToString() + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 74 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums2 = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums2[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(nums2);
+        string result = "";
+        for (int i = 0; i < nums2.Length; i++) {
+            result += nums2[i] + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 76 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] nums_int = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            nums_int[i] = Convert.ToInt32(nums[i]);
+        }
+        Array.Sort(nums_int);
+        string result = "";
+        for (int i = 0; i < nums_int.Length; i++) {
+            result += nums_int[i].ToString() + " ";
+        }
+        return result;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <8ef62a37d792468b8074ca7a399bea10>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8ef62a37d792468b8074ca7a399bea10>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <8ef62a37d792468b8074ca7a399bea10>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <8ef62a37d792468b8074ca7a399bea10>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 77 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        string[] nums = numbers.Split(' ');
+        int[] numsInt = new int[nums.Length];
+        for (int i = 0; i < nums.Length; i++) {
+            numsInt[i] = int.Parse(nums[i]);
+        }
+        Array.Sort(numsInt);
+        string result = "";
+        for (int i = 0; i < numsInt.Length; i++) {
+            result += numsInt[i].ToString() + " ";
+        }
+        return result.Trim();
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(SortNumbers(("")).Equals(("")));
+    Debug.Assert(SortNumbers(("three")).Equals(("three")));
+    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
+    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
+    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
+    }
+
+}
+
+# status = Exception
+# exit_code = 1
+''' stderr = 
+
+Unhandled Exception:
+System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
+  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_19_sort_numbers --- completion 78 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    // Return the string with numbers sorted from smallest to largest
+    // >>> SortNumbers(("three one five"))
+    // ("one three five")
+    public static string SortNumbers(string numbers) {
+        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(n => n).Select(n => n.ToString()).ToArray();
         return string.Join(" ", nums);
     }
     public static void Main(string[] args) {
@@ -1201,15 +2907,15 @@ System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <dbb89fb0f6da460699eb81a6b5b4f582>:0 
   at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dbb89fb0f6da460699eb81a6b5b4f582>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dbb89fb0f6da460699eb81a6b5b4f582>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
@@ -1222,7 +2928,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 78 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 79 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1353,7 +3059,7 @@ class Problem {
     // >>> SortNumbers(("three one five"))
     // ("one three five")
     public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
+        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
         return string.Join(" ", nums);
     }
     public static void Main(string[] args) {
@@ -1375,15 +3081,15 @@ System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
   at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
   at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
+  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
+  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
 [ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
   at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
   at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
@@ -1396,7 +3102,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 96 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 88 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -1454,1713 +3160,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 99 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 102 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++) {
-            result += nums2[i].ToString() + " ";
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <8f43759fdf294003a5467eca0277dbd1>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8f43759fdf294003a5467eca0277dbd1>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <8f43759fdf294003a5467eca0277dbd1>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8f43759fdf294003a5467eca0277dbd1>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 103 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++) {
-            result += nums2[i] + " ";
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <3fb222c27cb94d7bad4dec30d5d576e6>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 104 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        // TODO: Implement this function
-        //throw new NotImplementedException();
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++)
-        {
-            nums2[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++)
-        {
-            result += nums2[i] + " ";
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <3438bc735d4347d495854c0d04d34364>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <3438bc735d4347d495854c0d04d34364>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <3438bc735d4347d495854c0d04d34364>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <3438bc735d4347d495854c0d04d34364>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 106 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 107 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 115 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ');
-        var nums2 = nums.Select(x => int.Parse(x)).ToArray();
-        Array.Sort(nums2);
-        return string.Join(" ", nums2);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00030] in <47d5267524014de5940c4552c95c2cea>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <47d5267524014de5940c4552c95c2cea>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 120 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 121 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] numsInt = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            numsInt[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(numsInt);
-        string result = "";
-        for (int i = 0; i < numsInt.Length; i++) {
-            result += numsInt[i].ToString() + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 122 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 123 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(n => int.Parse(n)).OrderBy(n => n).Select(n => n.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String n) [0x00000] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <2c2552eba93a49a5b2047b5a0c6fe486>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 125 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ');
-        var nums2 = nums.Select(x => Convert.ToInt32(x)).ToArray();
-        Array.Sort(nums2);
-        return string.Join(" ", nums2);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <2cc98f1d467841a1a9e9ecda68375894>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00030] in <2cc98f1d467841a1a9e9ecda68375894>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <2cc98f1d467841a1a9e9ecda68375894>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <2cc98f1d467841a1a9e9ecda68375894>:0 
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 126 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 129 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 132 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ');
-        var nums2 = nums.Select(x => int.Parse(x)).ToArray();
-        Array.Sort(nums2);
-        return string.Join(" ", nums2);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00030] in <47d5267524014de5940c4552c95c2cea>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <47d5267524014de5940c4552c95c2cea>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <47d5267524014de5940c4552c95c2cea>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 133 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(i => i).Select(i => i.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <7306233ee02b45dab9d3a78f2d06779a>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 137 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] numsInt = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            numsInt[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(numsInt);
-        string result = "";
-        for (int i = 0; i < numsInt.Length; i++) {
-            result += numsInt[i].ToString() + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 152 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ');
-        var numsInt = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            numsInt[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(numsInt);
-        var result = "";
-        for (int i = 0; i < numsInt.Length; i++) {
-            result += numsInt[i].ToString() + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 167 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 173 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ');
-        var numsInt = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            numsInt[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(numsInt);
-        var result = "";
-        for (int i = 0; i < numsInt.Length; i++) {
-            result += numsInt[i].ToString() + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <e89f747363d44ca9adb925cf124284d0>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <e89f747363d44ca9adb925cf124284d0>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 174 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums2 = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums2[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(nums2);
-        string result = "";
-        for (int i = 0; i < nums2.Length; i++) {
-            result += nums2[i] + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <c86b946bc2584c1f9ef33507aee3cd4a>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 177 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] nums_int = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            nums_int[i] = Convert.ToInt32(nums[i]);
-        }
-        Array.Sort(nums_int);
-        string result = "";
-        for (int i = 0; i < nums_int.Length; i++) {
-            result += nums_int[i].ToString() + " ";
-        }
-        return result;
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <8ef62a37d792468b8074ca7a399bea10>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8ef62a37d792468b8074ca7a399bea10>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s, System.IFormatProvider provider) [0x00017] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Convert.ToInt32 (System.String value) [0x0000b] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <8ef62a37d792468b8074ca7a399bea10>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <8ef62a37d792468b8074ca7a399bea10>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 178 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        string[] nums = numbers.Split(' ');
-        int[] numsInt = new int[nums.Length];
-        for (int i = 0; i < nums.Length; i++) {
-            numsInt[i] = int.Parse(nums[i]);
-        }
-        Array.Sort(numsInt);
-        string result = "";
-        for (int i = 0; i < numsInt.Length; i++) {
-            result += numsInt[i].ToString() + " ";
-        }
-        return result.Trim();
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00019] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <ad2c0a22337a42ccb55d660ba0591be7>:0 
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 180 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(s => int.Parse(s)).OrderBy(n => n).Select(n => n.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String s) [0x00000] in <dbb89fb0f6da460699eb81a6b5b4f582>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dbb89fb0f6da460699eb81a6b5b4f582>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dbb89fb0f6da460699eb81a6b5b4f582>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 181 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 187 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 192 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_19_sort_numbers --- completion 194 ---- 
-using System;
-using System.Numerics;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Security.Cryptography;
-class Problem {
-    // Input is a space-delimited string of numberals from 'zero' to 'nine'.
-    // Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
-    // Return the string with numbers sorted from smallest to largest
-    // >>> SortNumbers(("three one five"))
-    // ("one three five")
-    public static string SortNumbers(string numbers) {
-        var nums = numbers.Split(' ').Select(x => int.Parse(x)).OrderBy(x => x).Select(x => x.ToString()).ToArray();
-        return string.Join(" ", nums);
-    }
-    public static void Main(string[] args) {
-    Debug.Assert(SortNumbers(("")).Equals(("")));
-    Debug.Assert(SortNumbers(("three")).Equals(("three")));
-    Debug.Assert(SortNumbers(("three five nine")).Equals(("three five nine")));
-    Debug.Assert(SortNumbers(("five zero four seven nine eight")).Equals(("zero four five seven eight nine")));
-    Debug.Assert(SortNumbers(("six five four three two one zero")).Equals(("zero one two three four five six")));
-    }
-
-}
-
-# status = Exception
-# exit_code = 1
-''' stderr = 
-
-Unhandled Exception:
-System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberStyles styles, System.Globalization.NumberFormatInfo info) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Int32.Parse (System.String s) [0x00016] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at Problem+<>c.<SortNumbers>b__0_0 (System.String x) [0x00000] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at System.Linq.Enumerable+SelectArrayIterator`2[TSource,TResult].ToArray () [0x00012] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Buffer`1[TElement]..ctor (System.Collections.Generic.IEnumerable`1[T] source) [0x0000a] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.OrderedEnumerable`1+<GetEnumerator>d__3[TElement].MoveNext () [0x0001e] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].PreallocatingToArray (System.Int32 count) [0x00035] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable+SelectIPartitionIterator`2[TSource,TResult].ToArray () [0x00023] in <e540098dd111461e919c5863f6975c29>:0 
-  at System.Linq.Enumerable.ToArray[TSource] (System.Collections.Generic.IEnumerable`1[T] source) [0x0001f] in <e540098dd111461e919c5863f6975c29>:0 
-  at Problem.SortNumbers (System.String numbers) [0x00076] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-  at Problem.Main (System.String[] args) [0x00001] in <dc44429ce7df4cf69f56b1678990ebd2>:0 
-[ERROR] FATAL UNHANDLED EXCEPTION: System.FormatException: Input string was not in a correct format.
-  at System.Number.ThrowOverflowOrFormatException (System.Boolean overflow, System.String overflowResourceKey) [0x0001a] in <aa5dff9b31c64fce86559bbbf6cd364f>:0 
-  at System.Number.ParseInt32 (System.ReadOnlySpan`1[T] value, System.Globalization.NumberS
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_108_count_nums --- completion 36 ---- 
+# ---- HumanEval_108_count_nums --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3225,7 +3225,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 45 ---- 
+# ---- HumanEval_108_count_nums --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3290,7 +3290,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 53 ---- 
+# ---- HumanEval_108_count_nums --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3355,7 +3355,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 55 ---- 
+# ---- HumanEval_108_count_nums --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3420,7 +3420,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 96 ---- 
+# ---- HumanEval_108_count_nums --- completion 9 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3485,7 +3485,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 156 ---- 
+# ---- HumanEval_108_count_nums --- completion 14 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3550,7 +3550,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_108_count_nums --- completion 159 ---- 
+# ---- HumanEval_108_count_nums --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3615,7 +3615,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 3 ---- 
+# ---- HumanEval_145_order_by_points --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3677,7 +3677,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 12 ---- 
+# ---- HumanEval_145_order_by_points --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3739,7 +3739,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 30 ---- 
+# ---- HumanEval_145_order_by_points --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3801,7 +3801,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 35 ---- 
+# ---- HumanEval_145_order_by_points --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3863,7 +3863,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 55 ---- 
+# ---- HumanEval_145_order_by_points --- completion 10 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3925,7 +3925,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 58 ---- 
+# ---- HumanEval_145_order_by_points --- completion 11 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -3987,7 +3987,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 86 ---- 
+# ---- HumanEval_145_order_by_points --- completion 19 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4049,7 +4049,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 171 ---- 
+# ---- HumanEval_145_order_by_points --- completion 36 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4111,7 +4111,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_145_order_by_points --- completion 192 ---- 
+# ---- HumanEval_145_order_by_points --- completion 41 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4173,7 +4173,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 2 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 0 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4241,7 +4241,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 55 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 1 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4309,7 +4309,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 93 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 2 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4378,7 +4378,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 97 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4446,7 +4446,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 109 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 4 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4515,7 +4515,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 129 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 5 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4584,7 +4584,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 156 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 6 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4652,7 +4652,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 164 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 7 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -4720,7 +4720,7 @@ System.FormatException: Input string was not in a correct format.
 
 
 
-# ---- HumanEval_67_fruit_distribution --- completion 190 ---- 
+# ---- HumanEval_67_fruit_distribution --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
