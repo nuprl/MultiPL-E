@@ -1,4 +1,4 @@
-# ---- HumanEval_20_find_closest_elements --- completion 0 ---- 
+# ---- HumanEval_20_find_closest_elements --- completion 26 ---- 
 from typing import List, Tuple
 
 def find_closest_elements(numbers: List[float]) -> Tuple[float, float]:
@@ -48,7 +48,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_20_find_closest_elements --- completion 1 ---- 
+# ---- HumanEval_20_find_closest_elements --- completion 136 ---- 
 from typing import List, Tuple
 
 def find_closest_elements(numbers: List[float]) -> Tuple[float, float]:
@@ -97,7 +97,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_20_find_closest_elements --- completion 2 ---- 
+# ---- HumanEval_20_find_closest_elements --- completion 182 ---- 
 from typing import List, Tuple
 
 def find_closest_elements(numbers: List[float]) -> Tuple[float, float]:
@@ -147,7 +147,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_136_largest_smallest_integers --- completion 1 ---- 
+# ---- HumanEval_136_largest_smallest_integers --- completion 141 ---- 
 from typing import List, Tuple, Optional
 
 def largest_smallest_integers(lst: List[int]) -> Tuple[Optional[int], Optional[int]]:
@@ -209,7 +209,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_140_fix_spaces --- completion 67 ---- 
+# ---- HumanEval_140_fix_spaces --- completion 78 ---- 
 def fix_spaces(text: str) -> str:
     """
     Given a string text, replace all spaces in it with underscores, 
@@ -264,7 +264,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_140_fix_spaces --- completion 142 ---- 
+# ---- HumanEval_140_fix_spaces --- completion 163 ---- 
 def fix_spaces(text: str) -> str:
     """
     Given a string text, replace all spaces in it with underscores, 
@@ -318,7 +318,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 0 ---- 
+# ---- HumanEval_105_by_length --- completion 13 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -377,7 +377,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 1 ---- 
+# ---- HumanEval_105_by_length --- completion 30 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -437,7 +437,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 2 ---- 
+# ---- HumanEval_105_by_length --- completion 91 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -496,7 +496,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 3 ---- 
+# ---- HumanEval_105_by_length --- completion 92 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -556,7 +556,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 4 ---- 
+# ---- HumanEval_105_by_length --- completion 115 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -615,7 +615,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 5 ---- 
+# ---- HumanEval_105_by_length --- completion 123 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -675,7 +675,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 6 ---- 
+# ---- HumanEval_105_by_length --- completion 151 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -734,7 +734,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 7 ---- 
+# ---- HumanEval_105_by_length --- completion 152 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -793,7 +793,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_105_by_length --- completion 8 ---- 
+# ---- HumanEval_105_by_length --- completion 193 ---- 
 from typing import List
 
 def by_length(arr: List[int]) -> List[str]:
@@ -852,7 +852,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 0 ---- 
+# ---- HumanEval_106_f --- completion 1 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -902,7 +902,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 1 ---- 
+# ---- HumanEval_106_f --- completion 3 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -952,7 +952,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 2 ---- 
+# ---- HumanEval_106_f --- completion 4 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1002,7 +1002,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 3 ---- 
+# ---- HumanEval_106_f --- completion 5 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1052,7 +1052,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 8 ---- 
+# ---- HumanEval_106_f --- completion 12 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1103,7 +1103,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 9 ---- 
+# ---- HumanEval_106_f --- completion 13 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1153,7 +1153,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 10 ---- 
+# ---- HumanEval_106_f --- completion 14 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1203,7 +1203,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 12 ---- 
+# ---- HumanEval_106_f --- completion 17 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1241,257 +1241,6 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph0kanzhd.py", line 17, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmph0kanzhd.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 13 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 14 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 15 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 16 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 18 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -1554,57 +1303,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 21 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 23 ---- 
+# ---- HumanEval_106_f --- completion 20 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1655,7 +1354,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 24 ---- 
+# ---- HumanEval_106_f --- completion 22 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1705,7 +1404,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 25 ---- 
+# ---- HumanEval_106_f --- completion 23 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1805,56 +1504,6 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 27 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_106_f --- completion 28 ---- 
 from typing import List
 
@@ -1905,7 +1554,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 29 ---- 
+# ---- HumanEval_106_f --- completion 31 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1955,7 +1604,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 30 ---- 
+# ---- HumanEval_106_f --- completion 33 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -1994,56 +1643,6 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 32 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -2106,7 +1705,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 35 ---- 
+# ---- HumanEval_106_f --- completion 36 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -2121,7 +1720,6 @@ def f(n: int) -> List[int]:
     """
     # YOUR CODE HERE
     raise NotImplementedError()
-
 
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
@@ -2138,13 +1736,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -2158,6 +1756,56 @@ NotImplementedError
 
 
 # ---- HumanEval_106_f --- completion 37 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 38 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -2323,55 +1971,6 @@ def f(n: int) -> List[int]:
     # YOUR CODE HERE
     raise NotImplementedError()
 
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 43 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
 
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
@@ -2388,63 +1987,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 44 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -2557,7 +2106,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 51 ---- 
+# ---- HumanEval_106_f --- completion 49 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -2572,6 +2121,7 @@ def f(n: int) -> List[int]:
     """
     # YOUR CODE HERE
     raise NotImplementedError()
+
 
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
@@ -2588,13 +2138,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -2607,7 +2157,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 54 ---- 
+# ---- HumanEval_106_f --- completion 53 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -2723,7 +2273,6 @@ def f(n: int) -> List[int]:
     # YOUR CODE HERE
     raise NotImplementedError()
 
-
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
     assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
@@ -2739,13 +2288,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -2758,7 +2307,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 58 ---- 
+# ---- HumanEval_106_f --- completion 59 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -2808,7 +2357,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 61 ---- 
+# ---- HumanEval_106_f --- completion 60 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -2846,57 +2395,6 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 62 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -2910,56 +2408,6 @@ NotImplementedError
 
 
 # ---- HumanEval_106_f --- completion 63 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 64 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3025,7 +2473,6 @@ def f(n: int) -> List[int]:
     # YOUR CODE HERE
     raise NotImplementedError()
 
-
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
     assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
@@ -3041,64 +2488,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 66 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -3161,7 +2557,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 69 ---- 
+# ---- HumanEval_106_f --- completion 72 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3211,7 +2607,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 74 ---- 
+# ---- HumanEval_106_f --- completion 75 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3261,7 +2657,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 79 ---- 
+# ---- HumanEval_106_f --- completion 77 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3311,7 +2707,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 84 ---- 
+# ---- HumanEval_106_f --- completion 78 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3326,6 +2722,7 @@ def f(n: int) -> List[int]:
     """
     # YOUR CODE HERE
     raise NotImplementedError()
+
 
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
@@ -3342,13 +2739,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -3361,7 +2758,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 85 ---- 
+# ---- HumanEval_106_f --- completion 82 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3477,6 +2874,7 @@ def f(n: int) -> List[int]:
     # YOUR CODE HERE
     raise NotImplementedError()
 
+
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
     assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
@@ -3492,13 +2890,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -3627,6 +3025,7 @@ def f(n: int) -> List[int]:
     # YOUR CODE HERE
     raise NotImplementedError()
 
+
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
     assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
@@ -3642,13 +3041,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -3712,7 +3111,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 92 ---- 
+# ---- HumanEval_106_f --- completion 94 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -3762,158 +3161,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 93 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 95 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 97 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 100 ---- 
+# ---- HumanEval_106_f --- completion 96 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -4013,358 +3261,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 103 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 104 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 105 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 106 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 107 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 108 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 109 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 114 ---- 
+# ---- HumanEval_106_f --- completion 110 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -4514,157 +3411,57 @@ NotImplementedError
 
 
 
+# ---- HumanEval_106_f --- completion 120 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_106_f --- completion 121 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 122 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 123 ---- 
-from typing import List
-
-def f(n: int) -> List[int]:
-    """ Implement the function f that takes n as a parameter,
-    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
-    or the sum of numbers from 1 to i otherwise.
-    i starts from 1.
-    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
-    Example:
-    >>> f(5)
-    [1, 2, 6, 24, 15]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate(5) == [1, 2, 6, 24, 15]
-    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
-    assert candidate(1) == [1]
-    assert candidate(3) == [1, 2, 6]
-
-def test_check():
-    check(f)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
-    check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
-    assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_106_f --- completion 124 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -4814,6 +3611,107 @@ NotImplementedError
 
 
 
+# ---- HumanEval_106_f --- completion 127 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 128 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
 # ---- HumanEval_106_f --- completion 129 ---- 
 from typing import List
 
@@ -4864,7 +3762,57 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 132 ---- 
+# ---- HumanEval_106_f --- completion 131 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 133 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -4930,6 +3878,7 @@ def f(n: int) -> List[int]:
     # YOUR CODE HERE
     raise NotImplementedError()
 
+
 def check(candidate):
     assert candidate(5) == [1, 2, 6, 24, 15]
     assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
@@ -4945,13 +3894,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
     check(f)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
     assert candidate(5) == [1, 2, 6, 24, 15]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
     raise NotImplementedError()
 NotImplementedError
 
@@ -4964,7 +3913,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 137 ---- 
+# ---- HumanEval_106_f --- completion 138 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -5014,7 +3963,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_106_f --- completion 139 ---- 
+# ---- HumanEval_106_f --- completion 140 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -5065,6 +4014,56 @@ NotImplementedError
 
 
 # ---- HumanEval_106_f --- completion 142 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 143 ---- 
 from typing import List
 
 def f(n: int) -> List[int]:
@@ -5314,7 +4313,1008 @@ NotImplementedError
 
 
 
-# ---- HumanEval_89_encrypt --- completion 5 ---- 
+# ---- HumanEval_106_f --- completion 149 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 26, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 24, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 18, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp34s0qf9n.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 154 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 160 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 162 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 164 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 165 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 166 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 167 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 168 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 169 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 173 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 178 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 182 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 184 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 187 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 191 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 194 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 196 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 197 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_106_f --- completion 199 ---- 
+from typing import List
+
+def f(n: int) -> List[int]:
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    >>> f(5)
+    [1, 2, 6, 24, 15]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate(5) == [1, 2, 6, 24, 15]
+    assert candidate(7) == [1, 2, 6, 24, 15, 720, 28]
+    assert candidate(1) == [1]
+    assert candidate(3) == [1, 2, 6]
+
+def test_check():
+    check(f)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 25, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 23, in test_check
+    check(f)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 17, in check
+    assert candidate(5) == [1, 2, 6, 24, 15]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpsps1odvh.py", line 14, in f
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_89_encrypt --- completion 48 ---- 
 def encrypt(s: str) -> str:
     """Create a function encrypt that takes a string as an argument and
     returns a string encrypted with the alphabet being rotated. 
@@ -5372,7 +5372,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_104_unique_digits --- completion 0 ---- 
+# ---- HumanEval_104_unique_digits --- completion 19 ---- 
 from typing import List
 
 def unique_digits(x: List[int]) -> List[int]:
@@ -5424,7 +5424,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_104_unique_digits --- completion 1 ---- 
+# ---- HumanEval_104_unique_digits --- completion 112 ---- 
 from typing import List
 
 def unique_digits(x: List[int]) -> List[int]:
@@ -5476,7 +5476,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_104_unique_digits --- completion 2 ---- 
+# ---- HumanEval_104_unique_digits --- completion 129 ---- 
 from typing import List
 
 def unique_digits(x: List[int]) -> List[int]:
@@ -5528,7 +5528,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_104_unique_digits --- completion 3 ---- 
+# ---- HumanEval_104_unique_digits --- completion 149 ---- 
 from typing import List
 
 def unique_digits(x: List[int]) -> List[int]:
@@ -5580,7 +5580,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 0 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 5 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -5639,7 +5639,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 1 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 9 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -5698,7 +5698,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 2 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 11 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -5745,953 +5745,6 @@ Traceback (most recent call last):
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpxy6d55sy.py", line 23, in check
     assert candidate([]) == 0
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpxy6d55sy.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 3 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 4 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 5 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 6 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
-    test_check()
-  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
-    check(double_the_difference)
-  File "/tmp/tmplvp3b5yi.py", line 24, in check
-    assert candidate([]) == 0
-  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 7 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 8 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
-    test_check()
-  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
-    check(double_the_difference)
-  File "/tmp/tmplvp3b5yi.py", line 24, in check
-    assert candidate([]) == 0
-  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 9 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 10 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 11 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 12 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
-    test_check()
-  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
-    check(double_the_difference)
-  File "/tmp/tmplvp3b5yi.py", line 24, in check
-    assert candidate([]) == 0
-  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 13 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 14 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 15 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 16 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 17 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 18 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
     raise NotImplementedError()
 NotImplementedError
 
@@ -6764,66 +5817,6 @@ NotImplementedError
 
 
 # ---- HumanEval_151_double_the_difference --- completion 20 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
-    test_check()
-  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
-    check(double_the_difference)
-  File "/tmp/tmplvp3b5yi.py", line 24, in check
-    assert candidate([]) == 0
-  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 21 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -6963,6 +5956,7 @@ def double_the_difference(lst: List[float]) -> int:
     # YOUR CODE HERE
     raise NotImplementedError()
 
+
 def check(candidate):
     assert candidate([]) == 0
     assert candidate([5.0, 4.0]) == 25
@@ -6981,13 +5975,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
     check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+  File "/tmp/tmplvp3b5yi.py", line 24, in check
     assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
     raise NotImplementedError()
 NotImplementedError
 
@@ -7081,64 +6075,6 @@ def double_the_difference(lst: List[float]) -> int:
     # YOUR CODE HERE
     raise NotImplementedError()
 
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 26 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
 
 def check(candidate):
     assert candidate([]) == 0
@@ -7158,13 +6094,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
     check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+  File "/tmp/tmplvp3b5yi.py", line 24, in check
     assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
     raise NotImplementedError()
 NotImplementedError
 
@@ -7236,244 +6172,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 28 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_151_double_the_difference --- completion 29 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
-    test_check()
-  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
-    check(double_the_difference)
-  File "/tmp/tmplvp3b5yi.py", line 24, in check
-    assert candidate([]) == 0
-  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 30 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 31 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 32 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -7591,65 +6290,6 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 34 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_151_double_the_difference --- completion 35 ---- 
 from typing import List
 
@@ -7672,6 +6312,7 @@ def double_the_difference(lst: List[float]) -> int:
     # YOUR CODE HERE
     raise NotImplementedError()
 
+
 def check(candidate):
     assert candidate([]) == 0
     assert candidate([5.0, 4.0]) == 25
@@ -7690,13 +6331,13 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
     check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+  File "/tmp/tmplvp3b5yi.py", line 24, in check
     assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
     raise NotImplementedError()
 NotImplementedError
 
@@ -7945,183 +6586,6 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 40 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 41 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 42 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_151_double_the_difference --- completion 43 ---- 
 from typing import List
 
@@ -8299,302 +6763,1838 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 46 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 47 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 48 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 49 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_151_double_the_difference --- completion 51 ---- 
-from typing import List
-
-def double_the_difference(lst: List[float]) -> int:
-    """
-    Given a list of numbers, return the sum of squares of the numbers
-    in the list that are odd. Ignore numbers that are negative or not integers.
-    
-    >>> double_the_difference([1, 3, 2, 0])
-    10
-    >>> double_the_difference([-1, -2, 0])
-    0
-    >>> double_the_difference([9, -2])
-    81
-    >>> double_the_difference([0])
-    0
-   
-    If the input list is empty, return 0.
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([]) == 0
-    assert candidate([5.0, 4.0]) == 25
-    assert candidate([0.1, 0.2, 0.3]) == 0
-    assert candidate([-10.0, -20.0, -30.0]) == 0
-    assert candidate([-1.0, -2.0, 8.0]) == 0
-    assert candidate([0.2, 3.0, 5.0]) == 34
-    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
-
-def test_check():
-    check(double_the_difference)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
-    check(double_the_difference)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
-    assert candidate([]) == 0
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_151_double_the_difference --- completion 52 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
+    test_check()
+  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
+    check(double_the_difference)
+  File "/tmp/tmplvp3b5yi.py", line 24, in check
+    assert candidate([]) == 0
+  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 56 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 57 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 60 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 65 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 66 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 75 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 80 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 85 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 87 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmplvp3b5yi.py", line 35, in <module>
+    test_check()
+  File "/tmp/tmplvp3b5yi.py", line 33, in test_check
+    check(double_the_difference)
+  File "/tmp/tmplvp3b5yi.py", line 24, in check
+    assert candidate([]) == 0
+  File "/tmp/tmplvp3b5yi.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 90 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 94 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 95 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 101 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 105 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 109 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 111 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 112 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 123 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 124 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 125 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 128 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 130 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 131 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 132 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 134 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 139 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 140 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 141 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 144 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 149 ---- 
+from typing import List
+
+def double_the_difference(lst: List[float]) -> int:
+    """
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    >>> double_the_difference([1, 3, 2, 0])
+    10
+    >>> double_the_difference([-1, -2, 0])
+    0
+    >>> double_the_difference([9, -2])
+    81
+    >>> double_the_difference([0])
+    0
+   
+    If the input list is empty, return 0.
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([]) == 0
+    assert candidate([5.0, 4.0]) == 25
+    assert candidate([0.1, 0.2, 0.3]) == 0
+    assert candidate([-10.0, -20.0, -30.0]) == 0
+    assert candidate([-1.0, -2.0, 8.0]) == 0
+    assert candidate([0.2, 3.0, 5.0]) == 34
+    assert candidate([-9.0, -7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0]) == 165
+
+def test_check():
+    check(double_the_difference)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 32, in test_check
+    check(double_the_difference)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 23, in check
+    assert candidate([]) == 0
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpr3nkxk95.py", line 20, in double_the_difference
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_151_double_the_difference --- completion 152 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -8901,7 +8901,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 53 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 156 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -8960,7 +8960,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 54 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 161 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9019,7 +9019,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 55 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 166 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9078,7 +9078,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 56 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 170 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9137,7 +9137,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 57 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 180 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9196,7 +9196,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 58 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 188 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9255,7 +9255,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 59 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 195 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9314,7 +9314,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 60 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 197 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9373,7 +9373,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_151_double_the_difference --- completion 61 ---- 
+# ---- HumanEval_151_double_the_difference --- completion 199 ---- 
 from typing import List
 
 def double_the_difference(lst: List[float]) -> int:
@@ -9433,7 +9433,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_102_choose_num --- completion 0 ---- 
+# ---- HumanEval_102_choose_num --- completion 10 ---- 
 def choose_num(x: int, y: int) -> int:
     """This function takes two positive numbers x and y and returns the
     biggest even integer number that is in the range [x, y] inclusive. If 
@@ -9487,7 +9487,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_102_choose_num --- completion 1 ---- 
+# ---- HumanEval_102_choose_num --- completion 33 ---- 
 def choose_num(x: int, y: int) -> int:
     """This function takes two positive numbers x and y and returns the
     biggest even integer number that is in the range [x, y] inclusive. If 
@@ -9541,7 +9541,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_102_choose_num --- completion 3 ---- 
+# ---- HumanEval_102_choose_num --- completion 90 ---- 
 def choose_num(x: int, y: int) -> int:
     """This function takes two positive numbers x and y and returns the
     biggest even integer number that is in the range [x, y] inclusive. If 
@@ -9595,7 +9595,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 0 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 17 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -9663,7 +9663,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 1 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 33 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -9731,7 +9731,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 2 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 41 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -9799,7 +9799,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 3 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 42 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -9867,7 +9867,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 4 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 103 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -9936,7 +9936,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 5 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 115 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -10004,7 +10004,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 6 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 117 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -10072,7 +10072,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 7 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 127 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -10140,7 +10140,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 8 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 132 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -10208,7 +10208,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 9 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 142 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -10276,7 +10276,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_81_numerical_letter_grade --- completion 10 ---- 
+# ---- HumanEval_81_numerical_letter_grade --- completion 150 ---- 
 from typing import List
 
 def numerical_letter_grade(grades: List[float]) -> List[str]:
@@ -10344,7 +10344,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_63_fibfib --- completion 0 ---- 
+# ---- HumanEval_63_fibfib --- completion 84 ---- 
 def fibfib(n: int) -> int:
     """The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fibfib(0) == 0
@@ -10400,7 +10400,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 0 ---- 
+# ---- HumanEval_142_sum_squares --- completion 6 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -10461,1105 +10461,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 1 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 2 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 3 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 4 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 5 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 6 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 7 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 8 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 9 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 10 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_142_sum_squares --- completion 11 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 12 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 13 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 14 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 15 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 16 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 17 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 18 ---- 
-from typing import List
-
-def sum_squares(lst: List[int]) -> int:
-    """"
-    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
-    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
-    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
-    
-    Examples:
-    >>> lst
-    [1, 2, 3]
-    >>> lst
-    []
-    >>> lst
-    [-1, -5, 2, -1, -5]
-    """
-    # YOUR CODE HERE
-    raise NotImplementedError()
-
-def check(candidate):
-    assert candidate([1, 2, 3]) == 6
-    assert candidate([1, 4, 9]) == 14
-    assert candidate([]) == 0
-    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
-    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
-    assert candidate([0]) == 0
-    assert candidate([-1, -5, 2, -1, -5]) == -126
-    assert candidate([-56, -99, 1, 0, -2]) == 3030
-    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
-    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
-    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
-
-def test_check():
-    check(sum_squares)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
-    check(sum_squares)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
-    assert candidate([1, 2, 3]) == 6
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
-    raise NotImplementedError()
-NotImplementedError
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_142_sum_squares --- completion 19 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -11681,7 +10583,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 21 ---- 
+# ---- HumanEval_142_sum_squares --- completion 47 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -11742,7 +10644,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 23 ---- 
+# ---- HumanEval_142_sum_squares --- completion 48 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -11803,7 +10705,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 24 ---- 
+# ---- HumanEval_142_sum_squares --- completion 55 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -11864,7 +10766,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 25 ---- 
+# ---- HumanEval_142_sum_squares --- completion 56 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -11925,7 +10827,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_142_sum_squares --- completion 26 ---- 
+# ---- HumanEval_142_sum_squares --- completion 63 ---- 
 from typing import List
 
 def sum_squares(lst: List[int]) -> int:
@@ -11986,7 +10888,1105 @@ NotImplementedError
 
 
 
-# ---- HumanEval_41_car_race_collision --- completion 0 ---- 
+# ---- HumanEval_142_sum_squares --- completion 64 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 66 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 75 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 87 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 89 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 90 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 117 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 129 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 132 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 145 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 146 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 150 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 151 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 160 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 173 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 188 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 191 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_142_sum_squares --- completion 194 ---- 
+from typing import List
+
+def sum_squares(lst: List[int]) -> int:
+    """"
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    >>> lst
+    [1, 2, 3]
+    >>> lst
+    []
+    >>> lst
+    [-1, -5, 2, -1, -5]
+    """
+    # YOUR CODE HERE
+    raise NotImplementedError()
+
+def check(candidate):
+    assert candidate([1, 2, 3]) == 6
+    assert candidate([1, 4, 9]) == 14
+    assert candidate([]) == 0
+    assert candidate([1, 1, 1, 1, 1, 1, 1, 1, 1]) == 9
+    assert candidate([-1, -1, -1, -1, -1, -1, -1, -1, -1]) == -3
+    assert candidate([0]) == 0
+    assert candidate([-1, -5, 2, -1, -5]) == -126
+    assert candidate([-56, -99, 1, 0, -2]) == 3030
+    assert candidate([-1, 0, 0, 0, 0, 0, 0, 0, -1]) == 0
+    assert candidate([-16, -9, -2, 36, 36, 26, -20, 25, -40, 20, -4, 12, -26, 35, 37]) == -14196
+    assert candidate([-1, -3, 17, -1, -15, 13, -1, 14, -14, -12, -5, 14, -14, 6, 13, 11, 16, 16, 4, 10]) == -1448
+
+def test_check():
+    check(sum_squares)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 34, in test_check
+    check(sum_squares)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 21, in check
+    assert candidate([1, 2, 3]) == 6
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpw59haj2v.py", line 18, in sum_squares
+    raise NotImplementedError()
+NotImplementedError
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_41_car_race_collision --- completion 32 ---- 
 def car_race_collision(n: int) -> int:
     """
     Imagine a road that's a perfectly straight infinitely long line.
@@ -12038,7 +12038,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_133_sum_squares --- completion 1 ---- 
+# ---- HumanEval_133_sum_squares --- completion 5 ---- 
 from typing import List
 
 def sum_squares(lst: List[float]) -> int:
@@ -12104,7 +12104,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_133_sum_squares --- completion 40 ---- 
+# ---- HumanEval_133_sum_squares --- completion 104 ---- 
 from typing import List
 
 def sum_squares(lst: List[float]) -> int:
@@ -12171,7 +12171,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_133_sum_squares --- completion 45 ---- 
+# ---- HumanEval_133_sum_squares --- completion 113 ---- 
 from typing import List
 
 def sum_squares(lst: List[float]) -> int:
@@ -12237,7 +12237,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_133_sum_squares --- completion 49 ---- 
+# ---- HumanEval_133_sum_squares --- completion 119 ---- 
 from typing import List
 
 def sum_squares(lst: List[float]) -> int:
@@ -12304,7 +12304,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_1_separate_paren_groups --- completion 0 ---- 
+# ---- HumanEval_1_separate_paren_groups --- completion 6 ---- 
 from typing import List
 
 def separate_paren_groups(paren_string: str) -> List[str]:
@@ -12351,7 +12351,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 11 ---- 
+# ---- HumanEval_93_encode --- completion 34 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12405,7 +12405,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 16 ---- 
+# ---- HumanEval_93_encode --- completion 48 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12459,7 +12459,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 28 ---- 
+# ---- HumanEval_93_encode --- completion 84 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12513,7 +12513,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 35 ---- 
+# ---- HumanEval_93_encode --- completion 124 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12567,7 +12567,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 37 ---- 
+# ---- HumanEval_93_encode --- completion 131 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12621,7 +12621,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 39 ---- 
+# ---- HumanEval_93_encode --- completion 157 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12675,7 +12675,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 43 ---- 
+# ---- HumanEval_93_encode --- completion 185 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12728,7 +12728,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_93_encode --- completion 44 ---- 
+# ---- HumanEval_93_encode --- completion 191 ---- 
 def encode(message: str) -> str:
     """
     Write a function that takes a message, and encodes in such a 
@@ -12782,7 +12782,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_39_prime_fib --- completion 5 ---- 
+# ---- HumanEval_39_prime_fib --- completion 73 ---- 
 def prime_fib(n: int) -> int:
     """
     prime_fib returns n-th number that is a Fibonacci number and it's also prime.
@@ -12853,7 +12853,7 @@ NotImplementedError: n must be less than 6
 
 
 
-# ---- HumanEval_117_select_words --- completion 3 ---- 
+# ---- HumanEval_117_select_words --- completion 61 ---- 
 from typing import List
 
 def select_words(s: str, n: int) -> List[str]:
@@ -12914,7 +12914,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_117_select_words --- completion 5 ---- 
+# ---- HumanEval_117_select_words --- completion 76 ---- 
 from typing import List
 
 def select_words(s: str, n: int) -> List[str]:
@@ -12975,7 +12975,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_117_select_words --- completion 6 ---- 
+# ---- HumanEval_117_select_words --- completion 78 ---- 
 from typing import List
 
 def select_words(s: str, n: int) -> List[str]:
@@ -13036,7 +13036,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_117_select_words --- completion 8 ---- 
+# ---- HumanEval_117_select_words --- completion 95 ---- 
 from typing import List
 
 def select_words(s: str, n: int) -> List[str]:
@@ -13097,7 +13097,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_117_select_words --- completion 12 ---- 
+# ---- HumanEval_117_select_words --- completion 173 ---- 
 from typing import List
 
 def select_words(s: str, n: int) -> List[str]:
@@ -13158,7 +13158,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_117_select_words --- completion 15 ---- 
+# ---- HumanEval_117_select_words --- completion 197 ---- 
 from typing import List
 
 def select_words(s: str, n: int) -> List[str]:
@@ -13219,7 +13219,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 0 ---- 
+# ---- HumanEval_98_count_upper --- completion 1 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13273,7 +13273,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 1 ---- 
+# ---- HumanEval_98_count_upper --- completion 8 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13327,7 +13327,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 2 ---- 
+# ---- HumanEval_98_count_upper --- completion 9 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13381,7 +13381,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 3 ---- 
+# ---- HumanEval_98_count_upper --- completion 20 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13435,7 +13435,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 4 ---- 
+# ---- HumanEval_98_count_upper --- completion 81 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13489,7 +13489,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 5 ---- 
+# ---- HumanEval_98_count_upper --- completion 83 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13543,7 +13543,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 6 ---- 
+# ---- HumanEval_98_count_upper --- completion 101 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13597,7 +13597,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 7 ---- 
+# ---- HumanEval_98_count_upper --- completion 119 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13651,7 +13651,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 8 ---- 
+# ---- HumanEval_98_count_upper --- completion 131 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13705,7 +13705,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 9 ---- 
+# ---- HumanEval_98_count_upper --- completion 132 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13758,7 +13758,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 10 ---- 
+# ---- HumanEval_98_count_upper --- completion 133 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13811,7 +13811,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 11 ---- 
+# ---- HumanEval_98_count_upper --- completion 139 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13865,7 +13865,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 12 ---- 
+# ---- HumanEval_98_count_upper --- completion 166 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13918,7 +13918,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 13 ---- 
+# ---- HumanEval_98_count_upper --- completion 192 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -13972,7 +13972,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_98_count_upper --- completion 14 ---- 
+# ---- HumanEval_98_count_upper --- completion 193 ---- 
 def count_upper(s: str) -> int:
     """
     Given a string s, count the number of uppercase vowels in even indices.
@@ -14026,7 +14026,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_156_int_to_mini_roman --- completion 90 ---- 
+# ---- HumanEval_156_int_to_mini_roman --- completion 167 ---- 
 def int_to_mini_roman(number: int) -> str:
     """
     Given a positive integer, obtain its roman numeral equivalent as a string,
@@ -14092,7 +14092,7 @@ NotImplementedError: int_to_mini_roman has not been implemented yet
 
 
 
-# ---- HumanEval_46_fib4 --- completion 1 ---- 
+# ---- HumanEval_46_fib4 --- completion 61 ---- 
 def fib4(n: int) -> int:
     """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
@@ -14146,7 +14146,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_46_fib4 --- completion 2 ---- 
+# ---- HumanEval_46_fib4 --- completion 78 ---- 
 def fib4(n: int) -> int:
     """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
@@ -14200,7 +14200,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_46_fib4 --- completion 3 ---- 
+# ---- HumanEval_46_fib4 --- completion 131 ---- 
 def fib4(n: int) -> int:
     """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
@@ -14254,7 +14254,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_46_fib4 --- completion 4 ---- 
+# ---- HumanEval_46_fib4 --- completion 147 ---- 
 def fib4(n: int) -> int:
     """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
@@ -14308,7 +14308,7 @@ NotImplementedError
 
 
 
-# ---- HumanEval_46_fib4 --- completion 5 ---- 
+# ---- HumanEval_46_fib4 --- completion 162 ---- 
 def fib4(n: int) -> int:
     """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
     fib4(0) -> 0
