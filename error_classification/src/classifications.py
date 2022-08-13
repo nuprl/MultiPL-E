@@ -181,6 +181,13 @@ MODEL = [
   }
 ]
 
+for d in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL]:
+  for theme in d: 
+    for v in ['C#', 'Python', 'Swift', 'Racket']:
+      if v in theme:
+        for value in theme[v]:
+          print(f"{theme['Theme']},{value},{v}")
+
 
 
 
