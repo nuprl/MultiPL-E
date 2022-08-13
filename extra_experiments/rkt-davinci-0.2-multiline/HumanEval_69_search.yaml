@@ -1,0 +1,804 @@
+name: HumanEval_69_search
+language: rkt
+prompt: "#lang racket\n\n#| You are given a non-empty list of positive integers. Return\
+  \ the greatest integer that is greater than \nzero, and has a frequency greater\
+  \ than or equal to the value of the integer itself. \nThe frequency of an integer\
+  \ is the number of times it appears in the list.\nIf no such a value exist, return\
+  \ -1.\nExamples:\n>>> (search (list 4 1 2 2 3 1))\n2\n>>> (search (list 1 2 2 3\
+  \ 3 3 4 4 4))\n3\n>>> (search (list 5 5 4 4 4))\n-1|#\n(define (search lst)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate search))\n\
+  \    (check-equal? (candidate (list 5 5 5 5 1)) 1)\n    (check-equal? (candidate\
+  \ (list 4 1 4 1 4 4)) 4)\n    (check-equal? (candidate (list 3 3)) -1)\n    (check-equal?\
+  \ (candidate (list 8 8 8 8 8 8 8 8)) 8)\n    (check-equal? (candidate (list 2 3\
+  \ 3 2 2)) 2)\n    (check-equal? (candidate (list 2 7 8 8 4 8 7 3 9 6 5 10 4 3 6\
+  \ 7 1 7 4 10 8 1)) 1)\n    (check-equal? (candidate (list 3 2 8 2)) 2)\n    (check-equal?\
+  \ (candidate (list 6 7 1 8 8 10 5 8 5 3 10)) 1)\n    (check-equal? (candidate (list\
+  \ 8 8 3 6 5 6 4)) -1)\n    (check-equal? (candidate (list 6 9 6 7 1 4 7 1 8 8 9\
+  \ 8 10 10 8 4 10 4 10 1 2 9 5 7 9)) 1)\n    (check-equal? (candidate (list 1 9 10\
+  \ 1 3)) 1)\n    (check-equal? (candidate (list 6 9 7 5 8 7 5 3 7 5 10 10 3 6 10\
+  \ 2 8 6 5 4 9 5 3 10)) 5)\n    (check-equal? (candidate (list 1)) 1)\n    (check-equal?\
+  \ (candidate (list 8 8 10 6 4 3 5 8 2 4 2 8 4 6 10 4 2 1 10 2 1 1 5)) 4)\n    (check-equal?\
+  \ (candidate (list 2 10 4 8 2 10 5 1 2 9 5 5 6 3 8 6 4 10)) 2)\n    (check-equal?\
+  \ (candidate (list 1 6 10 1 6 9 10 8 6 8 7 3)) 1)\n    (check-equal? (candidate\
+  \ (list 9 2 4 1 5 1 5 2 5 7 7 7 3 10 1 5 4 2 8 4 1 9 10 7 10 2 8 10 9 4)) 4)\n \
+  \   (check-equal? (candidate (list 2 6 4 2 8 7 5 6 4 10 4 6 3 7 8 8 3 1 4 2 2 10\
+  \ 7)) 4)\n    (check-equal? (candidate (list 9 8 6 10 2 6 10 2 7 8 10 3 8 2 6 2\
+  \ 3 1)) 2)\n    (check-equal? (candidate (list 5 5 3 9 5 6 3 2 8 5 6 10 10 6 8 4\
+  \ 10 7 7 10 8)) -1)\n    (check-equal? (candidate (list 10)) -1)\n    (check-equal?\
+  \ (candidate (list 9 7 7 2 4 7 2 10 9 7 5 7 2)) 2)\n    (check-equal? (candidate\
+  \ (list 5 4 10 2 1 1 10 3 6 1 8)) 1)\n    (check-equal? (candidate (list 7 9 9 9\
+  \ 3 4 1 5 9 1 2 1 1 10 7 5 6 7 6 7 7 6)) 1)\n    (check-equal? (candidate (list\
+  \ 3 10 10 9 2)) -1)\n))\n\n(test-humaneval)"
+completions: ["  (let ([freq (sort (map (lambda (x) (list x (count x lst))) lst)\n\
+    \                    (lambda (x y) (or (&gt; (car x) (car y))\n              \
+    \                        (&gt; (cadr x) (cadr y)))))]\n        [max (apply max\
+    \ (map car freq))])\n    (if (and (&gt; max 0) (&gt;= (cadr (assoc max freq))\
+    \ max))\n        max\n        -1)))\n</code>\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0)\n                   (= (hash-ref freq x 0) x)\n                   (<= x\
+    \ max-freq))\n          (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst\
+    \ lst])\n      (cond [(empty? lst) -1]\n            [(>= (hash-ref freq (first\
+    \ lst) 0) (first lst)) (first lst)]\n            [else (loop (rest lst))]))))\n",
+  "  (let loop ((lst lst) (freq (make-hash)) (max 0))\n    (cond [(empty? lst) (if\
+    \ (>= max (hash-ref freq max 0)) max -1)]\n          [else (let ((x (car lst)))\n\
+    \                  (hash-set! freq x (+ 1 (hash-ref freq x 0)))\n            \
+    \      (loop (cdr lst) freq (max max x)))])))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n          (return x))))\n \
+    \   -1))\n", "  (let loop ([lst lst] [max 0] [freq 0])\n    (cond [(empty? lst)\
+    \ (if (&gt;= max freq) max -1)]\n          [(= (first lst) max) (loop (rest lst)\
+    \ max (+ freq 1))]\n          [else (loop (rest lst) (first lst) 1)])))\n</code>\n",
+  "  (let ([freq (map (lambda (x) (list x (count x lst))) lst)])\n    (let ([max (apply\
+    \ max (map first freq))])\n      (let ([max-freq (apply max (map second freq))])\n\
+    \        (if (&gt;= max max-freq)\n            -1\n            max)))))\n</code>\n",
+  "  (let ([max (apply max lst)])\n    (for/first ([i (in-range 1 (add1 max))])\n\
+    \      (and (>= (count i lst) i) i))))\n", "  (define (helper lst)\n    (cond\n\
+    \      [(empty? lst) #f]\n      [(>= (count (first lst) lst) (first lst)) (first\
+    \ lst)]\n      [else (helper (rest lst))]))\n  (if (helper lst) (helper lst) -1))\n",
+  "  (let ([lst (sort lst <)])\n    (for/first ([x (in-list lst)]\n              \
+    \  #:when (>= (count x lst) x))\n      x)))\n", "  (define (search-helper lst)\n\
+    \    (cond [(empty? lst) -1]\n          [(>= (length (filter (lambda (x) (= x\
+    \ (first lst))) lst)) (first lst)) (first lst)]\n          [else (search-helper\
+    \ (rest lst))]))\n  (search-helper (sort lst >)))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0)\n                   (= (hash-ref freq x 0) x)\n                   (>= x\
+    \ max-freq))\n          (return x)))\n      -1)))\n", "  (let ([freq (map (lambda\
+    \ (x) (list x (count x lst))) (remove-duplicates lst))])\n    (for/first ([x freq]\n\
+    \                #:when (and (> (car x) 0)\n                            (>= (car\
+    \ x) (cadr x))))\n      (car x))))\n", "  (let ([max-freq (apply max (map length\
+    \ (group lst)))]\n        [max-val (apply max lst)])\n    (if (and (> max-freq\
+    \ 0) (>= max-freq max-val))\n        max-val\n        -1)))\n", "  (define (search-helper\
+    \ lst)\n    (cond\n      [(null? lst) (list)]\n      [(member (car lst) (cdr lst))\
+    \ (cons (car lst) (search-helper (cdr lst)))]\n      [else (search-helper (cdr\
+    \ lst))]))\n  (define (count-helper lst)\n    (cond\n      [(null? lst) (list)]\n\
+    \      [(member (car lst) (cdr lst)) (cons (car lst) (count-helper (cdr lst)))]\n\
+    \      [else (count-helper (cdr lst))]))\n  (define (count-helper2 lst)\n    (cond\n\
+    \      [(null? lst) (list)]\n      [(member (car lst) (cdr lst)) (cons (car lst)\
+    \ (count-helper2 (cdr lst)))]\n      [else (count-helper2 (cdr lst))]))\n  (define\
+    \ (count-helper3 lst)\n    (cond\n      [(null? lst) (list)]\n      [(member (car\
+    \ lst) (cdr lst)) (cons (car lst) (count-helper3 (cdr lst)))]\n      [else (count-helper3\
+    \ (cdr lst))]))\n  (define (count-helper4 lst)\n    (cond\n      [(null? lst)\
+    \ (list)]\n      [(member (car lst) (cdr lst)) (cons (car lst) (count-helper4\
+    \ (cdr lst)))]\n      [else (count-helper4 (cdr lst))]))\n  (define (count-helper5\
+    \ lst)\n    (cond\n      [(null? lst) (list)]\n      [(member (car lst) (cdr lst))\
+    \ (cons (car lst) (count-helper5 (cdr lst)))]\n      [else (count-helper5 (cdr\
+    \ lst))]))\n  (define (count-helper6 lst)\n    (cond\n      [(null? lst) (list)]\n\
+    \      [(member", "  (define (search-helper lst)\n    (cond\n      [(empty? lst)\
+    \ #f]\n      [(>= (count (first lst) lst) (first lst)) (first lst)]\n      [else\
+    \ (search-helper (rest lst))]))\n  (if (search-helper lst)\n      (search-helper\
+    \ lst)\n      -1))\n", "  (let ((counts (map (lambda (x) (list x (count x lst)))\
+    \ lst)))\n    (for/first ([(x c) counts] #:when (>= c x))\n      x)))\n", "  (define\
+    \ (helper lst)\n    (cond [(empty? lst) (list)]\n          [(member (first lst)\
+    \ (rest lst)) (cons (first lst) (helper (rest lst)))]\n          [else (helper\
+    \ (rest lst))]))\n  (define (count x lst)\n    (cond [(empty? lst) 0]\n      \
+    \    [(equal? x (first lst)) (+ 1 (count x (rest lst)))]\n          [else (count\
+    \ x (rest lst))]))\n  (define (greater-than-freq lst)\n    (cond [(empty? lst)\
+    \ -1]\n          [(>= (count (first lst) lst) (first lst)) (first lst)]\n    \
+    \      [else (greater-than-freq (rest lst))]))\n  (greater-than-freq (helper lst)))\n",
+  "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (>= (hash-ref freq x 0) x)\n          (return x))))\n    -1))\n",
+  "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let loop ([lst lst])\n      (cond [(empty? lst) -1]\n            [(>=\
+    \ (hash-ref freq (first lst) 0) (first lst)) (first lst)]\n            [else (loop\
+    \ (rest lst))]))))\n", "  (let* ([freq (map (lambda (x) (length (filter (lambda\
+    \ (y) (= x y)) lst))) lst)]\n         [max (apply max freq)])\n    (if (and (not\
+    \ (null? (filter (lambda (x) (= x max)) freq)))\n             (not (null? (filter\
+    \ (lambda (x) (= x max)) lst))))\n        (apply max (filter (lambda (x) (= x\
+    \ max)) lst))\n        -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let loop ([lst lst])\n      (cond [(empty?\
+    \ lst) -1]\n            [(>= (hash-ref freq (first lst) 0) (first lst)) (first\
+    \ lst)]\n            [else (loop (rest lst))]))))\n", "  (define (count x lst)\n\
+    \    (cond [(empty? lst) 0]\n          [(= x (first lst)) (+ 1 (count x (rest\
+    \ lst)))]\n          [else (count x (rest lst))]))\n  (define (greatest-freq lst)\n\
+    \    (cond [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first lst))\
+    \ (first lst)]\n          [else (greatest-freq (rest lst))]))\n  (greatest-freq\
+    \ lst))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0)\n                   (= (hash-ref\
+    \ freq x 0) x)\n                   (>= x max-freq))\n          (return x)))\n\
+    \      -1)))\n", "  (define (search-helper lst)\n    (cond\n      [(empty? lst)\
+    \ (list -1 0)]\n      [(= (length lst) 1) (list (first lst) 1)]\n      [else\n\
+    \       (define (count-occurrences lst)\n         (cond\n           [(empty? lst)\
+    \ 0]\n           [(= (first lst) (second lst)) (+ 1 (count-occurrences (rest lst)))]\n\
+    \           [else (count-occurrences (rest lst))]))\n       (define (remove-duplicates\
+    \ lst)\n         (cond\n           [(empty? lst) empty]\n           [(= (first\
+    \ lst) (second lst)) (remove-duplicates (rest lst))]\n           [else (cons (first\
+    \ lst) (remove-duplicates (rest lst)))]))\n       (define (remove-first-element\
+    \ lst)\n         (cond\n           [(empty? lst) empty]\n           [else (rest\
+    \ lst)]))\n       (define (remove-first-occurrence lst)\n         (cond\n    \
+    \       [(empty? lst) empty]\n           [(= (first lst) (second lst)) (rest lst)]\n\
+    \           [else (cons (first lst) (remove-first-occurrence (rest lst)))]))\n\
+    \       (define (remove-all-occurrences lst)\n         (cond\n           [(empty?\
+    \ lst) empty]\n           [(= (first lst) (second lst)) (remove-all-occurrences\
+    \ (rest lst))]\n           [else (cons (first lst) (remove-all-occurrences (rest\
+    \ lst)))]))\n       (define (remove-first-occurrence-and-all-others lst)\n   \
+    \      (cond\n           [(empty? lst) empty]\n           [(= (first lst) (second\
+    \ lst)) (remove-all-occurrences (rest lst))]\n           [else (cons (first lst)\
+    \ (remove-first-occurrence-and-all-others (rest lst)))]))\n       (define (remove-first-occurrence-and-all-others-helper\
+    \ l", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq\
+    \ x add1 0))\n    (let ([max (apply max (hash-keys freq))])\n      (for ([x (in-range\
+    \ 1 max)])\n        (when (and (hash-ref freq x 0) (<= (hash-ref freq x 0) x))\n\
+    \          (return x)))\n      -1)))\n", "  (let ([freq (make-hash)])\n    (for\
+    \ ([x lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst lst])\n\
+    \      (cond [(empty? lst) -1]\n            [(>= (hash-ref freq (first lst) 0)\
+    \ (first lst)) (first lst)]\n            [else (loop (rest lst))]))))\n", "  (define\
+    \ (search-helper lst)\n    (cond [(empty? lst) -1]\n          [(>= (count (first\
+    \ lst) lst) (first lst)) (first lst)]\n          [else (search-helper (rest lst))]))\n\
+    \  (search-helper (sort > lst)))\n", "  (let ([freq (make-hash)])\n    (for ([x\
+    \ lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n               \
+    \    (= (hash-ref freq x 0) x)\n                   (<= x max-freq))\n        \
+    \  (return x))))\n    -1))\n", "  (let ([max (apply max lst)])\n    (for/first\
+    \ ([i (in-range 1 max)])\n      (let ([count (count i lst)])\n        (when (and\
+    \ (>= count i) (> count 0))\n          i)))))\n", "  (define (search-helper lst)\n\
+    \    (if (null? lst)\n        -1\n        (let* ([x (car lst)]\n             \
+    \  [xs (cdr lst)]\n               [freq (count x xs)])\n          (if (and (>\
+    \ x 0) (>= x freq))\n              x\n              (search-helper xs)))))\n \
+    \ (search-helper lst))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (and (> i 0)\n               \
+    \    (= (hash-ref freq i 0) i)\n                   (>= i max-freq))\n        \
+    \  (return i))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (and (> i 0)\n               \
+    \    (= (hash-ref freq i 0) i)\n                   (>= i max-freq))\n        \
+    \  (return i))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (>= (hash-ref freq i 0) i)\n \
+    \         (return i))))\n    -1))\n", "  (let ([max (apply max lst)])\n    (for/first\
+    \ ([i (in-range 1 (add1 max))])\n      (and (>= (count i lst) i) i))))\n", " \
+    \ (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max -1])\n      (for ([x lst])\n        (when (and (> x 0)\n\
+    \                   (>= (hash-ref freq x 0) x)\n                   (> x max))\n\
+    \          (set! max x)))\n      max)))\n", "  (let ([freq (make-hash)])\n   \
+    \ (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq (apply\
+    \ max (hash-values freq))])\n      (for ([x lst])\n        (when (and (> x 0)\
+    \ (>= (hash-ref freq x 0) x) (> x max-freq))\n          (set! max-freq x)))\n\
+    \      (if (= max-freq 0) -1 max-freq))))\n", "  (let ([freq (make-hash)])\n \
+    \   (for ([e lst])\n      (hash-update! freq e add1 0))\n    (let ([max-freq (apply\
+    \ max (hash-values freq))])\n      (for ([e lst])\n        (when (and (> e 0)\
+    \ (= (hash-ref freq e 0) e))\n          (return e)))\n      -1)))\n", "  (let\
+    \ ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update! freq i add1 0))\n\
+    \    (let ([max-freq (apply max (hash-values freq))])\n      (for ([i lst])\n\
+    \        (when (and (> i 0) (= (hash-ref freq i 0) i))\n          (return i)))\n\
+    \      -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0) (= (hash-ref freq x 0) x))\n   \
+    \       (return x)))\n      (for ([x lst])\n        (when (and (> x 0) (>= (hash-ref\
+    \ freq x 0) x) (<= (hash-ref freq x 0) max-freq))\n          (return x)))\n  \
+    \    -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x\
+    \ max-freq))\n          (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst\
+    \ lst])\n      (cond [(null? lst) -1]\n            [(>= (hash-ref freq (car lst)\
+    \ 0) (car lst)) (car lst)]\n            [else (loop (cdr lst))]))))\n", "  (let\
+    \ ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n\
+    \    (let loop ([x (length lst)])\n      (if (zero? x)\n          -1\n       \
+    \   (if (and (>= (hash-ref freq x 0) x) (> x 0))\n              x\n          \
+    \    (loop (- x 1)))))))\n", "  (define (freq x lst)\n    (if (null? lst)\n  \
+    \      0\n        (+ (if (= x (car lst)) 1 0) (freq x (cdr lst)))))\n  (define\
+    \ (greater-than-freq lst)\n    (if (null? lst)\n        -1\n        (let ([x (car\
+    \ lst)])\n          (if (>= x (freq x lst))\n              x\n              (greater-than-freq\
+    \ (cdr lst))))))\n  (greater-than-freq lst))\n", "  (let ([freq (map (lambda (x)\
+    \ (list x (count x lst))) (remove-duplicates lst))])\n    (cond [(empty? freq)\
+    \ -1]\n          [(>= (first (first freq)) (second (first freq))) (first (first\
+    \ freq))]\n          [else (search (rest freq))])))\n", "  (let ([max-freq (apply\
+    \ max (map length (group lst)))]\n        [max-val (apply max lst)])\n    (if\
+    \ (and (> max-freq 0) (>= max-freq max-val))\n        max-val\n        -1)))\n",
+  "  (let ([lst (sort lst <)])\n    (let loop ([lst lst] [count 1])\n      (cond [(null?\
+    \ lst) -1]\n            [(= (car lst) (cadr lst)) (loop (cdr lst) (+ count 1))]\n\
+    \            [(>= count (car lst)) (car lst)]\n            [else (loop (cdr lst)\
+    \ 1)]))))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0)\n                   (= (hash-ref\
+    \ freq x 0) x)\n                   (>= x max-freq))\n          (return x)))\n\
+    \      -1)))\n", "  (let ([freq (sort (map (lambda (x) (list x (count x lst)))\
+    \ (remove-duplicates lst))\n                     (lambda (x y) (&gt; (car x) (car\
+    \ y))))])\n    (for ([x freq])\n      (if (&gt;= (car x) (cadr x))\n         \
+    \ (return (car x))))\n    -1))\n</code>\n", "  (let ([freq (make-hash)])\n   \
+    \ (for ([x lst])\n      (hash-update! freq x add1 0))\n    (for ([x lst])\n  \
+    \    (when (and (> (hash-ref freq x 0) x) (> x 0))\n        (return x)))\n   \
+    \ -1))\n</code>\n", "  (define (count n lst)\n    (cond\n      [(empty? lst) 0]\n\
+    \      [(= n (first lst)) (+ 1 (count n (rest lst)))]\n      [else (count n (rest\
+    \ lst))]))\n  (define (search-helper lst)\n    (cond\n      [(empty? lst) -1]\n\
+    \      [(>= (count (first lst) lst) (first lst)) (first lst)]\n      [else (search-helper\
+    \ (rest lst))]))\n  (search-helper (sort lst >)))\n", "  (define (search-helper\
+    \ lst)\n    (cond [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first\
+    \ lst)) (first lst)]\n          [else (search-helper (rest lst))]))\n  (search-helper\
+    \ (sort lst >)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (hash-ref freq x max-freq)\n           \
+    \        (>= (hash-ref freq x max-freq) x))\n          (return x))))\n    -1))\n",
+  "  (let ([counts (map (lambda (x) (cons x (count x lst))) lst)])\n    (for/first\
+    \ ([(x . c) counts] #:when (>= c x))\n      x)))\n", "  (let ([lst (sort lst <)])\n\
+    \    (let loop ([lst lst] [cnt 0] [prev (car lst)])\n      (cond [(null? lst)\
+    \ -1]\n            [(>= cnt prev) prev]\n            [else (loop (cdr lst) (+\
+    \ cnt 1) prev)]))))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n   \
+    \   (hash-update! freq x add1 0))\n    (let loop ([x (length lst)])\n      (cond\
+    \ [(>= x 0)\n             (cond [(>= (hash-ref freq x 0) x) x]\n             \
+    \      [else (loop (- x 1))])]\n            [else -1]))))\n", "  (define (search-helper\
+    \ lst)\n    (cond [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first\
+    \ lst)) (first lst)]\n          [else (search-helper (rest lst))]))\n  (search-helper\
+    \ (sort > lst)))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update!\
+    \ freq i add1 0))\n    (for ([i lst])\n      (when (and (> (hash-ref freq i 0)\
+    \ i) (> i 0))\n        (return i)))\n    -1))\n", "  (let ([freq (for/fold ([freq\
+    \ (make-hash)]) ([x lst])\n                (hash-update! freq x add1 0))])\n \
+    \   (for/first ([x lst]\n                #:when (and (> x 0)\n               \
+    \             (>= x (hash-ref freq x 0))))\n      x)))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst\
+    \ lst])\n      (cond [(null? lst) -1]\n            [(>= (hash-ref freq (car lst)\
+    \ 0) (car lst)) (car lst)]\n            [else (loop (cdr lst))]))))\n", "  (let\
+    \ ((freq (make-hash)))\n    (for ([i lst])\n      (hash-set! freq i (+ 1 (hash-ref\
+    \ freq i 0))))\n    (let loop ([lst lst])\n      (cond [(empty? lst) -1]\n   \
+    \         [(>= (hash-ref freq (first lst)) (first lst)) (first lst)]\n       \
+    \     [else (loop (rest lst))]))))\n", "  (let ([freq (make-hash)])\n    (for\
+    \ ([x lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst lst])\n\
+    \      (cond [(null? lst) -1]\n            [(>= (hash-ref freq (car lst) 0) (car\
+    \ lst)) (car lst)]\n            [else (loop (cdr lst))]))))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n   \
+    \     (when (and (> x 0)\n                   (= (hash-ref freq x 0) x)\n     \
+    \              (>= x max-freq))\n          (return x)))\n      -1)))\n", "  (let*\
+    \ ([freq (map (lambda (x) (list x (count x lst))) (remove-duplicates lst))]\n\
+    \         [freq-sorted (sort freq (lambda (x y) (> (cadr x) (cadr y))))])\n  \
+    \  (cond [(empty? freq-sorted) -1]\n          [(>= (cadr (car freq-sorted)) (car\
+    \ (car freq-sorted))) (car (car freq-sorted))]\n          [else -1])))\n", " \
+    \ (define (helper lst)\n    (cond [(empty? lst) empty]\n          [(member (first\
+    \ lst) (rest lst)) (cons (first lst) (helper (rest lst)))]\n          [else (helper\
+    \ (rest lst))]))\n  (define (helper2 lst)\n    (cond [(empty? lst) empty]\n  \
+    \        [(>= (count (first lst) lst) (first lst)) (cons (first lst) (helper2\
+    \ (rest lst)))]\n          [else (helper2 (rest lst))]))\n  (cond [(empty? (helper2\
+    \ (helper lst))) -1]\n        [else (max (helper2 (helper lst)))]))\n", "  (let\
+    \ ([max (apply max lst)])\n    (for/fold ([result -1]) ([i (in-range 1 (add1 max))])\n\
+    \      (let ([count (count i lst)])\n        (if (and (>= count i) (> count result))\n\
+    \            i\n            result)))))\n", "  (define (greatest-freq lst)\n \
+    \   (define (greatest-freq-helper lst)\n      (define (greatest-freq-helper-helper\
+    \ lst)\n        (if (null? lst)\n            '()\n            (cons (list (car\
+    \ lst) (length (filter (lambda (x) (= x (car lst))) lst)))\n                 \
+    \ (greatest-freq-helper-helper (cdr lst)))))\n      (define (greatest-freq-helper-helper-helper\
+    \ lst)\n        (if (null? lst)\n            '()\n            (cons (car lst)\
+    \ (greatest-freq-helper-helper-helper (cdr lst)))))\n      (greatest-freq-helper-helper-helper\
+    \ (greatest-freq-helper-helper lst)))\n    (define (greatest-freq-helper-helper\
+    \ lst)\n      (if (null? lst)\n          '()\n          (cons (car lst) (greatest-freq-helper-helper\
+    \ (cdr lst)))))\n    (greatest-freq-helper-helper (greatest-freq-helper lst)))\n\
+    \  (define (greatest-freq-helper lst)\n    (if (null? lst)\n        '()\n    \
+    \    (cons (car lst) (greatest-freq-helper (cdr lst)))))\n  (define (greatest-freq-helper-helper\
+    \ lst)\n    (if (null? lst)\n        '()\n        (cons (car lst) (greatest-freq-helper-helper\
+    \ (cdr lst)))))\n  (define (greatest-freq-helper-helper-helper lst)\n    (if (null?\
+    \ lst)\n        '()\n        (cons (car lst) (greatest-freq-helper-helper-helper\
+    \ (cdr lst)))))\n  (define (greatest-freq-helper-helper-helper-helper lst)\n \
+    \   (if (", "  (define (search-helper lst)\n    (cond\n      [(empty? lst) (cons\
+    \ -1 0)]\n      [(= (length lst) 1) (cons (first lst) 1)]\n      [else (let ([fst\
+    \ (first lst)]\n                  [snd (second lst)])\n               (if (= fst\
+    \ snd)\n                   (search-helper (rest lst))\n                   (cons\
+    \ fst (length lst))))]))\n  (define (search-helper2 lst)\n    (cond\n      [(empty?\
+    \ lst) -1]\n      [(>= (second (first lst)) (first (first lst))) (first (first\
+    \ lst))]\n      [else (search-helper2 (rest lst))]))\n  (search-helper2 (search-helper\
+    \ lst)))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update!\
+    \ freq i add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([i lst])\n        (when (and (> i 0) (= (hash-ref freq i 0) i))\n   \
+    \       (return i)))\n      (for ([i lst])\n        (when (and (> i 0) (>= (hash-ref\
+    \ freq i 0) i) (<= (hash-ref freq i 0) max-freq))\n          (return i)))\n  \
+    \    -1)))\n", "  (let ([lst (sort lst <)])\n    (for/first ([x (in-list lst)]\n\
+    \                #:when (>= (count x lst) x))\n      x)))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0)\n                   (= (hash-ref freq x 0) x)\n                   (>= x\
+    \ max-freq))\n          (return x)))\n      -1)))\n", "  (let ([freq-table (make-hash)])\n\
+    \    (for ([i lst])\n      (hash-update! freq-table i add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq-table))])\n      (for ([i lst])\n        (when\
+    \ (&gt;= (hash-ref freq-table i 0) i)\n          (return i))))\n    -1))\n</code>\n",
+  "  (let loop ((lst lst) (freq (list)) (max 0))\n    (cond ((null? lst) (if (&gt;=\
+    \ max (car freq)) max -1))\n          ((member (car lst) freq) (loop (cdr lst)\
+    \ freq max))\n          (else (loop (cdr lst) (cons (car lst) freq) (max (car\
+    \ lst)))))))\n</code>\n", "  (let ([lst (sort lst <)])\n    (let loop ([lst lst]\
+    \ [count 1])\n      (cond [(null? lst) -1]\n            [(= (car lst) (cadr lst))\
+    \ (loop (cdr lst) (+ count 1))]\n            [(>= count (car lst)) (car lst)]\n\
+    \            [else (loop (cdr lst) 1)]))))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([i lst])\n      (hash-update! freq i add1 0))\n    (for ([i lst])\n\
+    \      (when (and (> i 0) (>= (hash-ref freq i 0) i))\n        (return i)))\n\
+    \    -1))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let loop ([lst lst])\n      (cond [(empty? lst) -1]\n\
+    \            [(>= (hash-ref freq (first lst) 0) (first lst)) (first lst)]\n  \
+    \          [else (loop (rest lst))]))))\n", "  (let ([freq (make-hash)])\n   \
+    \ (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq (apply\
+    \ max (hash-values freq))])\n      (for ([x lst])\n        (when (and (hash-ref\
+    \ freq x max-freq)\n                   (>= (hash-ref freq x max-freq) x))\n  \
+    \        (return x))))\n    -1))\n", "  (let ([freq (map (lambda (x) (list x (count\
+    \ x lst))) (remove-duplicates lst))])\n    (for/first ([x (in-list freq)]\n  \
+    \              #:when (and (> (cadr x) 0)\n                            (>= (cadr\
+    \ x) (car x))))\n      (car x))))\n", "  (let ([counts (count-list lst)])\n  \
+    \  (for/first ([(n . c) counts]\n                #:when (and (> n 0) (>= n c)))\n\
+    \      n)))\n", "  (define (search-helper lst)\n    (cond [(empty? lst) -1]\n\
+    \          [(>= (count (first lst) lst) (first lst)) (first lst)]\n          [else\
+    \ (search-helper (rest lst))]))\n  (search-helper (sort lst >)))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n   \
+    \     (when (and (hash-ref freq x max-freq)\n                   (>= (hash-ref\
+    \ freq x max-freq) x))\n          (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0) (>= (hash-ref freq x 0) x) (> x max-freq))\n          (set! max-freq x)))\n\
+    \      (if (= max-freq 0) -1 max-freq))))\n", "  (let ([freq (make-hash)])\n \
+    \   (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq (apply\
+    \ max (hash-values freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n\
+    \                   (= (hash-ref freq x 0) x)\n                   (>= x max-freq))\n\
+    \          (return x)))\n      -1)))\n", "  (let ([freq (make-hash)])\n    (for\
+    \ ([i lst])\n      (hash-update! freq i add1 0))\n    (for ([i lst])\n      (when\
+    \ (and (> i 0) (>= (hash-ref freq i 0) i))\n        (return i)))\n    -1))\n",
+  "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update! freq i add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([i lst])\n\
+    \        (when (and (> i 0) (= (hash-ref freq i 0) i))\n          (return i)))\n\
+    \      (when (and (> max-freq 0) (>= max-freq (apply max lst)))\n        max-freq)\n\
+    \      -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x\
+    \ max-freq))\n          (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst\
+    \ lst])\n      (cond [(empty? lst) -1]\n            [(>= (hash-ref freq (first\
+    \ lst) 0) (first lst)) (first lst)]\n            [else (loop (rest lst))]))))\n",
+  "  (let ([max (apply max lst)])\n    (for/first ([i (in-range 1 (add1 max))])\n\
+    \      (and (not (zero? (count i lst)))\n           (>= i (count i lst))\n   \
+    \        i))))\n", "  (define (count-occurences lst n)\n    (cond [(empty? lst)\
+    \ 0]\n          [(= (first lst) n) (+ 1 (count-occurences (rest lst) n))]\n  \
+    \        [else (count-occurences (rest lst) n)]))\n  (define (find-max lst)\n\
+    \    (cond [(empty? lst) -1]\n          [(> (count-occurences lst (first lst))\
+    \ (first lst)) (first lst)]\n          [else (find-max (rest lst))]))\n  (find-max\
+    \ lst))\n", "  (define (count x lst)\n    (if (null? lst)\n        0\n       \
+    \ (if (= x (car lst))\n            (+ 1 (count x (cdr lst)))\n            (count\
+    \ x (cdr lst)))))\n  (define (find-max lst)\n    (if (null? lst)\n        -1\n\
+    \        (let ((x (car lst)))\n          (if (>= (count x lst) x)\n          \
+    \    (max x (find-max (cdr lst)))\n              (find-max (cdr lst))))))\n  (find-max\
+    \ lst))\n", "  (define (freq x lst)\n    (cond [(empty? lst) 0]\n          [(=\
+    \ x (first lst)) (+ 1 (freq x (rest lst)))]\n          [else (freq x (rest lst))]))\n\
+    \  (define (search-helper lst)\n    (cond [(empty? lst) -1]\n          [(>= (freq\
+    \ (first lst) lst) (first lst)) (first lst)]\n          [else (search-helper (rest\
+    \ lst))]))\n  (search-helper (sort lst >)))\n", "  (let ([lst (sort lst <)])\n\
+    \    (for/first ([x (in-list lst)]\n                #:when (>= (count x lst) x))\n\
+    \      x)))\n", "  (let ([freq (for/fold ([freq-table (make-hash)]) ([x lst])\n\
+    \                 (hash-update x add1 0 freq-table))])\n    (for/first ([x lst]\n\
+    \                #:when (and (> x 0)\n                            (>= (hash-ref\
+    \ freq x 0) x)))\n      x)))\n", "  (let ([max (apply max lst)])\n    (for/first\
+    \ ([i (in-range 1 (add1 max))])\n      (and (member i lst)\n           (>= (count\
+    \ i lst) i)\n           i))))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (and (> i 0) (= (hash-ref freq\
+    \ i 0) i))\n          (return i)))\n      -1)))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (&gt;\
+    \ x 0) (= (hash-ref freq x 0) x) (&gt;= x max-freq))\n          (return x))))\n\
+    \    -1))\n</code>\n", "  (let ([freq-map (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq-map x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq-map))])\n      (for ([x lst])\n        (when (and (hash-ref freq-map x)\n\
+    \                   (&gt;= (hash-ref freq-map x) x)\n                   (&gt;\
+    \ (hash-ref freq-map x) max-freq))\n          (set! max-freq (hash-ref freq-map\
+    \ x))))\n      (if (&gt; max-freq 0) max-freq -1))))\n</code>\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n   \
+    \     (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n        \
+    \  (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n               \
+    \    (= (hash-ref freq x 0) x)\n                   (>= x max-freq))\n        \
+    \  (return x)))\n      -1)))\n", "  (let ([max (apply max lst)])\n    (for/first\
+    \ ([i (in-range 1 max)])\n      (and (>= (count i lst) i) i))))\n", "  (let loop\
+    \ ((lst lst) (max -1) (freq 0))\n    (cond ((null? lst) max)\n          ((= (car\
+    \ lst) (cadr lst)) (loop (cdr lst) max (+ freq 1)))\n          ((> (car lst) max)\
+    \ (loop (cdr lst) (car lst) 1))\n          ((and (> (car lst) 0) (>= (car lst)\
+    \ freq)) (loop (cdr lst) (car lst) freq))\n          (else (loop (cdr lst) max\
+    \ freq)))))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let loop ([i (length lst)])\n      (if (zero? i)\n   \
+    \       -1\n          (if (and (>= (hash-ref freq i 0) i) (> i 0))\n         \
+    \     i\n              (loop (- i 1)))))))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0)\n                   (= (hash-ref freq x 0) x)\n                   (>= x\
+    \ max-freq))\n          (return x)))\n      -1)))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([i lst])\n      (hash-update! freq i add1 0))\n    (let ([max (apply\
+    \ max (hash-keys freq))])\n      (for ([i (in-range 1 max)])\n        (when (and\
+    \ (hash-ref freq i 0) (&gt;= i (hash-ref freq i 0)))\n          (return i)))\n\
+    \      -1)))\n</code>\n", "  (let ([freq (map (lambda (x) (list x (count x lst)))\
+    \ lst)])\n    (for/first ([x (in-list freq)]\n                #:when (and (> (cadr\
+    \ x) 0)\n                            (>= (cadr x) (car x))))\n      (car x))))\n",
+  "  (let ((freq (make-hash)))\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let loop ([lst lst])\n      (cond [(empty? lst) -1]\n            [(>=\
+    \ (hash-ref freq (first lst) 0) (first lst)) (first lst)]\n            [else (loop\
+    \ (rest lst))]))))\n", "  (define (search-helper lst)\n    (cond [(empty? lst)\
+    \ -1]\n          [(>= (count (first lst) lst) (first lst)) (first lst)]\n    \
+    \      [else (search-helper (rest lst))]))\n  (search-helper (sort > lst)))\n",
+  "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0)\n                   (= (hash-ref freq x 0) x)\n  \
+    \                 (>= x max-freq))\n          (return x)))\n      -1)))\n", " \
+    \ (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n     \
+    \     (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n               \
+    \    (= (hash-ref freq x 0) x)\n                   (>= x max-freq))\n        \
+    \  (return x)))\n      -1)))\n", "  (define (search-helper lst)\n    (cond [(empty?\
+    \ lst) (cons -1 0)]\n          [(= (first lst) (second lst)) (cons (first lst)\
+    \ (+ 1 (search-helper (rest lst))))]\n          [else (cons (first lst) 1)]))\n\
+    \  (define (search-helper2 lst)\n    (cond [(empty? lst) (cons -1 0)]\n      \
+    \    [(>= (first lst) (second lst)) (cons (first lst) (second lst))]\n       \
+    \   [else (search-helper2 (rest lst))]))\n  (define (search-helper3 lst)\n   \
+    \ (cond [(empty? lst) (cons -1 0)]\n          [(>= (first lst) (second lst)) (cons\
+    \ (first lst) (second lst))]\n          [else (search-helper3 (rest lst))]))\n\
+    \  (define (search-helper4 lst)\n    (cond [(empty? lst) (cons -1 0)]\n      \
+    \    [(>= (first lst) (second lst)) (cons (first lst) (second lst))]\n       \
+    \   [else (search-helper4 (rest lst))]))\n  (define (search-helper5 lst)\n   \
+    \ (cond [(empty? lst) (cons -1 0)]\n          [(>= (first lst) (second lst)) (cons\
+    \ (first lst) (second lst))]\n          [else (search-helper5 (rest lst))]))\n\
+    \  (define (search-helper6 lst)\n    (cond [(empty? lst) (cons -1 0)]\n      \
+    \    [(>= (first lst) (second lst)) (cons (first lst) (second lst))]\n       \
+    \   [else (search-helper6 (rest lst))]))\n  (define (search-helper7 lst)\n   \
+    \ (cond [(empty? lst) (cons -1 0)]\n          [(>= (first lst) (second lst)) (cons\
+    \ (first lst) (second lst))]\n          [else (search-helper", "  (let ([max (apply\
+    \ max lst)])\n    (for/first ([i (in-range 1 (add1 max))])\n      (and (>= (count\
+    \ i lst) i) i))))\n", "  (define (search-helper lst)\n    (cond [(empty? lst)\
+    \ 0]\n          [(= (first lst) (length (filter (lambda (x) (= x (first lst)))\
+    \ lst))) (first lst)]\n          [else (search-helper (rest lst))]))\n  (if (=\
+    \ (search-helper lst) 0)\n      -1\n      (search-helper lst)))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n   \
+    \     (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n        \
+    \  (return x))))\n    -1))\n", "  (define (helper lst)\n    (cond [(empty? lst)\
+    \ -1]\n          [(>= (length (filter (lambda (x) (= x (first lst))) lst)) (first\
+    \ lst)) (first lst)]\n          [else (helper (rest lst))]))\n  (helper lst))\n",
+  "  (define (freq x lst)\n    (cond [(empty? lst) 0]\n          [(= x (first lst))\
+    \ (+ 1 (freq x (rest lst)))]\n          [else (freq x (rest lst))]))\n  (define\
+    \ (greater-than-freq x lst)\n    (cond [(empty? lst) #f]\n          [(> x (freq\
+    \ (first lst) lst)) (greater-than-freq x (rest lst))]\n          [else #t]))\n\
+    \  (define (greater-than-zero x lst)\n    (cond [(empty? lst) #f]\n          [(>\
+    \ x (first lst)) (greater-than-zero x (rest lst))]\n          [else #t]))\n  (cond\
+    \ [(empty? lst) -1]\n        [(and (greater-than-freq (first lst) lst) (greater-than-zero\
+    \ (first lst) lst)) (first lst)]\n        [else (search (rest lst))]))\n", " \
+    \ (let ([max-freq 0]\n        [max-val 0])\n    (for ([x lst])\n      (let ([freq\
+    \ (count x lst)])\n        (when (and (>= freq x)\n                   (> freq\
+    \ max-freq))\n          (set! max-freq freq)\n          (set! max-val x))))\n\
+    \    (if (= max-freq 0)\n        -1\n        max-val)))\n", "  (let loop ([lst\
+    \ lst] [max 0] [freq 0])\n    (cond [(empty? lst) (if (&gt;= max freq) max -1)]\n\
+    \          [(= (first lst) max) (loop (rest lst) max (+ freq 1))]\n          [else\
+    \ (loop (rest lst) (first lst) 1)])))\n</code>\n", "  (define (search-helper lst)\n\
+    \    (cond [(empty? lst) -1]\n          [(>= (length (filter (lambda (x) (= x\
+    \ (first lst))) lst)) (first lst)) (first lst)]\n          [else (search-helper\
+    \ (rest lst))]))\n  (search-helper (sort lst >)))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([i lst])\n      (hash-update! freq i add1 0))\n    (for ([i lst])\n\
+    \      (when (and (> i 0) (>= (hash-ref freq i 0) i))\n        (return i)))\n\
+    \    -1))\n", "  (define (helper lst)\n    (cond [(empty? lst) (list -1)]\n  \
+    \        [(= (length (filter (lambda (x) (= x (first lst))) lst)) (first lst))\
+    \ (list (first lst))]\n          [else (helper (rest lst))]))\n  (apply max (helper\
+    \ lst)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0)\n                   (= (hash-ref\
+    \ freq x 0) x)\n                   (<= x max-freq))\n          (return x))))\n\
+    \    -1))\n", "  (define (search-helper lst max-freq max-val)\n    (cond [(empty?\
+    \ lst) max-val]\n          [(>= (count (first lst) lst) (first lst))\n       \
+    \    (search-helper (rest lst) (first lst) (first lst))]\n          [(>= (count\
+    \ (first lst) lst) max-freq)\n           (search-helper (rest lst) (count (first\
+    \ lst) lst) (first lst))]\n          [else (search-helper (rest lst) max-freq\
+    \ max-val)]))\n  (if (empty? lst) -1\n      (search-helper lst 0 0)))\n", "  (let\
+    \ ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n\
+    \    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n     \
+    \     (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n               \
+    \    (= (hash-ref freq x 0) x)\n                   (>= x max-freq))\n        \
+    \  (return x)))\n      -1)))", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let loop ([lst lst])\n      (cond [(empty?\
+    \ lst) -1]\n            [(>= (hash-ref freq (first lst) 0) (first lst)) (first\
+    \ lst)]\n            [else (loop (rest lst))]))))\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([e lst])\n      (hash-update! freq e add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([e lst])\n        (when (and (>\
+    \ e 0) (= (hash-ref freq e 0) e))\n          (return e))))\n    -1))\n", "  (define\
+    \ (search-helper lst)\n    (cond [(empty? lst) -1]\n          [(>= (length (filter\
+    \ (lambda (x) (= x (first lst))) lst)) (first lst)) (first lst)]\n          [else\
+    \ (search-helper (rest lst))]))\n  (search-helper (sort lst <)))\n", "  (let ([freq\
+    \ (map (lambda (x) (list x (count x lst))) (remove-duplicates lst))])\n    (for/first\
+    \ ([x freq] #:when (and (> (car x) 0) (>= (car x) (cadr x))))\n      (car x))))\n",
+  "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update! freq i add1\
+    \ 0))\n    (let ([max (apply max (hash-keys freq))])\n      (if (and (hash-ref\
+    \ freq max 0)\n               (>= (hash-ref freq max 0) max))\n          max\n\
+    \          -1))))\n", "  (let* ([freq (map (lambda (x) (list x (count x lst)))\
+    \ (remove-duplicates lst))]\n         [freq-sorted (sort freq (lambda (x y) (&gt;\
+    \ (cadr x) (cadr y))))])\n    (cond\n      [(empty? freq-sorted) -1]\n      [(&gt;=\
+    \ (cadr (first freq-sorted)) (car (first freq-sorted))) (car (first freq-sorted))]\n\
+    \      [else -1])))\n</code>\n", "  (define (search-helper lst)\n    (cond [(empty?\
+    \ lst) -1]\n          [(>= (length (filter (lambda (x) (= x (first lst))) lst))\
+    \ (first lst)) (first lst)]\n          [else (search-helper (rest lst))]))\n \
+    \ (search-helper (sort lst >)))\n", "  (let ([freq (make-hash)])\n    (for ([i\
+    \ lst])\n      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (and (> i 0)\n               \
+    \    (= (hash-ref freq i 0) i)\n                   (>= i max-freq))\n        \
+    \  (return i))))\n    -1))\n", "  (define (search-helper lst)\n    (cond\n   \
+    \   [(empty? lst) -1]\n      [(>= (count (first lst) lst) (first lst)) (first\
+    \ lst)]\n      [else (search-helper (rest lst))]))\n  (search-helper (sort lst\
+    \ >)))\n", "  (let ([freq (map (lambda (x) (list x (count x lst))) lst)])\n  \
+    \  (let ([max (apply max (map first freq))])\n      (let ([max-freq (apply max\
+    \ (map second freq))])\n        (if (&gt;= max max-freq)\n            -1\n   \
+    \         max)))))\n</code>\nI am trying to learn Racket and I am trying to solve\
+    \ this problem. I am not sure if this is the best way to solve this problem. I\
+    \ am looking for feedback on how to improve this code.\n\n\nA:\n\nI think your\
+    \ code is pretty good. Here are some suggestions:\n\nYou can use <code>for/fold</code>\
+    \ to simplify the code.\nYou can use <code>max-by</code> to simplify the code.\n\
+    You can use <code>cond</code> to simplify the code.\n\nHere is my solution:\n\
+    <code>(define (search lst)\n  (let ([freq (for/fold ([freq-list '()])\n      \
+    \                  ([x lst])\n                        (let ([count (count x lst)])\n\
+    \                          (if (&gt; count 0)\n                              (cons\
+    \ (list x count) freq-list)\n                              freq-list)))])\n  \
+    \  (cond\n      [(empty? freq) -1]\n      [(empty? (cdr freq)) (first (first freq))]\n\
+    \      [else (first (max-by second freq))])))\n</code>\n", "  (let ([max-freq\
+    \ (apply max (map length (group lst)))]\n        [max-val (apply max lst)])\n\
+    \    (cond [(>= max-freq max-val) max-val]\n          [else -1])))\n", "  (let\
+    \ ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n\
+    \    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0) (>= (hash-ref freq x 0) x) (> x max-freq))\n     \
+    \     (set! max-freq x)))\n      (if (= max-freq 0) -1 max-freq))))\n", "  (let\
+    \ ([freq (sort (map (lambda (x) (list x (count x lst))) lst) (lambda (x y) (&gt;\
+    \ (cadr x) (cadr y))))])\n    (for/first ([x freq] #:when (&gt; (car x) (cadr\
+    \ x)))\n      (car x))))\n</code>\n", "  (let ([freq (make-hash)])\n    (for ([x\
+    \ lst])\n      (hash-update! freq x add1 0))\n    (let loop ([lst lst])\n    \
+    \  (cond [(empty? lst) -1]\n            [(>= (hash-ref freq (first lst) 0) (first\
+    \ lst)) (first lst)]\n            [else (loop (rest lst))]))))\n", "  (define\
+    \ (helper lst)\n    (define (count x lst)\n      (cond [(empty? lst) 0]\n    \
+    \        [(= x (first lst)) (+ 1 (count x (rest lst)))]\n            [else (count\
+    \ x (rest lst))]))\n    (cond [(empty? lst) -1]\n          [(>= (count (first\
+    \ lst) lst) (first lst)) (first lst)]\n          [else (helper (rest lst))]))\n\
+    \  (helper lst))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update!\
+    \ freq i add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([i lst])\n        (when (and (> i 0) (= (hash-ref freq i 0) i))\n   \
+    \       (return i)))\n      -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x\
+    \ lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0) (>= (hash-ref freq\
+    \ x 0) x) (> x max-freq))\n          (set! max-freq x)))\n      (if (= max-freq\
+    \ 0) -1 max-freq))))\n", "  (define (count x lst)\n    (cond [(empty? lst) 0]\n\
+    \          [(= x (first lst)) (+ 1 (count x (rest lst)))]\n          [else (count\
+    \ x (rest lst))]))\n  (define (max-freq lst)\n    (cond [(empty? lst) 0]\n   \
+    \       [(> (count (first lst) lst) (max-freq (rest lst))) (first lst)]\n    \
+    \      [else (max-freq (rest lst))]))\n  (define (max-freq-greater-than-self lst)\n\
+    \    (cond [(empty? lst) 0]\n          [(and (> (first lst) (count (first lst)\
+    \ lst)) (> (first lst) (max-freq-greater-than-self (rest lst)))) (first lst)]\n\
+    \          [else (max-freq-greater-than-self (rest lst))]))\n  (cond [(= (max-freq-greater-than-self\
+    \ lst) 0) -1]\n        [else (max-freq-greater-than-self lst)]))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max (apply max (hash-keys freq))])\n      (for ([x (in-range 1 max)])\n\
+    \        (when (and (hash-ref freq x 0)\n                   (&gt;= (hash-ref freq\
+    \ x 0) x))\n          (return x)))\n      -1)))\n</code>\n", "  (let ([freq (make-hash)])\n\
+    \    (for ([x lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq\
+    \ (apply max (hash-values freq))])\n      (for ([x lst])\n        (when (and (>\
+    \ x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n          (return x))))\n \
+    \   -1))\n", "  (define (search-helper lst)\n    (cond\n      [(null? lst) -1]\n\
+    \      [(>= (count (car lst) lst) (car lst)) (car lst)]\n      [else (search-helper\
+    \ (cdr lst))]))\n  (search-helper (sort lst >)))\n", "  (let ((max-freq 0)\n \
+    \       (max-val -1))\n    (for ((i (in-list lst)))\n      (let ((freq (count\
+    \ i lst)))\n        (when (and (> i max-val)\n                   (>= freq i))\n\
+    \          (set! max-freq freq)\n          (set! max-val i))))\n    max-val))\n",
+  "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n     \
+    \     (return x))))\n    -1))\n", "  (let ([counts (map (lambda (x) (list x (count\
+    \ x lst))) lst)])\n    (for/first ([(x c) counts] #:when (>= c x))\n      x)))\n",
+  "  (define (search-helper lst)\n    (cond [(empty? lst) -1]\n          [(>= (count\
+    \ (first lst) lst) (first lst)) (first lst)]\n          [else (search-helper (rest\
+    \ lst))]))\n  (search-helper (sort lst >)))\n", "  (let ([max (apply max lst)])\n\
+    \    (for/fold ([result -1]) ([i (in-range 1 (add1 max))])\n      (if (and (>=\
+    \ (count i lst) i) (> i result))\n          i\n          result))))\n", "  (let\
+    \ ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n\
+    \    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n     \
+    \     (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (and (> i 0) (= (hash-ref freq\
+    \ i 0) i))\n          (return i)))\n      (for ([i lst])\n        (when (and (>\
+    \ i 0) (>= (hash-ref freq i 0) i) (<= (hash-ref freq i 0) max-freq))\n       \
+    \   (return i)))\n      -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0) (>= (hash-ref freq\
+    \ x 0) x) (> x max-freq))\n          (set! max-freq x)))\n      (if (= max-freq\
+    \ 0) -1 max-freq))))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n  \
+    \    (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0) (= (hash-ref freq\
+    \ x 0) x) (>= x max-freq))\n          (return x))))\n    -1))\n", "  (let ([freq-table\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq-table x add1 0))\n\
+    \    (let ([max-freq (apply max (hash-values freq-table))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0)\n                   (= (hash-ref freq-table x 0) x)\n\
+    \                   (>= x max-freq))\n          (return x)))\n      -1)))\n",
+  "  (define (count x lst)\n    (cond\n      [(empty? lst) 0]\n      [(= x (first\
+    \ lst)) (+ 1 (count x (rest lst)))]\n      [else (count x (rest lst))]))\n  (define\
+    \ (search-helper lst)\n    (cond\n      [(empty? lst) -1]\n      [(>= (count (first\
+    \ lst) lst) (first lst)) (first lst)]\n      [else (search-helper (rest lst))]))\n\
+    \  (search-helper (sort lst >)))\n", "  (let ([freq (make-hash)])\n    (for ([x\
+    \ lst])\n      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n               \
+    \    (= (hash-ref freq x 0) x)\n                   (>= x max-freq))\n        \
+    \  (return x)))\n      -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0)\n               \
+    \    (= (hash-ref freq x 0) x)\n                   (>= x max-freq))\n        \
+    \  (return x)))\n      -1)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([x lst])\n        (when (and (> x 0) (= (hash-ref freq\
+    \ x 0) x) (>= x max-freq))\n          (return x))))\n    -1))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n   \
+    \     (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n        \
+    \  (return x))))\n    -1))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let loop ([i (length lst)])\n     \
+    \ (if (zero? i)\n          -1\n          (let ([f (hash-ref freq i 0)])\n    \
+    \        (if (and (> f 0) (>= f i))\n                i\n                (loop\
+    \ (- i 1))))))))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (hash-ref freq x max-freq)\n           \
+    \        (>= (hash-ref freq x max-freq) x))\n          (return x))))\n    -1))\n",
+  "  (define (helper lst)\n    (cond\n      [(empty? lst) (list -1)]\n      [(= (length\
+    \ (filter (lambda (x) (= x (first lst))) lst)) (first lst)) (list (first lst))]\n\
+    \      [else (helper (rest lst))]))\n  (if (empty? (helper lst))\n      -1\n \
+    \     (apply max (helper lst))))\n", "  (let ([freq-lst (map (\u03BB (x) (list\
+    \ x (count x lst))) lst)])\n    (for/first ([x freq-lst]\n                #:when\
+    \ (and (equal? (car x) (cadr x))\n                            (&gt; (car x) 0)))\n\
+    \      (car x))))\n</code>\n", "  (let ([max (apply max lst)])\n    (for/first\
+    \ ([i (in-range 1 (add1 max))])\n      (and (member i lst)\n           (>= (count\
+    \ i lst) i)\n           i))))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n\
+    \      (hash-update! freq i add1 0))\n    (let ([max-freq (apply max (hash-values\
+    \ freq))])\n      (for ([i lst])\n        (when (and (> i 0) (= (hash-ref freq\
+    \ i 0) i))\n          (return i)))\n      -1)))\n", "  (define (search-helper\
+    \ lst)\n    (cond [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first\
+    \ lst)) (first lst)]\n          [else (search-helper (rest lst))]))\n  (search-helper\
+    \ (sort > lst)))\n", "  (define (helper lst)\n    (cond [(empty? lst) -1]\n  \
+    \        [(>= (count (first lst) lst) (first lst)) (first lst)]\n          [else\
+    \ (helper (rest lst))]))\n  (helper lst))\n", "  (let ([lst (sort lst <)])\n \
+    \   (let loop ([lst lst] [count 0] [prev (car lst)])\n      (cond [(null? lst)\
+    \ -1]\n            [(= count prev) prev]\n            [(= (car lst) prev) (loop\
+    \ (cdr lst) (+ count 1) prev)]\n            [else (loop (cdr lst) 1 (car lst))]))))\n",
+  "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update! freq i add1\
+    \ 0))\n    (for ([i lst])\n      (when (and (> i 0) (>= (hash-ref freq i 0) i))\n\
+    \        (return i)))\n    -1))\n", "  (let ([freq (map (lambda (x) (list x (count\
+    \ x lst))) lst)])\n    (let ([max (apply max (map first freq))])\n      (let ([max-freq\
+    \ (apply max (map second freq))])\n        (if (&gt;= max max-freq)\n        \
+    \    -1\n            max)))))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n\
+    \      (hash-update! freq x add1 0))\n    (let loop ([lst lst])\n      (cond\n\
+    \        [(empty? lst) -1]\n        [(>= (hash-ref freq (first lst) 0) (first\
+    \ lst)) (first lst)]\n        [else (loop (rest lst))]))))\n", "  (let ([freq\
+    \ (for/fold ([freq-lst '()]) ([x lst])\n                 (let ([freq (count x\
+    \ lst)])\n                   (if (not (member freq freq-lst))\n              \
+    \         (cons freq freq-lst)\n                       freq-lst)))])\n    (let\
+    \ ([freq-lst (for/list ([x lst])\n                      (cons x (count x lst)))])\n\
+    \      (for/fold ([max -1]) ([x freq-lst])\n        (if (and (> (car x) max)\n\
+    \                 (>= (cdr x) (car x))\n                 (member (cdr x) freq))\n\
+    \            (car x)\n            max)))))\n", "  (define (count n lst)\n    (cond\
+    \ [(empty? lst) 0]\n          [(= n (first lst)) (+ 1 (count n (rest lst)))]\n\
+    \          [else (count n (rest lst))]))\n  (define (greatest-freq lst)\n    (cond\
+    \ [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first lst)) (first\
+    \ lst)]\n          [else (greatest-freq (rest lst))]))\n  (greatest-freq lst))\n",
+  "  (let ([lst (sort lst <)])\n    (let loop ([lst lst] [count 0] [prev (car lst)])\n\
+    \      (cond [(null? lst) -1]\n            [(= count prev) prev]\n           \
+    \ [(> count prev) (loop (cdr lst) 0 prev)]\n            [else (loop (cdr lst)\
+    \ (+ count 1) prev)]))))\n", "  (define (helper lst)\n    (cond\n      [(empty?\
+    \ lst) 0]\n      [(= (first lst) (second lst)) (+ 1 (helper (rest lst)))]\n  \
+    \    [else (helper (rest lst))]))\n  (define (helper2 lst)\n    (cond\n      [(empty?\
+    \ lst) -1]\n      [(>= (helper lst) (first lst)) (first lst)]\n      [else (helper2\
+    \ (rest lst))]))\n  (helper2 lst))\n", "  (define (frequency x lst)\n    (if (null?\
+    \ lst)\n        0\n        (if (= x (car lst))\n            (+ 1 (frequency x\
+    \ (cdr lst)))\n            (frequency x (cdr lst)))))\n  (define (greatest-frequency\
+    \ lst)\n    (if (null? lst)\n        0\n        (max (frequency (car lst) lst)\
+    \ (greatest-frequency (cdr lst)))))\n  (define (greatest-frequency-value lst)\n\
+    \    (if (null? lst)\n        0\n        (if (= (frequency (car lst) lst) (greatest-frequency\
+    \ lst))\n            (car lst)\n            (greatest-frequency-value (cdr lst)))))\n\
+    \  (if (= (greatest-frequency lst) 0)\n      -1\n      (greatest-frequency-value\
+    \ lst)))\n", "  (define (search-helper lst)\n    (cond [(empty? lst) -1]\n   \
+    \       [(>= (count (first lst) lst) (first lst)) (first lst)]\n          [else\
+    \ (search-helper (rest lst))]))\n  (search-helper (sort > lst)))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([i lst])\n      (hash-update! freq i add1 0))\n   \
+    \ (let loop ([lst lst])\n      (cond [(empty? lst) -1]\n            [(>= (hash-ref\
+    \ freq (first lst) 0) (first lst)) (first lst)]\n            [else (loop (rest\
+    \ lst))]))))\n", "  (define (helper lst)\n    (cond [(empty? lst) -1]\n      \
+    \    [(>= (count (first lst) lst) (first lst)) (first lst)]\n          [else (helper\
+    \ (rest lst))]))\n  (helper lst))\n", "  (let ([lst (sort lst <)])\n    (for/first\
+    \ ([(x . xs) (in-list (in-groups lst))]\n                #:when (>= (length xs)\
+    \ x))\n      x)))\n", "  (let loop ([lst lst] [max -1] [freq 0])\n    (cond [(empty?\
+    \ lst) max]\n          [(= (first lst) (second lst)) (loop (rest lst) max (+ freq\
+    \ 1))]\n          [(> (first lst) max) (loop (rest lst) (first lst) 1)]\n    \
+    \      [(>= (first lst) (second lst)) (loop (rest lst) max (+ freq 1))]\n    \
+    \      [else (loop (rest lst) max 1)])))\n", "  (let ([freq-lst (map (lambda (x)\
+    \ (list x (count x lst))) lst)])\n    (for/first ([x freq-lst] #:when (and (not\
+    \ (zero? (cadr x))) (>= (car x) (cadr x))))\n      (car x))))\n", "  (let ([freq\
+    \ (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1 0))\n   \
+    \ (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n   \
+    \     (when (and (&gt; x 0)\n                   (= (hash-ref freq x 0) x)\n  \
+    \                 (&gt;= x max-freq))\n          (return x))))\n    -1))\n</code>\n",
+  "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0) (= (hash-ref freq x 0) x) (>= x max-freq))\n     \
+    \     (return x))))\n    -1))\n", "  (define (freq-of-n n)\n    (for/fold ([count\
+    \ 0]) ([x lst])\n      (if (= x n)\n          (+ count 1)\n          count)))\n\
+    \  (define (greater-than-freq n)\n    (if (= n (freq-of-n n))\n        n\n   \
+    \     -1))\n  (for/fold ([max-n -1]) ([x lst])\n    (if (&gt; (greater-than-freq\
+    \ x) max-n)\n        (greater-than-freq x)\n        max-n)))\n</code>\nI'm not\
+    \ sure how to make it more concise. I'm also not sure if I'm using the <code>for/fold</code>\
+    \ correctly.\n\n\nA:\n\nI think your code is pretty good. I would just make a\
+    \ few changes:\n\nI would use <code>for/fold</code> to count the frequency of\
+    \ each number.\nI would use <code>for/first</code> to find the first number that\
+    \ is greater than its frequency.\n\nHere's my solution:\n<code>(define (search\
+    \ lst)\n  (for/first ([n (in-list lst)]\n              #:when (&gt; n (for/fold\
+    \ ([count 0]) ([x lst])\n                                  (if (= x n)\n     \
+    \                                 (+ count 1)\n                              \
+    \        count))))\n    n))\n</code>\n", "  (define (search-helper lst)\n    (cond\
+    \ [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first lst)) (first\
+    \ lst)]\n          [else (search-helper (rest lst))]))\n  (search-helper (sort\
+    \ lst >)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([x lst])\n        (when (and (> x 0) (>= (hash-ref freq x 0) x) (> x\
+    \ max-freq))\n          (set! max-freq x)))\n      (if (= max-freq 0) -1 max-freq))))\n",
+  "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update! freq x add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for ([x lst])\n\
+    \        (when (and (> x 0)\n                   (= (hash-ref freq x 0) x)\n  \
+    \                 (>= x max-freq))\n          (return x)))\n      -1)))\n", " \
+    \ (let ([freq (make-hash)])\n    (for ([n lst])\n      (hash-update! freq n add1\
+    \ 0))\n    (let ([max-freq (apply max (hash-values freq))])\n      (for/first\
+    \ ([n lst] #:when (>= (hash-ref freq n 0) n))\n        (if (>= n max-freq) n -1)))))\n",
+  "  (let loop ((lst lst) (freq (make-hash)) (max 0))\n    (cond\n      [(empty? lst)\
+    \ (if (&gt;= max (hash-ref freq max 0)) max -1)]\n      [else (let ((x (car lst)))\n\
+    \              (hash-set! freq x (+ 1 (hash-ref freq x 0)))\n              (loop\
+    \ (cdr lst) freq (max x max)))])))\n</code>\n", "  (let ((freq-table (make-hash)))\n\
+    \    (for ([i lst])\n      (hash-update! freq-table i add1 0))\n    (let loop\
+    \ ([i (length lst)])\n      (if (and (&gt; i 0) (hash-ref freq-table i 0))\n \
+    \         i\n          (loop (- i 1))))))\n</code>\n", "  (define (search-helper\
+    \ lst)\n    (cond [(empty? lst) -1]\n          [(>= (count (first lst) lst) (first\
+    \ lst)) (first lst)]\n          [else (search-helper (rest lst))]))\n  (search-helper\
+    \ (sort lst >)))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let loop ([x (length lst)])\n      (if (zero? x)\n   \
+    \       -1\n          (if (and (>= (hash-ref freq x 0) x) (> x 0))\n         \
+    \     x\n              (loop (- x 1)))))))\n", "  (define (count x lst)\n    (cond\n\
+    \      [(empty? lst) 0]\n      [(= x (first lst)) (+ 1 (count x (rest lst)))]\n\
+    \      [else (count x (rest lst))]))\n  (define (find-max lst)\n    (cond\n  \
+    \    [(empty? lst) -1]\n      [(> (count (first lst) lst) (first lst)) (first\
+    \ lst)]\n      [else (find-max (rest lst))]))\n  (find-max lst))\n", "  (let ([freq\
+    \ (for/fold ([freq-lst '()]) ([x lst])\n                 (let ([f (count x lst)])\n\
+    \                   (if (and (> f 0) (>= f x))\n                       (cons (cons\
+    \ x f) freq-lst)\n                       freq-lst)))])\n    (if (null? freq)\n\
+    \        -1\n        (apply max (map car freq)))))\n", "  (define (count n lst)\n\
+    \    (cond\n      [(empty? lst) 0]\n      [(= n (first lst)) (+ 1 (count n (rest\
+    \ lst)))]\n      [else (count n (rest lst))]))\n  (define (search-helper lst)\n\
+    \    (cond\n      [(empty? lst) -1]\n      [(>= (count (first lst) lst) (first\
+    \ lst)) (first lst)]\n      [else (search-helper (rest lst))]))\n  (search-helper\
+    \ (sort lst >)))\n", "  (let ([freq (make-hash)])\n    (for ([i lst])\n      (hash-update!\
+    \ freq i add1 0))\n    (let ([max-freq (apply max (hash-values freq))])\n    \
+    \  (for ([i lst])\n        (when (and (> i 0)\n                   (= (hash-ref\
+    \ freq i 0) i)\n                   (<= i max-freq))\n          (return i))))\n\
+    \    -1))\n", "  (let ([freq (make-hash)])\n    (for ([x lst])\n      (hash-update!\
+    \ freq x add1 0))\n    (let loop ([lst lst])\n      (cond [(null? lst) -1]\n \
+    \           [(>= (hash-ref freq (car lst) 0) (car lst)) (car lst)]\n         \
+    \   [else (loop (cdr lst))]))))\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

@@ -33,8 +33,6 @@ pass_at_10 <- merge(pass_at_10,frequency_map)
 pass_at_100 <- read_csv("../model_results/all-pass-at-100-eval-run.csv",col_names = cn)
 pass_at_100 <- pass_at_100 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
 pass_at_100 <- merge(pass_at_100,frequency_map)
-
-all_pass <- rbind(pass_at_1,rbind(pass_at_100,pass_at_10))
 ```
 
 ```{r}
@@ -61,14 +59,70 @@ per_problem_new <- merge(per_problem,problem_class, all=TRUE)
 cn <- c("PL","PROBLEM","MODEL","TEMP","EXPT","rate1","n1","rate10","n10","rate100")
 pl <- read_csv("../results/pl_no_args_pass_k.csv")
 colnames(pl) <- cn
-```
 
-```{r}
 pl.o <- subset(per_problem_new,PL=="pl")
 pl.o <- subset(pl.o,select=c(PROBLEM,MODEL,EXPT,rate1,n1))
 pl <- subset(pl,select=c(PROBLEM,MODEL,EXPT,rate1,n1))
 
 pl.args <- rbind(pl.o,pl)
+```
+
+```{r}
+cn <- c("PL","PROBLEM","MODEL","TEMP","EXPT","rate1","n1","rate10","n10","rate100")
+ts.any <- read_csv("../results/ts-davinci-0.2-all_types_any.csv")
+colnames(ts.any) <- cn
+
+ts.pass <- read_csv("../results/ts-davinci-0.2-reworded_nocheck.csv")
+colnames(ts.pass) <- cn
+
+ts.new <- rbind(ts.any,ts.pass)
+
+s.o <- subset(per_problem_new,PL=="ts"|PL=="js")
+s.o <- subset(s.o,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+ts.new <- subset(ts.new,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+
+scripts <- rbind(ts.new,s.o)
+```
+
+```{r}
+cn <- c("PL","PROBLEM","MODEL","TEMP","EXPT","rate1","n1","rate10","n10","rate100")
+sh.notypes <- read_csv("../results/sh-davinci-0.2-notypes_cleanedvocab.csv")
+colnames(sh.notypes) <- cn
+
+sh.nocsv <- read_csv("../results/sh-davinci-0.2-notypes_originalvocab.csv")
+colnames(sh.nocsv) <- cn
+
+sh.new <- rbind(sh.notypes,sh.nocsv)
+
+sh.o <- subset(per_problem_new,PL=="sh")
+sh.o <- subset(sh.o,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+sh.new <- subset(sh.new,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+
+bash.all <- rbind(sh.new,sh.o)
+```
+
+
+```{r}
+cn <- c("PL","PROBLEM","MODEL","TEMP","EXPT","rate1","n1","rate10","n10","rate100")
+rkt.multi <- read_csv("../results/rkt-davinci-0.2-multiline.csv")
+colnames(rkt.multi) <- cn
+
+rkt.o <- subset(per_problem_new,PL=="rkt")
+rkt.o <- subset(rkt.o,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+rkt.multi <- subset(rkt.multi,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+
+rkt <- rbind(rkt.multi,rkt.o)
+```
+
+```{r}
+php.multi <- read_csv("../results/php-davinci-0.2-multiline.csv")
+colnames(php.multi) <- cn
+
+php.o <- subset(per_problem_new,PL=="php")
+php.o <- subset(php.o,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+php.multi <- subset(php.multi,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+
+php <- rbind(php.multi,php.o)
 ```
 
 ```{r}
@@ -128,11 +182,24 @@ ggplot(subset(pass_at_1,PL=="py"),aes(x=EXPT,y=RES,fill=MODEL)) + geom_col(posit
 Plot all passes, by model and language for all experiments
 
 ```{r}
-all_pass$K <- factor(all_pass$K,levels = c("1","10","100"))
-all_pass <- all_pass %>% mutate(MODEL_K = paste0(MODEL,'_',K))
-all_pass$MODEL_K <- factor(all_pass$MODEL_K,levels = c("incoder_1","incoder_10","incoder_100","davinci_1","davinci_10","davinci_100"))
-all_pass$MODEL <- factor(all_pass$MODEL,levels = c("incoder","davinci"))
-ggplot(all_pass, aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~EXPT, nrow = 4) + scale_fill_manual(name = "Model", values=c("#FFB000", "#FE6100","#DC267F","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")+ theme(text=element_text(size=16))
+all_pass <- per_problem_new %>% group_by(PL,MODEL,EXPT) %>% summarize(K1 = mean(rate1),
+                                                                      K10 = mean(rate10),
+                                                                      K100 = mean(rate100),
+                                                                      FREQ = unique(FREQ),
+                                                                      TYPES = unique(TYPES),
+                                                                      PERPLEXITY = unique(PERPLEXITY))
+
+all.mean <- all_pass %>% pivot_longer(K1:K100)
+colnames(all.mean) <- c("PL","MODEL","EXPT","FREQ","TYPES","PERPLEXITY","K","RES")
+
+all.mean$K <- factor(all.mean$K,levels = c("K1","K10","K100"))
+all.mean <- all.mean %>% mutate(MODEL_K = paste0(MODEL,'_',K))
+all.mean$MODEL_K <- factor(all.mean$MODEL_K,levels = c("incoder_K1","incoder_K10","incoder_K100","davinci_K1","davinci_K10","davinci_K100"))
+all.mean$MODEL <- factor(all.mean$MODEL,levels = c("incoder","davinci"))
+```
+
+```{r}
+ggplot(all.mean, aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~EXPT, nrow = 4) + scale_fill_manual(name = "Model", values=c("#FFB000", "#FE6100","#DC267F","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")+ theme(text=element_text(size=16))
 ggsave("all_models_temps.pdf")
 ```
 
@@ -140,17 +207,18 @@ Plot pass at 1 for all experiments, models, and languages
 
 
 ```{r}
-expt_labs <- c(`keep_keep` = "Original Prompt",`transform_keep` = "Test-Only Translation", `transform_transform` = "Full Translation",`remove_keep` = "No Doctests")
+expt_labs <- c(`keep` = "Original Prompt",`transform` = "Test-Only Translation", `reworded` = "Full Translation",`remove` = "No Doctests")
 m_labs <- c("davinci"="Codex","incoder"="InCoder")
-all_pass$EXPT <- factor(all_pass$EXPT,levels = c("keep_keep","transform_keep","transform_transform","remove_keep"))
-ggplot(subset(all_pass,K==1), aes(x=PL,y=RES,fill=EXPT)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~MODEL, nrow = 2,labeller=as_labeller(m_labs)) + scale_fill_manual(name = "Experiment", values=c("#DC267F", "#FFB000","#0072B2","#56B4E9"), labels=expt_labs) + ylab("Average pass@1 rate")+ theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE))
+all.mean$EXPT <- factor(all.mean$EXPT,levels = c("keep","transform","reworded","remove"))
+
+ggplot(subset(all.mean,K=="K1"), aes(x=PL,y=RES,fill=EXPT)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~MODEL, nrow = 2,labeller=as_labeller(m_labs)) + scale_fill_manual(name = "Experiment", values=c("#DC267F", "#FFB000","#0072B2","#56B4E9"), labels=expt_labs) + ylab("Average pass@1 rate")+ theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE))
 ggsave("all_expts_pass1.pdf",height=8,width=12)
 ```
 
 Plot all passes, by model and language for TRANSFORM TRANSFORM
 
 ```{r}
-ggplot(subset(all_pass,EXPT="transform_transform"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#FFB000", "#FE6100","#DC267F","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE))
+ggplot(subset(all.mean,EXPT="reworded"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#FFB000", "#FE6100","#DC267F","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE))
 ggsave("all_models_temps_reworded.pdf",height=5,width=12)
 ```
 
@@ -159,10 +227,10 @@ Plot pass at 1 by model, expt=reworded, languages by frequency
 ```{r}
 pl_order <- c("py","sh","js","lua",  "pl",   "php", "r", "rb", "rkt", "cpp", "cs","d", "go","java","jl", "rs", "scala","swift","ts")
 
-all_pass$PL <- factor(all_pass$PL,levels = pl_order)
-all_pass$FREQ <- factor(all_pass$FREQ,levels = c("High","Medium","Low","Niche"))
+all.mean$PL <- factor(all.mean$PL,levels = pl_order)
+all.mean$FREQ <- factor(all.mean$FREQ,levels = c("High","Medium","Low","Niche"))
 
-freq <- subset(all_pass,EXPT=='transform_transform'&K==1)
+freq <- subset(all.mean,EXPT=='reworded'&K=="K1")
 ggplot(freq,aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 2,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=20),legend.position="bottom") + scale_fill_manual(name = "Model", values=c("#FFB000","#56B4E9"),labels=c('InCoder','Codex'))  +guides(fill=guide_legend(nrow=1,byrow=TRUE)) + geom_vline(data=filter(freq,FREQ=="Niche"),aes(xintercept=3.5),linetype="dotted") + geom_vline(data=filter(freq,FREQ!="Niche"),aes(xintercept=2.5),linetype="dotted")
 ggsave("lang_freq_pass1_reworded.pdf",height=8,width=12)
 ```
@@ -175,13 +243,24 @@ ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_boxplot(stat = "boxplot",outli
 ```
 
 ```{r}
-s <- subset(per_problem,EXPT=='reworded'&MODEL=='davinci')
 ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_violin() + geom_jitter(height = 0, width = 0.1)
 ```
 
 
 ```{r}
-ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1)) + geom_jitter(height = 0, width = 0.1)
+ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1,color=PL)) + geom_jitter(height = 0, width = 0.1)
+```
+
+## Perplexity versus pass@1
+
+```{r}
+perp <- s %>% group_by(PL) %>% summarize(perplexity = unique(PERPLEXITY),
+                                         avg_pass1 = mean(rate1)) %>% na.omit()
+
+perp$PL <- recode(perp$PL,"py" = "Python", `sh` = "Bash", `cpp` = "C++", `go` = "Go", `java` = "Java", `js` = "JavaScript", `pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
+ggplot(data=perp,aes(x=perplexity,y=avg_pass1,color=PL, label=PL)) + geom_point(size=15,alpha=0.5) + geom_text(color="black",size=5,fontface="bold") + ylim(0, 0.55) + xlim(1.37, 2.45) + ylab("Pass@1 rates") + xlab("Perplexity") + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(color=guide_legend(nrow=2,byrow=TRUE))
+cor(perp$perplexity,perp$avg_pass1) 
+ggsave("perplexity.pdf",height=8,width=10)
 ```
 
 ## By language feature analysis
@@ -213,6 +292,8 @@ ggsave("reworded_davinci_lang_features_pass1.pdf",height=3,width=12)
 ```
 
 ```{r}
+feature_order <- c("None","Bool", "Dictionary", "List", "Tuple")
+by.feature$name <- factor(by.feature$name,levels = feature_order)
 ggplot(data=by.feature, aes(x=name,y=means,color=PL=="py",fill=name)) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~PL) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) +  geom_vline(xintercept=c(0,1.5),linetype="dotted")
 ```
 
@@ -296,6 +377,8 @@ summary(codex.feat.l.model)
 
 ```{r}
 codex.pl <- subset(pl.args,MODEL=='davinci'&(EXPT=="reworded"|EXPT=="no_args"))
+pl.sum <- codex.pl %>% group_by(EXPT) %>% summarize(mean = mean(rate1))
+ggplot(data=pl.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge")
 ```
 
 
@@ -304,4 +387,77 @@ codex.perl.model <- glmer(rate1 ~ EXPT + (1+EXPT||PROBLEM),weights=n1, data=code
 ```
 ```{r}
 summary(codex.perl.model)
+```
+
+### TS v JS experiments
+
+```{r}
+codex.script <- subset(scripts,MODEL=='davinci'&(EXPT=="reworded"|EXPT=="reworded_nocheck"|EXPT=="all_types_any"))
+
+codex.script <- codex.script %>% mutate(expt = ifelse(PL=="js","JS",EXPT))
+codex.script$expt <- factor(codex.script$expt,levels = c("reworded","JS","reworded_nocheck","all_types_any"))
+codex.script$PROBLEM <- factor(codex.script$PROBLEM)
+```
+```{r}
+script.sum <- codex.script %>% group_by(expt) %>% summarize(mean = mean(rate1))
+ggplot(data=script.sum,aes(x=expt,y=mean)) + geom_col(position="dodge")
+```
+
+```{r}
+codex.script.model <- glmer(rate1 ~ expt + (1|PROBLEM),weights=n1, data=codex.script,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(codex.script.model)
+```
+
+### Bash experiments
+
+```{r}
+bash.davinci <- subset(bash.all,MODEL=='davinci')
+bash.expt <- subset(bash.davinci,EXPT!="keep"&EXPT!="remove")
+bash.expt$EXPT <- recode(bash.expt$EXPT,"notypes_cleanedvocab"="notypes_reworded","notypes_originalvocab"="notypes_transform")
+```
+
+```{r}
+bash.expt$EXPT <- factor(bash.expt$EXPT,levels = c("notypes_transform","notypes_reworded","transform","reworded"))
+bash.expt$PROBLEM <- factor(bash.expt$PROBLEM)
+```
+```{r}
+bash.sum <- bash.expt %>% group_by(EXPT) %>% summarize(mean = mean(rate1))
+ggplot(data=bash.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge")
+```
+```{r}
+bash.mem <- bash.expt %>% mutate(annotations = ifelse(grepl("notypes",EXPT),0,1),
+                                 rewording = ifelse(grepl("reword",EXPT),1,0))
+bash.model <- glmer(rate1 ~ annotations*rewording + (1+annotations*rewording|PROBLEM),weights=n1, data=bash.mem,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(bash.model)
+```
+
+### Multiline experiments
+
+```{r}
+multi <- rbind(php,rkt)
+multi.davinci <- subset(multi,MODEL=='davinci')
+multi.expt <- subset(multi.davinci,EXPT=="multiline"|EXPT=="reworded")
+multi.expt$PROBLEM <- factor(multi.expt$PROBLEM)
+multi.expt$EXPT <- factor(multi.expt$EXPT,c("reworded","multiline"))
+
+multi.sum <- multi.expt %>% group_by(PL,EXPT) %>% summarize(mean = mean(rate1))
+ggplot(data=multi.sum,aes(x=EXPT,y=mean,fill=PL)) + geom_col(position="dodge")
+```
+
+```{r}
+rkt.model <- glmer(rate1 ~ EXPT + (1+EXPT|PROBLEM),weights=n1, data=subset(multi.expt,PL=="rkt"),family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(rkt.model)
+```
+
+```{r}
+php.model <- glmer(rate1 ~ EXPT + (1+EXPT|PROBLEM),weights=n1, data=subset(multi.expt,PL=="php"),family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(php.model)
 ```

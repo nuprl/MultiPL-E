@@ -1,0 +1,500 @@
+name: HumanEval_103_rounded_avg
+language: rkt
+prompt: "#lang racket\n\n#| You are given two positive integers n and m, and your\
+  \ task is to compute the\naverage of the integers from n through m (including n\
+  \ and m). \nRound the answer to the nearest integer and convert that to binary.\n\
+  If n is greater than m, return -1.\nExample:\n>>> (rounded_avg 1 5)\n\"0b11\"\n\
+  >>> (rounded_avg 7 5)\n-1\n>>> (rounded_avg 10 20)\n\"0b1111\"\n>>> (rounded_avg\
+  \ 20 33)\n\"0b11010\"|#\n(define (rounded_avg n m)\n"
+tests: "(require rackunit)\n\n(define (test-humaneval) \n\n  (let (( candidate rounded_avg))\n\
+  \    (check-equal? (candidate 1 5) \"0b11\")\n    (check-equal? (candidate 7 13)\
+  \ \"0b1010\")\n    (check-equal? (candidate 964 977) \"0b1111001010\")\n    (check-equal?\
+  \ (candidate 996 997) \"0b1111100100\")\n    (check-equal? (candidate 560 851) \"\
+  0b1011000010\")\n    (check-equal? (candidate 185 546) \"0b101101110\")\n    (check-equal?\
+  \ (candidate 362 496) \"0b110101101\")\n    (check-equal? (candidate 350 902) \"\
+  0b1001110010\")\n    (check-equal? (candidate 197 233) \"0b11010111\")\n    (check-equal?\
+  \ (candidate 7 5) -1)\n    (check-equal? (candidate 5 1) -1)\n    (check-equal?\
+  \ (candidate 5 5) \"0b101\")\n))\n\n(test-humaneval)"
+completions: ["  (if (&gt; n m) -1\n      (integer-&gt;binary (round (/ (+ n m) 2)))))\n\
+    </code>\n", "  (cond [(> n m) -1]\n        [else (string->number (number->string\
+    \ (round (/ (+ n m) 2))) 2)]))\n", "  (cond [(> n m) -1]\n        [else (define\
+    \ sum (+ n m))\n              (define avg (/ sum 2))\n              (define rounded\
+    \ (round avg))\n              (string-append \"0b\" (number->string (integer->binary\
+    \ rounded)))]))\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+\
+    \ n m) 2))])\n        (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2))])\n        (string-append\
+    \ \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n</code>\n", "  (cond\n\
+    \    [(> n m) -1]\n    [else (define sum (for/sum ([i (in-range n (+ m 1))]) i))\n\
+    \          (define avg (/ sum (- m n)))\n          (define rounded (round avg))\n\
+    \          (define binary (number->string rounded 2))\n          (string-append\
+    \ \"0b\" binary)]))\n", "  (if (> n m)\n      -1\n      (let ([avg (/ (+ n m)\
+    \ 2)])\n        (string-append \"0b\" (number->string (integer-length avg))))))\n",
+  "  (define (avg n m)\n    (cond [(> n m) -1]\n          [else (round (/ (+ n m)\
+    \ 2))]))\n  (define (to-binary n)\n    (cond [(= n 0) \"0b0\"]\n          [(=\
+    \ n 1) \"0b1\"]\n          [else (string-append (to-binary (quotient n 2))\n \
+    \                              (number->string (remainder n 2)))]))\n  (to-binary\
+    \ (avg n m)))\n", "  (cond\n    [(> n m) -1]\n    [else\n     (define sum (+ n\
+    \ m))\n     (define avg (quotient sum 2))\n     (define bin (number->string (quotient\
+    \ (round avg) 2) 2))\n     (string-append \"0b\" bin)]))", "  (if (&gt; n m)\n\
+    \      -1\n      (let* ([avg (round (/ (+ n m) 2))]\n             [bin (number-&gt;string\
+    \ avg 2)])\n        (string-append \"0b\" bin))))\n</code>\n", "  (if (&gt; n\
+    \ m)\n      -1\n      (string-append \"0b\" (integer-&gt;binary (round (/ (+ n\
+    \ m) 2))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let ([sum (apply\
+    \ + (range n (add1 m)))]\n            [avg (quotient sum (sub1 m))])\n       \
+    \ (string-append \"0b\" (integer-&gt;binary (round avg))))))\n</code>\n", "  (if\
+    \ (> n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient sum\
+    \ 2)]\n             [bin (number->string (round avg) 2)])\n        (string-append\
+    \ \"0b\" bin))))\n", "  (if (&gt; n m)\n      -1\n      (define sum 0)\n     \
+    \ (define count 0)\n      (for ([i n (+ i 1)])\n        (set! sum (+ sum i))\n\
+    \        (set! count (+ count 1)))\n      (define avg (/ sum count))\n      (define\
+    \ rounded_avg (round avg))\n      (string-append \"0b\" (number-&gt;string (integer-&gt;binary\
+    \ rounded_avg)))))\n</code>\nI'm getting the following error:\n<code>for: bad\
+    \ syntax in: (for ([i n (+ i 1)]) (set! sum (+ sum i)) (set! count (+ count 1)))\n\
+    </code>\nI'm not sure what I'm doing wrong.\n\n\nA:\n\nYou can't use <code>for</code>\
+    \ like that, it's a special form that requires a certain syntax. In this case\
+    \ you can use <code>for/fold</code> instead:\n<code>(define (rounded_avg n m)\n\
+    \  (if (&gt; n m)\n      -1\n      (define sum 0)\n      (define count 0)\n  \
+    \    (for/fold ([sum 0] [count 0]) ([i n (+ i 1)])\n        (values (+ sum i)\
+    \ (+ count 1)))\n      (define avg (/ sum count))\n      (define rounded_avg (round\
+    \ avg))\n      (string-append \"0b\" (number-&gt;string (integer-&gt;binary rounded_avg)))))\n\
+    </code>\n", "  (if (> n m)\n      -1\n      (let* ([avg (round (/ (+ n m) 2))]\n\
+    \             [bin (number->string avg 2)])\n        (string-append \"0b\" bin))))\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n      \
+    \  (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (if (&gt;\
+    \ n m)\n      -1\n      (let ([sum (apply + (range n (+ m 1)))]\n            [avg\
+    \ (quotient sum (- (+ m 1) n))])\n        (string-append \"0b\" (integer-&gt;binary\
+    \ (round avg))))))\n</code>\n", "  (if (< n m)\n      (let ([avg (/ (+ n m) 2)])\n\
+    \        (string-append \"0b\" (number->string (integer-length avg))))\n     \
+    \ -1))\n", "  (cond\n    [(> n m) -1]\n    [else\n     (define sum (for/sum ([i\
+    \ (in-range n (+ m 1))]) i))\n     (define avg (quotient sum (- m n)))\n     (define\
+    \ rounded (round avg))\n     (define binary (number->string rounded 2))\n    \
+    \ (string-append \"0b\" binary)]))\n", "  (if (&gt; n m)\n      -1\n      (let\
+    \ ([sum (for/sum ([i (in-range n (+ m 1))]) i)])\n        (string-append \"0b\"\
+    \ (integer-&gt;binary (round (/ sum (- m n 1))))))))\n</code>\n", "  (if (&gt;\
+    \ n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n</code>\n", "  (cond\n\
+    \    [(> n m) -1]\n    [else\n     (define sum (for/sum ([i (in-range n (add1\
+    \ m))]) i))\n     (define avg (quotient sum (- m n)))\n     (define rounded (round\
+    \ avg))\n     (string-append \"0b\" (number->string (integer->binary rounded)))]))\n",
+  "  (if (&gt; n m)\n      -1\n      (integer-&gt;binary (round (/ (+ n m) 2)))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (string-&gt;number (number-&gt;string\
+    \ (round (/ (+ n m) 2))) 2)))\n</code>\n", "  (if (&gt; n m)\n      -1\n     \
+    \ (let ([sum (for/sum ([i (in-range n (add1 m))]) i)])\n        (let ([avg (quotient\
+    \ sum (add1 (- m n)))])\n          (string-append \"0b\" (integer-&gt;binary (round\
+    \ avg)))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let* ([sum (+ n m)]\n\
+    \             [avg (quotient sum 2)]\n             [rounded (round avg)])\n  \
+    \      (string->number (format \"0b~a\" rounded)))))\n", "  (if (&gt; n m)\n \
+    \     -1\n      (let* ([sum (+ n m)]\n             [avg (/ sum 2)]\n         \
+    \    [rounded (round avg)]\n             [binary (number-&gt;string rounded 2)])\n\
+    \        (string-append \"0b\" binary))))\n", "  (if (> n m)\n      -1\n     \
+    \ (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number->string\
+    \ (integer->binary avg))))))\n", "  (cond [(> n m) -1]\n        [else (number->string\
+    \ (round (/ (+ n m) 2)) 2)]))\n", "  (if (> n m)\n      -1\n      (let* ([sum\
+    \ (+ n m)]\n             [avg (/ sum 2)]\n             [rounded (round avg)]\n\
+    \             [binary (number->string rounded 2)])\n        (string-append \"\
+    0b\" binary))))\n", "  (if (> n m)\n      -1\n      (integer->binary (round (/\
+    \ (+ n m) 2)))))\n", "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n\
+    \ m) 2.0))])\n        (string-append \"0b\" (number->string (integer->binary avg))))))\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([sum (for/sum ([i (in-range n (add1 m))])\
+    \ i)])\n        (string-append \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n\
+    </code>\n", "  (define (avg n m)\n    (define (sum n m)\n      (if (= n m)\n \
+    \         n\n          (+ n (sum (+ n 1) m))))\n    (define (count n m)\n    \
+    \  (if (= n m)\n          1\n          (+ 1 (count (+ n 1) m))))\n    (round (/\
+    \ (sum n m) (count n m))))\n  (if (&gt; n m)\n      -1\n      (number-&gt;string\
+    \ (avg n m) 2)))\n</code>\n", "  (if (> n m)\n      -1\n      (let ([sum (for/sum\
+    \ ([i (in-range n (add1 m))]) i)])\n        (string-append \"0b\" (integer->binary\
+    \ (round (/ sum (- (add1 m) n))))))))\n", "  (if (&gt; n m)\n      -1\n      (let\
+    \ ((sum 0)\n            (count 0))\n        (for ([i (in-range n (+ m 1))])\n\
+    \          (set! sum (+ sum i))\n          (set! count (+ count 1)))\n       \
+    \ (string-append \"0b\" (integer-&gt;binary (round (/ sum count)))))))\n</code>\n",
+  "  (cond\n    [(> n m) -1]\n    [else (integer->binary (round (/ (+ n m) 2)))]))\n",
+  "  (if (&gt; n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient\
+    \ sum 2)]\n             [rounded (round avg)])\n        (string-append \"0b\"\
+    \ (number-&gt;string (integer-&gt;binary rounded))))))\n</code>\n", "  (if (>\
+    \ n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient sum\
+    \ 2)]\n             [rounded (round avg)])\n        (string->number (format \"\
+    0b~a\" rounded)))))\n", "  (cond\n    [(> n m) -1]\n    [else (number->string\
+    \ (round (/ (+ n m) 2)) 2)]))\n", "  (if (> n m)\n      -1\n      (let ([avg (/\
+    \ (+ n m) 2)])\n        (string-append \"0b\" (integer->binary avg)))))\n", " \
+    \ (if (> n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (/ sum\
+    \ 2)]\n             [rounded (round avg)]\n             [binary (number->string\
+    \ rounded 2)])\n        (string-append \"0b\" binary))))\n", "  (if (&gt; n m)\n\
+    \      -1\n      (let ([sum 0]\n            [count 0])\n        (for ([i (in-range\
+    \ n (+ m 1))])\n          (set! sum (+ sum i))\n          (set! count (+ count\
+    \ 1)))\n        (let ([avg (round (/ sum count))])\n          (string-append \"\
+    0b\" (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n\
+    \      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (integer-&gt;binary\
+    \ avg)))))\n</code>\n", "  (if (< n m)\n      (let ([avg (round (/ (+ n m) 2))])\n\
+    \        (string-append \"0b\" (number->string (integer->binary avg))))\n    \
+    \  -1))\n", "  (if (< n m)\n      (let ([sum (for/sum ([i (in-range n (add1 m))])\
+    \ i)])\n        (string-append \"0b\" (integer->binary (round (/ sum (- m n 1))))))\n\
+    \      -1))\n", "  (if (&gt; n m)\n      -1\n      (let ([sum (for/sum ([i (in-range\
+    \ n (+ m 1))]) i)])\n        (string-append \"0b\" (integer-&gt;binary (round\
+    \ (/ sum (- m n))))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let ([avg\
+    \ (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number->string (integer->binary\
+    \ avg))))))\n", "  (if (&gt; n m)\n      -1\n      (define (avg n m)\n       \
+    \ (define (sum n m)\n          (if (&gt; n m)\n              0\n             \
+    \ (+ n (sum (+ n 1) m))))\n        (/ (sum n m) (- m n 1)))\n      (define (round\
+    \ n)\n        (if (zero? (remainder n 2))\n            (round (/ n 2))\n     \
+    \       (cons 1 (round (/ (- n 1) 2)))))\n      (define (to-string lst)\n    \
+    \    (if (null? lst)\n            \"\"\n            (string-append (to-string\
+    \ (cdr lst)) (number-&gt;string (car lst)))))\n      (string-append \"0b\" (to-string\
+    \ (round (avg n m))))))\n</code>\n", "  (cond [(> n m) -1]\n        [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (cond\n    [(> n m) -1]\n    [else (string->number\
+    \ (number->string (round (/ (+ n m) 2))) 2)]))\n", "  (if (&gt; n m)\n      -1\n\
+    \      (let ([avg (round (/ (+ n m) 2))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (let ([sum (for/sum ([i (in-range n (add1 m))]) i)])\n        (string-append\
+    \ \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n</code>\n", "  (if\
+    \ (&gt; n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient\
+    \ sum 2)]\n             [rounded (round avg)])\n        (string-append \"0b\"\
+    \ (number-&gt;string (integer-&gt;binary rounded))))))\n</code>\n", "  (cond [(>\
+    \ n m) -1]\n        [else (round (/ (+ n m) 2))]))\n", "  (cond\n    [(> n m)\
+    \ -1]\n    [else\n     (define sum (apply + (range n (+ m 1))))\n     (define\
+    \ avg (quotient sum (- m n)))\n     (define rounded (round avg))\n     (string-append\
+    \ \"0b\" (number->string (integer->binary rounded)))]))\n", "  (if (> n m) -1\n\
+    \      (let ([avg (/ (+ n m) 2)])\n        (string-append \"0b\" (number->string\
+    \ (integer-length avg))))))\n", "  (if (> n m)\n      -1\n      (let ([sum (+\
+    \ n m)])\n        (let ([avg (quotient sum 2)])\n          (let ([bin (number->string\
+    \ (integer-length avg) 2)])\n            (string-append \"0b\" bin))))))\n", " \
+    \ (if (> n m)\n      -1\n      (string->number (number->string (round (/ (+ n\
+    \ m) 2))) 2)))\n", "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m)\
+    \ 2.0))])\n        (string-append \"0b\" (integer->binary avg)))))\n", "  (if\
+    \ (&gt; n m)\n      -1\n      (let ([sum (for/sum ([i (in-range n (+ m 1))]) i)])\n\
+    \        (string-append \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (define sum 0)\n      (define count\
+    \ 0)\n      (for ([i (in-range n (+ m 1))])\n        (set! sum (+ sum i))\n  \
+    \      (set! count (+ count 1)))\n      (define avg (/ sum count))\n      (define\
+    \ rounded (round avg))\n      (define binary (number-&gt;string rounded 2))\n\
+    \      (string-append \"0b\" binary)))\n</code>\nI am getting the following error:\n\
+    <code>application: not a procedure;\n expected a procedure that can be applied\
+    \ to arguments\n  given: #&lt;syntax:procedure-type-declaration&gt;\n  arguments...:\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&lt;syntax:procedure-type-declaration&gt;\n\
+    \   #&lt;syntax:procedure-type-declaration&gt;\n   #&", "  (if (> n m) -1\n  \
+    \    (let* ([sum (+ n m)]\n             [avg (/ sum 2)]\n             [rounded\
+    \ (round avg)]\n             [bin (number->string rounded 2)])\n        (string-append\
+    \ \"0b\" bin))))\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+\
+    \ n m) 2.0))])\n        (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([sum 0]\n            [count 0])\n     \
+    \   (for ([i (in-range n (add1 m))])\n          (set! sum (+ sum i))\n       \
+    \   (set! count (add1 count)))\n        (string-append \"0b\" (integer-&gt;binary\
+    \ (round (/ sum count)))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let\
+    \ ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (string-&gt;number (number-&gt;string (round (/ (+ n m) 2))) 2)))\n</code>\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n      \
+    \  (string-append \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n</code>\n",
+  "  (define (avg n m)\n    (cond [(> n m) -1]\n          [else (/ (+ n m) 2)]))\n\
+    \  (define (to-binary n)\n    (cond [(= n 0) \"0b0\"]\n          [(= n 1) \"0b1\"\
+    ]\n          [else (string-append (to-binary (quotient n 2))\n               \
+    \                (number->string (remainder n 2)))]))\n  (to-binary (round (avg\
+    \ n m))))\n", "  (if (&gt; n m)\n      -1\n      (string-&gt;number (number-&gt;string\
+    \ (round (/ (+ n m) 2))) 2)))\n</code>\n", "  (if (> n m)\n      -1\n      (let*\
+    \ ([sum (+ n m)]\n             [avg (/ sum 2)]\n             [rounded (round avg)]\n\
+    \             [binary (number->string rounded 2)])\n        (string-append \"\
+    0b\" binary))))\n", "  (if (> n m)\n      -1\n      (let ([sum (+ n m)])\n   \
+    \     (string-append \"0b\" (integer->binary (round (/ sum 2)))))))\n", "  (if\
+    \ (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (> n m)\n     \
+    \ -1\n      (define sum (+ n m))\n      (define avg (round (/ sum 2)))\n     \
+    \ (string->number (number->string avg 2))))\n", "  (if (> n m)\n      -1\n   \
+    \   (let ([avg (/ (+ n m) 2)])\n        (string-append \"0b\" (number->string\
+    \ (integer-length avg))))))\n", "  (cond\n    [(> n m) -1]\n    [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (if (> n m)\n      -1\n      (let ([avg (round\
+    \ (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number->string (integer->binary\
+    \ avg))))))\n", "  (if (&gt; n m)\n      -1\n      (string-&gt;number (number-&gt;string\
+    \ (round (/ (+ n m) 2))) 2)))\n</code>\n", "  (cond\n    [(> n m) -1]\n    [else\n\
+    \     (define sum (+ n m))\n     (define avg (quotient sum 2))\n     (define bin\
+    \ (number->string (integer->binary avg) 2))\n     (string-append \"0b\" bin)]))\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (> n m)\n     \
+    \ -1\n      (define (avg n m)\n        (/ (+ n m) 2))\n  (define (round n)\n \
+    \   (if (and (integer? n) (positive? n))\n        (if (odd? n)\n            (add1\
+    \ n)\n            n)\n        (round (avg n (add1 n)))))\n  (define (to_binary\
+    \ n)\n    (if (= n 0)\n        \"\"\n        (string-append (to_binary (quotient\
+    \ n 2)) (number->string (remainder n 2)))))\n  (string-append \"0b\" (to_binary\
+    \ (round (avg n m))))))\n", "  (if (> n m)\n      -1\n      (string->number (number->string\
+    \ (round (/ (+ n m) 2))) 2)))\n", "  (if (> n m)\n      -1\n      (let* ([avg\
+    \ (round (/ (+ n m) 2))]\n             [bin (number->string avg 2)])\n       \
+    \ (string-append \"0b\" bin))))\n", "  (if (&gt; n m)\n      -1\n      (let ([avg\
+    \ (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (integer-&gt;binary\
+    \ avg)))))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let ([sum (for/sum\
+    \ ([i (in-range n (add1 m))]) i)])\n        (string-append \"0b\" (integer-&gt;binary\
+    \ (round (/ sum (- m n))))))))\n", "  (if (&gt; n m)\n      -1\n      (let* ([sum\
+    \ (+ n m)]\n             [avg (quotient sum 2)]\n             [rounded (round\
+    \ avg)])\n        (string-append \"0b\" (number-&gt;string (integer-&gt;binary\
+    \ rounded))))))\n</code>\n", "  (cond\n    [(> n m) -1]\n    [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (cond\n    [(> n m) -1]\n    [else (string->number\
+    \ (number->string (round (/ (+ n m) 2))) 2)]))\n", "  (if (&gt; n m)\n      -1\n\
+    \      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (define (avg n m)\n        (define (sum n m)\n          (if (&gt; n m)\n \
+    \             0\n              (+ n (sum (+ n 1) m))))\n        (/ (sum n m) (-\
+    \ m n 1)))\n  (define (round n)\n    (if (&gt; n 0)\n        (if (&gt; (remainder\
+    \ n 2) 0)\n            (round (/ (+ n 1) 2))\n            (round (/ n 2)))\n \
+    \       0))\n  (string-append \"0b\" (number-&gt;string (round (avg n m))))))\n\
+    </code>\nI'm not sure why this is not working. I'm getting a \"define: not allowed\
+    \ in an expression context in: (define (avg n m) (define (sum n m) (if (> n m)\
+    \ 0 (+ n (sum (+ n 1) m)))) (/ (sum n m) (- m n 1)))\" error.\n\n\nA:\n\nYou have\
+    \ a couple of problems. First, you have a <code>define</code> inside of an expression,\
+    \ which is not allowed. Second, you have a <code>define</code> inside of a <code>define</code>,\
+    \ which is also not allowed.\nYou can fix the first problem by moving the <code>define</code>\
+    \ outside of the <code>if</code> expression.\n<code>(define (rounded_avg n m)\n\
+    \  (define (avg n m)\n    (define (sum n m)\n      (if (&gt; n m)\n          0\n\
+    \          (+ n (sum (+ n 1) m))))\n    (/ (sum n m) (- m n 1)))\n  (define (round\
+    \ n)\n    (if (&gt; n 0)\n        (if (&gt; (remainder n 2) 0)\n            (round\
+    \ (/ (+ n 1) 2))\n            (round (/ n 2)))\n        0))\n  (if (&gt; n m)\n\
+    \      -1\n      (string-append \"0b\" (number-&gt;string (round (avg n m))))))\n\
+    </code>\nYou can fix the second problem by moving the <code>define</code> outside\
+    \ of", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n\
+    </code>\n", "  (cond\n    [(> n m) -1]\n    [else (let ([avg (round (/ (+ n m)\
+    \ 2))])\n            (string-append \"0b\" (number->string (integer->binary avg))))]))\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (> n m)\n     \
+    \ -1\n      (let* ([avg (/ (+ n m) 2)]\n             [bin (integer->binary avg)])\n\
+    \        (string-append \"0b\" bin))))\n", "  (if (&gt; n m)\n      -1\n     \
+    \ (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let\
+    \ ([avg (/ (+ n m) 2)])\n        (string-append \"0b\" (integer->binary avg)))))\n",
+  "  (if (> n m)\n      -1\n      (let ((avg (round (/ (+ n m) 2))))\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (> n m)\n     \
+    \ -1\n      (let* ([avg (/ (+ n m) 2)]\n             [bin (number->string avg\
+    \ 2)])\n        (string-append \"0b\" bin))))\n", "  (if (&gt; n m)\n      -1\n\
+    \      (let ([sum (for/sum ([i (in-range n (add1 m))]) i)])\n        (string-append\
+    \ \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n</code>\n", "  (if\
+    \ (&gt; n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (round (/\
+    \ sum 2))]\n             [bin (number-&gt;string (inexact-&gt;exact (string-&gt;number\
+    \ (number-&gt;string avg) 2)) 2)])\n        (string-append \"0b\" bin))))\n</code>\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (&gt; n m)\n  \
+    \    -1\n      (let* ([sum (+ n m)]\n             [avg (quotient sum 2)]\n   \
+    \          [rounded (round avg)])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary rounded))))))\n</code>\n", "  (if (> n m)\n      -1\n  \
+    \    (let ([avg (/ (+ n m) 2)])\n        (string-append \"0b\" (integer->binary\
+    \ avg)))))\n", "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (number->string (integer->binary avg))))))\n",
+  "  (cond [(> n m) -1]\n        [else (round (average n m))]))\n", "  (define (avg\
+    \ n m)\n    (/ (+ n m) 2))\n  (define (round-to-int n)\n    (if (negative? (-\
+    \ n (round n)))\n        (round (+ n 1))\n        (round n)))\n  (define (int-to-bin\
+    \ n)\n    (if (zero? n)\n        \"\"\n        (string-append (int-to-bin (quotient\
+    \ n 2))\n                       (number->string (remainder n 2)))))\n  (if (>\
+    \ n m)\n      -1\n      (string-append \"0b\" (int-to-bin (round-to-int (avg n\
+    \ m))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/\
+    \ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string (integer-&gt;binary\
+    \ avg))))))\n</code>\n", "  (cond [(> n m) -1]\n        [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (if (> n m)\n      -1\n      (let* ([sum (+\
+    \ n m)]\n             [avg (quotient sum 2)]\n             [rounded (round avg)])\n\
+    \        (string->number (string-append \"0b\" (number->string rounded))))))\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([avg (/ (+ n m) 2)])\n        (string-append\
+    \ \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (cond [(> n m) -1]\n   \
+    \     [else (integer->binary (round (/ (+ n m) 2)))]))\n", "  (if (&gt; n m) -1\n\
+    \      (let ([avg (round (/ (+ n m) 2))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (cond\n    [(> n m) -1]\n    [else\
+    \ (define sum (+ n m))\n          (define avg (/ sum 2))\n          (define rounded\
+    \ (round avg))\n          (string->symbol (string-append \"0b\" (number->string\
+    \ (integer->binary rounded))))]))\n", "  (if (&gt; n m)\n      -1\n      (let\
+    \ ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (< n m)\n      (let* ([sum\
+    \ (+ n m)]\n             [avg (/ sum 2)]\n             [rounded (round avg)])\n\
+    \        (string-append \"0b\" (number->string (integer->binary rounded))))\n\
+    \      -1))\n", "  (if (&gt; n m)\n      -1\n      (let ([sum (apply + (range\
+    \ n (+ m 1)))])\n        (string-append \"0b\" (integer-&gt;binary (round (/ sum\
+    \ (- m n 1))))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let ([avg (/\
+    \ (+ n m) 2)])\n        (string-append \"0b\" (integer->binary avg)))))\n", " \
+    \ (if (> n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient\
+    \ sum 2)]\n             [rounded (round avg)])\n        (string->symbol (string-append\
+    \ \"0b\" (number->string (integer->binary rounded)))))))\n", "  (if (> n m)\n\
+    \      -1\n      (define (avg n m)\n        (define (sum n m)\n          (if (=\
+    \ n m)\n              n\n              (+ n (sum (+ n 1) m))))\n        (/ (sum\
+    \ n m) (- m n 1)))\n  (define (round n)\n    (if (= n 0)\n        0\n        (if\
+    \ (< n 0)\n            (round (- n 0.5))\n            (round (+ n 0.5))))\n  (define\
+    \ (dec2bin n)\n    (if (= n 0)\n        \"\"\n        (string-append (dec2bin\
+    \ (quotient n 2)) (number->string (remainder n 2)))))\n  (string-append \"0b\"\
+    \ (dec2bin (round (avg n m)))))\n", "  (if (&gt; n m)\n      -1\n      (let ([avg\
+    \ (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let\
+    \ ([avg (/ (+ n m) 2)])\n        (string-append \"0b\" (number->string (integer-length\
+    \ avg))))))\n", "  (if (&gt; n m)\n      -1\n      (string-&gt;number (number-&gt;string\
+    \ (round (/ (+ n m) 2))) 2)))\n</code>\n", "  (if (&gt; n m)\n      -1\n     \
+    \ (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (let ([sum 0]\n            [count 0])\n        (for ([i (in-range n (+ m 1))])\n\
+    \          (set! sum (+ sum i))\n          (set! count (+ count 1)))\n       \
+    \ (integer-&gt;binary (round (/ sum count))))))\n</code>\n", "  (cond [(> n m)\
+    \ -1]\n        [else (let ([avg (round (/ (+ n m) 2.0))])\n                (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))]))\n", "  (if (&gt; n m)\n \
+    \     -1\n      (let ([sum (+ n m)])\n        (string-append \"0b\" (integer-&gt;binary\
+    \ (round (/ sum 2)))))))\n</code>\n", "  (define (avg n m)\n    (define (sum n\
+    \ m)\n      (if (= n m)\n          m\n          (+ n (sum (+ n 1) m))))\n    (if\
+    \ (&gt; n m)\n        -1\n        (round (/ (sum n m) (- m n 1)))))\n  (string-append\
+    \ \"0b\" (number-&gt;string (integer-&gt;binary (avg n m)))))\n</code>\n", " \
+    \ (cond\n    [(> n m) -1]\n    [else\n     (define sum (for/sum ([i (in-range\
+    \ n (+ m 1))]) i))\n     (define avg (quotient sum (- m n)))\n     (define rounded\
+    \ (round avg))\n     (string-append \"0b\" (number->string (integer->binary rounded)))]))\n",
+  "  (if (> n m)\n      -1\n      (let ([sum (+ n m)])\n        (string-append \"\
+    0b\" (integer->binary (round (/ sum 2)))))))\n", "  (cond\n    [(> n m) -1]\n\
+    \    [else\n     (define sum (apply + (range n (+ m 1))))\n     (define avg (/\
+    \ sum (- m n)))\n     (define rounded (round avg))\n     (string-append \"0b\"\
+    \ (number->string (integer->binary rounded)))]))\n", "  (define (avg n m)\n  \
+    \  (cond [(> n m) -1]\n          [else (round (/ (+ n m) 2))]))\n  (define (to-binary\
+    \ n)\n    (cond [(= n 0) \"0b0\"]\n          [(= n 1) \"0b1\"]\n          [else\
+    \ (string-append (to-binary (quotient n 2))\n                               (number->string\
+    \ (remainder n 2)))]))\n  (to-binary (avg n m)))\n", "  (if (> n m)\n      -1\n\
+    \      (let ([sum (+ n m)])\n        (let ([avg (/ sum 2)])\n          (let ([rounded-avg\
+    \ (round avg)])\n            (let ([binary-rounded-avg (number->string rounded-avg\
+    \ 2)])\n              (string-append \"0b\" binary-rounded-avg)))))))\n", "  (if\
+    \ (&gt; n m)\n      -1\n      (let ([sum (for/sum ([i (in-range n (+ m 1))]) i)])\n\
+    \        (string-append \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2))])\n\
+    \        (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (if\
+    \ (> n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient sum\
+    \ 2)]\n             [bin (number->string (round avg) 2)])\n        (string-append\
+    \ \"0b\" bin))))\n", "  (if (> n m)\n      -1\n      (define (avg n m)\n     \
+    \   (quotient (+ n m) 2))\n      (define (rounded_avg n m)\n        (avg n m))\n\
+    \      (define (to-binary n)\n        (if (= n 0)\n            \"\"\n        \
+    \    (string-append (to-binary (quotient n 2))\n                           (number->string\
+    \ (remainder n 2)))))\n      (string-append \"0b\" (to-binary (rounded_avg n m)))))\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([sum 0]\n            [count 0])\n     \
+    \   (for ([i (in-range n (+ m 1))])\n          (set! sum (+ sum i))\n        \
+    \  (set! count (+ count 1)))\n        (string-append \"0b\" (integer-&gt;binary\
+    \ (round (/ sum count)))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let\
+    \ ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let\
+    \ ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number->string\
+    \ (integer->binary avg))))))\n", "  (if (&gt; n m)\n      -1\n      (let ([sum\
+    \ 0]\n            [count 0])\n        (for ([i (in-range n (+ m 1))])\n      \
+    \    (set! sum (+ sum i))\n          (set! count (+ count 1)))\n        (let ([avg\
+    \ (/ sum count)])\n          (string-append \"0b\" (integer-&gt;binary (round\
+    \ avg)))))))\n</code>\n", "  (if (> n m)\n      -1\n      (let ([sum (for/sum\
+    \ ([i (in-range n (+ m 1))]) i)])\n        (string-append \"0b\" (integer->binary\
+    \ (round (/ sum (- m n))))))))\n", "  (cond [(> n m) -1]\n        [else (string-append\
+    \ \"0b\" (integer->binary (round (/ (+ n m) 2))))]))\n", "  (if (&gt; n m)\n \
+    \     -1\n      (let ([sum (for/sum ([i (in-range n (add1 m))]) i)])\n       \
+    \ (let ([avg (round (/ sum (- m n)))])\n          (string-append \"0b\" (integer-&gt;binary\
+    \ avg))))))\n</code>\n", "  (if (> n m)\n      -1\n      (string->number (number->string\
+    \ (round (/ (+ n m) 2))) 2)))\n", "  (cond [(> n m) -1]\n        [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (if (&gt; n m)\n      -1\n      (let ([sum\
+    \ (for/sum ([i (in-range n (+ m 1))]) i)])\n        (string-append \"0b\" (integer-&gt;binary\
+    \ (round (/ sum (- m n))))))))\n</code>\n", "  (if (> n m)\n      -1\n      (string->number\
+    \ (number->string (round (/ (+ n m) 2))) 2)))\n", "  (if (> n m)\n      -1\n \
+    \     (define (avg n m)\n        (/ (+ n m) 2))\n  (define (rounded_avg n m)\n\
+    \    (round (avg n m)))\n  (define (binary n)\n    (if (= n 0)\n        \"\"\n\
+    \        (string-append (binary (quotient n 2))\n                       (number->string\
+    \ (remainder n 2)))))\n  (string-append \"0b\" (binary (rounded_avg n m)))))\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (&gt; n m)\n  \
+    \    -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"\
+    0b\" (number-&gt;string (integer-&gt;binary avg))))))\n</code>\n", "  (if (> n\
+    \ m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient sum 2)]\n\
+    \             [bin (integer->binary avg)])\n        (string-append \"0b\" bin))))\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (> n m)\n     \
+    \ -1\n      (let* ([sum (+ n m)]\n             [avg (quotient sum 2)]\n      \
+    \       [bin (number->string (round avg) 2)])\n        (string-append \"0b\" bin))))\n",
+  "  (if (> n m)\n      -1\n      (let ([sum (for/sum ([i (in-range n (+ m 1))]) i)])\n\
+    \        (string-append \"0b\" (integer->binary (round (/ sum (- m n))))))))\n",
+  "  (if (&gt; n m)\n      -1\n      (string-&gt;number (number-&gt;string (round\
+    \ (/ (+ n m) 2))) 2)))\n</code>\n", "  (cond\n    [(> n m) -1]\n    [else (string->number\
+    \ (number->string (round (/ (+ n m) 2))) 2)]))\n", "  (if (> n m)\n      -1\n\
+    \      (let ([s (for/sum ([i (in-range n (add1 m))]) i)])\n        (string-append\
+    \ \"0b\" (integer->binary (round (/ s (- (add1 m) n))))))))\n", "  (if (> n m)\n\
+    \      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (&gt; n m)\n  \
+    \    -1\n      (string-&gt;number (number-&gt;string (round (/ (+ n m) 2))) 2)))\n\
+    </code>\n", "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (integer->binary avg)))))\n", "  (if (&gt; n m)\n\
+    \      -1\n      (let* ([avg (round (/ (+ n m) 2))]\n             [bin (number-&gt;string\
+    \ avg 2)])\n        (string-append \"0b\" bin))))\n</code>\n", "  (if (&gt; n\
+    \ m)\n      -1\n      (let ([sum (+ n m)])\n        (let ([avg (quotient sum 2)])\n\
+    \          (let ([rounded (round avg)])\n            (string-append \"0b\" (integer-&gt;binary\
+    \ rounded)))))))\n</code>\n", "  (cond [(> n m) -1]\n        [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (if (&gt; n m)\n      -1\n      (let ([avg\
+    \ (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string\
+    \ (integer-&gt;binary avg))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n   \
+    \   (string-append \"0b\" (integer-&gt;binary (round (/ (+ n m) 2))))))\n</code>\n",
+  "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n      \
+    \  (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (if (&gt;\
+    \ n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n</code>\n", "  (if\
+    \ (&gt; n m)\n      -1\n      (let* ([sum (+ n m)]\n             [avg (quotient\
+    \ sum 2)]\n             [rounded (round avg)])\n        (string-append \"0b\"\
+    \ (number-&gt;string (integer-&gt;binary rounded))))))\n</code>\n", "  (if (&gt;\
+    \ n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (if (&gt; n m)\n      -1\n\
+    \      (let ([sum (for/sum ([i (in-range n (add1 m))]) i)])\n        (string-append\
+    \ \"0b\" (integer-&gt;binary (round (/ sum (- (add1 m) n))))))))\n</code>\n",
+  "  (if (&gt; n m)\n      -1\n      (string-&gt;number (number-&gt;string (round\
+    \ (/ (+ n m) 2))) 2)))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let ([sum\
+    \ (apply + (range n (+ m 1)))]\n            [avg (quotient sum (- m n))])\n  \
+    \      (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (if\
+    \ (&gt; n m)\n      -1\n      (let ([sum (for/sum ([i (in-range n (+ m 1))]) i)])\n\
+    \        (string-append \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (let* ([sum (+ n m)]\n        \
+    \     [avg (/ sum 2)]\n             [rounded (round avg)]\n             [binary\
+    \ (number-&gt;string rounded 2)])\n        (string-append \"0b\" binary))))\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (number->string (integer->binary avg))))))\n", "  (if (&gt; n m)\n  \
+    \    -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append \"\
+    0b\" (number-&gt;string (integer-&gt;binary avg))))))\n</code>\n", "  (if (> n\
+    \ m)\n      -1\n      (let* ([avg (/ (+ n m) 2)]\n             [rounded (round\
+    \ avg)]\n             [binary (number->string rounded 2)])\n        (string-append\
+    \ \"0b\" binary))))\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/\
+    \ (+ n m) 2.0))])\n        (string-append \"0b\" (number-&gt;string (integer-&gt;binary\
+    \ avg))))))\n</code>\n", "  (if (> n m)\n      -1\n      (string->number (number->string\
+    \ (round (/ (+ n m) 2))) 2)))\n", "  (if (> n m)\n      -1\n      (let ([avg (round\
+    \ (/ (+ n m) 2.0))])\n        (string-append \"0b\" (number->string (integer->binary\
+    \ avg))))))\n", "  (if (&gt; n m) -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (number-&gt;string (integer-&gt;binary avg))))))\n\
+    </code>\n", "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (integer->binary avg)))))\n", "  (if (&gt; n m)\n\
+    \      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (integer-&gt;binary avg)))))\n</code>\n", "  (define (average n m)\n\
+    \    (round (/ (+ n m) 2)))\n  (cond [(> n m) -1]\n        [else (number->string\
+    \ (average n m) 2)]))\n", "  (cond\n    [(> n m) -1]\n    [else (integer->binary\
+    \ (round (/ (+ n m) 2)))]))\n", "  (if (> n m)\n      -1\n      (let ([sum 0]\n\
+    \            [count 0])\n        (for ([i (in-range n (add1 m))])\n          (set!\
+    \ sum (+ sum i))\n          (set! count (add1 count)))\n        (string->symbol\
+    \ (format \"0b~a\" (integer->binary (round (/ sum count))))))))\n", "  (if (>\
+    \ n m)\n      -1\n      (string->number (number->string (round (/ (+ n m) 2)))\
+    \ 2)))\n", "  (if (&gt; n m)\n      -1\n      (let* ([sum (+ n m)]\n         \
+    \    [avg (quotient sum 2)]\n             [rounded (round avg)])\n        (string-append\
+    \ \"0b\" (number-&gt;string (integer-&gt;binary rounded))))))\n</code>\n", " \
+    \ (define (avg n m)\n    (/ (+ n m) 2))\n  (define (to-binary n)\n    (if (= n\
+    \ 0)\n        \"\"\n        (string-append (to-binary (quotient n 2))\n      \
+    \                 (number->string (remainder n 2)))))\n  (if (> n m)\n      -1\n\
+    \      (to-binary (round (avg n m)))))\n", "  (if (&gt; n m)\n      -1\n     \
+    \ (string-append \"0b\" (number-&gt;string (round (/ (+ n m) 2))))))\n</code>\n",
+  "  (if (> n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n        (string-append\
+    \ \"0b\" (integer->binary avg)))))\n", "  (if (&gt; n m)\n      -1\n      (let*\
+    \ ([sum (+ n m)]\n             [avg (quotient sum 2)]\n             [rounded (round\
+    \ avg)])\n        (string-append \"0b\" (number-&gt;string (integer-&gt;binary\
+    \ rounded))))))\n</code>\n", "  (if (&gt; n m)\n      -1\n      (let* ([avg (round\
+    \ (/ (+ n m) 2))]\n             [bin (number-&gt;string avg 2)])\n        (string-append\
+    \ \"0b\" bin))))\n", "  (if (> n m)\n      -1\n      (let* ([sum (+ n m)]\n  \
+    \           [avg (quotient sum 2)]\n             [rounded (round avg)])\n    \
+    \    (string->symbol (format \"0b~a\" (integer->binary rounded))))))\n", "  (if\
+    \ (&gt; n m) -1\n      (let ([sum (for/sum ([i (in-range n (+ m 1))]) i)])\n \
+    \       (string-append \"0b\" (integer-&gt;binary (round (/ sum (- m n))))))))\n\
+    </code>\n", "  (if (&gt; n m)\n      -1\n      (let ([avg (round (/ (+ n m) 2.0))])\n\
+    \        (string-append \"0b\" (integer-&gt;binary avg)))))\n</code>\n"]
+stop_tokens:
+- "\n(define "
+- "\n#|"
+- "\n;"
+- "\n("

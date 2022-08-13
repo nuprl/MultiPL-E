@@ -3,7 +3,7 @@ import csv
 LANG_NAME = "C#"
 
 CSV_DICT = {}
-with open('csharp_codes.csv', 'r') as csv_f:
+with open('../csharp_codes.csv', 'r') as csv_f:
     csv_reader = csv.reader(csv_f)
     for r in csv_reader:
         CSV_DICT[r[0]] = r

@@ -52,6 +52,20 @@ RUNTIME = [
     "Swift": ["Timeout"],
     "Python": ["RecursionError"],
     "Racket": ["timeout"]
+  },
+  {
+    "Theme": "AssertionFailed",
+    "Swift": [],
+    "Python": ["AssertionError"],
+    "Racket": [],
+    "C#" : ["AssertionError"]
+  },
+  {
+    "Theme": "OK",
+    "Swift": ["OK"],
+    "Python": ["OK"],
+    "Racket": ["OK"],
+    "C#": ["OK"]
   }
 ]
 
@@ -186,6 +200,13 @@ MODEL = [
   }
 ]
 
+for d in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL]:
+  for theme in d: 
+    for v in ['C#', 'Python', 'Swift', 'Racket']:
+      if v in theme:
+        for value in theme[v]:
+          print(f"{theme['Theme']},{value},{v}")
+
 
 
 
@@ -205,8 +226,5 @@ def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
-# print(RACKET_CODES_DATA) 
 PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
 CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
-# print(CSHARP_CODES_DATA)
-# print(RACKET_CODES_DATA)
