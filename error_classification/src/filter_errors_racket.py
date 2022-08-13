@@ -39,7 +39,7 @@ class Filters:
     # hack: since dir() sorts members alphabetically, we do this so this 
     # is the first to be checked.
     @staticmethod
-    def A01_generating_webpage_or_markdown(e):
+    def A01GeneratingWebpageOrMarkdown(e):
         """
         Generated code seems to be part of webpage or markdown source file.
         """
@@ -49,7 +49,7 @@ class Filters:
                'read-syntax: bad syntax `##`' in e.stderr # generating Markdown headers
     
     @staticmethod
-    def A02_incomplete_generation(e):
+    def A02IncompleteGeneration(e):
         """
         Quick heuristic: programs that have generation timeouts will not have correct matching brackets.
         We treat all kinds of braces as the same (i.e. (] is a matching pair).
@@ -57,45 +57,45 @@ class Filters:
         return count_braces_balance(e.program) != 0
 
     @staticmethod
-    def A03_if_extra_args(e):
+    def A03IfExtraArgs(e):
         """Generated code contains if with more than 3 arguments."""
         return "if: bad syntax" in e.stderr
 
     @staticmethod
-    def arity_mismatch(e):
+    def arityMismatch(e):
         """A function is called with wrong number of arguments."""
         return "arity mismatch;" in e.stderr
 
     @staticmethod
-    def bad_syntax(e):
+    def badSyntax(e):
         """
         Racket compiler reported bad syntax (excluding ifs).
         """
         return "bad syntax" in e.stderr
 
     @staticmethod
-    def missing_else(e):
+    def missingElse(e):
         """
         Generated code contains if with 2 arguments or less; expecting 3.
         """
         return 'missing an "else" expression' in e.stderr
 
     @staticmethod
-    def bad_match(e):
+    def badMatch(e):
         """
         Malformed match statement: either missing a operand for match clause; or syntax error in pattern.
         """
         return ' match:' in e.stderr or "match: no matching clause for" in e.stderr
 
     @staticmethod
-    def bad_char_const(e):
+    def badCharConst(e):
         """
         Racket compiler reported bad character constant.
         """
         return "read-syntax: bad character constant" in e.stderr
 
     @staticmethod
-    def missing_or_unmatched_braces(e):
+    def missingOrUnmatchedBraces(e):
         """
         Missing or unmatched braces that is not caused by incomplete generation.
         """
@@ -103,14 +103,14 @@ class Filters:
         return not (result is None)
 
     @staticmethod
-    def unknown_escape_sequence(e):
+    def unknownEscapeSequence(e):
         """
         Bad escape sequence; caused by a missing backslash \\ in regular expressions (2 required in escape sequences for regular expressions).
         """
         return "read-syntax: unknown escape sequence" in e.stderr
 
     @staticmethod
-    def default_value_exp_missing(e):
+    def defaultValueExpMissing(e):
         """
         Racket requiring the nested function (with same name but a "'" character at the end) to have a default value for the last argument.
         The "'" character at the end might be Haskell syntax.
@@ -118,35 +118,35 @@ class Filters:
         return "default-value expression missing" in e.stderr
 
     @staticmethod
-    def unbound_identifier(e):
+    def unboundIdentifier(e):
         """
         generated code uses non-existent identifier names.
         """
         return "unbound identifier" in e.stderr
     
     @staticmethod
-    def use_before_init(e):
+    def useBeforeInit(e):
         """
         Use of an identifier before initialization.
         """
         return "cannot use before initialization" in e.stderr
 
     @staticmethod
-    def let_duplicate_identifier(e):
+    def letDuplicateIdentifier(e):
         """
         let special form defines duplicate identifier.
         """
         return "let: duplicate identifier" in e.stderr
 
     @staticmethod
-    def contract_violation(e):
+    def contractViolation(e):
         """
         contract violation as errors.  
         """
         return "contract violation" in e.stderr
 
     @staticmethod
-    def index_out_of_range(e):
+    def indexOutOfRange(e):
         """
         out-of-range index access for list and string; or ending index smaller than beginning index for substring.
         """
@@ -155,21 +155,21 @@ class Filters:
                "list contains too few elements" in e.stderr 
 
     @staticmethod
-    def string_index_out_of_range(e):
+    def stringIndexOutOfRange(e):
         """
         out-of-range index access for string; or ending index smaller than beginning index for substring.
         """
         return "index is out of range" in e.stderr or "ending index is smaller than starting index" in e.stderr
 
     @staticmethod
-    def hashmap_no_value_for_key(e):
+    def hashmapNoValueForKey(e):
         """
         No value for given key for hash map.
         """
         return "hash-ref: no value found for key" in e.stderr or "hash-update: no value found for key:" in e.stderr
     
     @staticmethod
-    def bad_built_in_fn_app_call(e):
+    def badBuiltInFnAppCall(e):
         """
         Calling a built-in function in a non-expected way (with correct arity).
         """
@@ -185,34 +185,34 @@ class Filters:
                "for: expected a sequence" in e.stderr
 
     @staticmethod
-    def application_on_not_a_function(e):
+    def applicationOnNotAFunction(e):
         """
         generated program attempts to apply function application with rator that is not a function.
         """
         return "application: not a procedure;" in e.stderr or "function application is not allowed;" in e.stderr
 
     @staticmethod
-    def division_by_0(e):
+    def divisionBy0(e):
         """
         """
         return "division by zero" in e.stderr
     
     @staticmethod
-    def zz99_value_failure(e):
+    def zz99ValueFailure(e):
         """
         returned value is different than the expected value in tests.
         """
         return "FAILURE" in e.stderr and (not ("ERROR" in e.stderr))
 
     @staticmethod
-    def else_as_expression(e):
+    def elseAsExpression(e):
         """
         Generated code contains an 'else' as expression.
         """
         return "else: not allowed as an expression" in e.stderr
 
     @staticmethod
-    def error_by_generated_program(e):
+    def errorByGeneratedProgram(e):
         """
         Generated code contains explicitly created error and program execution reaches the created error.
         """
