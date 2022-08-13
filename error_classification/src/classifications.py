@@ -33,7 +33,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": ["list_index_too_large"],
+    "Racket": ["index_out_of_range"],
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -76,7 +76,7 @@ STATIC = [
       "CompileError-TypeCheck-CallingNonFunctionType",
       "CompileError-InvalidSyntax"
     ],
-    "Racket": ["unbound_identifier"]
+    "Racket": ["unbound_identifier", "use_before_init", "application_on_not_a_function"]
   },
   {
     "Theme": "MissingReturn",
@@ -92,13 +92,18 @@ STATIC = [
       "CompileError-TypeMismatch-StringIndices",
       "CompileError-TypeMismatch-StringsArentCharArrays"
     ],
-    "Racket": [], # YT: Surprisingly it seems that there is no such cases for Racket.
+    "Racket": ["bad_built_in_fn_app_call"], 
   },
   {
     "Theme": "Re-Declaration",
     "C#": ["Re-declaration"],
     "Racket": ["let_duplicate_identifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
+  },
+  {
+    "Theme": "ArityMismatch",
+    "Racket": ["arity_mismatch"],
+    "C#": ["Invalid argument"]
   }
 ]
 

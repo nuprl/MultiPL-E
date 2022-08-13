@@ -9,9 +9,9 @@ import csv
 from pathlib import Path
 
 SOURCE="rkt-davinci-0.2-reworded"
-SRC_PATH=Path(Path(__file__).parent, "..", "experiments", SOURCE)
-WRITE_PATH_DIR=Path(Path(__file__).parent, "..", "error_examples", SOURCE)
-CSV_PATH=Path(Path(__file__).parent, "..", "error_examples", "racket_codes.csv")
+SRC_PATH=Path(Path(__file__).parent, "..", "..", "experiments", SOURCE)
+WRITE_PATH_DIR=Path(Path(__file__).parent, "..", "..", "error_examples", SOURCE)
+CSV_PATH=Path(Path(__file__).parent, "..", ".." ,"error_examples", "racket_codes.csv")
 
 def count_braces_balance(program):
     count = 0
@@ -63,6 +63,11 @@ class Filters:
         return "if: bad syntax" in e.stderr
 
     @staticmethod
+    def arity_mismatch(e):
+        """A function is called with wrong number of arguments."""
+        return "arity mismatch;" in e.stderr
+
+    @staticmethod
     def bad_syntax(e):
         """
         Racket compiler reported bad syntax (excluding ifs).
@@ -81,7 +86,7 @@ class Filters:
         """
         Malformed match statement: either missing a operand for match clause, or syntax error in pattern.
         """
-        return ' match:' in e.stderr
+        return ' match:' in e.stderr or "match: no matching clause for" in e.stderr
 
     @staticmethod
     def bad_char_const(e):
@@ -116,9 +121,16 @@ class Filters:
     @staticmethod
     def unbound_identifier(e):
         """
-        Generated code uses non-existent identifier names.
+        generated code uses non-existent identifier names.
         """
         return "unbound identifier" in e.stderr
+    
+    @staticmethod
+    def use_before_init(e):
+        """
+        Use of an identifier before initialization.
+        """
+        return "cannot use before initialization" in e.stderr
 
     @staticmethod
     def let_duplicate_identifier(e):
@@ -135,11 +147,50 @@ class Filters:
         return "contract violation" in e.stderr
 
     @staticmethod
-    def list_index_too_large(e):
+    def index_out_of_range(e):
         """
-        index too large for list-ref
+        out-of-range index access for list and string, or ending index smaller than beginning index for substring.
         """
-        return "list-ref: index too large" in e.stderr
+        return "list-ref: index too large" in e.stderr or \
+               "is not an exact nonnegative integer" in e.stderr or \
+               "list contains too few elements" in e.stderr 
+
+    @staticmethod
+    def string_index_out_of_range(e):
+        """
+        out-of-range index access for string, or ending index smaller than beginning index for substring.
+        """
+        return "index is out of range" in e.stderr or "ending index is smaller than starting index" in e.stderr
+
+    @staticmethod
+    def hashmap_no_value_for_key(e):
+        """
+        No value for given key for hash map.
+        """
+        return "hash-ref: no value found for key" in e.stderr or "hash-update: no value found for key:" in e.stderr
+    
+    @staticmethod
+    def bad_built_in_fn_app_call(e):
+        """
+        Calling a built-in function in a non-expected way (with correct arity).
+        """
+        return "member: not a proper list" in e.stderr or \
+               "map: all lists must have same size" in e.stderr or \
+               "hash: key does not have a value (i.e., an odd number of arguments were provided)" in e.stderr or \
+               "number->string: inexact numbers can only be printed in base 10" in e.stderr or \
+               "  procedure: round" in e.stderr or \
+               "  procedure: sort" in e.stderr or \
+               "  procedure: not" in e.stderr or \
+               "list-ref: index reaches a non-pair" in e.stderr or \
+               "map: argument mismatch;" in e.stderr or \
+               "for: expected a sequence" in e.stderr
+
+    @staticmethod
+    def application_on_not_a_function(e):
+        """
+        generated program attempts to apply function application with rator that is not a function.
+        """
+        return "application: not a procedure;" in e.stderr or "function application is not allowed;" in e.stderr
 
     @staticmethod
     def division_by_0(e):
@@ -148,11 +199,11 @@ class Filters:
         return "division by zero" in e.stderr
     
     @staticmethod
-    def value_failure(e):
+    def zz99_value_failure(e):
         """
         returned value is different than the expected value in tests.
         """
-        return "FAILURE" in e.stderr
+        return "FAILURE" in e.stderr and (not ("ERROR" in e.stderr))
 
     @staticmethod
     def else_as_expression(e):
@@ -160,6 +211,13 @@ class Filters:
         Generated code contains an 'else' as expression.
         """
         return "else: not allowed as an expression" in e.stderr
+
+    @staticmethod
+    def error_by_generated_program(e):
+        """
+        Generated code contains explicitly created error and program execution reaches the created error.
+        """
+        return "(error" in e.program and "ERROR" in e.stderr
 
     @staticmethod
     def timeout(e):
@@ -180,6 +238,7 @@ def print_program(result, name, f=sys.stdout):
 
 def find_errors(path):
     files = path.glob("*.results.yaml")
+    total_results_count = 0
     errors = []
     #for f in [next(files) for _ in range(len(files))]:
     for f in files:
@@ -187,7 +246,8 @@ def find_errors(path):
         with open(f) as text:
             result_file = yamlize_errors.TestResults.load(text.read())
             results = result_file.results
-            errored_results = [(r, result_file.name) for r in results if r.exit_code != 0]
+            total_results_count += len(results)
+            errored_results = [(r, result_file.name) for r in results if r.exit_code != 0 or r.status != "OK"]
 
             errors.extend(errored_results)
 
@@ -251,8 +311,9 @@ def find_errors(path):
     print("unclassified:", len(unclassified))
     total += len(unclassified)
 
-    print("total:", total)
-    print("should have:", len(errors))
+    print("total results:", total_results_count)
+    print("total errors:", total)
+    print("should have:", len(errors), "errors")
 
     with CSV_PATH.open('w', newline='') as csv_f:
 
@@ -268,7 +329,7 @@ def find_errors(path):
             "Does not fit in all above descriptions",\
             len(unclassified),\
             f"{SOURCE}/unclassified.txt"])
-        csv_writer.writerow(["total", "", total, ""])
+        csv_writer.writerow(["total errors", "", total, ""])
         
 
 def main():
