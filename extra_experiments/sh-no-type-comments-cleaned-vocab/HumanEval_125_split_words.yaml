@@ -1,0 +1,1149 @@
+name: HumanEval_125_split_words
+language: sh
+prompt: "#!/bin/bash\n# Given a string of words, return a list of words split on whitespace,\
+  \ if no whitespaces exists in the text you\n# should split on commas ',' if no commas\
+  \ exists you should return the number of lower-case letters with odd order in the\n\
+  # alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25\n# Examples\n# >>> $(split_words\
+  \ \"Hello world\\!\")\n# ['\"Hello\"', '\"world\\\\!\"']\n# >>> $(split_words \"\
+  Hello,world\\!\")\n# ['\"Hello\"', '\"world\\\\!\"']\n# >>> $(split_words \"abcdef\"\
+  )\n# \"3\"\nsplit_words() {\n"
+tests: "}\n\ncandidate() {\n    split_words \"$@\"\n}\n\nset -e\nrun_test() {\n  \
+  \  [[ $(candidate \"Hello world\\!\") = \"Hello world\\!\" ]]\n    [[ $(candidate\
+  \ \"Hello,world\\!\") = \"Hello world\\!\" ]]\n    [[ $(candidate \"Hello world,\\\
+  !\") = \"Hello world,\\!\" ]]\n    [[ $(candidate \"Hello,Hello,world \\!\") = \"\
+  Hello,Hello,world \\!\" ]]\n    [[ $(candidate \"abcdef\") = \"3\" ]]\n    [[ $(candidate\
+  \ \"aaabb\") = \"2\" ]]\n    [[ $(candidate \"aaaBb\") = \"1\" ]]\n    [[ $(candidate\
+  \ \"\") = \"0\" ]]\n}\n\nrun_test"
+completions: ["    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/\
+    \ /\"\\,\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep -o '[a-z]'\
+    \ | awk '{print NR%2}' | grep -c 1)\n    fi", "    local words=\"$1\"\n    if\
+    \ [[ \"$words\" =~ [^[:space:],] ]]; then\n        echo \"${words//[!a-z]/}\"\
+    \ | grep -o . | awk '{if(NR%2==1)print}' | wc -l\n    elif [[ \"$words\" =~ [^[:space:]]\
+    \ ]]; then\n        echo \"${words//[,]/ }\"\n    else\n        echo \"${words//[\
+    \ ]/\\\",\\\"}\"\n    fi", "  if [[ $1 =~ \" \" ]]; then\n    echo \"[\\\"$(echo\
+    \ $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n  elif [[ $1 =~ \",\" ]]; then\n    echo\
+    \ \"[\\\"$(echo $1 | sed 's/,/\",\"/g')\\\"]\"\n  else\n    echo \"$(echo $1 |\
+    \ grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR%2}' | grep -c 1)\"\
+    \n  fi", "    if [[ $1 =~ [a-zA-Z] ]]; then\n        if [[ $1 =~ [^a-zA-Z] ]];\
+    \ then\n            if [[ $1 =~ [^a-zA-Z,] ]]; then\n                echo \"[\\\
+    \"$1\\\"]\"\n            else\n                echo \"[\\\"${1//,/\\\"\\\",\\\"\
+    }\\\"]\"\n            fi\n        else\n            echo \"$(($(echo $1 | grep\
+    \ -o [a-z] | tr -d '\\n' | wc -m) / 2))\"\n        fi\n    else\n        echo\
+    \ \"\\\"\\\"\"\n    fi", "  local text=\"$1\"\n  if [[ \"$text\" =~ [a-z] ]];\
+    \ then\n    echo \"$(echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{print ord($0)}' | awk '{if ($0 % 2 == 1) count++} END {print count}')\"\
+    \n  elif [[ \"$text\" =~ [,] ]]; then\n    echo \"$(echo \"$text\" | tr ',' '\\\
+    n')\"\n  else\n    echo \"$(echo \"$text\" | tr ' ' '\\n')\"\n  fi", "    if [[\
+    \ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo \"$1\" | tr -d '\\n' | sed 's/\\\
+    ([^ ]\\)/\"\\1\"/g'\n    elif [[ \"$1\" =~ [^a-zA-Z] ]]; then\n        echo \"\
+    $1\" | tr -d '\\n' | sed 's/\\([^,]\\)/\"\\1\"/g'\n    else\n        echo \"$1\"\
+    \ | tr -d '\\n' | sed 's/\\([^a-zA-Z]\\)/\\1\\n/g' | grep -c '[a-z]'\n    fi",
+  "    local text=\"$1\"\n    if [[ \"$text\" =~ \\  ]]; then\n        echo \"$text\"\
+    \ | sed 's/ /\", \"/g'\n    elif [[ \"$text\" =~ , ]]; then\n        echo \"$text\"\
+    \ | sed 's/,/\", \"/g'\n    else\n        echo \"$text\" | grep -o '[a-z]' | awk\
+    \ '{print NR%2}' | grep -c 1\n    fi", "    if [[ \"$1\" =~ \\  ]]; then\n   \
+    \     echo \"$1\" | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"$1\" =~\
+    \ , ]]; then\n        echo \"$1\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n   \
+    \ else\n        echo \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk\
+    \ '{a[$0]++}END{for(i in a)if(a[i]%2==1)print i}' | wc -l\n    fi", "    local\
+    \ text=\"$1\"\n    local words=()\n    local word=\"\"\n    local c=\"\"\n   \
+    \ local i=0\n    local odd_count=0\n    local odd_letters=()\n    local odd_letter=\"\
+    \"\n    local ord_a=97\n    local ord_z=122\n    local ord_0=48\n    local ord_9=57\n\
+    \    local ord_A=65\n    local ord_Z=90\n    local ord_space=32\n    local ord_comma=44\n\
+    \    local ord_exclamation=33\n    local ord_question=63\n    local ord_period=46\n\
+    \    local ord_colon=58\n    local ord_semicolon=59\n    local ord_slash=47\n\
+    \    local ord_backslash=92\n    local ord_quote=34\n    local ord_single_quote=39\n\
+    \    local ord_left_paren=40\n    local ord_right_paren=41\n    local ord_left_bracket=91\n\
+    \    local ord_right_bracket=93\n    local ord_left_brace=123\n    local ord_right_brace=125\n\
+    \    local ord_underscore=95\n    local ord_dash=45\n    local ord_plus=43\n \
+    \   local ord_equals=61\n    local ord_asterisk=42\n    local ord_ampersand=38\n\
+    \    local ord_percent=37\n    local ord_dollar=36\n    local ord_pound=35\n \
+    \   local ord_at=64\n    local ord_tilde=126\n    local ord_caret=94\n    local\
+    \ ord_backtick=96\n    local ord_pipe=124\n    local ord_less_than=60\n    local\
+    \ ord_greater_than=62\n    local ord_newline=10\n    local ord_carriage_return=13\n\
+    \    local ord_tab=9\n    local ord_vertical_tab=11\n    local ord_form_feed=12\n\
+    \    local ord_null=0\n    local ord_delete=127\n    local ord_eof=-1\n    local\
+    \ ord_escape=27\n    local ord_bell=7\n    local ord_backspace=8\n    local ord_space=32\n\
+    \    local", "    local words=\"$1\"\n    if [[ \"$words\" =~ \\s ]]; then\n \
+    \       echo \"[\\\"$(echo \"$words\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif\
+    \ [[ \"$words\" =~ , ]]; then\n        echo \"[\\\"$(echo \"$words\" | sed 's/,/\"\
+    ,\"/g')\\\"]\"\n    else\n        echo \"$(echo \"$words\" | grep -o '[a-z]' |\
+    \ awk '{print tolower($0)}' | awk '{print NR%2}' | grep -c 1)\"\n    fi", "  \
+    \  local text=\"$1\"\n    local words=()\n    local word=\"\"\n    local i=0\n\
+    \    local c=0\n    local char=\"\"\n    local char_code=0\n    local odd_count=0\n\
+    \    local odd_count_str=\"\"\n    local word_count=0\n    local word_count_str=\"\
+    \"\n    local result=\"\"\n    local result_str=\"\"\n    local result_arr=()\n\
+    \    local result_arr_str=\"\"\n    local result_arr_str_escaped=\"\"\n    local\
+    \ result_arr_str_escaped_quoted=\"\"\n    local result_arr_str_escaped_quoted_joined=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped=\"\"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined=\"\"\n\
+    \    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_escaped=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_escaped=\"\
+    \"\n    local result_arr_str_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_escaped_quoted_joined_",
+  "    if [[ $1 =~ \\s ]]; then\n        echo \"[$(echo $1 | sed 's/ /\", \"/g')]\"\
+    \n    elif [[ $1 =~ , ]]; then\n        echo \"[$(echo $1 | sed 's/,/\", \"/g')]\"\
+    \n    else\n        echo $(echo $1 | grep -o '[a-z]' | awk '{print NR%2}' | grep\
+    \ -c 1)\n    fi", "  if [[ $1 =~ [[:space:]] ]]; then\n    echo \"$1\" | tr '\
+    \ ' '\\n' | sed 's/^/\"/;s/$/\"/'\n  elif [[ $1 =~ , ]]; then\n    echo \"$1\"\
+    \ | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n  else\n    echo \"$1\" | grep -o '[a-z]'\
+    \ | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1\n  fi", "   \
+    \ local text=$1\n    if [[ $text =~ [^a-zA-Z, ] ]]; then\n        echo \"[\\\"\
+    $text\\\"]\"\n    elif [[ $text =~ [^a-zA-Z ] ]]; then\n        echo \"[\\\"${text//,/\\\
+    \",\\\"}\\\"]\"\n    else\n        local count=0\n        for (( i=0; i<${#text};\
+    \ i++ )); do\n            if [[ $(( $i % 2 )) -eq 0 ]] && [[ ${text:$i:1} =~ [a-z]\
+    \ ]]; then\n                (( count++ ))\n            fi\n        done\n    \
+    \    echo $count\n    fi", "    if [[ \"$1\" == *\" \"* ]]; then\n        echo\
+    \ \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ \"$1\" ==\
+    \ *\",\"* ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\",\"/g')\\\"\
+    ]\"\n    else\n        echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{print NR%2}' | grep -c 1)\"\n    fi", "  if [[ $1 =~ [a-zA-Z] ]]; then\n\
+    \    if [[ $1 =~ [^a-zA-Z] ]]; then\n      if [[ $1 =~ [^a-zA-Z,] ]]; then\n \
+    \       echo $1 | tr -d -c [a-z] | grep -o . | awk '{print NR % 2}' | grep -c\
+    \ 1\n      else\n        echo $1 | tr -d -c [a-zA-Z] | tr ',' '\\n' | awk '{print\
+    \ \"\\\"\"$0\"\\\"\"}' | tr '\\n' ' '\n      fi\n    else\n      echo $1 | tr\
+    \ -d -c [a-zA-Z] | tr ',' '\\n' | awk '{print \"\\\"\"$0\"\\\"\"}' | tr '\\n'\
+    \ ' '\n    fi\n  else\n    echo $1 | tr -d -c [a-zA-Z] | tr ',' '\\n' | awk '{print\
+    \ \"\\\"\"$0\"\\\"\"}' | tr '\\n' ' '\n  fi", "    if [[ \"$1\" =~ [\\ \\,] ]];\
+    \ then\n        echo \"$1\" | sed 's/[\\ \\,]/\\n/g' | sed 's/^/\"/' | sed 's/$/\"\
+    /'\n    else\n        echo \"$1\" | grep -o '[a-z]' | awk '{print NR % 2}' | grep\
+    \ -c '1'\n    fi", "    local input=$1\n    if [[ $input =~ [ ] ]]; then\n   \
+    \     echo \"[\\\"$(echo $input | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $input\
+    \ =~ [,] ]]; then\n        echo \"[\\\"$(echo $input | sed 's/,/\",\"/g')\\\"\
+    ]\"\n    else\n        echo $(echo $input | grep -o '[a-z]' | awk '{print NR%2}'\
+    \ | grep -c 1)\n    fi", "    local text=\"$1\"\n    local words=()\n    local\
+    \ word=''\n    local c\n    local i\n    local n\n    local n_words\n    local\
+    \ n_lower_odd\n    local n_lower_even\n    local n_lower_odd_letters\n    local\
+    \ n_lower_even_letters\n    local n_lower_odd_letters_str\n    local n_lower_even_letters_str\n\
+    \    local n_lower_odd_str\n    local n_lower_even_str\n    local n_lower_odd_str_len\n\
+    \    local n_lower_even_str_len\n    local n_lower_odd_str_len_max\n    local\
+    \ n_lower_even_str_len_max\n    local n_lower_odd_str_len_max_str\n    local n_lower_even_str_len_max_str\n\
+    \    local n_lower_odd_str_len_max_str_len\n    local n_lower_even_str_len_max_str_len\n\
+    \    local n_lower_odd_str_len_max_str_len_max\n    local n_lower_even_str_len_max_str_len_max\n\
+    \    local n_lower_odd_str_len_max_str_len_max_str\n    local n_lower_even_str_len_max_str_len_max_str\n\
+    \    local n_lower_odd_str_len_max_str_len_max_str_len\n    local n_lower_even_str_len_max_str_len_max_str_len\n\
+    \    local n_lower_odd_str_len_max_str_len_max_str_len_max\n    local n_lower_even_str_len_max_str_len_max_str_len_max\n\
+    \    local n_lower_odd_str_len_max_str_len_max_str_len_max_str\n    local n_lower_even_str_len_max_str_len_max_str_len_max_str\n\
+    \    local n_lower_odd_str_len_max_str_len_max_str_len_max_str_len\n    local\
+    \ n", "  # your code here\n  if [[ $1 == *\" \"* ]]; then\n    echo \"[\\\"${1//\
+    \ /\\\", \\\"}\\\"]\"\n  elif [[ $1 == *\",\"* ]]; then\n    echo \"[\\\"${1//,/\\\
+    \", \\\"}\\\"]\"\n  else\n    echo $(($(echo $1 | tr -d -c 'a-z' | grep -o . |\
+    \ awk '{print NR%2}' | grep -o 1 | wc -l)))\n  fi", "    local text=\"$1\"\n \
+    \   if [[ \"$text\" =~ [^a-zA-Z, ] ]]; then\n        echo \"[\\\"$text\\\"]\"\n\
+    \    elif [[ \"$text\" =~ [, ] ]]; then\n        echo \"[$(echo \"$text\" | sed\
+    \ -E 's/[, ]+/\" \"/g')]\"\n    else\n        local count=0\n        for ((i=0;\
+    \ i<${#text}; i++)); do\n            if [[ $((i % 2)) -eq 1 ]] && [[ \"${text:$i:1}\"\
+    \ =~ [a-z] ]]; then\n                count=$((count + 1))\n            fi\n  \
+    \      done\n        echo \"\\\"$count\\\"\"\n    fi", "    local text=\"$1\"\n\
+    \    if [[ \"$text\" =~ [a-zA-Z] ]]; then\n        if [[ \"$text\" =~ [a-zA-Z]\
+    \ ]]; then\n            if [[ \"$text\" =~ [a-zA-Z] ]]; then\n               \
+    \ if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                    if [[ \"$text\" =~\
+    \ [a-zA-Z] ]]; then\n                        if [[ \"$text\" =~ [a-zA-Z] ]]; then\n\
+    \                            if [[ \"$text\" =~ [a-zA-Z] ]]; then\n          \
+    \                      if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                \
+    \                    if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                  \
+    \                      if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                \
+    \                            if [[ \"$text\" =~ [a-zA-Z] ]]; then\n          \
+    \                                      if [[ \"$text\" =~ [a-zA-Z] ]]; then\n\
+    \                                                    if [[ \"$text\" =~ [a-zA-Z]\
+    \ ]]; then\n                                                        if [[ \"$text\"\
+    \ =~ [a-zA-Z] ]]; then\n                                                     \
+    \       if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                               \
+    \                                 if [[ \"$text\" =~ [a-zA-Z] ]]; then\n     \
+    \                                                               if [[ \"$text\"\
+    \ =~ [a-zA-Z] ]]; then\n                                                     \
+    \                   if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                   \
+    \                                                         if [[ \"$text\" =~ [a-zA-Z]\
+    \ ]]; then\n                                                                 \
+    \               if [[ \"$text\" =~ [a-zA-Z] ]]; then\n                       \
+    \                                                             if [[ \"$text\"\
+    \ =~ [a-zA-Z] ]]; then\n                                                     \
+    \                                   if [[ \"$text\" =~ [a-zA-Z] ]]; then\n   \
+    \                                                                            \
+    \             if [[ \"$text\" =~ [a-zA-Z] ]];", "    local text=$1\n    if [[\
+    \ $text =~ [^a-zA-Z,] ]]; then\n        echo \"[$(printf '\"%s\" ' $(tr ' ' '\\\
+    n' <<< \"$text\" | sed 's/\\\\/\\\\\\\\/g'))]\"\n    elif [[ $text =~ [^a-zA-Z]\
+    \ ]]; then\n        echo \"[$(printf '\"%s\" ' $(tr ',' '\\n' <<< \"$text\" |\
+    \ sed 's/\\\\/\\\\\\\\/g'))]\"\n    else\n        echo \"$(grep -o '[a-z]' <<<\
+    \ \"$text\" | awk '{print tolower($0)}' | awk 'NR % 2 == 1' | wc -l)\"\n    fi",
+  "  if [[ \"$1\" =~ \\  ]]; then\n    echo \"$1\" | sed 's/ /\", \"/g' | sed 's/^/\"\
+    /' | sed 's/$/\"/'\n  elif [[ \"$1\" =~ , ]]; then\n    echo \"$1\" | sed 's/,/\"\
+    , \"/g' | sed 's/^/\"/' | sed 's/$/\"/'\n  else\n    echo \"$1\" | grep -o '[a-z]'\
+    \ | awk '{print NR%2}' | grep -c 1\n  fi", "    if [[ $1 =~ \\ |\\! ]]; then\n\
+    \        echo \"[\\\"$(echo $1 | sed -e 's/ /\"\\,\\\"/g')\\\"]\"\n    elif [[\
+    \ $1 =~ \\, ]]; then\n        echo \"[\\\"$(echo $1 | sed -e 's/,/\"\\,\\\"/g')\\\
+    \"]\"\n    else\n        echo $(echo $1 | grep -o '[a-z]' | awk '{print NR%2}'\
+    \ | grep -c 1)\n    fi", "    if [[ \"$1\" =~ [[:space:]] ]]; then\n        echo\
+    \ \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ \"$1\" =~\
+    \ , ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\",\"/g')\\\"]\"\n\
+    \    else\n        echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print a[i]}' | wc -l)\"\n    fi",
+  "  if [[ $1 =~ \\s ]]; then\n    echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\
+    \"]\"\n  elif [[ $1 =~ , ]]; then\n    echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\
+    \"/g')\\\"]\"\n  else\n    echo $(echo $1 | grep -o '[a-z]' | awk '{print NR%2}'\
+    \ | grep -c 1)\n  fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo\
+    \ \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo\
+    \ $1 | grep -o '[a-z]' | awk '{print NR % 2}' | grep -c 1)\n    fi", "    local\
+    \ text=\"$1\"\n    local words=()\n    local word=''\n    local c=''\n    local\
+    \ i=0\n    local j=0\n    local n=0\n    local odd=0\n    local odd_count=0\n\
+    \    local ord=0\n    local ord_a=97\n    local ord_z=122\n    local ord_A=65\n\
+    \    local ord_Z=90\n    local ord_0=48\n    local ord_9=57\n    local ord_space=32\n\
+    \    local ord_comma=44\n    local ord_exclamation=33\n    local ord_backslash=92\n\
+    \    local ord_double_quote=34\n    local ord_single_quote=39\n    local ord_left_bracket=91\n\
+    \    local ord_right_bracket=93\n    local ord_left_brace=123\n    local ord_right_brace=125\n\
+    \    local ord_left_parenthesis=40\n    local ord_right_parenthesis=41\n    local\
+    \ ord_left_angle=60\n    local ord_right_angle=62\n    local ord_colon=58\n  \
+    \  local ord_semicolon=59\n    local ord_underscore=95\n    local ord_hyphen=45\n\
+    \    local ord_period=46\n    local ord_question=63\n    local ord_slash=47\n\
+    \    local ord_backtick=96\n    local ord_tilde=126\n    local ord_at=64\n   \
+    \ local ord_hash=35\n    local ord_dollar=36\n    local ord_percent=37\n    local\
+    \ ord_caret=94\n    local ord_ampersand=38\n    local ord_asterisk=42\n    local\
+    \ ord_plus=43\n    local ord_equal=61\n    local ord_pipe=124\n    local ord_backspace=8\n\
+    \    local ord_tab=9\n    local ord_newline=10\n    local ord_carriage_return=13\n\
+    \    local ord_vertical_tab=11\n    local ord_form_feed=12\n    local ord_escape=27\n\
+    \    local ord_delete=127\n    local ord_null=0\n    local ord_bell=7\n    local\
+    \ ord_alert", "    local text=\"$1\"\n    if [[ $text =~ \\  ]]; then\n      \
+    \  echo -n \"[\"\n        for word in $text; do\n            echo -n '\"'\n  \
+    \          echo -n \"$word\" | sed 's/\\\\/\\\\\\\\/g' | sed 's/\"/\\\\\"/g'\n\
+    \            echo -n '\",'\n        done\n        echo -n \"]\"\n    elif [[ $text\
+    \ =~ , ]]; then\n        echo -n \"[\"\n        for word in $(echo $text | tr\
+    \ ',' ' '); do\n            echo -n '\"'\n            echo -n \"$word\" | sed\
+    \ 's/\\\\/\\\\\\\\/g' | sed 's/\"/\\\\\"/g'\n            echo -n '\",'\n     \
+    \   done\n        echo -n \"]\"\n    else\n        echo -n \"$(echo $text | grep\
+    \ -o '[a-z]' | awk '{print NR % 2}' | grep -c 1)\"\n    fi", "    local str=$1\n\
+    \    local words=$(echo $str | tr -d '\\n' | tr -d '\\r' | tr -d '\\t' | tr -d\
+    \ ' ')\n    if [ -z \"$words\" ]; then\n        echo $str | tr -d '\\n' | tr -d\
+    \ '\\r' | tr -d '\\t' | tr -d ' ' | wc -c\n    else\n        echo $str | tr -d\
+    \ '\\n' | tr -d '\\r' | tr -d '\\t' | tr -d ',' | tr ' ' '\\n' | awk '{print \"\
+    \\\"\"$0\"\\\"\"}'\n    fi", "  if [[ \"$1\" =~ \\ |\\' ]]; then\n    echo \"\
+    [\\\"$(echo \"$1\" | sed 's/ /\"\\,\\\"/g')\\\"]\"\n  elif [[ \"$1\" =~ , ]];\
+    \ then\n    echo \"[\\\"$(echo \"$1\" | sed 's/,/\",\"/g')\\\"]\"\n  else\n  \
+    \  echo \"$(echo \"$1\" | grep -o '[a-z]' | grep -v -n -e '^[02468]$' | cut -d:\
+    \ -f1 | paste -sd+ - | bc)\"\n  fi", "    local text=$1\n    if [[ $text =~ [[:space:]]\
+    \ ]]; then\n        echo \"[$(echo $text | sed -e 's/ /\", \"/g')]\"\n    elif\
+    \ [[ $text =~ , ]]; then\n        echo \"[$(echo $text | sed -e 's/,/\", \"/g')]\"\
+    \n    else\n        echo $(( $(echo $text | tr -d -c 'a-z' | wc -c) % 2 ))\n \
+    \   fi", "    local text=\"$1\"\n    local words=$(echo \"$text\" | grep -o '\\\
+    w\\+')\n    if [ -z \"$words\" ]; then\n        local letters=$(echo \"$text\"\
+    \ | grep -o '[a-z]' | tr -d '\\n')\n        local count=0\n        for ((i=0;\
+    \ i<${#letters}; i+=2)); do\n            local letter=${letters:$i:1}\n      \
+    \      local ord=$(printf '%d' \"'$letter\")\n            if [ $((ord % 2)) -eq\
+    \ 0 ]; then\n                count=$((count + 1))\n            fi\n        done\n\
+    \        echo \"$count\"\n    else\n        echo \"[$(echo \"$words\" | sed 's/\\\
+    w\\+/\"&\"/g')]\"\n    fi", "    local text=\"$1\"\n    local words=()\n    local\
+    \ word=\"\"\n    local c=\"\"\n    local i=0\n    local len=${#text}\n    local\
+    \ in_word=false\n    local in_quote=false\n    local in_escape=false\n    local\
+    \ in_whitespace=false\n    local in_comma=false\n    local in_letter=false\n \
+    \   local in_odd_letter=false\n    local odd_letters=0\n    local in_even_letter=false\n\
+    \    local even_letters=0\n    local in_odd_letter_count=false\n    local in_even_letter_count=false\n\
+    \    local in_letter_count=false\n    local in_odd_letter_count_result=false\n\
+    \    local in_even_letter_count_result=false\n    local in_letter_count_result=false\n\
+    \    local in_result=false\n    local result=\"\"\n    local in_result_array=false\n\
+    \    local result_array=()\n    local result_array_index=0\n    local result_array_len=0\n\
+    \    local result_array_str=\"\"\n    local result_array_str_len=0\n    local\
+    \ result_array_str_index=0\n    local result_array_str_in_quote=false\n    local\
+    \ result_array_str_in_escape=false\n    local result_array_str_in_comma=false\n\
+    \    local result_array_str_in_result=false\n    local result_array_str_result=\"\
+    \"\n    local result_array_str_result_len=0\n    local result_array_str_result_index=0\n\
+    \    local result_array_str_result_in_quote=false\n    local result_array_str_result_in_escape=false\n\
+    \    local result_array_str_result_in_comma=false\n    local result_array_str_result_in_result=false\n\
+    \    local result_array_str_result_result=\"\"\n    local result_array_str_result_result_len=0\n\
+    \    local result_array_str_result_result_index=0\n    local result_array_str_result_result_in_quote=false\n\
+    \    local result", "  local words=$1\n  if [[ $words =~ [a-zA-Z] ]]; then\n \
+    \   if [[ $words =~ [a-zA-Z] ]]; then\n      if [[ $words =~ [a-zA-Z] ]]; then\n\
+    \        echo $words | sed -e 's/[^a-zA-Z]//g' | grep -o . | awk '{print tolower($0)}'\
+    \ | awk '{print NR % 2}' | grep -c 1\n      else\n        echo $words | sed -e\
+    \ 's/[^a-zA-Z]//g' | grep -o . | awk '{print tolower($0)}' | awk '{print NR %\
+    \ 2}' | grep -c 1\n      fi\n    else\n      echo $words | sed -e 's/[^a-zA-Z]//g'\
+    \ | grep -o . | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1\n\
+    \    fi\n  else\n    echo $words | sed -e 's/[^a-zA-Z]//g' | grep -o . | awk '{print\
+    \ tolower($0)}' | awk '{print NR % 2}' | grep -c 1\n  fi", "    if [[ $1 =~ [^a-zA-Z,\\\
+    \ ] ]]; then\n        echo \"\\\"$1\\\"\"\n    elif [[ $1 =~ [\\ ] ]]; then\n\
+    \        echo $1 | tr -s ' ' '\\n' | sed 's/^/\\\"/g' | sed 's/$/\\\"/g'\n   \
+    \ elif [[ $1 =~ [,] ]]; then\n        echo $1 | tr -s ',' '\\n' | sed 's/^/\\\"\
+    /g' | sed 's/$/\\\"/g'\n    else\n        echo $1 | grep -o '[a-z]' | awk '{print\
+    \ tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2)print i}' | wc -l\n \
+    \   fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/\
+    \ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep\
+    \ -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n    fi", "    local input=$1\n\
+    \    local output\n    if [[ $input =~ [[:space:]] ]]; then\n        output=$(echo\
+    \ $input | tr ' ' '\\n' | sed 's/^/\"/g' | sed 's/$/\"/g' | tr '\\n' ' ')\n  \
+    \  elif [[ $input =~ , ]]; then\n        output=$(echo $input | tr ',' '\\n' |\
+    \ sed 's/^/\"/g' | sed 's/$/\"/g' | tr '\\n' ' ')\n    else\n        output=$(echo\
+    \ $input | grep -o '[a-z]' | awk '{print ord($0)}' | awk '{if ($0 % 2 == 1) {print\
+    \ $0}}' | wc -l)\n    fi\n    echo $output", "    local text=\"$1\"\n    if [[\
+    \ \"$text\" =~ \\  ]]; then\n        echo \"$text\" | tr ' ' '\\n' | sed 's/^/\"\
+    /;s/$/\"/'\n    elif [[ \"$text\" =~ , ]]; then\n        echo \"$text\" | tr ','\
+    \ '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n        echo \"$text\" | grep -o '[a-z]'\
+    \ | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print\
+    \ i}' | wc -l\n    fi", "  local words=$1\n  if [[ $words =~ [^a-zA-Z, ] ]]; then\n\
+    \    echo \"[\\\"$(echo $words | tr ' ' '\",\"')\\\"]\"\n  elif [[ $words =~ [^a-zA-Z\
+    \ ] ]]; then\n    echo \"[\\\"$(echo $words | tr ',' '\",\"')\\\"]\"\n  else\n\
+    \    echo $(echo $words | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i\
+    \ in a)if(a[i]%2==1)print i}' | wc -l)\n  fi", "    local text=$1\n    if [[ \"\
+    $text\" =~ [^a-zA-Z, ] ]]; then\n        echo \"$text\" | tr -d '\\n' | sed -e\
+    \ 's/\\([^ ]\\)/\"\\1\"/g'\n    elif [[ \"$text\" =~ [^a-zA-Z,] ]]; then\n   \
+    \     echo \"$text\" | tr -d '\\n' | sed -e 's/\\([^,]\\)/\"\\1\"/g'\n    else\n\
+    \        local count=0\n        for (( i=0; i<${#text}; i++ )); do\n         \
+    \   if [[ $(( $i % 2 )) -eq 0 ]]; then\n                if [[ \"${text:$i:1}\"\
+    \ =~ [a-z] ]]; then\n                    count=$(( $count + 1 ))\n           \
+    \     fi\n            fi\n        done\n        echo \"$count\"\n    fi", "  \
+    \  if [[ \"$1\" =~ \\s ]]; then\n        echo \"$1\" | tr ' ' '\\n' | sed -e 's/^/\"\
+    /' -e 's/$/\"/'\n    elif [[ \"$1\" =~ , ]]; then\n        echo \"$1\" | tr ','\
+    \ '\\n' | sed -e 's/^/\"/' -e 's/$/\"/'\n    else\n        echo \"$1\" | grep\
+    \ -o '[a-z]' | awk '{print ord($1) % 2}' | grep -c 1\n    fi", "    local text=\"\
+    $1\"\n    if [[ \"$text\" =~ \\  ]]; then\n        echo \"$text\" | tr ' ' '\\\
+    n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"$text\" =~ , ]]; then\n        echo\
+    \ \"$text\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n        echo \"\
+    $text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i\
+    \ in a)if(a[i]%2==1)print i}' | wc -l\n    fi", "    local words=$1\n    if [[\
+    \ \"$words\" =~ [[:space:]] ]]; then\n        echo \"$words\" | tr ' ' '\\n' |\
+    \ sed 's/^/\"/;s/$/\"/'\n    elif [[ \"$words\" =~ , ]]; then\n        echo \"\
+    $words\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n        echo \"$words\"\
+    \ | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print\
+    \ i}' | wc -l\n    fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo\
+    \ \"[\\\"$(echo \"$1\" | sed 's/ /\"\\,\\\"/g')\\\"]\"\n    elif [[ \"$1\" =~\
+    \ [^a-zA-Z] ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\\\"\\,\\\"\
+    /g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print\
+    \ tolower($0)}' | awk '{print NR%2}' | grep -c 1)\"\n    fi", "    local text=\"\
+    $1\"\n    local words\n    if [[ \"$text\" =~ [, ] ]]; then\n        words=$(echo\
+    \ \"$text\" | sed 's/[, ]/\\n/g' | sed 's/^/\"/g' | sed 's/$/\"/g')\n    else\n\
+    \        words=$(echo \"$text\" | sed 's/\\(.\\)/\\1\\n/g' | grep -v '[aeiou]'\
+    \ | wc -l)\n    fi\n    echo \"$words\"", "  local text=\"$1\"\n  local words=()\n\
+    \  local word=\"\"\n  local odd_letters=0\n  local i\n  local c\n  for ((i=0;\
+    \ i<${#text}; i++)); do\n    c=\"${text:$i:1}\"\n    if [[ \"$c\" == \" \" ]];\
+    \ then\n      if [[ \"$word\" != \"\" ]]; then\n        words+=(\"$word\")\n \
+    \       word=\"\"\n      fi\n    elif [[ \"$c\" == \",\" ]]; then\n      if [[\
+    \ \"$word\" != \"\" ]]; then\n        words+=(\"$word\")\n        word=\"\"\n\
+    \      fi\n      break\n    else\n      word+=\"$c\"\n    fi\n  done\n  if [[\
+    \ \"$word\" != \"\" ]]; then\n    words+=(\"$word\")\n  fi\n  if [[ ${#words[@]}\
+    \ -gt 0 ]]; then\n    printf \"[\"\n    for ((i=0; i<${#words[@]}; i++)); do\n\
+    \      printf '\"%s\"' \"${words[$i]}\"\n      if ((i < ${#words[@]} - 1)); then\n\
+    \        printf \", \"\n      fi\n    done\n    printf \"]\"\n  else\n    for\
+    \ ((i=0; i<${#text}; i++)); do\n      c=\"${text:$i:1}\"\n      if [[ \"$c\" ==\
+    \ \",\" ]]; then\n        break\n      elif [[ \"$c\" == \"a\" ]] || [[ \"$c\"\
+    \ == \"c\" ]] || [[ \"$c\" == \"e\" ]] || [[ \"$c\" == \"g\" ]] || [[ \"$c\" ==\
+    \ \"i\" ]] || [[ \"$c\" == \"k\" ]] || [[ \"$c\" == \"m\" ]] || [[ \"$c\" == \"\
+    o\" ]] || [[ \"$c\" == \"q\" ]] || [[ \"$c\" == \"s\" ]] || [[ \"$c\" == \"u\"\
+    \ ]] || [[ \"$c\" == \"w\" ]] || [[ \"$c\" == \"y\" ]]; then\n        ((odd_letters++))\n\
+    \      fi\n    done\n    echo \"$odd_letters\"\n  fi", "  if [[ \"$1\" =~ \\ |\\\
+    ' ]]; then\n    echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\\/g')\\\"]\"\n  elif\
+    \ [[ \"$1\" =~ , ]]; then\n    echo \"[\\\"$(echo \"$1\" | sed 's/,/\" \"\\\\\
+    /g')\\\"]\"\n  else\n    echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print\
+    \ tolower($0)}' | sort | uniq -c | awk '{if ($1 % 2 == 1) print $1}' | wc -l)\"\
+    \n  fi", "  local text=\"$1\"\n  if [[ \"$text\" =~ [[:space:]] ]]; then\n   \
+    \ echo \"$text\" | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n  elif [[ \"$text\" =~\
+    \ , ]]; then\n    echo \"$text\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n  else\n\
+    \    echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i\
+    \ in a)if(a[i]%2==1)print i}' | wc -l\n  fi", "  if [[ \"$1\" =~ [^a-zA-Z,] ]];\
+    \ then\n    echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\\\"/g')\\\"]\"\n  elif\
+    \ [[ \"$1\" =~ [^a-zA-Z] ]]; then\n    echo \"[\\\"$(echo \"$1\" | sed 's/,/\"\
+    \ \"\\\\\"/g')\\\"]\"\n  else\n    echo \"$(echo \"$1\" | grep -o '[a-z]' | awk\
+    \ '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print i}'\
+    \ | wc -l)\"\n  fi", "    local text=\"$1\"\n    local words=$(echo \"$text\"\
+    \ | tr -d '\\n' | tr -s ' ' | tr ' ' '\\n' | tr -d '\\n' | tr ',' '\\n')\n   \
+    \ if [ -z \"$words\" ]; then\n        echo \"$(echo \"$text\" | tr -d '\\n' |\
+    \ tr -s ' ' | tr ' ' '\\n' | tr -d '\\n' | tr ',' '\\n' | wc -c)\"\n    else\n\
+    \        echo \"$(echo \"$words\" | tr -d '\\n' | tr -s ' ' | tr ' ' '\\n' | tr\
+    \ -d '\\n' | tr ',' '\\n' | wc -c)\"\n    fi", "  local text=\"$1\"\n  if [[ \"\
+    $text\" =~ [[:space:]] ]]; then\n    echo \"$text\" | tr ' ' '\\n' | sed 's/^/\"\
+    /;s/$/\"/'\n  elif [[ \"$text\" =~ , ]]; then\n    echo \"$text\" | tr ',' '\\\
+    n' | sed 's/^/\"/;s/$/\"/'\n  else\n    echo \"$text\" | grep -o '[a-z]' | awk\
+    \ '{a[NR]=$0} END {for (i=1;i<=NR;i++) if (i%2==1) printf \"%s\", a[i]}' | wc\
+    \ -c\n  fi", "  local text=\"$1\"\n  if [[ \"$text\" =~ [, ] ]]; then\n    echo\
+    \ \"[$(echo \"$text\" | sed 's/\\([, ]\\)/\"\\1\"/g')]\"\n  else\n    echo \"\
+    $(echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR\
+    \ % 2}' | grep -c 1)\"\n  fi", "  if [[ $1 =~ [a-zA-Z] ]]; then\n    if [[ $1\
+    \ =~ [\\ ] ]]; then\n      echo \"[\\\"$(echo $1 | sed 's/ /\\\", \\\"/g')\\\"\
+    ]\"\n    else\n      if [[ $1 =~ [,] ]]; then\n        echo \"[\\\"$(echo $1 |\
+    \ sed 's/,/\\\", \\\"/g')\\\"]\"\n      else\n        echo \"$(echo $1 | grep\
+    \ -o [a-z] | grep -v -e [acegikmoqsuwy] | wc -l)\"\n      fi\n    fi\n  fi", " \
+    \   if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\
+    \"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed\
+    \ 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep -o '[a-z]'\
+    \ | awk '{print NR%2}' | grep -c 1)\n    fi", "    if [[ $1 =~ \\s ]]; then\n\
+    \        echo \"[\\\"$(echo $1 | sed -e 's/ /\" \"\\\\\\n/g')\\\"]\"\n    elif\
+    \ [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed -e 's/,/\" \"\\\\\\\
+    n/g')\\\"]\"\n    else\n        echo $(echo $1 | tr -d -c 'a-z' | grep -o . |\
+    \ awk '{print NR%2}' | grep -c 1)\n    fi", "    if [[ $1 =~ [[:space:]] ]]; then\n\
+    \        echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[\
+    \ $1 =~ , ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\",\"/g')\\\"\
+    ]\"\n    else\n        echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print i}' | wc -c)\"\n    fi", " \
+    \   if [[ $1 =~ [[:space:]] ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/\
+    \ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep\
+    \ -o '[a-z]' | awk '{print NR % 2}' | grep -c 1)\n    fi", "    if [[ $1 =~ \\\
+    s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n  \
+    \  elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"\
+    /g')\\\"]\"\n    else\n        echo $(echo $1 | grep -o '[a-z]' | awk '{print\
+    \ NR%2}' | grep -c 1)\n    fi", "    local text=\"$1\"\n    local words=()\n \
+    \   local word=\"\"\n    local in_word=false\n    local escaped=false\n    local\
+    \ i\n    local c\n    local n\n    local odd_letters=0\n    for ((i=0; i<${#text};\
+    \ i++)); do\n        c=\"${text:$i:1}\"\n        n=$(printf \"%d\" \"'$c\")\n\
+    \        if $escaped; then\n            word+=\"$c\"\n            escaped=false\n\
+    \        elif [ \"$c\" = \"\\\\\" ]; then\n            escaped=true\n        elif\
+    \ [ \"$c\" = \",\" ]; then\n            if $in_word; then\n                words+=(\"\
+    $word\")\n                word=\"\"\n                in_word=false\n         \
+    \   fi\n        elif [ \"$c\" = \" \" ]; then\n            if $in_word; then\n\
+    \                words+=(\"$word\")\n                word=\"\"\n             \
+    \   in_word=false\n            fi\n        else\n            word+=\"$c\"\n  \
+    \          in_word=true\n            if [ $((n % 2)) -eq 1 ]; then\n         \
+    \       odd_letters=$((odd_letters + 1))\n            fi\n        fi\n    done\n\
+    \    if $in_word; then\n        words+=(\"$word\")\n    fi\n    if [ ${#words[@]}\
+    \ -gt 0 ]; then\n        echo \"[\"$(printf '\"%s\",' \"${words[@]}\")\"]\" |\
+    \ sed 's/,]$/]/'\n    else\n        echo \"$odd_letters\"\n    fi", "    local\
+    \ text=\"$1\"\n    if [[ \"$text\" =~ [^[:space:],] ]]; then\n        echo $(echo\
+    \ $text | grep -o '[^[:space:],]\\+' | wc -l)\n    else\n        echo $(echo $text\
+    \ | grep -o '[^[:space:],]\\+' | tr -d '\\n' | sed 's/\\(.\\)/\"\\1\"/g')\n  \
+    \  fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed -e\
+    \ 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"\
+    $(echo $1 | sed -e 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1\
+    \ | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n    fi", "    if [[ $1\
+    \ =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"\
+    ]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\"\
+    \ \"\\\"/g')\\\"]\"\n    else\n        echo \"$(echo $1 | grep -o '[a-z]' | awk\
+    \ '{print NR%2}' | grep -c 1)\"\n    fi", "    if [[ $1 =~ \\ |\\\\ ]]; then\n\
+    \        echo \"[\\\"$(echo $1 | sed 's/ /\"\\,\\\"/g')\\\"]\"\n    elif [[ $1\
+    \ =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\",\\\"/g')\\\"]\"\n\
+    \    else\n        echo $(echo $1 | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{print NR % 2}' | grep -c 1)\n    fi", "    if [[ \"$1\" =~ \" \" ]];\
+    \ then\n        echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n  \
+    \  elif [[ \"$1\" =~ \",\" ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\"\
+    ,\"/g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" | grep -o \"[a-z]\" | grep\
+    \ -v -n -e \"[02468]\" | wc -l)\"\n    fi", "  local words=$1\n  if [[ $words\
+    \ =~ [[:space:]] ]]; then\n    echo \"[\\\"$(echo $words | sed 's/ /\" \"\\\"\
+    /g')\\\"]\"\n  elif [[ $words =~ , ]]; then\n    echo \"[\\\"$(echo $words | sed\
+    \ 's/,/\",\"/g')\\\"]\"\n  else\n    echo $(echo $words | grep -o [[:lower:]]\
+    \ | awk '{a[NR]=$0} END {for (i=1;i<=NR;i++) if (i%2==1) printf \"%s\",a[i]}')\n\
+    \  fi", "    local text=\"$1\"\n    if [[ \"$text\" =~ [[:space:]] ]]; then\n\
+    \        echo \"$text\" | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"\
+    $text\" =~ , ]]; then\n        echo \"$text\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"\
+    /'\n    else\n        echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{print ord($0) % 2}' | grep -c 1\n    fi", "    local words=$1\n    if\
+    \ [[ $words =~ [^a-zA-Z,\\ ] ]]; then\n        echo '\"'\"$words\"'\"'\n    elif\
+    \ [[ $words =~ [,] ]]; then\n        echo '\"'\"${words//,/\\\" \\\"}\"'\"'\n\
+    \    else\n        local odd_count=0\n        for ((i=0; i<${#words}; i++)); do\n\
+    \            if [[ $((i%2)) -eq 1 ]]; then\n                if [[ ${words:$i:1}\
+    \ =~ [a-z] ]]; then\n                    odd_count=$((odd_count+1))\n        \
+    \        fi\n            fi\n        done\n        echo $odd_count\n    fi", " \
+    \   local words=$1\n    if [[ $words =~ [^a-zA-Z, ] ]]; then\n        echo \"\
+    [\\\"$(echo $words | tr ' ' '\", \"')\\\"]\"\n    elif [[ $words =~ [^a-zA-Z ]\
+    \ ]]; then\n        echo \"[\\\"$(echo $words | tr ',' '\", \"')\\\"]\"\n    else\n\
+    \        local count=0\n        for (( i=0; i<${#words}; i++ )); do\n        \
+    \    local c=${words:$i:1}\n            if [[ $(( $i % 2 )) -eq 1 ]]; then\n \
+    \               if [[ $c =~ [a-z] ]]; then\n                    count=$(( $count\
+    \ + 1 ))\n                fi\n            fi\n        done\n        echo \"$count\"\
+    \n    fi", "    local text=\"$1\"\n    local words\n    if [[ \"$text\" =~ \\\
+    \ |\\' ]]; then\n        words=$(echo \"$text\" | sed -e 's/ /,/g' -e 's/^/\"\
+    /' -e 's/$/\"/')\n    elif [[ \"$text\" =~ , ]]; then\n        words=$(echo \"\
+    $text\" | sed -e 's/,/ /g' -e 's/^/\"/' -e 's/$/\"/')\n    else\n        local\
+    \ count=0\n        for ((i=0; i<${#text}; i++)); do\n            local char=${text:$i:1}\n\
+    \            local ord=$(printf \"%d\" \"'$char\")\n            if ((ord % 2 ==\
+    \ 1)); then\n                ((count++))\n            fi\n        done\n     \
+    \   words=\"$count\"\n    fi\n    echo \"$words\"", "    local text=\"$1\"\n \
+    \   local words=()\n    local word=\"\"\n    local i\n    local c\n    local in_word=0\n\
+    \    local in_quote=0\n    local in_escape=0\n    local in_escape_quote=0\n  \
+    \  local in_escape_escape=0\n    local in_escape_space=0\n    local in_escape_comma=0\n\
+    \    local in_escape_backslash=0\n    local in_escape_newline=0\n    local in_escape_tab=0\n\
+    \    local in_escape_carriage_return=0\n    local in_escape_form_feed=0\n    local\
+    \ in_escape_vertical_tab=0\n    local in_escape_octal=0\n    local in_escape_hex=0\n\
+    \    local in_escape_unicode=0\n    local in_escape_unicode_hex=0\n    local in_escape_unicode_hex_hex=0\n\
+    \    local in_escape_unicode_hex_hex_hex=0\n    local in_escape_unicode_hex_hex_hex_hex=0\n\
+    \    local in_escape_unicode_hex_hex_hex_hex_hex=0\n    local in_escape_unicode_hex_hex_hex_hex_hex_hex=0\n\
+    \    local in_escape_unicode_hex_hex_hex_hex_hex_hex_hex=0\n    local in_escape_unicode_hex_hex_hex_hex_hex_hex_hex_hex=0\n\
+    \    local in_escape_unicode_hex_hex_hex_hex_hex_hex_hex_hex_hex=0\n    local\
+    \ in_escape_unicode_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex=0\n    local in_escape_unicode_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex=0\n\
+    \    local in_escape_unicode_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex=0\n\
+    \    local in_escape_unicode_hex_hex_hex_hex_hex_hex_hex_hex_hex_hex", "    if\
+    \ [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo \"$1\" | tr ' ' '\" \"')\\\
+    \"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo \"$1\" | tr ','\
+    \ '\" \"')\\\"]\"\n    else\n        echo \"$(echo \"$1\" | grep -o '[a-z]' |\
+    \ awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print\
+    \ i}' | wc -l)\"\n    fi", "    local text=\"$1\"\n    local words=()\n    local\
+    \ word=\"\"\n    local odd_count=0\n    local i=0\n    local c=\"\"\n    local\
+    \ is_odd=0\n    local is_whitespace=0\n    local is_comma=0\n    local is_letter=0\n\
+    \    local is_lower=0\n    local is_upper=0\n    local is_digit=0\n    local is_alpha=0\n\
+    \    local is_alnum=0\n    local is_space=0\n    local is_print=0\n    local is_graph=0\n\
+    \    local is_punct=0\n    local is_cntrl=0\n    local is_xdigit=0\n    local\
+    \ is_blank=0\n    local is_ascii=0\n    local is_ascii_print=0\n    local is_ascii_graph=0\n\
+    \    local is_ascii_punct=0\n    local is_ascii_cntrl=0\n    local is_ascii_xdigit=0\n\
+    \    local is_ascii_blank=0\n    local is_ascii_alnum=0\n    local is_ascii_alpha=0\n\
+    \    local is_ascii_digit=0\n    local is_ascii_lower=0\n    local is_ascii_upper=0\n\
+    \    local is_ascii_space=0\n    local is_ascii_word=0\n    local is_ascii_id_start=0\n\
+    \    local is_ascii_id_cont=0\n    local is_ascii_xid_start=0\n    local is_ascii_xid_cont=0\n\
+    \    local is_ascii_word_start=0\n    local is_ascii_word_cont=0\n    local is_ascii_digit_start=0\n\
+    \    local is_ascii_digit_cont=0\n    local is_ascii_hex_digit_start=0\n    local\
+    \ is_ascii_hex_digit_cont=0\n    local is_ascii_oct_digit_start=0\n    local is_",
+  "    local text=$1\n    if [[ $text =~ [[:space:]] ]]; then\n        echo \"[\\\"\
+    $(echo $text | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $text =~ , ]]; then\n\
+    \        echo \"[\\\"$(echo $text | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n\
+    \        echo $(echo $text | grep -o '[a-z]' | awk '{print NR % 2}' | grep -c\
+    \ 1)\n    fi", "  local text=\"$1\"\n  local words\n  if [[ \"$text\" =~ \\ |\\\
+    ' ]]; then\n    words=$(echo \"$text\" | sed -e 's/ /\",\"/g')\n  elif [[ \"$text\"\
+    \ =~ , ]]; then\n    words=$(echo \"$text\" | sed -e 's/,/\",\"/g')\n  else\n\
+    \    words=$(echo \"$text\" | grep -o '[a-z]' | awk '{print ord($0)}' | awk '{sum+=$1}\
+    \ END {print sum%2}')\n  fi\n  echo \"[\\\"$words\\\"]\"", "  if [[ \"$1\" =~\
+    \ [^a-zA-Z,\\ ] ]]; then\n    echo \"\\\"$1\\\"\"\n  elif [[ \"$1\" =~ [,] ]];\
+    \ then\n    echo \"\\\"${1//,/\\\" \\\"}\"\n  else\n    echo \"$(echo \"$1\" |\
+    \ grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR%2}' | grep -c 1)\"\
+    \n  fi", "  if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n    echo \"[\\\"$(echo \"$1\"\
+    \ | tr ' ' '\" \"')\\\"]\"\n  elif [[ \"$1\" =~ [^a-zA-Z] ]]; then\n    echo \"\
+    [\\\"$(echo \"$1\" | tr ',' '\" \"')\\\"]\"\n  else\n    echo \"$(echo \"$1\"\
+    \ | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep\
+    \ -c 1)\"\n  fi", "    if [[ $1 =~ [[:space:]] ]]; then\n        echo \"[\\\"\
+    $(echo $1 | tr ' ' '\" \"')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo\
+    \ \"[\\\"$(echo $1 | tr ',' '\" \"')\\\"]\"\n    else\n        echo $(echo $1\
+    \ | grep -o '[a-z]' | grep -v -o -E '([a-z])\\1' | wc -l)\n    fi", "    local\
+    \ input=\"$1\"\n    if [[ \"$input\" =~ [^a-zA-Z, ] ]]; then\n        echo \"\
+    [\\\"$(echo \"$input\" | sed 's/ /\", \"/g')\\\"]\"\n    elif [[ \"$input\" =~\
+    \ [^a-zA-Z ] ]]; then\n        echo \"[\\\"$(echo \"$input\" | sed 's/,/, \"/g')\\\
+    \"]\"\n    else\n        local count=0\n        for (( i=0; i<${#input}; i++ ));\
+    \ do\n            local char=${input:$i:1}\n            if [[ \"$char\" =~ [a-z]\
+    \ ]]; then\n                local ord=$(printf \"%d\" \"'$char\")\n          \
+    \      if (( ord % 2 == 0 )); then\n                    (( count++ ))\n      \
+    \          fi\n            fi\n        done\n        echo \"$count\"\n    fi",
+  "    local s=$1\n    if [[ $s =~ \\s ]]; then\n        echo \"[\\\"$(echo $s | sed\
+    \ 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $s =~ , ]]; then\n        echo \"[\\\"\
+    $(echo $s | sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo $(echo $s | grep\
+    \ -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n    fi", "    if [[ \"$1\" ==\
+    \ *\" \"* ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\"/g')\\\
+    \"]\"\n    elif [[ \"$1\" == *\",\"* ]]; then\n        echo \"[\\\"$(echo \"$1\"\
+    \ | sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" | grep -o\
+    \ '[a-z]' | awk '{print tolower($0)}' | awk '{print NR%2}' | grep -c 1)\"\n  \
+    \  fi", "    local str=\"$1\"\n    if [[ \"$str\" =~ [[:space:]] ]]; then\n  \
+    \      echo \"$str\" | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"$str\"\
+    \ =~ , ]]; then\n        echo \"$str\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n\
+    \    else\n        echo \"$str\" | grep -o '[a-z]' | awk '{a[NR]=$0} END {for\
+    \ (i=1;i<=length(a);i++) if (i%2==1) {print a[i]}}' | wc -l\n    fi", "    if\
+    \ [[ \"$1\" =~ \\  ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\
+    \\\"/g')\\\"]\"\n    elif [[ \"$1\" =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ \"$1\" | sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" |\
+    \ grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\"\n    fi", "    local words=$1\n\
+    \    if [[ $words =~ [\\ ] ]]; then\n        echo \"[\\\"$(echo $words | sed 's/\
+    \ /\" \"\\\"/g')\\\"]\"\n    elif [[ $words =~ [,] ]]; then\n        echo \"[\\\
+    \"$(echo $words | sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo $(echo $words\
+    \ | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n    fi", "    local text=\"\
+    $1\"\n    local words=$(echo \"$text\" | tr -s ' ' '\\n' | tr -d '\\n' | tr ','\
+    \ '\\n')\n    local num_words=$(echo \"$words\" | wc -l)\n    if [ \"$num_words\"\
+    \ -gt 1 ]; then\n        echo \"$words\" | sed 's/^/\"/;s/$/\"/'\n    else\n \
+    \       echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print\
+    \ ord($0) % 2}' | grep -c 1\n    fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n\
+    \        echo \"$1\" | tr -d '\\n' | sed 's/[^a-zA-Z,]/\\\\&/g'\n    elif [[ \"\
+    $1\" =~ [^a-zA-Z] ]]; then\n        echo \"$1\" | tr -d '\\n' | sed 's/[^a-zA-Z]/\\\
+    \\&/g'\n    else\n        echo \"$1\" | tr -d '\\n' | sed 's/[a-z]/\\L&/g' | grep\
+    \ -o 'a\\|c\\|e\\|g\\|i\\|k\\|m\\|o\\|q\\|s\\|u\\|w\\|y' | wc -l\n    fi", " \
+    \   # your code here\n    if [[ $1 =~ [a-zA-Z] ]]; then\n        if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n            if [[ $1 =~ [a-zA-Z] ]]; then\n                if [[ $1\
+    \ =~ [a-zA-Z] ]]; then\n                    if [[ $1 =~ [a-zA-Z] ]]; then\n  \
+    \                      if [[ $1 =~ [a-zA-Z] ]]; then\n                       \
+    \     if [[ $1 =~ [a-zA-Z] ]]; then\n                                if [[ $1\
+    \ =~ [a-zA-Z] ]]; then\n                                    if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n                                        if [[ $1 =~ [a-zA-Z] ]]; then\n\
+    \                                            if [[ $1 =~ [a-zA-Z] ]]; then\n \
+    \                                               if [[ $1 =~ [a-zA-Z] ]]; then\n\
+    \                                                    if [[ $1 =~ [a-zA-Z] ]];\
+    \ then\n                                                        if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n                                                            if [[\
+    \ $1 =~ [a-zA-Z] ]]; then\n                                                  \
+    \              if [[ $1 =~ [a-zA-Z] ]]; then\n                               \
+    \                                     if [[ $1 =~ [a-zA-Z] ]]; then\n        \
+    \                                                                if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n                                                                 \
+    \           if [[ $1 =~ [a-zA-Z] ]]; then\n                                  \
+    \                                              if [[ $1 =~ [a-zA-Z] ]]; then\n\
+    \                                                                            \
+    \        if [[ $1 =~ [a-zA-Z] ]]; then\n                                     \
+    \                                                   if [[ $1 =~ [a-zA-Z] ]]; then\n\
+    \                                                                            \
+    \                if [[ $1 =~ [a-zA-Z] ]]; then\n                             \
+    \                                                                   if [[ $1 =~\
+    \ [a-zA-Z] ]]; then", "    if [[ $1 =~ \\ + ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo\
+    \ \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo\
+    \ $1 | grep -o '[a-z]' | grep -v -n -e '[02468]' | wc -l)\n    fi", "    if [[\
+    \ \"$1\" =~ [^a-zA-Z,\\ ] ]]; then\n        echo \"[\\\"$1\\\"]\"\n    elif [[\
+    \ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$1\\\"]\"\n    else\n   \
+    \     echo \"$(echo \"$1\" | grep -o '[a-zA-Z]' | grep -o '[a-z]' | awk '{print\
+    \ NR%2}' | grep -c 1)\"\n    fi", "    local text=\"$1\"\n    if [[ \"$text\"\
+    \ =~ [a-zA-Z] ]]; then\n        if [[ \"$text\" =~ [,] ]]; then\n            echo\
+    \ \"[$(echo \"$text\" | sed 's/,/\",\"/g')]\"\n        else\n            echo\
+    \ \"$(echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i\
+    \ in a)if(a[i]%2==1)print i}' | wc -l)\"\n        fi\n    else\n        echo \"\
+    [$(echo \"$text\" | sed 's/ /\",\"/g')]\"\n    fi", "    local text=\"$1\"\n \
+    \   local words=()\n    local word=\"\"\n    local c=\"\"\n    local i=0\n   \
+    \ local j=0\n    local k=0\n    local n=0\n    local m=0\n    local odd_count=0\n\
+    \    local is_odd=0\n    local is_word=0\n    local is_comma=0\n    local is_space=0\n\
+    \    local is_letter=0\n    local is_lower=0\n    local is_upper=0\n    local\
+    \ is_digit=0\n    local is_punct=0\n    local is_print=0\n    local is_graph=0\n\
+    \    local is_cntrl=0\n    local is_blank=0\n    local is_xdigit=0\n    local\
+    \ is_alnum=0\n    local is_alpha=0\n    local is_ascii=0\n    local is_space=0\n\
+    \    local is_newline=0\n    local is_null=0\n    local is_tab=0\n    local is_backspace=0\n\
+    \    local is_return=0\n    local is_escape=0\n    local is_formfeed=0\n    local\
+    \ is_verticaltab=0\n    local is_octal=0\n    local is_hex=0\n    local is_unicode=0\n\
+    \    local is_unicode_upper=0\n    local is_unicode_lower=0\n    local is_unicode_title=0\n\
+    \    local is_unicode_digit=0\n    local is_unicode_number=0\n    local is_unicode_decimal=0\n\
+    \    local is_unicode_space=0\n    local is_unicode_line=0\n    local is_unicode_paragraph=0\n\
+    \    local is_unicode_category=0\n    local is_unicode_blank=0\n    local is_unicode_control=0\n\
+    \    local is_unicode_hex=0\n    local is_unicode_punctuation=0\n    local is_unicode_printable=0\n\
+    \    local is_unicode_format=0\n    local is_unicode_private=0\n    local is_unicode_surrogate=",
+  "    local text=\"$1\"\n    local words=()\n    if [[ \"$text\" =~ [^[:space:],]\
+    \ ]]; then\n        local count=0\n        for (( i=0; i<${#text}; i++ )); do\n\
+    \            local c=${text:$i:1}\n            if [[ \"$c\" =~ [a-z] ]]; then\n\
+    \                (( count += i % 2 == 0 ))\n            fi\n        done\n   \
+    \     echo \"$count\"\n    else\n        if [[ \"$text\" =~ [,] ]]; then\n   \
+    \         IFS=',' read -r -a words <<< \"$text\"\n        else\n            IFS='\
+    \ ' read -r -a words <<< \"$text\"\n        fi\n        echo \"[$(IFS=,; echo\
+    \ \"${words[*]/#/\\\"}\")]\"\n    fi", "  local text=\"$1\"\n  if [[ \"$text\"\
+    \ =~ [[:space:]] ]]; then\n    echo \"$text\" | tr ' ' '\\n' | awk '{printf \"\
+    \\\"%s\\\" \", $0}'\n  elif [[ \"$text\" =~ , ]]; then\n    echo \"$text\" | tr\
+    \ ',' '\\n' | awk '{printf \"\\\"%s\\\" \", $0}'\n  else\n    echo \"$text\" |\
+    \ grep -o '[a-z]' | awk '{print NR % 2}' | grep -c 1\n  fi", "    local text=\"\
+    $1\"\n    if [[ \"$text\" =~ [[:space:]] ]]; then\n        echo \"$text\" | tr\
+    \ ' ' '\\n' | sed -e 's/^/\"/' -e 's/$/\"/'\n    elif [[ \"$text\" =~ , ]]; then\n\
+    \        echo \"$text\" | tr ',' '\\n' | sed -e 's/^/\"/' -e 's/$/\"/'\n    else\n\
+    \        echo \"$text\" | grep -o '[a-z]' | awk '{print NR % 2}' | grep -c 1\n\
+    \    fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/\
+    \ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | tr -cd\
+    \ '[:lower:]' | grep -o . | awk '{if (NR % 2 == 1) print $0}' | wc -l)\n    fi",
+  "  local input=\"$1\"\n  local output=\"\"\n  if [[ \"$input\" =~ [[:space:]] ]];\
+    \ then\n    output=\"$(echo \"$input\" | sed 's/ /\", \"/g')\"\n  elif [[ \"$input\"\
+    \ =~ , ]]; then\n    output=\"$(echo \"$input\" | sed 's/,/\", \"/g')\"\n  else\n\
+    \    output=\"$(echo \"$input\" | grep -o '[a-z]' | awk '{print NR % 2}' | grep\
+    \ -c 1)\"\n  fi\n  echo \"$output\"", "    if [[ $1 =~ [[:space:]] ]]; then\n\
+    \        echo \"[\\\"$(echo $1 | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/')\\\"]\"\n\
+    \    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | tr ',' '\\n' |\
+    \ sed 's/^/\"/;s/$/\"/')\\\"]\"\n    else\n        echo $(echo $1 | grep -o \"\
+    [a-z]\" | awk '{print NR%2}' | grep -c 1)\n    fi", "  if [[ $1 =~ \\ |\\' ]];\
+    \ then\n    echo \"[\\\"$(echo $1 | sed -e 's/ /\" \"\\\\\\n/g')\\\"]\"\n  elif\
+    \ [[ $1 =~ , ]]; then\n    echo \"[\\\"$(echo $1 | sed -e 's/,/\" \"\\\\\\n/g')\\\
+    \"]\"\n  else\n    echo \"$(echo $1 | grep -o '[a-z]' | awk '{print NR%2}' | grep\
+    \ -c 1)\"\n  fi", "    echo $1 | grep -oE '\\w+' | tr '\\n' ',' | sed 's/,$//'",
+  "    if [[ $1 =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\"\
+    \\,\\\"/g')\\\"]\"\n    elif [[ $1 =~ [^a-zA-Z] ]]; then\n        echo \"[\\\"\
+    $(echo $1 | sed 's/,/\\\"\\,\\\"/g')\\\"]\"\n    else\n        echo $(echo $1\
+    \ | grep -o [a-z] | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep 1\
+    \ | wc -l)\n    fi", "    if [[ \"$1\" =~ [\\ \\,] ]]; then\n        echo \"$1\"\
+    \ | tr ' ' '\\n' | tr ',' '\\n' | sed 's/^/\"/' | sed 's/$/\"/'\n    else\n  \
+    \      echo \"$1\" | grep -o '[a-z]' | awk '{print NR%2}' | grep -c '1'\n    fi",
+  "    if [[ $1 =~ \" \" ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\
+    \"/g')\\\"]\"\n    elif [[ $1 =~ \",\" ]]; then\n        echo \"[\\\"$(echo $1\
+    \ | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep -o\
+    \ \"[a-z]\" | awk '{print NR%2}' | grep -c 1)\n    fi", "  if [[ $1 =~ [^a-zA-Z0-9,\\\
+    !\\ ] ]]; then\n    echo \"Invalid input\"\n    return 1\n  fi\n  if [[ $1 =~\
+    \ [\\ ] ]]; then\n    echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n\
+    \  elif [[ $1 =~ [,] ]]; then\n    echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"\
+    /g')\\\"]\"\n  else\n    echo \"$(echo $1 | grep -o '[a-z]' | awk '{if(NR%2==1)print\
+    \ $0}' | wc -l)\"\n  fi", "    local input=\"$1\"\n    if [[ \"$input\" =~ [^a-z,\
+    \ ] ]]; then\n        echo \"[\\\"$(echo \"$input\" | tr ' ' '\", \"')\\\"]\"\n\
+    \    elif [[ \"$input\" =~ [^a-z] ]]; then\n        echo \"[\\\"$(echo \"$input\"\
+    \ | tr ',' '\", \"')\\\"]\"\n    else\n        echo \"$(echo \"$input\" | grep\
+    \ -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[NR]=$0} END {for(i=1;i<=NR;i++)\
+    \ if(i%2==1) printf(\"%s\",a[i])}' | wc -c)\"\n    fi", "    if [[ $1 =~ \\s ]];\
+    \ then\n        echo \"[\\\"$(echo $1 | sed -e 's/ /\"\\,\\\"/g')\\\"]\"\n   \
+    \ elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed -e 's/,/\",\"\
+    /g')\\\"]\"\n    else\n        echo \"$(echo $1 | grep -o '[a-z]' | grep -v -e\
+    \ '^.$' | wc -l)\"\n    fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\
+    \"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n  \
+    \      echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n     \
+    \   echo \"$(echo $1 | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\"\n \
+    \   fi", "    local text=\"$1\"\n    if [[ \"$text\" =~ [[:space:]] ]]; then\n\
+    \        echo \"[\\\"$(echo \"$text\" | sed 's/ /\" \"\\\\/g')\\\"]\"\n    elif\
+    \ [[ \"$text\" =~ , ]]; then\n        echo \"[\\\"$(echo \"$text\" | sed 's/,/\"\
+    ,\"\\\\/g')\\\"]\"\n    else\n        echo \"$(echo \"$text\" | grep -o '[a-z]'\
+    \ | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1)\"\n    fi",
+  "  local text=\"$1\"\n  if [[ \"$text\" =~ [^a-zA-Z, ] ]]; then\n    echo \"[\\\"\
+    $(echo \"$text\" | sed 's/\\([^ ]\\)/\"\\1\"/g')\\\"]\"\n  elif [[ \"$text\" =~\
+    \ [^a-zA-Z ] ]]; then\n    echo \"[\\\"$(echo \"$text\" | sed 's/\\([^,]\\)/\"\
+    \\1\"/g')\\\"]\"\n  else\n    echo \"$(echo \"$text\" | tr -d ' ' | grep -o '[a-z]'\
+    \ | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1)\"\n  fi", " \
+    \ if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n    echo \"[\\\"$(echo $1 | sed 's/ /\"\
+    \ \"\\\"/g')\\\"]\"\n  elif [[ \"$1\" =~ [^a-zA-Z] ]]; then\n    echo \"[\\\"\
+    $(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n  else\n    echo \"$(echo $1 | grep\
+    \ -o [a-z] | awk '{print tolower($0)}' | awk '{if (NR % 2 == 1) {print $0}}' |\
+    \ wc -l)\"\n  fi", "    local words=${1//[^a-zA-Z]/ }\n    if [ \"$words\" ==\
+    \ \"$1\" ]; then\n        words=${1//[^a-zA-Z,]/,}\n        if [ \"$words\" ==\
+    \ \"$1\" ]; then\n            echo $(echo $1 | grep -o '[a-z]' | awk '{print NR%2}'\
+    \ | grep -c 1)\n        else\n            echo \"[\\\"$(echo $words | sed 's/,/\\\
+    \",\\\"/g')\\\"]\"\n        fi\n    else\n        echo \"[\\\"$(echo $words |\
+    \ sed 's/ /\\\",\\\"/g')\\\"]\"\n    fi", "    local text=\"$1\"\n    local words=$(echo\
+    \ \"$text\" | tr -s ' ' | tr ' ' ',')\n    if [[ \"$words\" == *\",\"* ]]; then\n\
+    \        echo \"[$words]\"\n    else\n        local count=0\n        for ((i=0;\
+    \ i<${#words}; i++)); do\n            if (( $i % 2 == 0 )); then\n           \
+    \     count=$((count + 1))\n            fi\n        done\n        echo \"$count\"\
+    \n    fi", "  local input=$1\n  if [[ $input =~ \\s ]]; then\n    echo \"[\\\"\
+    $(echo $input | sed 's/ /\" \"\\\"/g')\\\"]\"\n  elif [[ $input =~ , ]]; then\n\
+    \    echo \"[\\\"$(echo $input | sed 's/,/\",\"/g')\\\"]\"\n  else\n    echo $(echo\
+    \ $input | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n  fi", "    local\
+    \ input=\"$1\"\n    if [[ $input =~ [^a-z, ] ]]; then\n        echo \"[\\\"$(echo\
+    \ \"$input\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $input =~ [^a-z ] ]];\
+    \ then\n        echo \"[\\\"$(echo \"$input\" | sed 's/,/\",\"/g')\\\"]\"\n  \
+    \  else\n        local count=0\n        for (( i=0; i<${#input}; i++ )); do\n\
+    \            local c=${input:$i:1}\n            if [[ $(( $i % 2 )) -eq 1 ]];\
+    \ then\n                if [[ $c =~ [a-z] ]]; then\n                    count=$((\
+    \ $count + 1 ))\n                fi\n            fi\n        done\n        echo\
+    \ \"$count\"\n    fi", "    if [[ $1 =~ [[:space:]] ]]; then\n        echo \"\
+    [\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n\
+    \        echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n   \
+    \     echo $(echo $1 | tr -d -c 'a-z' | grep -o . | awk '{print NR % 2}' | grep\
+    \ -c 1)\n    fi", "    if [[ $1 =~ [[:space:]] ]]; then\n        echo -n \"[\"\
+    \n        for word in $1; do\n            echo -n \"\\\"$word\\\" \"\n       \
+    \ done\n        echo -n \"]\"\n    elif [[ $1 =~ , ]]; then\n        echo -n \"\
+    [\"\n        for word in $(echo $1 | tr \",\" \"\\n\"); do\n            echo -n\
+    \ \"\\\"$word\\\" \"\n        done\n        echo -n \"]\"\n    else\n        echo\
+    \ -n \"$(echo $1 | grep -o -i '[a-z]' | awk '{print NR % 2}' | grep -c 1)\"\n\
+    \    fi", "    if [[ $1 =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$(echo $1\
+    \ | tr ' ' '\"','\"' | sed 's/^/\"/;s/$/\"/')\\\"]\"\n    elif [[ $1 =~ [^a-zA-Z]\
+    \ ]]; then\n        echo \"[\\\"$(echo $1 | tr ',' '\"','\"' | sed 's/^/\"/;s/$/\"\
+    /')\\\"]\"\n    else\n        echo $(echo $1 | grep -o [a-z] | awk '{print tolower($0)}'\
+    \ | awk '{print NR%2}' | grep -c 1)\n    fi", "    if [[ $1 =~ [^a-zA-Z,] ]];\
+    \ then\n        echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif\
+    \ [[ $1 =~ [^a-zA-Z] ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\
+    \"/g')\\\"]\"\n    else\n        echo \"$(echo $1 | grep -o '[a-z]' | grep -v\
+    \ '[aeiou]' | wc -l)\"\n    fi", "    local words=$1\n    if [[ $words =~ [[:space:]]\
+    \ ]]; then\n        echo \"[\\\"$(echo $words | sed 's/ /\" \"\\\"/g')\\\"]\"\n\
+    \    elif [[ $words =~ , ]]; then\n        echo \"[\\\"$(echo $words | sed 's/,/\"\
+    ,\"/g')\\\"]\"\n    else\n        echo \"$(echo $words | grep -o '[a-z]' | awk\
+    \ '{print tolower($0)}' | awk '{print NR%2}' | grep -c 1)\"\n    fi", "    local\
+    \ words=$1\n    if [[ $words =~ [a-zA-Z] ]]; then\n        if [[ $words =~ [a-zA-Z]\
+    \ ]]; then\n            if [[ $words =~ [a-zA-Z] ]]; then\n                echo\
+    \ $words | grep -o '[a-zA-Z]' | awk '{print tolower($0)}' | awk '{print ord($0)}'\
+    \ | awk '{if ($0 % 2 == 1) print $0}' | wc -l\n            else\n            \
+    \    echo $words | grep -o '[a-zA-Z]' | awk '{print tolower($0)}' | awk '{print\
+    \ ord($0)}' | awk '{if ($0 % 2 == 1) print $0}' | wc -l\n            fi\n    \
+    \    else\n            echo $words | grep -o '[a-zA-Z]' | awk '{print tolower($0)}'\
+    \ | awk '{print ord($0)}' | awk '{if ($0 % 2 == 1) print $0}' | wc -l\n      \
+    \  fi\n    else\n        echo $words | grep -o '[a-zA-Z]' | awk '{print tolower($0)}'\
+    \ | awk '{print ord($0)}' | awk '{if ($0 % 2 == 1) print $0}' | wc -l\n    fi",
+  "    local text=\"$1\"\n    if [[ \"$text\" =~ \\  ]]; then\n        echo \"$text\"\
+    \ | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"$text\" =~ , ]]; then\n\
+    \        echo \"$text\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n   \
+    \     echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i\
+    \ in a)if(a[i]%2==1)print i}' | wc -l\n    fi", "  local str=$1\n  if [[ \"$str\"\
+    \ =~ [^a-zA-Z,] ]]; then\n    echo \"[\\\"$(echo \"$str\" | sed 's/ /\" \"\\\"\
+    /g')\\\"]\"\n  elif [[ \"$str\" =~ [^a-zA-Z] ]]; then\n    echo \"[\\\"$(echo\
+    \ \"$str\" | sed 's/,/\" \"/g')\\\"]\"\n  else\n    local count=0\n    for ((\
+    \ i=0; i<${#str}; i++ )); do\n      if (( $(( ${str:$i:1} - 97 )) % 2 )); then\n\
+    \        (( count++ ))\n      fi\n    done\n    echo \"$count\"\n  fi", "    if\
+    \ [[ $1 =~ [[:space:]] ]]; then\n        echo \"$1\" | tr ' ' '\\n' | sed 's/^/\"\
+    /;s/$/\"/'\n    elif [[ $1 =~ , ]]; then\n        echo \"$1\" | tr ',' '\\n' |\
+    \ sed 's/^/\"/;s/$/\"/'\n    else\n        echo \"$1\" | grep -o '[a-z]' | awk\
+    \ '{print $1}' | awk '{print NR%2}' | grep -c 1\n    fi", "    local text=\"$1\"\
+    \n    if [[ \"$text\" =~ [^a-z, ] ]]; then\n        echo \"[\\\"$text\\\"]\"\n\
+    \    elif [[ \"$text\" =~ [^a-z] ]]; then\n        echo \"[\\\"${text//,/\\\"\
+    ,\\\"}\\\"]\"\n    else\n        local count=0\n        for (( i=0; i<${#text};\
+    \ i++ )); do\n            if (( i % 2 == 0 )); then\n                if [[ \"\
+    ${text:i:1}\" =~ [a-z] ]]; then\n                    (( count++ ))\n         \
+    \       fi\n            fi\n        done\n        echo \"$count\"\n    fi", " \
+    \   local text=\"$1\"\n    if [[ \"$text\" =~ [[:space:]] ]]; then\n        echo\
+    \ \"[$(sed 's/ /\", \"/g' <<< \"$text\")]\"\n    elif [[ \"$text\" =~ , ]]; then\n\
+    \        echo \"[$(sed 's/,/\", \"/g' <<< \"$text\")]\"\n    else\n        echo\
+    \ \"$(tr -d -c 'a-z' <<< \"$text\" | grep -o . | awk 'NR % 2 == 1' | wc -l)\"\n\
+    \    fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo \"$1\" | tr -d\
+    \ '\\n' | sed -e 's/\\(.*\\)/[\"\\1\"]/'\n    elif [[ \"$1\" =~ [^a-zA-Z] ]];\
+    \ then\n        echo \"$1\" | tr -d '\\n' | sed -e 's/\\(.*\\)/[\"\\1\"]/'\n \
+    \   else\n        echo \"$1\" | tr -d '\\n' | sed -e 's/\\(.*\\)/\"\\1\"/'\n \
+    \   fi", "    if [[ $1 =~ [^a-zA-Z, ] ]]; then\n        echo \"[\\\"$1\\\"]\"\n\
+    \    elif [[ $1 =~ [^a-zA-Z ] ]]; then\n        echo \"[\\\"$1\\\"]\"\n    else\n\
+    \        echo \"$(echo $1 | tr -d ' ' | wc -c)\"\n    fi", "    local text=\"\
+    $1\"\n    if [[ \"$text\" =~ \\  ]]; then\n        echo \"$text\" | sed 's/ /\"\
+    , \"/g'\n    elif [[ \"$text\" =~ , ]]; then\n        echo \"$text\" | sed 's/,/\"\
+    , \"/g'\n    else\n        echo \"$text\" | sed 's/./&\\n/g' | grep -v '[aeiou]'\
+    \ | wc -l\n    fi", "    if [[ $1 =~ [a-zA-Z] ]]; then\n        if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n            if [[ $1 =~ [a-zA-Z] ]]; then\n                echo $1\
+    \ | tr -d ' ' | tr -d ',' | grep -o '[a-z]' | awk '{print length($0)}'\n     \
+    \       else\n                echo $1 | tr -d ' ' | tr -d ',' | grep -o '[a-z]'\
+    \ | awk '{print length($0)}'\n            fi\n        else\n            echo $1\
+    \ | tr -d ' ' | tr -d ',' | grep -o '[a-z]' | awk '{print length($0)}'\n     \
+    \   fi\n    else\n        echo $1 | tr -d ' ' | tr -d ',' | grep -o '[a-z]' |\
+    \ awk '{print length($0)}'\n    fi", "    local text=\"$1\"\n    if [[ \"$text\"\
+    \ =~ [[:space:]] ]]; then\n        echo -n \"[\"\n        while read -r word;\
+    \ do\n            echo -n \"\\\"$word\\\" \"\n        done <<< \"$text\"\n   \
+    \     echo -n \"]\"\n    elif [[ \"$text\" =~ , ]]; then\n        echo -n \"[\"\
+    \n        while read -r word; do\n            echo -n \"\\\"$word\\\" \"\n   \
+    \     done <<< \"$text\"\n        echo -n \"]\"\n    else\n        local count=0\n\
+    \        for (( i=0; i<${#text}; i++ )); do\n            if [[ $(( $i % 2 )) -eq\
+    \ 0 ]]; then\n                if [[ \"${text:$i:1}\" =~ [[:lower:]] ]]; then\n\
+    \                    count=$(( $count + 1 ))\n                fi\n           \
+    \ fi\n        done\n        echo -n \"$count\"\n    fi", "    if [[ $1 =~ \\s\
+    \ ]]; then\n        echo -n \"[\"\n        echo -n $1 | sed -E 's/\\s+/\", \"\
+    /g'\n        echo -n \"]\"\n    elif [[ $1 =~ , ]]; then\n        echo -n \"[\"\
+    \n        echo -n $1 | sed -E 's/,+/\", \"/g'\n        echo -n \"]\"\n    else\n\
+    \        echo -n $1 | grep -o '[a-z]' | awk '{print NR % 2}' | grep -c 1\n   \
+    \ fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/\
+    \ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep\
+    \ -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1)\n\
+    \    fi", "    if [[ \"$1\" == *\" \"* ]]; then\n        echo \"$1\" | tr ' '\
+    \ '\\n' | sed 's/.*/\"&\"/'\n    elif [[ \"$1\" == *\",\"* ]]; then\n        echo\
+    \ \"$1\" | tr ',' '\\n' | sed 's/.*/\"&\"/'\n    else\n        echo \"$1\" | grep\
+    \ -o '[a-z]' | awk '{print tolower($0)}' | awk '{print ord($0)}' | awk '{if ($0\
+    \ % 2 == 1) {print $0}}' | wc -l\n    fi", "    local words=$1\n    if [[ $words\
+    \ =~ [^a-zA-Z, ] ]]; then\n        echo \"\\\"$words\\\"\"\n    elif [[ $words\
+    \ =~ [,] ]]; then\n        echo $words | tr ',' '\\n' | awk '{print \"\\\"\"$0\"\
+    \\\"\"}'\n    else\n        echo $words | grep -o '[a-z]' | awk '{print NR%2}'\
+    \ | grep -c '1'\n    fi", "    local input=$1\n    local output\n    if [[ $input\
+    \ =~ \\s ]]; then\n        output=$(echo $input | sed -e 's/ /\",\"/g')\n    elif\
+    \ [[ $input =~ , ]]; then\n        output=$(echo $input | sed -e 's/,/\",\"/g')\n\
+    \    else\n        output=$(echo $input | grep -o '[a-z]' | awk '{a[NR]=$0} END\
+    \ {for (i=1;i<=NR;i++) {if (i%2==1) {print a[i]}}}' | wc -l)\n    fi\n    echo\
+    \ $output", "    if [[ $1 =~ [[:space:]] ]]; then\n        echo -n \"[\"\n   \
+    \     for word in $1; do\n            echo -n \"\\\"$word\\\" \"\n        done\n\
+    \        echo -n \"]\"\n    elif [[ $1 =~ , ]]; then\n        echo -n \"[\"\n\
+    \        for word in $(echo $1 | tr \",\" \" \"); do\n            echo -n \"\\\
+    \"$word\\\" \"\n        done\n        echo -n \"]\"\n    else\n        count=0\n\
+    \        for (( i=0; i<${#1}; i++ )); do\n            if [[ $((i%2)) -eq 1 ]];\
+    \ then\n                if [[ ${1:$i:1} =~ [a-z] ]]; then\n                  \
+    \  count=$((count+1))\n                fi\n            fi\n        done\n    \
+    \    echo -n $count\n    fi", "    local text=\"$1\"\n    local words=$(echo \"\
+    $text\" | sed -e 's/[^[:space:],]//g')\n    if [[ -z \"$words\" ]]; then\n   \
+    \     echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}\
+    \ END {for (i in a) if (a[i] % 2 == 1) print i}' | wc -l\n    elif [[ \"$words\"\
+    \ == \",\" ]]; then\n        echo \"$text\" | tr ',' '\\n' | sed -e 's/^/\"/'\
+    \ -e 's/$/\"/'\n    else\n        echo \"$text\" | tr ' ' '\\n' | sed -e 's/^/\"\
+    /' -e 's/$/\"/'\n    fi", "  if [[ $1 =~ \\ |\\' ]]; then\n    echo \"[$(echo\
+    \ $1 | sed -e 's/ /\", \"/g')]\"\n  elif [[ $1 =~ , ]]; then\n    echo \"[$(echo\
+    \ $1 | sed -e 's/,/\", \"/g')]\"\n  else\n    echo $(echo $1 | grep -o '[a-z]'\
+    \ | awk '{print NR%2}' | grep -c 1)\n  fi", "    local words=$1\n    if [[ $words\
+    \ =~ ' ' ]]; then\n        echo \"[\\\"$(echo $words | sed 's/ /\" \"\\\"/g')\\\
+    \"]\"\n    elif [[ $words =~ ',' ]]; then\n        echo \"[\\\"$(echo $words |\
+    \ sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo $(echo $words | grep -o '[a-z]'\
+    \ | awk '{print NR%2}' | grep -c 1)\n    fi", "  local text=\"$1\"\n  local result=\"\
+    \"\n  if [[ \"$text\" =~ [^[:space:],] ]]; then\n    result=\"$(echo \"$text\"\
+    \ | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\"\n  elif [[ \"$text\" =~\
+    \ [^[:space:]] ]]; then\n    result=\"$(echo \"$text\" | sed -e 's/\\([^,]*\\\
+    )/\"\\1\"/g')\"\n  else\n    result=\"$(echo \"$text\" | sed -e 's/\\([^ ]*\\\
+    )/\"\\1\"/g')\"\n  fi\n  echo \"$result\"", "    local text=\"$1\"\n    local\
+    \ words=()\n    local word=\"\"\n    local c=\"\"\n    local i=0\n    local n=0\n\
+    \    local l=0\n    local odd_letters=0\n    local odd_letters_list=()\n    local\
+    \ odd_letters_list_str=\"\"\n    local odd_letters_list_str_escaped=\"\"\n   \
+    \ local odd_letters_list_str_quoted=\"\"\n    local odd_letters_list_str_quoted_escaped=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json=\"\"\n    local odd_letters_list_str_quoted_escaped_json_escaped=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted=\"\"\n \
+    \   local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped=\"\"\
+    \n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped_quoted=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped_quoted_escaped=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped_quoted_escaped_json=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped_quoted_escaped_json_escaped=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped_quoted_escaped_json_escaped_quoted=\"\
+    \"\n    local odd_letters_list_str_quoted_escaped_json_escaped_quoted_escaped_json_escaped",
+  "    if [[ $1 =~ \\ |\\' ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\"\\\
+    ,\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1\
+    \ | sed 's/,/\"\\,\\\"/g')\\\"]\"\n    else\n        echo $(( $(echo $1 | grep\
+    \ -o '[a-z]' | awk '{print ord($0)}' | awk '{sum+=$1} END {print sum}') % 2 ))\n\
+    \    fi", "    if [[ \"$1\" =~ \" \" ]]; then\n        echo \"[\\\"$(echo \"$1\"\
+    \ | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ \"$1\" =~ \",\" ]]; then\n    \
+    \    echo \"[\\\"$(echo \"$1\" | sed 's/,/\",\"/g')\\\"]\"\n    else\n       \
+    \ echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print\
+    \ NR%2}' | grep -c 1)\"\n    fi", "    local str=$1\n    local words\n    if [[\
+    \ $str =~ \\  ]]; then\n        words=$(echo $str | sed 's/ /,/g')\n    elif [[\
+    \ $str =~ , ]]; then\n        words=$(echo $str | sed 's/,/ /g')\n    else\n \
+    \       words=$(echo $str | sed 's/\\(.\\)/\\1\\n/g' | grep -c [a-z] | sed 's/[^0-9]//g')\n\
+    \    fi\n    echo $words", "  local text=\"$1\"\n  local words=()\n  local word=''\n\
+    \  local c\n  local i\n  local n\n  local n_lower_odd=0\n  local n_lower_even=0\n\
+    \  local n_lower=$(echo \"$text\" | tr -d -c 'a-z' | wc -c)\n  local n_upper=$(echo\
+    \ \"$text\" | tr -d -c 'A-Z' | wc -c)\n  local n_digits=$(echo \"$text\" | tr\
+    \ -d -c '0-9' | wc -c)\n  local n_other=$(echo \"$text\" | tr -d -c 'a-zA-Z0-9'\
+    \ | wc -c)\n  local n_total=$(echo \"$text\" | wc -c)\n  if [ $n_total -eq $((n_lower\
+    \ + n_upper + n_digits + n_other)) ]; then\n    for ((i=0; i<${#text}; i++));\
+    \ do\n      c=\"${text:$i:1}\"\n      if [ \"$c\" == ' ' ]; then\n        words+=(\"\
+    $word\")\n        word=''\n      elif [ \"$c\" == ',' ]; then\n        words+=(\"\
+    $word\")\n        word=''\n        break\n      else\n        word+=\"$c\"\n \
+    \     fi\n    done\n    if [ \"$word\" != '' ]; then\n      words+=(\"$word\"\
+    )\n    fi\n    if [ ${#words[@]} -gt 0 ]; then\n      echo \"[\"$(printf '\"%s\"\
+    ,' \"${words[@]}\")\"]\" | sed 's/,]$/]/'\n    else\n      for ((i=0; i<${#text};\
+    \ i++)); do\n        c=\"${text:$i:1}\"\n        n=$(printf '%d' \"'$c\")\n  \
+    \      if [ $((n % 2)) -eq 0 ]; then\n          n_lower_even=$((n_lower_even +\
+    \ 1))\n        else\n          n_lower_odd=$((n_lower_odd + 1))\n        fi\n\
+    \      done\n      echo \"$n_lower_odd\"\n", "  # Fill this in\n  echo \"\\\"\
+    $1\\\"\"", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed\
+    \ 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"\
+    $(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo \"$(echo $1\
+    \ | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\"\n    fi", "    if [[ $1\
+    \ =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\"\\,\\\"/g')\\\
+    \"]\"\n    elif [[ $1 =~ [^a-zA-Z] ]]; then\n        echo \"[\\\"$(echo $1 | sed\
+    \ 's/,/\\\"\\,\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 | grep -o [a-z]\
+    \ | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print\
+    \ i}' | wc -l)\n    fi", "    if [[ \"$1\" =~ [a-zA-Z] ]]; then\n        if [[\
+    \ \"$1\" =~ [a-zA-Z] ]]; then\n            if [[ \"$1\" =~ [a-zA-Z] ]]; then\n\
+    \                echo \"$1\" | grep -o \"[a-z]\" | awk '{print NR%2}' | grep -c\
+    \ 1\n            else\n                echo \"$1\" | grep -o \"[a-z]\" | awk '{print\
+    \ NR%2}' | grep -c 1\n            fi\n        else\n            echo \"$1\" |\
+    \ grep -o \"[a-z]\" | awk '{print NR%2}' | grep -c 1\n        fi\n    else\n \
+    \       echo \"$1\" | grep -o \"[a-z]\" | awk '{print NR%2}' | grep -c 1\n   \
+    \ fi", "  local text=\"$1\"\n  local words=()\n  local word=\"\"\n  local count=0\n\
+    \  local i\n  local c\n  local is_odd\n  local is_word_start\n  local is_word_end\n\
+    \  local is_word_char\n  local is_space\n  local is_comma\n  local is_quote\n\
+    \  local is_escape\n  local is_word_char_or_quote\n  local is_word_char_or_escape\n\
+    \  local is_word_char_or_quote_or_escape\n  local is_word_char_or_space_or_comma\n\
+    \  local is_word_char_or_space_or_comma_or_quote\n  local is_word_char_or_space_or_comma_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape\n  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape_or_escape_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape_or_escape_or_escape_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape_or_escape_or_escape_or_escape_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape_or_escape_or_escape_or_escape_or_escape_or_escape\n\
+    \  local is_word_char_or_space_or_comma_or_quote_or_escape_or_escape_or_escape_or_escape_or_escape_or_escape_or_escape_or_escape\n\
+    \  local is_word_char_or_space_", "  if [[ $1 =~ \\s ]]; then\n    echo \"[\\\"\
+    $(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n  elif [[ $1 =~ , ]]; then\n    echo\
+    \ \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n  else\n    echo $(echo $1\
+    \ | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR % 2}' | grep\
+    \ -c 1)\n  fi", "    local text=\"$1\"\n    if [[ \"$text\" =~ \" \" ]]; then\n\
+    \        echo \"$text\" | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"\
+    $text\" =~ \",\" ]]; then\n        echo \"$text\" | tr ',' '\\n' | sed 's/^/\"\
+    /;s/$/\"/'\n    else\n        echo \"$text\" | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print i}' | wc -l\n    fi", "  local\
+    \ input=\"$1\"\n  local output=()\n  local i\n  local c\n  local n\n  local s\n\
+    \  local t\n  local w\n  local x\n  local y\n  local z\n  local -i l\n  local\
+    \ -i m\n  local -i o\n  local -i p\n  local -i q\n  local -i r\n  local -i u\n\
+    \  local -i v\n  local -i w\n  local -i x\n  local -i y\n  local -i z\n  local\
+    \ -i A\n  local -i B\n  local -i C\n  local -i D\n  local -i E\n  local -i F\n\
+    \  local -i G\n  local -i H\n  local -i I\n  local -i J\n  local -i K\n  local\
+    \ -i L\n  local -i M\n  local -i N\n  local -i O\n  local -i P\n  local -i Q\n\
+    \  local -i R\n  local -i S\n  local -i T\n  local -i U\n  local -i V\n  local\
+    \ -i W\n  local -i X\n  local -i Y\n  local -i Z\n  local -i a\n  local -i b\n\
+    \  local -i c\n  local -i d\n  local -i e\n  local -i f\n  local -i g\n  local\
+    \ -i h\n  local -i i\n  local -i j\n  local -i k\n  local -i l\n  local -i m\n\
+    \  local -i n\n  local -i o\n  local -i p\n  local -i q\n  local -i r\n  local\
+    \ -i s\n  local -i t\n  local -i u\n  local -i v\n  local -i w\n  local -i x\n\
+    \  local -i y\n  local -i z\n  local -i A\n  local -i B\n  local -i C\n  local\
+    \ -i D\n  local -i E\n  local -i F\n  local -i G\n  local -i H\n  local -i I\n\
+    \  local -i J\n  local -i K\n  local -i L\n  local -i M", "    if [[ \"$1\" =~\
+    \ [a-zA-Z] ]]; then\n        if [[ \"$1\" =~ [a-zA-Z][a-zA-Z] ]]; then\n     \
+    \       if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z] ]]; then\n                if\
+    \ [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z] ]]; then\n                   \
+    \ if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z] ]]; then\n        \
+    \                if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]\
+    \ ]]; then\n                            if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]\
+    \ ]]; then\n                                if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]\
+    \ ]]; then\n                                    if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z]\
+    \ ]]; then\n                                        if [[ \"$1\" =~ [a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-zA-Z][a-z",
+  "    local text=\"$1\"\n    if [[ \"$text\" =~ [[:space:]] ]]; then\n        echo\
+    \ \"$text\" | tr ' ' '\\n' | awk '{print \"\\\"\"$0\"\\\"\"}' | tr '\\n' ' '\n\
+    \    elif [[ \"$text\" =~ , ]]; then\n        echo \"$text\" | tr ',' '\\n' |\
+    \ awk '{print \"\\\"\"$0\"\\\"\"}' | tr '\\n' ' '\n    else\n        echo \"$text\"\
+    \ | grep -o '[a-z]' | awk '{print NR%2}' | grep -c '1'\n    fi", "    if [[ $1\
+    \ =~ [^a-zA-Z] ]]; then\n        echo $1 | tr -d '\\n' | sed 's/\\s/\",\"/g' |\
+    \ sed 's/^/\"/' | sed 's/$/\"/'\n    elif [[ $1 =~ [^a-zA-Z,] ]]; then\n     \
+    \   echo $1 | tr -d '\\n' | sed 's/,/\\n/g' | wc -l\n    else\n        echo $1\
+    \ | tr -d '\\n' | sed 's/[a-z]/\\n&/g' | grep -v '^$' | wc -l\n    fi", "    echo\
+    \ -n \"[\"\n    if [[ $1 =~ [^a-zA-Z,] ]]; then\n        echo -n '\"'\n      \
+    \  echo -n \"$1\" | sed 's/ /\" \"\\\"/g'\n        echo -n '\"'\n    elif [[ $1\
+    \ =~ [^a-zA-Z] ]]; then\n        echo -n '\"'\n        echo -n \"$1\" | sed 's/,/\"\
+    ,\"/g'\n        echo -n '\"'\n    else\n        echo -n \"$(echo -n \"$1\" | grep\
+    \ -o '[a-z]' | awk '{print tolower($0)}' | sort | uniq -c | awk '{if ($1 % 2 ==\
+    \ 1) {print $0}}' | wc -l)\"\n    fi\n    echo -n \"]\"", "    local text=\"$1\"\
+    \n    local words=$(echo \"$text\" | tr -d '\\n' | tr -s ' ' | tr ' ' '\\n' |\
+    \ grep -v '^$' | sed 's/^/\"/;s/$/\"/')\n    if [ -z \"$words\" ]; then\n    \
+    \    local words=$(echo \"$text\" | tr -d '\\n' | tr -s ',' | tr ',' '\\n' | grep\
+    \ -v '^$' | sed 's/^/\"/;s/$/\"/')\n        if [ -z \"$words\" ]; then\n     \
+    \       local words=$(echo \"$text\" | tr -d '\\n' | grep -o '[a-z]' | awk '{print\
+    \ ord($0)}' | grep -o '[13579]' | wc -l)\n        fi\n    fi\n    echo \"$words\"",
+  "    if [[ $1 =~ [[:space:]] ]]; then\n        echo \"$1\" | tr ' ' '\\n' | sed\
+    \ 's/^/\"/;s/$/\"/'\n    elif [[ $1 =~ , ]]; then\n        echo \"$1\" | tr ','\
+    \ '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n        echo \"$1\" | grep -o '[a-z]'\
+    \ | awk '{a[NR]=$0} END {for (i=1;i<=NR;i++) {if (i%2==1) {print a[i]}}}' | wc\
+    \ -l\n    fi", "    local str=\"$1\"\n    if [[ \"$str\" =~ \\  ]]; then\n   \
+    \     echo \"[\\\"$(echo \"$str\" | sed 's/ /\" \"\\\\/g')\\\"]\"\n    elif [[\
+    \ \"$str\" =~ , ]]; then\n        echo \"[\\\"$(echo \"$str\" | sed 's/,/\" \"\
+    \\\\/g')\\\"]\"\n    else\n        echo \"$(echo \"$str\" | grep -o '[a-z]' |\
+    \ awk '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1)\"\n    fi", " \
+    \   local text=\"$1\"\n    if [[ \"$text\" =~ [^[:space:],] ]]; then\n       \
+    \ echo \"${#text}\"\n    else\n        echo \"[$(echo \"$text\" | sed 's/[^,]*/\"\
+    &\"/g')]\"\n    fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo \"\
+    [\\\"$(echo \"$1\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ \"$1\" =~ [^a-zA-Z]\
+    \ ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\", \"/g')\\\"]\"\n \
+    \   else\n        echo \"$(echo \"$1\" | grep -o [a-z] | awk '{print tolower($0)}'\
+    \ | awk '{print NR % 2}' | grep -c 1)\"\n    fi", "    if [[ $1 =~ [a-zA-Z] ]];\
+    \ then\n        if [[ $1 =~ [,] ]]; then\n            echo $1 | tr ',' '\\n'\n\
+    \        else\n            echo $1 | grep -o [a-z] | awk '{print NR % 2}' | grep\
+    \ -c 1\n        fi\n    else\n        echo $1 | tr ' ' '\\n'\n    fi", "    if\
+    \ [[ \"$1\" =~ \\s ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\
+    \\\"/g')\\\"]\"\n    elif [[ \"$1\" =~ , ]]; then\n        echo \"[\\\"$(echo\
+    \ \"$1\" | sed 's/,/\",\"/g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" |\
+    \ grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print NR%2}' | grep 1 |\
+    \ wc -l)\"\n    fi", "    if [[ \"$1\" =~ \" \" ]]; then\n        echo \"$1\"\
+    \ | sed -E 's/([^ ]+)/\"\\1\"/g'\n    elif [[ \"$1\" =~ \",\" ]]; then\n     \
+    \   echo \"$1\" | sed -E 's/([^,]+)/\"\\1\"/g'\n    else\n        echo \"$1\"\
+    \ | sed -E 's/([a-z])/\\1\\n/g' | grep -v '^$' | awk '{print NR % 2}' | grep -c\
+    \ '1'\n    fi", "    local words=\"$1\"\n    if [[ \"$words\" =~ \\s ]]; then\n\
+    \        echo \"[\\\"$(echo \"$words\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif\
+    \ [[ \"$words\" =~ , ]]; then\n        echo \"[\\\"$(echo \"$words\" | sed 's/,/\"\
+    ,\"/g')\\\"]\"\n    else\n        echo \"$(echo \"$words\" | grep -o '[a-z]' |\
+    \ grep -v -o '[a-z]' | wc -l)\"\n    fi", "    if [[ $1 =~ [^a-zA-Z0-9,] ]]; then\n\
+    \        echo \"[\\\"$(echo $1 | sed 's/ /\"\\,\\\"/g')\\\"]\"\n    elif [[ $1\
+    \ =~ [^a-zA-Z0-9] ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\"\\,\\\"\
+    /g')\\\"]\"\n    else\n        echo $(echo $1 | grep -o [a-z] | awk '{if(NR%2==1)print}'\
+    \ | wc -l)\n    fi", "    local text=$1\n    local words=()\n    if [[ $text =~\
+    \ \\  ]]; then\n        words=($(echo $text | tr ' ' '\\n'))\n    elif [[ $text\
+    \ =~ , ]]; then\n        words=($(echo $text | tr ',' '\\n'))\n    else\n    \
+    \    local count=0\n        for (( i=0; i<${#text}; i++ )); do\n            local\
+    \ c=${text:$i:1}\n            if [[ $((i % 2)) -eq 0 ]]; then\n              \
+    \  if [[ $c =~ [a-z] ]]; then\n                    count=$((count + 1))\n    \
+    \            fi\n            fi\n        done\n        echo $count\n    fi\n \
+    \   echo ${words[@]}", "    local text=\"$1\"\n    if [[ \"$text\" =~ \\  ]];\
+    \ then\n        echo \"$text\" | sed 's/ /\",\"/g'\n    elif [[ \"$text\" =~ ,\
+    \ ]]; then\n        echo \"$text\" | sed 's/,/\",\"/g'\n    else\n        echo\
+    \ \"$text\" | grep -o '[a-z]' | awk '{print NR%2}' | grep 1 | wc -l\n    fi",
+  "    local words=$1\n    if [[ $words =~ [[:space:]] ]]; then\n        echo \"[\\\
+    \"$(echo $words | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $words =~ , ]]; then\n\
+    \        echo \"[\\\"$(echo $words | sed 's/,/\",\"/g')\\\"]\"\n    else\n   \
+    \     echo $(echo $words | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n\
+    \    fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$(echo\
+    \ \"$1\" | tr ' ' '\" \"')\\\"]\"\n    elif [[ \"$1\" =~ [^a-zA-Z] ]]; then\n\
+    \        echo \"[\\\"$(echo \"$1\" | tr ',' '\" \"')\\\"]\"\n    else\n      \
+    \  echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print\
+    \ NR % 2}' | grep -c 1)\"\n    fi", "    local text=\"$1\"\n    local words=()\n\
+    \    if [[ \"$text\" =~ [[:space:]] ]]; then\n        words=($(echo \"$text\"\
+    \ | tr ' ' '\\n'))\n    elif [[ \"$text\" =~ , ]]; then\n        words=($(echo\
+    \ \"$text\" | tr ',' '\\n'))\n    else\n        local count=0\n        for ((i=0;\
+    \ i<${#text}; i++)); do\n            local char=\"${text:$i:1}\"\n           \
+    \ local ord=$(printf \"%d\" \"'$char\")\n            if ((ord % 2 == 0)); then\n\
+    \                ((count++))\n            fi\n        done\n        echo \"$count\"\
+    \n        return\n    fi\n    local result=()\n    for word in \"${words[@]}\"\
+    ; do\n        result+=(\"\\\"$word\\\"\")\n    done\n    echo \"${result[@]}\"",
+  "    local input=\"$1\"\n    if [[ \"$input\" =~ \\s ]]; then\n        echo \"$input\"\
+    \ | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[ \"$input\" =~ , ]]; then\n\
+    \        echo \"$input\" | tr ',' '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n  \
+    \      echo \"$input\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{print\
+    \ ord($0)%2}' | grep -c 1\n    fi", "    if [[ $1 =~ [a-z] ]]; then\n        echo\
+    \ $(echo $1 | grep -o [a-z] | awk '{if (NR % 2 == 1) {print $0}}' | wc -l)\n \
+    \   elif [[ $1 =~ [,] ]]; then\n        echo $(echo $1 | tr ',' '\\n' | awk '{print\
+    \ \"\\\"\"$0\"\\\"\"}' | tr '\\n' ' ')\n    else\n        echo $(echo $1 | tr\
+    \ ' ' '\\n' | awk '{print \"\\\"\"$0\"\\\"\"}' | tr '\\n' ' ')\n    fi", "   \
+    \ local str=$1\n    if [[ $str =~ [^a-zA-Z, ] ]]; then\n        echo \"[\\\"$(echo\
+    \ $str | sed 's/ /\" \"\\\\/g')\\\"]\"\n    elif [[ $str =~ [^a-zA-Z ] ]]; then\n\
+    \        echo \"[\\\"$(echo $str | sed 's/,/\" \"\\\\/g')\\\"]\"\n    else\n \
+    \       echo $str | grep -o [a-z] | awk '{print NR%2}' | grep 1 | wc -l\n    fi",
+  "  local text=\"$1\"\n  if [[ \"$text\" =~ \\  ]]; then\n    echo \"$text\" | sed\
+    \ 's/ /\", \"/g'\n  elif [[ \"$text\" =~ , ]]; then\n    echo \"$text\" | sed\
+    \ 's/,/\", \"/g'\n  else\n    echo \"$text\" | grep -o '[a-z]' | awk '{print NR%2}'\
+    \ | grep -c 1\n  fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo \"\
+    $1\" | sed -e 's/\\([a-zA-Z]\\+\\)/\"\\1\"/g'\n    elif [[ \"$1\" =~ [^a-zA-Z]\
+    \ ]]; then\n        echo \"$1\" | sed -e 's/\\([a-zA-Z]\\+\\)/\"\\1\"/g'\n   \
+    \ else\n        echo \"$1\" | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1\n\
+    \    fi", "    local words=$1\n    if [[ $words =~ [,] ]]; then\n        echo\
+    \ \"[\\\"${words//,/\\\",\\\"}\\\"]\"\n    elif [[ $words =~ [ ] ]]; then\n  \
+    \      echo \"[\\\"${words// /\\\",\\\"}\\\"]\"\n    else\n        local count=0\n\
+    \        for ((i=0; i<${#words}; i++)); do\n            local char=${words:$i:1}\n\
+    \            if [[ $((i%2)) -eq 0 ]]; then\n                if [[ $((ord(char)))\
+    \ -lt 97 ]]; then\n                    count=$((count+1))\n                fi\n\
+    \            else\n                if [[ $((ord(char))) -ge 97 ]]; then\n    \
+    \                count=$((count+1))\n                fi\n            fi\n    \
+    \    done\n        echo $count\n    fi", "    if [[ $1 =~ \\s ]]; then\n     \
+    \   echo \"[$(sed 's/ /\", \"/g' <<< $1)]\"\n    elif [[ $1 =~ , ]]; then\n  \
+    \      echo \"[$(sed 's/,/\", \"/g' <<< $1)]\"\n    else\n        echo $(grep\
+    \ -o 'a\\|b\\|c\\|d\\|e\\|f\\|g\\|h\\|i\\|j\\|k\\|l\\|m\\|n\\|o\\|p\\|q\\|r\\\
+    |s\\|t\\|u\\|v\\|w\\|x\\|y\\|z' <<< $1 | grep -o '[a-z]' | awk '{print length($0)%2}'\
+    \ | grep -c 1)\n    fi", "    local text=$1\n    if [[ $text =~ [[:space:]] ]];\
+    \ then\n        echo $text | tr ' ' '\\n' | sed 's/^/\"/;s/$/\"/'\n    elif [[\
+    \ $text =~ , ]]; then\n        echo $text | tr ',' '\\n' | sed 's/^/\"/;s/$/\"\
+    /'\n    else\n        echo $text | grep -o '[a-z]' | awk '{print tolower($0)}'\
+    \ | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print i}' | wc -l\n    fi", "  \
+    \  if [[ $1 =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/\
+    \ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ [^a-zA-Z] ]]; then\n        echo \"\
+    [\\\"$(echo \"$1\" | sed 's/,/\" \"/g')\\\"]\"\n    else\n        echo \"$(echo\
+    \ \"$1\" | grep -o '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++} END {for\
+    \ (i in a) if (a[i] % 2 == 1) {print NR; exit}}')\"\n    fi", "    if [[ $1 =~\
+    \ \\s ]]; then\n        echo \"[\\\"$(sed 's/ /\" \"\\\"/g' <<< $1)\\\"]\"\n \
+    \   elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(sed 's/,/\" \"\\\"/g' <<<\
+    \ $1)\\\"]\"\n    else\n        echo $(grep -o '[a-z]' <<< $1 | grep -v -n -e\
+    \ '[02468]' | cut -d: -f1 | wc -l)\n    fi", "    local text=\"$1\"\n    if [[\
+    \ \"$text\" =~ \\  ]]; then\n        echo \"$text\" | tr ' ' '\\n' | sed 's/^/\"\
+    /;s/$/\"/'\n    elif [[ \"$text\" =~ , ]]; then\n        echo \"$text\" | tr ','\
+    \ '\\n' | sed 's/^/\"/;s/$/\"/'\n    else\n        echo \"$text\" | grep -o '[a-z]'\
+    \ | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)c++}END{print\
+    \ c}'\n    fi", "    local words=${1//[^a-zA-Z]/ }\n    if [[ -z $words ]]; then\n\
+    \        echo ${1//[^a-z]/} | grep -o . | awk '{if (NR % 2 == 1) print}' | wc\
+    \ -l\n    else\n        echo $words | tr ' ' ','\n    fi", "    if [[ \"$1\" =~\
+    \ \\ |\\' ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\\/g')\\\
+    \"]\"\n    elif [[ \"$1\" =~ , ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed\
+    \ 's/,/\" \"\\\\/g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" | grep -o\
+    \ '[a-z]' | awk '{print tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print\
+    \ i}' | wc -l)\"\n    fi", "    if [[ \"$1\" =~ [^a-zA-Z,] ]]; then\n        echo\
+    \ \"[\\\"$(echo \"$1\" | sed 's/ /\" \"\\\\\"/g')\\\"]\"\n    elif [[ \"$1\" =~\
+    \ [^a-zA-Z] ]]; then\n        echo \"[\\\"$(echo \"$1\" | sed 's/,/\" \"\\\\\"\
+    /g')\\\"]\"\n    else\n        echo \"$(echo \"$1\" | grep -o '[a-z]' | awk '{print\
+    \ tolower($0)}' | awk '{a[$0]++}END{for(i in a)if(a[i]%2==1)print i}' | wc -l)\"\
+    \n    fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed\
+    \ 's/ /\" \"\\\\\\n/g')\\\"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"\
+    [\\\"$(echo $1 | sed 's/,/\" \"\\\\\\n/g')\\\"]\"\n    else\n        echo $(echo\
+    \ $1 | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1)\n    fi", "    local\
+    \ words=$1\n    if [[ $words =~ \\s ]]; then\n        echo \"[\\\"$(echo $words\
+    \ | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $words =~ , ]]; then\n        echo\
+    \ \"[\\\"$(echo $words | sed 's/,/\",\"/g')\\\"]\"\n    else\n        local count=0\n\
+    \        for ((i=0; i<${#words}; i++)); do\n            if [[ $((i%2)) -eq 1 ]];\
+    \ then\n                if [[ ${words:$i:1} =~ [a-z] ]]; then\n              \
+    \      count=$((count+1))\n                fi\n            fi\n        done\n\
+    \        echo $count\n    fi", "  if [[ $1 =~ \" \" ]]; then\n    echo \"[\\\"\
+    $(echo $1 | sed 's/ /\"\\,\\\"/g')\\\"]\"\n  elif [[ $1 =~ \",\" ]]; then\n  \
+    \  echo \"[\\\"$(echo $1 | sed 's/,/\\\"\\,\\\"/g')\\\"]\"\n  else\n    echo $(echo\
+    \ $1 | grep -o -i '[a-z]' | awk '{print tolower($0)}' | awk '{print NR % 2}' |\
+    \ grep -c 1)\n  fi", "  local text=\"$1\"\n  if [[ \"$text\" =~ [[:space:]] ]];\
+    \ then\n    echo \"[\\\"$(echo \"$text\" | sed 's/ /\" \"\\\"/g')\\\"]\"\n  elif\
+    \ [[ \"$text\" =~ , ]]; then\n    echo \"[\\\"$(echo \"$text\" | sed 's/,/\",\"\
+    /g')\\\"]\"\n  else\n    local count=0\n    for (( i=0; i<${#text}; i++ )); do\n\
+    \      local char=\"${text:$i:1}\"\n      if [[ \"$(( $i % 2 ))\" -eq 0 ]]; then\n\
+    \        if [[ \"$char\" =~ [a-z] ]]; then\n          count=$(( $count + 1 ))\n\
+    \        fi\n      fi\n    done\n    echo \"$count\"\n  fi", "    local text=\"\
+    $1\"\n    if [[ \"$text\" =~ [^a-zA-Z,\\s] ]]; then\n        echo \"\\\"$text\\\
+    \"\"\n    elif [[ \"$text\" =~ [,] ]]; then\n        echo \"\\\"${text//,/\\\"\
+    \\\",\\\"}\\\"\"\n    else\n        local count=0\n        for ((i=0; i<${#text};\
+    \ i++)); do\n            if [[ \"${text:$i:1}\" =~ [a-z] ]]; then\n          \
+    \      if ((i % 2 == 0)); then\n                    ((count++))\n            \
+    \    fi\n            fi\n        done\n        echo \"$count\"\n    fi", "   \
+    \ if [[ $1 =~ [^a-zA-Z,] ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\"\
+    \ \"\\\"/g')\\\"]\"\n    elif [[ $1 =~ [^a-zA-Z] ]]; then\n        echo \"[\\\"\
+    $(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n    else\n        echo $(echo $1 |\
+    \ grep -o [a-z] | awk '{print tolower($0)}' | awk '{if(NR%2==1)print $0}' | wc\
+    \ -l)\n    fi", "    if [[ $1 =~ \\s ]]; then\n        echo \"[$(echo $1 | sed\
+    \ 's/ /\", \"/g')]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[$(echo $1\
+    \ | sed 's/,/\", \"/g')]\"\n    else\n        echo \"$(echo $1 | grep -o '[a-z]'\
+    \ | awk '{print NR%2}' | grep -c 1)\"\n    fi", "    if [[ $1 =~ [a-zA-Z] ]];\
+    \ then\n        if [[ $1 =~ [a-zA-Z] ]]; then\n            if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n                echo $1 | grep -o '[a-zA-Z]' | awk '{print tolower($0)}'\
+    \ | awk '{print ord($0)}' | awk '{if ($0 % 2 == 1) print $0}' | wc -l\n      \
+    \      else\n                echo $1 | sed 's/\\(.*\\),\\(.*\\)/[\"\\1\",\"\\\
+    2\"]/'\n            fi\n        else\n            echo $1 | sed 's/\\(.*\\) \\\
+    (.*\\)/[\"\\1\",\"\\2\"]/'\n        fi\n    else\n        echo $1 | sed 's/\\\
+    (.*\\) \\(.*\\)/[\"\\1\",\"\\2\"]/'\n    fi", "  # TODO: Implement me\n  if [[\
+    \ $1 =~ [\\ ] ]]; then\n    echo $1 | tr ' ' '\\n' | awk '{print \"\\\"\"$1\"\\\
+    \"\"}' | tr '\\n' ' '\n  elif [[ $1 =~ [,] ]]; then\n    echo $1 | tr ',' '\\\
+    n' | awk '{print \"\\\"\"$1\"\\\"\"}' | tr '\\n' ' '\n  else\n    echo $1 | grep\
+    \ -o '[a-z]' | awk '{print NR%2}' | grep -c 1\n  fi", "    if [[ $1 =~ [a-zA-Z]\
+    \ ]]; then\n        echo -n '['\n        for ((i=0; i<${#1}; i++)); do\n     \
+    \       if [[ ${1:$i:1} =~ [a-zA-Z] ]]; then\n                if [[ $i -ne 0 ]];\
+    \ then\n                    echo -n ', '\n                fi\n               \
+    \ echo -n '\"'${1:$i:1}'\"'\n            fi\n        done\n        echo -n ']'\n\
+    \    else\n        echo -n '\"'$(echo $1 | tr -d ',')'\"'\n    fi", "    if [[\
+    \ $1 =~ \\s ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\
+    \"]\"\n    elif [[ $1 =~ , ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\"\
+    \ \"\\\"/g')\\\"]\"\n    else\n        echo \"$(echo $1 | grep -o '[a-z]' | awk\
+    \ '{print tolower($0)}' | awk '{print NR % 2}' | grep -c 1)\"\n    fi", "  if\
+    \ [[ \"$1\" =~ [[:space:]] ]]; then\n    echo \"$1\" | sed -E 's/[[:space:]]+/\"\
+    , \"/g' | sed -E 's/^/\"/' | sed -E 's/$/\"/'\n  elif [[ \"$1\" =~ , ]]; then\n\
+    \    echo \"$1\" | sed -E 's/,+/\", \"/g' | sed -E 's/^/\"/' | sed -E 's/$/\"\
+    /'\n  else\n    echo \"$1\" | grep -o '[a-z]' | awk '{print NR%2}' | grep -c 1\n\
+    \  fi", "    local text=\"$1\"\n    if [[ \"$text\" =~ [^a-zA-Z, ] ]]; then\n\
+    \        echo \"[\\\"$text\\\"]\"\n    elif [[ \"$text\" =~ [, ] ]]; then\n  \
+    \      echo \"[\\\"${text//,/\\\",\\\"}\\\"]\"\n    else\n        local count=0\n\
+    \        for ((i=0; i<${#text}; i++)); do\n            if [[ $((i%2)) -eq 1 ]];\
+    \ then\n                if [[ \"${text:$i:1}\" =~ [a-z] ]]; then\n           \
+    \         count=$((count+1))\n                fi\n            fi\n        done\n\
+    \        echo \"$count\"\n    fi", "    if [[ $1 =~ [[:space:]] ]]; then\n   \
+    \     echo \"[\\\"$(echo $1 | sed 's/ /\" \"\\\"/g')\\\"]\"\n    elif [[ $1 =~\
+    \ , ]]; then\n        echo \"[\\\"$(echo $1 | sed 's/,/\" \"\\\"/g')\\\"]\"\n\
+    \    else\n        echo \"$(echo $1 | grep -o '[a-z]' | awk '{print NR % 2}' |\
+    \ grep -c 1)\"\n    fi"]
+stop_tokens:
+- "\n}"

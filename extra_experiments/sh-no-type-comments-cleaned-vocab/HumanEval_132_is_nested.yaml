@@ -1,0 +1,1717 @@
+name: HumanEval_132_is_nested
+language: sh
+prompt: "#!/bin/bash\n# Create a function that takes a string as input which contains\
+  \ only square brackets.\n# The function should return true if and only if there\
+  \ is a valid subsequence of brackets \n# where at least one bracket in the subsequence\
+  \ is nested.\n# >>> $(is_nested \"[[]]\")\n# \"true\"\n# >>> $(is_nested \"[]]]]]]][[[[[]\"\
+  )\n# \"false\"\n# >>> $(is_nested \"[][]\")\n# \"false\"\n# >>> $(is_nested \"[]\"\
+  )\n# \"false\"\n# >>> $(is_nested \"[[][]]\")\n# \"true\"\n# >>> $(is_nested \"\
+  [[]][[\")\n# \"true\"\nis_nested() {\n"
+tests: "}\n\ncandidate() {\n    is_nested \"$@\"\n}\n\nset -e\nrun_test() {\n    [[\
+  \ $(candidate \"[[]]\") = \"true\" ]]\n    [[ $(candidate \"[]]]]]]][[[[[]\") =\
+  \ \"false\" ]]\n    [[ $(candidate \"[][]\") = \"false\" ]]\n    [[ $(candidate\
+  \ \"[]\") = \"false\" ]]\n    [[ $(candidate \"[[[[]]]]\") = \"true\" ]]\n    [[\
+  \ $(candidate \"[]]]]]]]]]]\") = \"false\" ]]\n    [[ $(candidate \"[][][[]]\")\
+  \ = \"true\" ]]\n    [[ $(candidate \"[[]\") = \"false\" ]]\n    [[ $(candidate\
+  \ \"[]]\") = \"false\" ]]\n    [[ $(candidate \"[[]][[\") = \"true\" ]]\n    [[\
+  \ $(candidate \"[[][]]\") = \"true\" ]]\n    [[ $(candidate \"\") = \"false\" ]]\n\
+  \    [[ $(candidate \"[[[[[[[[\") = \"false\" ]]\n    [[ $(candidate \"]]]]]]]]\"\
+  ) = \"false\" ]]\n}\n\nrun_test"
+completions: ["    local input=$1\n    local stack=()\n    local top=0\n    local\
+    \ i=0\n    local len=${#input}\n    local char\n    while [ $i -lt $len ]; do\n\
+    \        char=${input:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n       \
+    \     stack[$top]=$char\n            top=$((top+1))\n        elif [ \"$char\"\
+    \ == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                echo\
+    \ \"false\"\n                return\n            fi\n            top=$((top-1))\n\
+    \            if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"\
+    true\"\n                return\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo \"false\"", "    local str=\"$1\"\n    local stack=()\n  \
+    \  local i\n    local c\n    for ((i=0; i<${#str}; i++)); do\n        c=\"${str:$i:1}\"\
+    \n        if [[ \"$c\" == \"[\" ]]; then\n            stack+=(\"$c\")\n      \
+    \  elif [[ \"$c\" == \"]\" ]]; then\n            if [[ \"${#stack[@]}\" -eq 0\
+    \ ]]; then\n                echo \"false\"\n                return\n         \
+    \   fi\n            unset stack[${#stack[@]}-1]\n        fi\n    done\n    if\
+    \ [[ \"${#stack[@]}\" -eq 0 ]]; then\n        echo \"true\"\n    else\n      \
+    \  echo \"false\"\n    fi", "    local input=\"$1\"\n    local stack=()\n    local\
+    \ top=0\n    local i=0\n    local char=''\n    local is_nested=false\n    while\
+    \ [ $i -lt ${#input} ]; do\n        char=\"${input:$i:1}\"\n        if [ \"$char\"\
+    \ == \"[\" ]; then\n            stack[$top]=\"$char\"\n            top=$((top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                is_nested=false\n                break\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                is_nested=true\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ $top -ne 0 ]; then\n        is_nested=false\n    fi\n    echo\
+    \ \"$is_nested\"", "    local string=\"$1\"\n    local stack=\"\"\n    local is_nested=\"\
+    false\"\n    for (( i=0; i<${#string}; i++ )); do\n        if [[ \"${string:$i:1}\"\
+    \ == \"[\" ]]; then\n            stack+=\"[\"\n        elif [[ \"${string:$i:1}\"\
+    \ == \"]\" ]]; then\n            if [[ -z \"$stack\" ]]; then\n              \
+    \  is_nested=\"false\"\n                break\n            else\n            \
+    \    stack=\"${stack%?}\"\n                if [[ -z \"$stack\" ]]; then\n    \
+    \                is_nested=\"true\"\n                fi\n            fi\n    \
+    \    fi\n    done\n    echo \"$is_nested\"", "    local str=$1\n    local stack=()\n\
+    \    local len=${#str}\n    local i=0\n    while [ $i -lt $len ]; do\n       \
+    \ local char=${str:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n          \
+    \  stack+=($char)\n        elif [ \"$char\" == \"]\" ]; then\n            if [\
+    \ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n               \
+    \ return\n            fi\n            unset stack[${#stack[@]}-1]\n        fi\n\
+    \        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local input=$1\n \
+    \   local stack=()\n    local stack_size=0\n    local i=0\n    local c=''\n  \
+    \  local top=''\n    local is_nested=false\n\n    for ((i=0; i<${#input}; i++));\
+    \ do\n        c=${input:$i:1}\n        if [[ $c == '[' ]]; then\n            stack[$stack_size]=$c\n\
+    \            ((stack_size++))\n        elif [[ $c == ']' ]]; then\n          \
+    \  if [[ $stack_size -eq 0 ]]; then\n                return 1\n            fi\n\
+    \            top=${stack[$((stack_size-1))]}\n            if [[ $top == '[' ]];\
+    \ then\n                is_nested=true\n            fi\n            unset stack[$((stack_size-1))]\n\
+    \            ((stack_size--))\n        fi\n    done\n\n    if [[ $is_nested ==\
+    \ true ]]; then\n        return 0\n    else\n        return 1\n    fi", "    local\
+    \ string=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ n=${#string}\n    local c=\"\"\n    local is_nested=false\n    for ((i=0; i<n;\
+    \ i++)); do\n        c=${string:i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n\
+    \            stack[top++]=\"$c\"\n        elif [[ \"$c\" == \"]\" ]]; then\n \
+    \           if [[ \"${stack[top-1]}\" == \"[\" ]]; then\n                top=$((top-1))\n\
+    \                is_nested=true\n            else\n                top=$((top-1))\n\
+    \            fi\n        fi\n    done\n    if [[ \"$is_nested\" == \"true\" ]];\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  \
+    \  local str=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    while [ $i -lt $len ]; do\n        local ch=${str:$i:1}\n \
+    \       if [ \"$ch\" == \"[\" ]; then\n            stack[$top]=$ch\n         \
+    \   top=$((top+1))\n        elif [ \"$ch\" == \"]\" ]; then\n            if [\
+    \ $top -eq 0 ]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            top=$((top-1))\n            if [ \"${stack[$top]}\"\
+    \ == \"[\" ]; then\n                echo \"true\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    echo \"false\"",
+  "    local str=$1\n    local stack=()\n    local i=0\n    local len=${#str}\n  \
+    \  local c\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n        if [\
+    \ \"$c\" == \"[\" ]; then\n            stack+=($c)\n        elif [ \"$c\" == \"\
+    ]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n                echo\
+    \ \"false\"\n                return\n            fi\n            stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\"\
+    )\n        fi\n        i=$(($i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ string=$1\n    local count=0\n    for (( i=0; i<${#string}; i++ )); do\n   \
+    \     if [[ ${string:$i:1} == \"[\" ]]; then\n            (( count++ ))\n    \
+    \    elif [[ ${string:$i:1} == \"]\" ]]; then\n            (( count-- ))\n   \
+    \     fi\n        if [[ $count -lt 0 ]]; then\n            echo \"false\"\n  \
+    \          return\n        fi\n    done\n    if [[ $count -eq 0 ]]; then\n   \
+    \     echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"\
+    $1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n    local top=0\n\
+    \    local c=''\n    local is_nested=false\n    while [ $i -lt $len ]; do\n  \
+    \      c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n\
+    \            top=$((top+1))\n        elif [ \"$c\" == \"]\" ]; then\n        \
+    \    if [ $top -gt 0 ]; then\n                top=$((top-1))\n               \
+    \ if [ $top -gt 0 ]; then\n                    is_nested=true\n              \
+    \  fi\n            fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested\
+    \ == true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n \
+    \   fi", "    local str=$1\n    local stack=()\n    local i=0\n    local len=${#str}\n\
+    \    local top=0\n    local ch=''\n    local is_nested=false\n    while [ $i -lt\
+    \ $len ]; do\n        ch=${str:$i:1}\n        if [ \"$ch\" == \"[\" ]; then\n\
+    \            stack[$top]=$ch\n            top=$((top+1))\n        elif [ \"$ch\"\
+    \ == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n                top=$((top-1))\n\
+    \                if [ $top -gt 0 ]; then\n                    is_nested=true\n\
+    \                fi\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    if [ $is_nested == true ]; then\n        echo \"true\"\n    else\n      \
+    \  echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n    local\
+    \ i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n        local char=${str:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack+=($char)\n       \
+    \ elif [ \"$char\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        unset stack[${#stack[@]}-1]\n        fi\n        i=$((i+1))\n    done\n\
+    \    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n      \
+    \  echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n    local\
+    \ i=0\n    while [ $i -lt ${#str} ]; do\n        local c=${str:$i:1}\n       \
+    \ if [ \"$c\" == \"[\" ]; then\n            stack+=($c)\n        elif [ \"$c\"\
+    \ == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n            \
+    \    return 1\n            fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n        fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        return 0\n    else\n        return 1\n    fi", "    local input=$1\n\
+    \    local stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n\
+    \    while [ $i -lt $len ]; do\n        local char=${input:$i:1}\n        if [\
+    \ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                stack[$top]=\"\"\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ $top -eq 0 ]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=\"\"\n  \
+    \  local len=${#str}\n    local i=0\n    local c=\"\"\n    while [ $i -lt $len\
+    \ ]; do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n       \
+    \     stack=\"$stack$c\"\n        elif [ \"$c\" == \"]\" ]; then\n           \
+    \ if [ -z \"$stack\" ]; then\n                return 1\n            fi\n     \
+    \       stack=${stack%?}\n        fi\n        i=$((i+1))\n    done\n    if [ -z\
+    \ \"$stack\" ]; then\n        return 0\n    fi\n    return 1", "    local string=\"\
+    $1\"\n    local stack=()\n    local i\n    for ((i=0; i<${#string}; i++)); do\n\
+    \        local char=\"${string:$i:1}\"\n        if [[ \"$char\" == \"[\" ]]; then\n\
+    \            stack+=(\"$char\")\n        elif [[ \"$char\" == \"]\" ]]; then\n\
+    \            if [[ ${#stack[@]} -eq 0 ]]; then\n                echo \"false\"\
+    \n                return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\n   \
+    \ local count=0\n    for (( i=0; i<${#str}; i++ )); do\n        if [[ ${str:$i:1}\
+    \ == \"[\" ]]; then\n            (( count++ ))\n        elif [[ ${str:$i:1} ==\
+    \ \"]\" ]]; then\n            (( count-- ))\n        fi\n        if [[ $count\
+    \ -lt 0 ]]; then\n            echo \"false\"\n            return\n        fi\n\
+    \    done\n    if [[ $count -eq 0 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local input=$1\n    local stack=()\n  \
+    \  local top=0\n    local i=0\n    local len=${#input}\n    local c=''\n    local\
+    \ is_nested=false\n    while [ $i -lt $len ]; do\n        c=${input:$i:1}\n  \
+    \      if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n\
+    \                top=$((top-1))\n                if [ $top -gt 0 ]; then\n   \
+    \                 is_nested=true\n                fi\n            fi\n       \
+    \ fi\n        i=$((i+1))\n    done\n    if [ $is_nested == true ]; then\n    \
+    \    echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"\
+    $1\"\n    local stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n\
+    \    while [ $i -lt $len ]; do\n        local c=${str:$i:1}\n        if [ \"$c\"\
+    \ == \"[\" ]; then\n            stack[$top]=$c\n            top=$(($top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$(($top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$(($i+1))\n    done\n    echo \"false\"", "    local input=$1\n\
+    \    local stack=()\n    local stack_size=0\n    local is_nested=false\n    local\
+    \ i=0\n    local c=''\n    for ((i=0; i<${#input}; i++)); do\n        c=${input:$i:1}\n\
+    \        if [[ $c == '[' ]]; then\n            stack[$stack_size]=$c\n       \
+    \     ((stack_size++))\n        elif [[ $c == ']' ]]; then\n            if [[\
+    \ $stack_size -eq 0 ]]; then\n                break\n            fi\n        \
+    \    unset stack[$((stack_size-1))]\n            ((stack_size--))\n          \
+    \  if [[ $stack_size -eq 0 ]]; then\n                is_nested=true\n        \
+    \    fi\n        fi\n    done\n    echo $is_nested", "    local string=\"$1\"\n\
+    \    local stack=()\n    local i\n    for ((i=0; i<${#string}; i++)); do\n   \
+    \     local c=${string:$i:1}\n        if [[ $c == \"[\" ]]; then\n           \
+    \ stack+=($c)\n        elif [[ $c == \"]\" ]]; then\n            if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n                echo \"false\"\n                return\n   \
+    \         fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n        fi\n\
+    \    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "  local string=$1\n  local stack=()\n  local\
+    \ top=0\n  local i=0\n  local length=${#string}\n  local char=''\n  for ((i=0;\
+    \ i<length; i++)); do\n    char=${string:$i:1}\n    if [[ \"$char\" == \"[\" ]];\
+    \ then\n      stack[$top]=$char\n      top=$((top+1))\n    elif [[ \"$char\" ==\
+    \ \"]\" ]]; then\n      if [[ \"$top\" -eq 0 ]]; then\n        echo \"false\"\n\
+    \        return\n      fi\n      top=$((top-1))\n      if [[ \"${stack[$top]}\"\
+    \ == \"[\" ]]; then\n        stack[$top]=\"\"\n      fi\n    fi\n  done\n  if\
+    \ [[ \"$top\" -eq 0 ]]; then\n    echo \"true\"\n  else\n    echo \"false\"\n\
+    \  fi", "    local stack=()\n    local i=0\n    local str=\"$1\"\n    local len=${#str}\n\
+    \    while [ $i -lt $len ]; do\n        local char=${str:$i:1}\n        if [ \"\
+    $char\" == \"[\" ]; then\n            stack+=($char)\n        elif [ \"$char\"\
+    \ == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n            \
+    \    return 1\n            else\n                stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\"\
+    )\n            fi\n        fi\n        i=$(($i+1))\n    done\n    if [ ${#stack[@]}\
+    \ -eq 0 ]; then\n        return 0\n    else\n        return 1\n    fi", "    local\
+    \ str=$1\n    local stack=()\n    local i=0\n    local len=${#str}\n    local\
+    \ top=0\n    local c=''\n    local is_nested=false\n    while [ $i -lt $len ];\
+    \ do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n          \
+    \  stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ $top -gt 0 ]; then\n                top=$((top-1))\n\
+    \                if [ \"${stack[$top]}\" == \"[\" ]; then\n                  \
+    \  is_nested=true\n                fi\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo $is_nested", "    local input=$1\n    local stack=()\n   \
+    \ local top=0\n    local i=0\n    local len=${#input}\n    for ((i=0; i<len; i++));\
+    \ do\n        if [[ ${input:i:1} == \"[\" ]]; then\n            stack[$top]=$i\n\
+    \            top=$((top+1))\n        elif [[ ${input:i:1} == \"]\" ]]; then\n\
+    \            if [[ $top -eq 0 ]]; then\n                echo \"false\"\n     \
+    \           return\n            fi\n            top=$((top-1))\n            if\
+    \ [[ $i -eq $((stack[$top]+1)) ]]; then\n                echo \"true\"\n     \
+    \           return\n            fi\n        fi\n    done\n    echo \"false\"",
+  "    local str=\"$1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n\
+    \    local top=0\n    local c=''\n    local is_nested=false\n    while [ $i -lt\
+    \ $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n  \
+    \          stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\" ==\
+    \ \"]\" ]; then\n            if [ $top -gt 0 ]; then\n                top=$((top-1))\n\
+    \                is_nested=true\n            else\n                is_nested=false\n\
+    \                break\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    if [ $top -gt 0 ]; then\n        is_nested=false\n    fi\n    if [ \"$is_nested\"\
+    \ == \"true\" ]; then\n        echo \"true\"\n    else\n        echo \"false\"\
+    \n    fi", "    local str=\"$1\"\n    local stack=()\n    local top=0\n    local\
+    \ i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n        local char=${str:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n    \
+    \        top=$((top+1))\n        elif [ \"$char\" == \"]\" ]; then\n         \
+    \   if [ $top -eq 0 ]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            top=$((top-1))\n            if [ \"${stack[$top]}\"\
+    \ == \"[\" ]; then\n                echo \"true\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    echo \"false\"",
+  "    local str=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    while [[ $i -lt $len ]]; do\n        if [[ ${str:$i:1} == \"\
+    [\" ]]; then\n            stack[$top]=$i\n            top=$((top+1))\n       \
+    \ elif [[ ${str:$i:1} == \"]\" ]]; then\n            if [[ $top -eq 0 ]]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [[ $i -eq $((stack[$top]+1)) ]]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=\"$1\"\
+    \n    local stack=()\n    local char\n    for ((i=0; i<${#str}; i++)); do\n  \
+    \      char=\"${str:$i:1}\"\n        if [[ \"$char\" == \"[\" ]]; then\n     \
+    \       stack+=(\"$char\")\n        elif [[ \"$char\" == \"]\" ]]; then\n    \
+    \        if [[ ${#stack[@]} -eq 0 ]]; then\n                echo \"false\"\n \
+    \               return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n    local\
+    \ stack=()\n    for ((i=0; i<${#str}; i++)); do\n        local char=${str:$i:1}\n\
+    \        if [[ $char == \"[\" ]]; then\n            stack+=($char)\n        elif\
+    \ [[ $char == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local string=$1\n    local stack=()\n    local stack_top=0\n    local\
+    \ i=0\n    local len=${#string}\n    local char=\n    local top=\n    local is_nested=false\n\
+    \n    while [ $i -lt $len ]; do\n        char=${string:$i:1}\n        if [ \"\
+    $char\" == \"[\" ]; then\n            stack[$stack_top]=$char\n            stack_top=$((stack_top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $stack_top -eq 0\
+    \ ]; then\n                is_nested=false\n                break\n          \
+    \  fi\n            top=${stack[$((stack_top-1))]}\n            if [ \"$top\" ==\
+    \ \"[\" ]; then\n                stack_top=$((stack_top-1))\n                is_nested=true\n\
+    \            else\n                is_nested=false\n                break\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n\n    if [ $stack_top\
+    \ -eq 0 ]; then\n        echo $is_nested\n    else\n        echo false\n    fi",
+  "    # Write your code here\n    # To print results to the standard output you can\
+    \ use echo\n    # Example: echo \"Hello world\"\n    echo \"true\"", "    local\
+    \ str=$1\n    local stack=()\n    for ((i=0; i<${#str}; i++)); do\n        local\
+    \ char=${str:$i:1}\n        if [[ $char == \"[\" ]]; then\n            stack+=(\"\
+    $char\")\n        elif [[ $char == \"]\" ]]; then\n            if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n                echo \"false\"\n                return\n   \
+    \         fi\n            unset stack[${#stack[@]}-1]\n        fi\n    done\n\
+    \    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=$1\n    local stack=()\n    local\
+    \ i=0\n    local len=${#str}\n    local top=0\n    local c=''\n    local is_nested=false\n\
+    \    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\" ==\
+    \ \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n    \
+    \    elif [ \"$c\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n   \
+    \             top=$((top-1))\n                if [ $top -gt 0 ]; then\n      \
+    \              is_nested=true\n                fi\n            fi\n        fi\n\
+    \        i=$((i+1))\n    done\n    if [ $is_nested == true ]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\n\
+    \    local count=0\n    for (( i=0; i<${#str}; i++ )); do\n        if [[ ${str:$i:1}\
+    \ == \"[\" ]]; then\n            (( count++ ))\n        elif [[ ${str:$i:1} ==\
+    \ \"]\" ]]; then\n            (( count-- ))\n        fi\n        if [[ $count\
+    \ -lt 0 ]]; then\n            echo \"false\"\n            return\n        fi\n\
+    \    done\n    if [[ $count -eq 0 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local string=$1\n    local open=0\n   \
+    \ local close=0\n    for (( i=0; i<${#string}; i++ )); do\n        if [[ ${string:$i:1}\
+    \ == \"[\" ]]; then\n            open=$((open+1))\n        elif [[ ${string:$i:1}\
+    \ == \"]\" ]]; then\n            close=$((close+1))\n        fi\n    done\n  \
+    \  if [[ $open -eq $close ]]; then\n        echo \"false\"\n    else\n       \
+    \ echo \"true\"\n    fi", "    local string=\"$1\"\n    local stack=()\n    local\
+    \ stack_top=0\n    local i=0\n    local length=${#string}\n    local char=''\n\
+    \    local top_char=''\n    while [[ $i -lt $length ]]; do\n        char=${string:$i:1}\n\
+    \        if [[ $char == '[' ]]; then\n            stack[$stack_top]=$char\n  \
+    \          stack_top=$((stack_top+1))\n        elif [[ $char == ']' ]]; then\n\
+    \            if [[ $stack_top -eq 0 ]]; then\n                echo \"false\"\n\
+    \                return\n            fi\n            stack_top=$((stack_top-1))\n\
+    \            top_char=${stack[$stack_top]}\n            if [[ $top_char == '['\
+    \ ]]; then\n                stack[$stack_top]=''\n            else\n         \
+    \       echo \"false\"\n                return\n            fi\n        fi\n \
+    \       i=$((i+1))\n    done\n    if [[ $stack_top -eq 0 ]]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\n\
+    \    local stack=()\n    local i=0\n    local top=0\n    local len=${#str}\n \
+    \   while [ $i -lt $len ]; do\n        if [ \"${str:$i:1}\" == \"[\" ]; then\n\
+    \            stack[$top]=1\n            top=$((top+1))\n        elif [ \"${str:$i:1}\"\
+    \ == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                echo\
+    \ \"false\"\n                return\n            fi\n            top=$((top-1))\n\
+    \            stack[$top]=0\n        fi\n        i=$((i+1))\n    done\n    if [\
+    \ $top -eq 0 ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n\
+    \    fi", "    local input=\"$1\"\n    local stack=()\n    local i\n    for ((i=0;\
+    \ i<${#input}; i++)); do\n        local c=${input:$i:1}\n        if [[ $c == \"\
+    [\" ]]; then\n            stack+=($c)\n        elif [[ $c == \"]\" ]]; then\n\
+    \            if [[ ${#stack[@]} -eq 0 ]]; then\n                return 1\n   \
+    \         fi\n            unset stack[${#stack[@]}-1]\n        fi\n    done\n\
+    \    [[ ${#stack[@]} -eq 0 ]]", "    local str=\"$1\"\n    local stack=()\n  \
+    \  local i=0\n    local len=${#str}\n    local top=0\n    local c\n    while [\
+    \ $i -lt $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n\
+    \            stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\"\
+    \ == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                echo\
+    \ \"false\"\n                return\n            fi\n            top=$((top-1))\n\
+    \            if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"\
+    true\"\n                return\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo \"false\"", "    local str=$1\n    local stack=()\n    local\
+    \ top=0\n    local i=0\n    local len=${#str}\n    local ch=''\n    local is_nested=false\n\
+    \    while [ $i -lt $len ]; do\n        ch=${str:$i:1}\n        if [ \"$ch\" ==\
+    \ \"[\" ]; then\n            stack[$top]=$ch\n            top=$((top+1))\n   \
+    \     elif [ \"$ch\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n \
+    \               break\n            fi\n            top=$((top-1))\n          \
+    \  if [ $top -eq 0 ]; then\n                is_nested=true\n            fi\n \
+    \       fi\n        i=$((i+1))\n    done\n    echo $is_nested", "    local str=\"\
+    $1\"\n    local stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n\
+    \    for ((i=0; i<len; i++)); do\n        if [[ \"${str:$i:1}\" == \"[\" ]]; then\n\
+    \            stack[top++]=\"[\"\n        elif [[ \"${str:$i:1}\" == \"]\" ]];\
+    \ then\n            if [[ $top -eq 0 ]]; then\n                echo \"false\"\n\
+    \                return\n            else\n                top=$((top-1))\n  \
+    \          fi\n        fi\n    done\n    if [[ $top -eq 0 ]]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local input=$1\n \
+    \   local stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n\
+    \    while [ $i -lt $len ]; do\n        local char=${input:$i:1}\n        if [\
+    \ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=\"$1\"\
+    \n    local stack=()\n    local i=0\n    local len=${#str}\n    local top=0\n\
+    \    local c=''\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n      \
+    \  if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n\
+    \                top=$((top-1))\n                stack[$top]=''\n            else\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \    fi\n        i=$((i+1))\n    done\n    if [ $top -gt 0 ]; then\n        echo\
+    \ \"false\"\n    else\n        echo \"true\"\n    fi", "    local input=$1\n \
+    \   local stack=()\n    local i=0\n    local len=${#input}\n    local char=''\n\
+    \    local top=''\n    local is_nested=false\n\n    while [[ $i -lt $len ]]; do\n\
+    \        char=${input:$i:1}\n        if [[ $char == '[' ]]; then\n           \
+    \ stack+=($char)\n        elif [[ $char == ']' ]]; then\n            top=${stack[-1]}\n\
+    \            if [[ $top == '[' ]]; then\n                stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n            else\n                stack+=($char)\n            fi\n        fi\n\
+    \        ((i++))\n    done\n\n    if [[ ${#stack[@]} -gt 0 ]]; then\n        is_nested=false\n\
+    \    else\n        is_nested=true\n    fi\n\n    echo $is_nested", "    local\
+    \ str=\"$1\"\n    local stack=()\n    local stack_top\n    local i\n    local\
+    \ c\n    for ((i=0; i<${#str}; i++)); do\n        c=\"${str:$i:1}\"\n        if\
+    \ [[ \"$c\" == \"[\" ]]; then\n            stack+=(\"$c\")\n        elif [[ \"\
+    $c\" == \"]\" ]]; then\n            stack_top=\"${stack[-1]}\"\n            if\
+    \ [[ \"$stack_top\" == \"[\" ]]; then\n                unset stack[-1]\n     \
+    \       else\n                stack+=(\"$c\")\n            fi\n        fi\n  \
+    \  done\n    if [[ ${#stack[@]} -gt 0 ]]; then\n        echo \"false\"\n    else\n\
+    \        echo \"true\"\n    fi", "    local string=\"$1\"\n    local stack=()\n\
+    \    local i=0\n    local len=${#string}\n    while [ $i -lt $len ]; do\n    \
+    \    local char=${string:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n    \
+    \        stack+=($char)\n        elif [ \"$char\" == \"]\" ]; then\n         \
+    \   if [ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n        \
+    \        return\n            fi\n            local last_char=${stack[${#stack[@]}-1]}\n\
+    \            if [ \"$last_char\" == \"[\" ]; then\n                stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n            else\n                echo \"false\"\n                return\n\
+    \            fi\n        fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]}\
+    \ -eq 0 ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n   \
+    \ fi", "    local str=$1\n    local len=${#str}\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local aa=0\n    local bb=0\n    local cc=0\n    local dd=0\n\
+    \    local ee=0\n    local ff=0\n    local gg=0\n    local hh=0\n    local ii=0\n\
+    \    local jj=0\n    local kk=0\n    local ll=0\n    local mm=0\n    local nn=0\n\
+    \    local oo=0\n    local pp=0\n    local qq=0\n    local rr=0\n    local ss=0\n\
+    \    local tt=0\n    local uu=0\n    local vv=0\n    local ww=0\n    local xx=0\n\
+    \    local yy=0\n    local zz=0\n    local aaa=0\n    local bbb=0\n    local ccc=0\n\
+    \    local ddd=0\n    local eee=0\n    local fff=0\n    local ggg=0\n    local\
+    \ hhh=0\n    local iii=0\n    local jjj=0\n    local kkk=0\n    local lll=0\n\
+    \    local mmm=0\n    local nnn=0\n    local ooo=0\n    local ppp=0\n    local\
+    \ qqq=0\n    local rrr=0\n    local sss=0\n    local ttt=0\n    local uuu=0\n\
+    \    local vvv=0\n    local www=0\n    local xxx=0\n    local yyy=0\n    local\
+    \ zzz=0\n    local aaaa=0\n    local bbbb=0\n    local cccc=0\n    local dddd=0\n\
+    \    local eee", "    local str=\"$1\"\n    local stack=()\n    local i\n    local\
+    \ c\n    for ((i=0; i<${#str}; i++)); do\n        c=\"${str:$i:1}\"\n        if\
+    \ [[ \"$c\" == \"[\" ]]; then\n            stack+=(\"$c\")\n        elif [[ \"\
+    $c\" == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n      \
+    \          echo \"false\"\n                return\n            fi\n          \
+    \  unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]} -eq\
+    \ 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi",
+  "    local input=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#input}\n    while [ $i -lt $len ]; do\n        local c=${input:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n          \
+    \  top=$((top+1))\n        elif [ \"$c\" == \"]\" ]; then\n            if [ $top\
+    \ -eq 0 ]; then\n                echo \"false\"\n                return\n    \
+    \        fi\n            top=$((top-1))\n            if [ \"${stack[$top]}\" ==\
+    \ \"[\" ]; then\n                echo \"true\"\n                return\n     \
+    \       fi\n        fi\n        i=$((i+1))\n    done\n    echo \"false\"", " \
+    \   local input=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n \
+    \   local len=${#input}\n    local c\n    local is_nested=false\n    while [ $i\
+    \ -lt $len ]; do\n        c=${input:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n\
+    \            stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\"\
+    \ == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                break\n\
+    \            fi\n            top=$((top-1))\n            if [ $top -eq 0 ]; then\n\
+    \                is_nested=true\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ $is_nested == true ]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local str=\"$1\"\n    local len=${#str}\n\
+    \    local i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n \
+    \   local n=0\n    local o=0\n    local p=0\n    local q=0\n    local r=0\n  \
+    \  local s=0\n    local t=0\n    local u=0\n    local v=0\n    local w=0\n   \
+    \ local x=0\n    local y=0\n    local z=0\n    local aa=0\n    local bb=0\n  \
+    \  local cc=0\n    local dd=0\n    local ee=0\n    local ff=0\n    local gg=0\n\
+    \    local hh=0\n    local ii=0\n    local jj=0\n    local kk=0\n    local ll=0\n\
+    \    local mm=0\n    local nn=0\n    local oo=0\n    local pp=0\n    local qq=0\n\
+    \    local rr=0\n    local ss=0\n    local tt=0\n    local uu=0\n    local vv=0\n\
+    \    local ww=0\n    local xx=0\n    local yy=0\n    local zz=0\n    local aaa=0\n\
+    \    local bbb=0\n    local ccc=0\n    local ddd=0\n    local eee=0\n    local\
+    \ fff=0\n    local ggg=0\n    local hhh=0\n    local iii=0\n    local jjj=0\n\
+    \    local kkk=0\n    local lll=0\n    local mmm=0\n    local nnn=0\n    local\
+    \ ooo=0\n    local ppp=0\n    local qqq=0\n    local rrr=0\n    local sss=0\n\
+    \    local ttt=0\n    local uuu=0\n    local vvv=0\n    local www=0\n    local\
+    \ xxx=0\n    local yyy=0\n    local zzz=0\n    local aaaa=0\n    local bbbb=0\n\
+    \    local cccc=0\n    local dddd=0\n    local", "    local input=$1\n    local\
+    \ stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n    local\
+    \ char=''\n    local is_nested=false\n\n    while [ $i -lt $len ]; do\n      \
+    \  char=${input:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n\
+    \            top=$((top+1))\n        elif [ \"$char\" == \"]\" ]; then\n     \
+    \       if [ $top -gt 0 ]; then\n                top=$((top-1))\n            \
+    \    if [ $top -gt 0 ]; then\n                    is_nested=true\n           \
+    \     fi\n            fi\n        fi\n        i=$((i+1))\n    done\n\n    if [\
+    \ $is_nested == true ]; then\n        echo \"true\"\n    else\n        echo \"\
+    false\"\n    fi", "    local input=\"$1\"\n    local stack=()\n    local top=0\n\
+    \    local i=0\n    local char=''\n    local is_nested=false\n    local is_valid=true\n\
+    \    while [[ $i -lt ${#input} ]]; do\n        char=\"${input:$i:1}\"\n      \
+    \  if [[ \"$char\" == \"[\" ]]; then\n            stack[$top]=\"$char\"\n    \
+    \        top=$((top+1))\n        elif [[ \"$char\" == \"]\" ]]; then\n       \
+    \     if [[ $top -eq 0 ]]; then\n                is_valid=false\n            \
+    \    break\n            else\n                top=$((top-1))\n               \
+    \ if [[ $top -gt 0 ]]; then\n                    is_nested=true\n            \
+    \    fi\n            fi\n        fi\n        i=$((i+1))\n    done\n    if [[ $top\
+    \ -gt 0 ]]; then\n        is_valid=false\n    fi\n    if [[ $is_valid == true\
+    \ ]]; then\n        if [[ $is_nested == true ]]; then\n            echo \"true\"\
+    \n        else\n            echo \"false\"\n        fi\n    else\n        echo\
+    \ \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n    local i=0\n\
+    \    local len=${#str}\n    local top=0\n    local char=''\n    local is_nested=false\n\
+    \    while [ $i -lt $len ]; do\n        char=${str:$i:1}\n        if [ \"$char\"\
+    \ == \"[\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n\
+    \                top=$((top-1))\n                if [ $top -gt 0 ]; then\n   \
+    \                 is_nested=true\n                fi\n            fi\n       \
+    \ fi\n        i=$((i+1))\n    done\n    if [ $is_nested == true ]; then\n    \
+    \    echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"\
+    $1\"\n    local len=${#str}\n    local i=0\n    local j=0\n    local k=0\n   \
+    \ local l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n    local\
+    \ q=0\n    local r=0\n    local s=0\n    local t=0\n    local u=0\n    local v=0\n\
+    \    local w=0\n    local x=0\n    local y=0\n    local z=0\n    local aa=0\n\
+    \    local bb=0\n    local cc=0\n    local dd=0\n    local ee=0\n    local ff=0\n\
+    \    local gg=0\n    local hh=0\n    local ii=0\n    local jj=0\n    local kk=0\n\
+    \    local ll=0\n    local mm=0\n    local nn=0\n    local oo=0\n    local pp=0\n\
+    \    local qq=0\n    local rr=0\n    local ss=0\n    local tt=0\n    local uu=0\n\
+    \    local vv=0\n    local ww=0\n    local xx=0\n    local yy=0\n    local zz=0\n\
+    \    local aaa=0\n    local bbb=0\n    local ccc=0\n    local ddd=0\n    local\
+    \ eee=0\n    local fff=0\n    local ggg=0\n    local hhh=0\n    local iii=0\n\
+    \    local jjj=0\n    local kkk=0\n    local lll=0\n    local mmm=0\n    local\
+    \ nnn=0\n    local ooo=0\n    local ppp=0\n    local qqq=0\n    local rrr=0\n\
+    \    local sss=0\n    local ttt=0\n    local uuu=0\n    local vvv=0\n    local\
+    \ www=0\n    local xxx=0\n    local yyy=0\n    local zzz=0\n    local aaaa=0\n\
+    \    local bbbb=0\n    local cccc=0\n    local dddd=0\n    local", "    local\
+    \ str=$1\n    local stack=()\n    local i=0\n    local len=${#str}\n    local\
+    \ top=0\n    local ch=''\n    while [ $i -lt $len ]; do\n        ch=${str:$i:1}\n\
+    \        if [ \"$ch\" == \"[\" ]; then\n            stack[$top]=$ch\n        \
+    \    top=$((top+1))\n        elif [ \"$ch\" == \"]\" ]; then\n            if [\
+    \ $top -eq 0 ]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            top=$((top-1))\n            if [ \"${stack[$top]}\"\
+    \ == \"[\" ]; then\n                echo \"true\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    echo \"false\"",
+  "    local str=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    local c\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n          \
+    \  top=$((top+1))\n        elif [ \"$c\" == \"]\" ]; then\n            if [ $top\
+    \ -eq 0 ]; then\n                echo \"false\"\n                return\n    \
+    \        else\n                top=$((top-1))\n            fi\n        fi\n  \
+    \      i=$((i+1))\n    done\n    if [ $top -eq 0 ]; then\n        echo \"true\"\
+    \n    else\n        echo \"false\"\n    fi", "    local input=$1\n    local stack=()\n\
+    \    local top=0\n    local i=0\n    local len=${#input}\n    local char=''\n\
+    \    local is_nested=false\n\n    while [ $i -lt $len ]; do\n        char=${input:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n    \
+    \        top=$((top+1))\n        elif [ \"$char\" == \"]\" ]; then\n         \
+    \   if [ $top -gt 0 ]; then\n                top=$((top-1))\n                is_nested=true\n\
+    \            else\n                is_nested=false\n                break\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n\n    if [ $top -gt 0\
+    \ ]; then\n        is_nested=false\n    fi\n\n    echo $is_nested", "    local\
+    \ input=\"$1\"\n    local stack=()\n    local stack_top\n    local char\n    local\
+    \ i\n    for ((i=0; i<${#input}; i++)); do\n        char=\"${input:$i:1}\"\n \
+    \       if [[ \"$char\" == \"[\" ]]; then\n            stack+=(\"$char\")\n  \
+    \      elif [[ \"$char\" == \"]\" ]]; then\n            stack_top=\"${stack[-1]}\"\
+    \n            if [[ \"$stack_top\" == \"[\" ]]; then\n                unset stack[-1]\n\
+    \            else\n                return 1\n            fi\n        fi\n    done\n\
+    \    if [[ ${#stack[@]} -eq 0 ]]; then\n        return 0\n    else\n        return\
+    \ 1\n    fi", "    local str=\"$1\"\n    local count=0\n    for (( i=0; i<${#str};\
+    \ i++ )); do\n        if [[ ${str:$i:1} == \"[\" ]]; then\n            ((count++))\n\
+    \        elif [[ ${str:$i:1} == \"]\" ]]; then\n            ((count--))\n    \
+    \    fi\n        if [[ $count -lt 0 ]]; then\n            echo \"false\"\n   \
+    \         return\n        fi\n    done\n    [[ $count -eq 0 ]] && echo \"true\"\
+    \ || echo \"false\"", "    local string=\"$1\"\n    local stack=()\n    local\
+    \ top=0\n    local i=0\n    local char=''\n    local is_nested=false\n    for\
+    \ ((i=0; i<${#string}; i++)); do\n        char=\"${string:$i:1}\"\n        if\
+    \ [[ \"$char\" == \"[\" ]]; then\n            stack[$top]=\"$char\"\n        \
+    \    ((top++))\n        elif [[ \"$char\" == \"]\" ]]; then\n            if [[\
+    \ $top -gt 0 ]]; then\n                ((top--))\n                if [[ \"${stack[$top]}\"\
+    \ == \"[\" ]]; then\n                    is_nested=true\n                fi\n\
+    \            fi\n        fi\n    done\n    echo \"$is_nested\"", "    local str=$1\n\
+    \    local stack=()\n    local i=0\n    local len=${#str}\n    while [ $i -lt\
+    \ $len ]; do\n        local char=${str:$i:1}\n        if [ \"$char\" == \"[\"\
+    \ ]; then\n            stack+=($char)\n        elif [ \"$char\" == \"]\" ]; then\n\
+    \            if [ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n\
+    \                return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local len=${#str}\n    local i=0\n    local j=0\n    local k=0\n\
+    \    local l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n \
+    \   local q=0\n    local r=0\n    local s=0\n    local t=0\n    local u=0\n  \
+    \  local v=0\n    local w=0\n    local x=0\n    local y=0\n    local z=0\n   \
+    \ local aa=0\n    local bb=0\n    local cc=0\n    local dd=0\n    local ee=0\n\
+    \    local ff=0\n    local gg=0\n    local hh=0\n    local ii=0\n    local jj=0\n\
+    \    local kk=0\n    local ll=0\n    local mm=0\n    local nn=0\n    local oo=0\n\
+    \    local pp=0\n    local qq=0\n    local rr=0\n    local ss=0\n    local tt=0\n\
+    \    local uu=0\n    local vv=0\n    local ww=0\n    local xx=0\n    local yy=0\n\
+    \    local zz=0\n    local aaa=0\n    local bbb=0\n    local ccc=0\n    local\
+    \ ddd=0\n    local eee=0\n    local fff=0\n    local ggg=0\n    local hhh=0\n\
+    \    local iii=0\n    local jjj=0\n    local kkk=0\n    local lll=0\n    local\
+    \ mmm=0\n    local nnn=0\n    local ooo=0\n    local ppp=0\n    local qqq=0\n\
+    \    local rrr=0\n    local sss=0\n    local ttt=0\n    local uuu=0\n    local\
+    \ vvv=0\n    local www=0\n    local xxx=0\n    local yyy=0\n    local zzz=0\n\
+    \    local aaaa=0\n    local bbbb=0\n    local cccc=0\n    local dddd=0\n    local",
+  "    # Write your code here\n    # To print results to the standard output you can\
+    \ use echo\n    # Example: echo \"Hello world\"\n    echo \"true\"", "    local\
+    \ str=\"$1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n    local\
+    \ top=0\n    local ch=''\n    local is_nested=false\n    while [ $i -lt $len ];\
+    \ do\n        ch=${str:$i:1}\n        if [ \"$ch\" == \"[\" ]; then\n        \
+    \    stack[$top]=$ch\n            top=$((top+1))\n        else\n            if\
+    \ [ $top -gt 0 ]; then\n                top=$((top-1))\n                if [ $top\
+    \ -gt 0 ]; then\n                    is_nested=true\n                fi\n    \
+    \        fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested ==\
+    \ true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi",
+  "    local str=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    while [ $i -lt $len ]; do\n        if [ \"${str:$i:1}\" ==\
+    \ \"[\" ]; then\n            stack[$top]=$i\n            top=$((top+1))\n    \
+    \    elif [ \"${str:$i:1}\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ $i -eq $((stack[$top]+1)) ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local string=\"\
+    $1\"\n    local stack=\"\"\n    local top=\"\"\n    local i=0\n    local len=${#string}\n\
+    \    while [ $i -lt $len ]; do\n        local char=${string:$i:1}\n        if\
+    \ [ \"$char\" == \"[\" ]; then\n            stack=\"$stack$char\"\n        elif\
+    \ [ \"$char\" == \"]\" ]; then\n            top=${stack: -1}\n            if [\
+    \ \"$top\" == \"[\" ]; then\n                stack=${stack:0:-1}\n           \
+    \ else\n                return 1\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ -z \"$stack\" ]; then\n        return 0\n    else\n      \
+    \  return 1\n    fi", "    local str=\"$1\"\n    local stack=()\n    local len=${#str}\n\
+    \    local i=0\n    local top=0\n    local ch=''\n    local is_nested=false\n\
+    \    while [ $i -lt $len ]; do\n        ch=${str:$i:1}\n        if [ \"$ch\" ==\
+    \ \"[\" ]; then\n            stack[$top]=$ch\n            top=$((top+1))\n   \
+    \     elif [ \"$ch\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n \
+    \               is_nested=false\n                break\n            fi\n     \
+    \       top=$((top-1))\n            if [ $top -eq 0 ]; then\n                is_nested=true\n\
+    \            fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested\
+    \ == true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n \
+    \   fi", "    # Write your code here\n    # To print results to the standard output\
+    \ you can use echo\n    # Example: echo \"Hello world\"\n    echo \"true\"", " \
+    \   local input=$1\n    local stack=()\n    local stack_top=0\n    local i=0\n\
+    \    local length=${#input}\n    while [ $i -lt $length ]; do\n        local char=${input:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack[$stack_top]=\"$char\"\
+    \n            stack_top=$((stack_top+1))\n        elif [ \"$char\" == \"]\" ];\
+    \ then\n            if [ $stack_top -eq 0 ]; then\n                echo \"false\"\
+    \n                return\n            fi\n            stack_top=$((stack_top-1))\n\
+    \            if [ \"${stack[$stack_top]}\" == \"[\" ]; then\n                echo\
+    \ \"true\"\n                return\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo \"false\"", "    local str=$1\n    local stack=()\n    local\
+    \ i=0\n    local len=${#str}\n    local top=0\n    local ch=''\n    local is_nested=false\n\
+    \    while [ $i -lt $len ]; do\n        ch=${str:$i:1}\n        if [ \"$ch\" ==\
+    \ \"[\" ]; then\n            stack[$top]=$ch\n            top=$((top+1))\n   \
+    \     elif [ \"$ch\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n \
+    \               top=$((top-1))\n                if [ $top -gt 0 ]; then\n    \
+    \                is_nested=true\n                fi\n            fi\n        fi\n\
+    \        i=$((i+1))\n    done\n    echo $is_nested", "    local str=$1\n    local\
+    \ stack=()\n    for ((i=0; i<${#str}; i++)); do\n        local char=${str:$i:1}\n\
+    \        if [[ $char == \"[\" ]]; then\n            stack+=($char)\n        elif\
+    \ [[ $char == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local string=$1\n    local stack=()\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local a=0\n    local b=0\n    local c=0\n    local d=0\n    local\
+    \ e=0\n    local f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local a=0\n    local b=0\n    local c=0\n    local d=0\n    local\
+    \ e=0\n    local f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local a=0\n    local b=0\n    local c=0\n    local d=0\n    local\
+    \ e=0\n    local f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n   ", "    local input=$1\n    local\
+    \ stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n    local\
+    \ char=''\n    local top_char=''\n    while [ $i -lt $len ]; do\n        char=${input:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n    \
+    \        top=$((top+1))\n        elif [ \"$char\" == \"]\" ]; then\n         \
+    \   if [ $top -eq 0 ]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            top_char=${stack[$((top-1))]}\n            if [ \"\
+    $top_char\" == \"[\" ]; then\n                stack[$((top-1))]=''\n         \
+    \       top=$((top-1))\n            else\n                echo \"false\"\n   \
+    \             return\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    if [ $top -eq 0 ]; then\n        echo \"true\"\n    else\n        echo \"\
+    false\"\n    fi", "    local input=\"$1\"\n    local stack=\"\"\n    local top=\"\
+    \"\n    local char=\"\"\n    local i=0\n    local len=${#input}\n    while [ $i\
+    \ -lt $len ]; do\n        char=${input:$i:1}\n        if [ \"$char\" == \"[\"\
+    \ ]; then\n            stack=\"$stack$char\"\n        elif [ \"$char\" == \"]\"\
+    \ ]; then\n            top=${stack: -1}\n            if [ \"$top\" == \"[\" ];\
+    \ then\n                stack=${stack:0:-1}\n            else\n              \
+    \  stack=\"$stack$char\"\n            fi\n        fi\n        i=$((i+1))\n   \
+    \ done\n    if [ -z \"$stack\" ]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n    local\
+    \ i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n        if [ \"${str:$i:1}\"\
+    \ == \"[\" ]; then\n            stack+=(1)\n        elif [ \"${str:$i:1}\" ==\
+    \ \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n               \
+    \ echo \"false\"\n                return\n            else\n                stack=(\"\
+    ${stack[@]:0:${#stack[@]}-1}\")\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n\
+    \    local i=0\n    local len=${#str}\n    local top=0\n    local c=''\n    local\
+    \ is_nested=false\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n    \
+    \    if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n\
+    \                top=$((top-1))\n                if [ $top -gt 0 ]; then\n   \
+    \                 is_nested=true\n                fi\n            fi\n       \
+    \ fi\n        i=$((i+1))\n    done\n    echo $is_nested", "    local str=\"$1\"\
+    \n    local stack=()\n    local i=0\n    local len=${#str}\n    while [ $i -lt\
+    \ $len ]; do\n        local c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n\
+    \            stack+=($c)\n        elif [ \"$c\" == \"]\" ]; then\n           \
+    \ if [ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n          \
+    \      return\n            fi\n            stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\"\
+    )\n        fi\n        i=$(($i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local len=${#str}\n    local i=0\n    local j=0\n    local k=0\n\
+    \    local l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n \
+    \   local q=0\n    local r=0\n    local s=0\n    local t=0\n    local u=0\n  \
+    \  local v=0\n    local w=0\n    local x=0\n    local y=0\n    local z=0\n   \
+    \ local aa=0\n    local bb=0\n    local cc=0\n    local dd=0\n    local ee=0\n\
+    \    local ff=0\n    local gg=0\n    local hh=0\n    local ii=0\n    local jj=0\n\
+    \    local kk=0\n    local ll=0\n    local mm=0\n    local nn=0\n    local oo=0\n\
+    \    local pp=0\n    local qq=0\n    local rr=0\n    local ss=0\n    local tt=0\n\
+    \    local uu=0\n    local vv=0\n    local ww=0\n    local xx=0\n    local yy=0\n\
+    \    local zz=0\n    local aaa=0\n    local bbb=0\n    local ccc=0\n    local\
+    \ ddd=0\n    local eee=0\n    local fff=0\n    local ggg=0\n    local hhh=0\n\
+    \    local iii=0\n    local jjj=0\n    local kkk=0\n    local lll=0\n    local\
+    \ mmm=0\n    local nnn=0\n    local ooo=0\n    local ppp=0\n    local qqq=0\n\
+    \    local rrr=0\n    local sss=0\n    local ttt=0\n    local uuu=0\n    local\
+    \ vvv=0\n    local www=0\n    local xxx=0\n    local yyy=0\n    local zzz=0\n\
+    \    local aaaa=0\n    local bbbb=0\n    local cccc=0\n    local dddd=0\n    local",
+  "    local input=$1\n    local stack=()\n    for ((i=0; i<${#input}; i++)); do\n\
+    \        local char=${input:$i:1}\n        if [[ $char == \"[\" ]]; then\n   \
+    \         stack+=(\"$char\")\n        elif [[ $char == \"]\" ]]; then\n      \
+    \      if [[ ${#stack[@]} -eq 0 ]]; then\n                echo \"false\"\n   \
+    \             return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n    local\
+    \ stack=()\n    local top=0\n    for ((i=0; i<${#str}; i++)); do\n        if [[\
+    \ ${str:$i:1} == \"[\" ]]; then\n            stack[$top]=$i\n            top=$((top+1))\n\
+    \        elif [[ ${str:$i:1} == \"]\" ]]; then\n            if [[ $top -eq 0 ]];\
+    \ then\n                echo \"false\"\n                return\n            fi\n\
+    \            top=$((top-1))\n            if [[ $i -eq $((stack[$top]+1)) ]]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n    done\n    echo \"false\"", "    local str=\"$1\"\n    local -i len=${#str}\n\
+    \    local -i i=0\n    local -i j=0\n    local -i k=0\n    local -i l=0\n    local\
+    \ -i m=0\n    local -i n=0\n    local -i o=0\n    local -i p=0\n    local -i q=0\n\
+    \    local -i r=0\n    local -i s=0\n    local -i t=0\n    local -i u=0\n    local\
+    \ -i v=0\n    local -i w=0\n    local -i x=0\n    local -i y=0\n    local -i z=0\n\
+    \    local -i a=0\n    local -i b=0\n    local -i c=0\n    local -i d=0\n    local\
+    \ -i e=0\n    local -i f=0\n    local -i g=0\n    local -i h=0\n    local -i ii=0\n\
+    \    local -i jj=0\n    local -i kk=0\n    local -i ll=0\n    local -i mm=0\n\
+    \    local -i nn=0\n    local -i oo=0\n    local -i pp=0\n    local -i qq=0\n\
+    \    local -i rr=0\n    local -i ss=0\n    local -i tt=0\n    local -i uu=0\n\
+    \    local -i vv=0\n    local -i ww=0\n    local -i xx=0\n    local -i yy=0\n\
+    \    local -i zz=0\n    local -i aa=0\n    local -i bb=0\n    local -i cc=0\n\
+    \    local -i dd=0\n    local -i ee=0\n    local -i ff=0\n    local -i gg=0\n\
+    \    local -i hh=0\n    local -i iii=0\n    local -i jjj=0\n    local -i kkk=0\n\
+    \    local -i lll=0\n    local -i mmm=0\n    local -i nnn=0\n    local -i ooo",
+  "    local str=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    local char=''\n    local top_char=''\n    while [ $i -lt $len\
+    \ ]; do\n        char=${str:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n \
+    \           stack[$top]=$char\n            top=$((top+1))\n        elif [ \"$char\"\
+    \ == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                echo\
+    \ \"false\"\n                return\n            fi\n            top_char=${stack[$((top-1))]}\n\
+    \            if [ \"$top_char\" == \"[\" ]; then\n                top=$((top-1))\n\
+    \            else\n                echo \"false\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    if [ $top -eq 0 ];\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  \
+    \  # Write your code here\n    # To print results to the standard output you can\
+    \ use echo\n    # Example: echo \"Hello world\"\n    echo \"true\"", "  local\
+    \ str=\"$1\"\n  local stack=()\n  local top=0\n  local i=0\n  local len=${#str}\n\
+    \  while [ $i -lt $len ]; do\n    local c=${str:$i:1}\n    if [ \"$c\" == \"[\"\
+    \ ]; then\n      stack[$top]=$c\n      top=$((top+1))\n    elif [ \"$c\" == \"\
+    ]\" ]; then\n      if [ $top -eq 0 ]; then\n        echo \"false\"\n        return\n\
+    \      fi\n      top=$((top-1))\n      if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \        echo \"true\"\n        return\n      fi\n    fi\n    i=$((i+1))\n  done\n\
+    \  echo \"false\"", "    local str=$1\n    local stack=()\n    local top=0\n \
+    \   local i=0\n    local len=${#str}\n    local c\n    while [ $i -lt $len ];\
+    \ do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n          \
+    \  stack[$top]=$c\n            top=$(($top+1))\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ $top -eq 0 ]; then\n                echo \"false\"\
+    \n                return\n            fi\n            top=$(($top-1))\n      \
+    \      if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"true\"\
+    \n                return\n            fi\n        fi\n        i=$(($i+1))\n  \
+    \  done\n    echo \"false\"", "    local string=$1\n    local stack=()\n    for\
+    \ ((i=0; i<${#string}; i++)); do\n        local char=${string:$i:1}\n        if\
+    \ [[ $char == \"[\" ]]; then\n            stack+=($char)\n        elif [[ $char\
+    \ == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n         \
+    \       echo \"false\"\n                return\n            fi\n            unset\
+    \ stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]];\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  \
+    \  local input=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n  \
+    \  local c=''\n    local is_nested=false\n    for ((i=0; i<${#input}; i++)); do\n\
+    \        c=\"${input:$i:1}\"\n        if [[ \"$c\" == \"[\" ]]; then\n       \
+    \     stack[$top]=\"$c\"\n            top=$((top+1))\n        elif [[ \"$c\" ==\
+    \ \"]\" ]]; then\n            if [[ $top -gt 0 ]]; then\n                top=$((top-1))\n\
+    \                if [[ \"${stack[$top]}\" == \"[\" ]]; then\n                \
+    \    is_nested=true\n                fi\n            fi\n        fi\n    done\n\
+    \    if [[ $is_nested == true ]]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local input=\"$1\"\n    local stack=\"\"\n\
+    \    local top=\"\"\n    local char=\"\"\n    for (( i=0; i<${#input}; i++ ));\
+    \ do\n        char=\"${input:$i:1}\"\n        if [[ \"$char\" == \"[\" ]]; then\n\
+    \            stack=\"$stack$char\"\n        elif [[ \"$char\" == \"]\" ]]; then\n\
+    \            top=\"${stack: -1}\"\n            if [[ \"$top\" == \"[\" ]]; then\n\
+    \                stack=\"${stack:0:-1}\"\n            else\n                return\
+    \ 1\n            fi\n        fi\n    done\n    if [[ -z \"$stack\" ]]; then\n\
+    \        return 0\n    else\n        return 1\n    fi", "    local str=\"$1\"\n\
+    \    local stack=()\n    local i\n    for ((i=0; i<${#str}; i++)); do\n      \
+    \  local ch=\"${str:$i:1}\"\n        if [[ \"$ch\" == \"[\" ]]; then\n       \
+    \     stack+=(\"$ch\")\n        elif [[ \"$ch\" == \"]\" ]]; then\n          \
+    \  if [[ \"${#stack[@]}\" == 0 ]]; then\n                echo \"false\"\n    \
+    \            return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n    done\n    if [[ \"${#stack[@]}\" == 0 ]]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n   \
+    \ local stack=()\n    local i=0\n    local len=${#str}\n    local top=0\n    local\
+    \ is_nested=false\n    while [ $i -lt $len ]; do\n        local c=${str:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n          \
+    \  top=$((top+1))\n        elif [ \"$c\" == \"]\" ]; then\n            if [ $top\
+    \ -gt 0 ]; then\n                top=$((top-1))\n                if [ \"${stack[$top]}\"\
+    \ == \"[\" ]; then\n                    is_nested=true\n                fi\n \
+    \           fi\n        fi\n        i=$((i+1))\n    done\n    echo $is_nested",
+  "    # Write your code here\n    # To print results to the standard output you can\
+    \ use echo\n    # Example: echo \"Hello world\"\n    echo \"true\"", "    local\
+    \ str=$1\n    local stack=()\n    local stack_size=0\n    local i=0\n    local\
+    \ c=''\n    local top=''\n    local is_nested=false\n    local is_valid=true\n\
+    \    local is_empty=true\n    for ((i=0; i<${#str}; i++)); do\n        c=${str:$i:1}\n\
+    \        if [[ $c == '[' ]]; then\n            stack[$stack_size]=$c\n       \
+    \     stack_size=$((stack_size+1))\n            is_empty=false\n        elif [[\
+    \ $c == ']' ]]; then\n            if [[ $stack_size -eq 0 ]]; then\n         \
+    \       is_valid=false\n                break\n            fi\n            top=${stack[$((stack_size-1))]}\n\
+    \            if [[ $top == '[' ]]; then\n                stack_size=$((stack_size-1))\n\
+    \                is_nested=true\n            else\n                is_valid=false\n\
+    \                break\n            fi\n        fi\n    done\n    if [[ $is_empty\
+    \ == true ]]; then\n        echo \"false\"\n    elif [[ $is_valid == false ]];\
+    \ then\n        echo \"false\"\n    elif [[ $stack_size -eq 0 ]]; then\n     \
+    \   if [[ $is_nested == true ]]; then\n            echo \"true\"\n        else\n\
+    \            echo \"false\"\n        fi\n    else\n        echo \"false\"\n  \
+    \  fi", "    local str=$1\n    local len=${#str}\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local a=0\n    local b=0\n    local c=0\n    local d=0\n    local\
+    \ e=0\n    local f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local a=0\n    local b=0\n    local c=0\n    local d=0\n    local\
+    \ e=0\n    local f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=0\n    local n=0\n    local o=0\n \
+    \   local p=0\n    local q=0\n    local r=0\n    local s=0\n    local t=0\n  \
+    \  local u=0\n    local v=0\n    local w=0\n    local x=0\n    local y=0\n   \
+    \ local z=0\n    local a=0\n    local b=0\n    local c=0\n    local d=0\n    local\
+    \ e=0\n    local f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n\
+    \    local k=0\n    local l=0\n    local m=", "    local str=\"$1\"\n    local\
+    \ stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n    local c\n\
+    \    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\" ==\
+    \ \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n    \
+    \    elif [ \"$c\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n   \
+    \             echo \"false\"\n                return\n            fi\n       \
+    \     top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n \
+    \               echo \"true\"\n                return\n            fi\n      \
+    \  fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=\"$1\"\
+    \n    local stack=()\n    local open_bracket='['\n    local close_bracket=']'\n\
+    \    local open_count=0\n    local close_count=0\n    local i=0\n    local len=${#str}\n\
+    \    for (( i=0; i<len; i++ )); do\n        local char=${str:$i:1}\n        if\
+    \ [[ $char == $open_bracket ]]; then\n            open_count=$((open_count+1))\n\
+    \            stack+=($char)\n        elif [[ $char == $close_bracket ]]; then\n\
+    \            close_count=$((close_count+1))\n            if [[ $close_count -gt\
+    \ $open_count ]]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            stack+=($char)\n        fi\n    done\n    if [[ $open_count\
+    \ -ne $close_count ]]; then\n        echo \"false\"\n        return\n    fi\n\
+    \    local stack_len=${#stack[@]}\n    local j=0\n    local k=0\n    for (( j=0;\
+    \ j<stack_len; j++ )); do\n        local char=${stack[$j]}\n        if [[ $char\
+    \ == $open_bracket ]]; then\n            for (( k=j+1; k<stack_len; k++ )); do\n\
+    \                local next_char=${stack[$k]}\n                if [[ $next_char\
+    \ == $close_bracket ]]; then\n                    echo \"true\"\n            \
+    \        return\n                fi\n            done\n        fi\n    done\n\
+    \    echo \"false\"", "    local str=\"$1\"\n    local len=${#str}\n    local\
+    \ i=0\n    local stack=()\n    local top=0\n    while [ $i -lt $len ]; do\n  \
+    \      local c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n           \
+    \ stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\" == \"]\" ];\
+    \ then\n            if [ $top -eq 0 ]; then\n                echo \"false\"\n\
+    \                return\n            fi\n            top=$((top-1))\n        \
+    \    if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"true\"\n\
+    \                return\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    echo \"false\"", "    local str=\"$1\"\n    local stack=\"\"\n    local i=0\n\
+    \    local len=${#str}\n    while [ $i -lt $len ]; do\n        local c=${str:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack=\"$stack$c\"\n      \
+    \  elif [ \"$c\" == \"]\" ]; then\n            if [ -z \"$stack\" ]; then\n  \
+    \              return 1\n            fi\n            stack=${stack%?}\n      \
+    \  fi\n        i=$((i+1))\n    done\n    [ -z \"$stack\" ]", "    local str=\"\
+    $1\"\n    local -i i=0\n    local -i j=0\n    local -i k=0\n    local -i l=0\n\
+    \    local -i m=0\n    local -i n=0\n    local -i o=0\n    local -i p=0\n    local\
+    \ -i q=0\n    local -i r=0\n    local -i s=0\n    local -i t=0\n    local -i u=0\n\
+    \    local -i v=0\n    local -i w=0\n    local -i x=0\n    local -i y=0\n    local\
+    \ -i z=0\n    local -i a=0\n    local -i b=0\n    local -i c=0\n    local -i d=0\n\
+    \    local -i e=0\n    local -i f=0\n    local -i g=0\n    local -i h=0\n    local\
+    \ -i ii=0\n    local -i jj=0\n    local -i kk=0\n    local -i ll=0\n    local\
+    \ -i mm=0\n    local -i nn=0\n    local -i oo=0\n    local -i pp=0\n    local\
+    \ -i qq=0\n    local -i rr=0\n    local -i ss=0\n    local -i tt=0\n    local\
+    \ -i uu=0\n    local -i vv=0\n    local -i ww=0\n    local -i xx=0\n    local\
+    \ -i yy=0\n    local -i zz=0\n    local -i aa=0\n    local -i bb=0\n    local\
+    \ -i cc=0\n    local -i dd=0\n    local -i ee=0\n    local -i ff=0\n    local\
+    \ -i gg=0\n    local -i hh=0\n    local -i iii=0\n    local -i jjj=0\n    local\
+    \ -i kkk=0\n    local -i lll=0\n    local -i mmm=0\n    local -i nnn=0\n    local\
+    \ -i ooo=0\n    local -i ppp=0", "    local string=\"$1\"\n    local stack=()\n\
+    \    local top=0\n    local i=0\n    local len=${#string}\n    while [ $i -lt\
+    \ $len ]; do\n        local char=${string:$i:1}\n        if [ \"$char\" == \"\
+    [\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n     \
+    \   elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n \
+    \               echo \"false\"\n                return\n            fi\n     \
+    \       top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=$1\n\
+    \    local len=${#str}\n    local stack=()\n    local i=0\n    local top=0\n \
+    \   local is_nested=false\n    while [ $i -lt $len ]; do\n        if [ \"${str:$i:1}\"\
+    \ == \"[\" ]; then\n            stack[$top]=$i\n            top=$((top+1))\n \
+    \       elif [ \"${str:$i:1}\" == \"]\" ]; then\n            if [ $top -gt 0 ];\
+    \ then\n                top=$((top-1))\n                if [ $top -gt 0 ]; then\n\
+    \                    is_nested=true\n                fi\n            else\n  \
+    \              return 1\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    if [ $is_nested == true ]; then\n        echo \"true\"\n    else\n      \
+    \  echo \"false\"\n    fi", "    local str=$1\n    local stack=()\n    local stack_size=0\n\
+    \    local i=0\n    local char=''\n    local top=''\n    local is_nested=false\n\
+    \n    while [ $i -lt ${#str} ]; do\n        char=${str:$i:1}\n        if [ \"\
+    $char\" == \"[\" ]; then\n            stack[$stack_size]=$char\n            stack_size=$((stack_size\
+    \ + 1))\n        elif [ \"$char\" == \"]\" ]; then\n            if [ $stack_size\
+    \ -eq 0 ]; then\n                break\n            fi\n            top=${stack[$((stack_size\
+    \ - 1))]}\n            if [ \"$top\" == \"[\" ]; then\n                is_nested=true\n\
+    \            fi\n            stack_size=$((stack_size - 1))\n        fi\n    \
+    \    i=$((i + 1))\n    done\n\n    if [ $stack_size -ne 0 ]; then\n        is_nested=false\n\
+    \    fi\n\n    echo $is_nested", "    local string=$1\n    local stack=()\n  \
+    \  local top=0\n    local i=0\n    local len=${#string}\n    while [ $i -lt $len\
+    \ ]; do\n        local char=${string:$i:1}\n        if [ \"$char\" == \"[\" ];\
+    \ then\n            stack[$top]=$char\n            top=$((top+1))\n        elif\
+    \ [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n        \
+    \        echo \"false\"\n                return\n            fi\n            top=$((top-1))\n\
+    \            if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"\
+    true\"\n                return\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo \"false\"", "    local string=\"$1\"\n    local stack=()\n\
+    \    local top=0\n    local i=0\n    local len=${#string}\n    while [ $i -lt\
+    \ $len ]; do\n        local char=${string:$i:1}\n        if [ \"$char\" == \"\
+    [\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n     \
+    \   elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n \
+    \               echo \"false\"\n                return\n            fi\n     \
+    \       top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "  local str=$1\n \
+    \ local stack=()\n  local stack_top=0\n  local i=0\n  local len=${#str}\n  while\
+    \ [ $i -lt $len ]; do\n    local c=${str:$i:1}\n    if [ \"$c\" == \"[\" ]; then\n\
+    \      stack[$stack_top]=$c\n      stack_top=$((stack_top+1))\n    elif [ \"$c\"\
+    \ == \"]\" ]; then\n      if [ $stack_top -eq 0 ]; then\n        echo \"false\"\
+    \n        return\n      fi\n      stack_top=$((stack_top-1))\n    fi\n    i=$((i+1))\n\
+    \  done\n  if [ $stack_top -eq 0 ]; then\n    echo \"true\"\n  else\n    echo\
+    \ \"false\"\n  fi", "    local str=$1\n    local stack=()\n    local i=0\n   \
+    \ local len=${#str}\n    local top=0\n    local ch=''\n    local is_nested=false\n\
+    \    while [[ $i -lt $len ]]; do\n        ch=${str:$i:1}\n        if [[ $ch ==\
+    \ '[' ]]; then\n            stack[$top]=$ch\n            top=$((top+1))\n    \
+    \    elif [[ $ch == ']' ]]; then\n            if [[ $top -gt 0 ]]; then\n    \
+    \            top=$((top-1))\n                is_nested=true\n            else\n\
+    \                is_nested=false\n                break\n            fi\n    \
+    \    fi\n        i=$((i+1))\n    done\n    if [[ $is_nested == true ]]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local stack=()\n    for ((i=0; i<${#str}; i++)); do\n      \
+    \  local c=${str:i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n            stack+=(\"\
+    $c\")\n        elif [[ \"$c\" == \"]\" ]]; then\n            if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n                echo \"false\"\n                return\n   \
+    \         fi\n            unset stack[${#stack[@]}-1]\n        fi\n    done\n\
+    \    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n    local\
+    \ top=0\n    local i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n\
+    \        local c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n         \
+    \   stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ $top -eq 0 ]; then\n                echo \"false\"\
+    \n                return\n            fi\n            top=$((top-1))\n       \
+    \     if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"true\"\n\
+    \                return\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    echo \"false\"", "    local input=$1\n    local stack=()\n    local top=0\n\
+    \    local i=0\n    local length=${#input}\n    local is_nested=false\n    while\
+    \ [ $i -lt $length ]; do\n        local char=${input:$i:1}\n        if [ \"$char\"\
+    \ == \"[\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n\
+    \                top=$((top-1))\n                if [ $top -gt 0 ]; then\n   \
+    \                 is_nested=true\n                fi\n            fi\n       \
+    \ fi\n        i=$((i+1))\n    done\n    if [ \"$is_nested\" == \"true\" ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local len=${#str}\n    local i=0\n    local j=0\n    local k=0\n\
+    \    local l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n \
+    \   local q=0\n    local r=0\n    local s=0\n    local t=0\n    local u=0\n  \
+    \  local v=0\n    local w=0\n    local x=0\n    local y=0\n    local z=0\n   \
+    \ local a=0\n    local b=0\n    local c=0\n    local d=0\n    local e=0\n    local\
+    \ f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n    local k=0\n\
+    \    local l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n \
+    \   local q=0\n    local r=0\n    local s=0\n    local t=0\n    local u=0\n  \
+    \  local v=0\n    local w=0\n    local x=0\n    local y=0\n    local z=0\n   \
+    \ local a=0\n    local b=0\n    local c=0\n    local d=0\n    local e=0\n    local\
+    \ f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n    local k=0\n\
+    \    local l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n \
+    \   local q=0\n    local r=0\n    local s=0\n    local t=0\n    local u=0\n  \
+    \  local v=0\n    local w=0\n    local x=0\n    local y=0\n    local z=0\n   \
+    \ local a=0\n    local b=0\n    local c=0\n    local d=0\n    local e=0\n    local\
+    \ f=0\n    local g=0\n    local h=0\n    local i=0\n    local j=0\n    local k=0\n\
+    \    local l=0\n    local", "    local str=$1\n    local count=0\n    for (( i=0;\
+    \ i<${#str}; i++ )); do\n        if [[ ${str:$i:1} == \"[\" ]]; then\n       \
+    \     (( count++ ))\n        elif [[ ${str:$i:1} == \"]\" ]]; then\n         \
+    \   (( count-- ))\n        fi\n        if [[ $count -lt 0 ]]; then\n         \
+    \   echo \"false\"\n            return\n        fi\n    done\n    if [[ $count\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local str=\"$1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n\
+    \    while [ $i -lt $len ]; do\n        local c=${str:$i:1}\n        if [ \"$c\"\
+    \ == \"[\" ]; then\n            stack+=(\"$c\")\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n                return\
+    \ 1\n            fi\n            unset stack[${#stack[@]}-1]\n        fi\n   \
+    \     ((i++))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        return 0\n\
+    \    else\n        return 1\n    fi", "    local str=$1\n    local stack=()\n\
+    \    local i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n       \
+    \ local char=${str:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n          \
+    \  stack+=($char)\n        elif [ \"$char\" == \"]\" ]; then\n            if [\
+    \ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n               \
+    \ return\n            fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n        fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ input=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ c=''\n    local is_nested=false\n    for ((i=0; i<${#input}; i++)); do\n   \
+    \     c=\"${input:$i:1}\"\n        if [[ \"$c\" == \"[\" ]]; then\n          \
+    \  stack[$top]=\"$c\"\n            top=$((top+1))\n        elif [[ \"$c\" == \"\
+    ]\" ]]; then\n            if [[ $top -gt 0 ]]; then\n                top=$((top-1))\n\
+    \                if [[ \"${stack[$top]}\" == \"[\" ]]; then\n                \
+    \    is_nested=true\n                fi\n            fi\n        fi\n    done\n\
+    \    if [[ $is_nested == true ]]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=\"$1\"\n    local len=${#str}\n \
+    \   local i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n  \
+    \  local n=0\n    local o=0\n    local p=0\n    local q=0\n    local r=0\n   \
+    \ local s=0\n    local t=0\n    local u=0\n    local v=0\n    local w=0\n    local\
+    \ x=0\n    local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n\
+    \    local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n \
+    \   local i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n  \
+    \  local n=0\n    local o=0\n    local p=0\n    local q=0\n    local r=0\n   \
+    \ local s=0\n    local t=0\n    local u=0\n    local v=0\n    local w=0\n    local\
+    \ x=0\n    local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n\
+    \    local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n \
+    \   local i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n  \
+    \  local n=0\n    local o=0\n    local p=0\n    local q=0\n    local r=0\n   \
+    \ local s=0\n    local t=0\n    local u=0\n    local v=0\n    local w=0\n    local\
+    \ x=0\n    local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n\
+    \    local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n \
+    \   local i=0\n    local j=0\n    local k=0\n    local l=0\n    local", "    local\
+    \ str=\"$1\"\n    local stack=()\n    local i\n    for ((i=0; i<${#str}; i++));\
+    \ do\n        local c=${str:i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n   \
+    \         stack+=(\"$c\")\n        elif [[ \"$c\" == \"]\" ]]; then\n        \
+    \    if [[ ${#stack[@]} -eq 0 ]]; then\n                echo \"false\"\n     \
+    \           return\n            fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "  local str=\"$1\"\n  local\
+    \ stack=()\n  local i=0\n  local len=${#str}\n  local c\n  while [ $i -lt $len\
+    \ ]; do\n    c=${str:$i:1}\n    if [ \"$c\" == \"[\" ]; then\n      stack+=(\"\
+    $c\")\n    elif [ \"$c\" == \"]\" ]; then\n      if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"false\"\n        return\n      fi\n      stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\"\
+    )\n    fi\n    i=$(($i+1))\n  done\n  if [ ${#stack[@]} -eq 0 ]; then\n    echo\
+    \ \"true\"\n  else\n    echo \"false\"\n  fi", "    local input=$1\n    local\
+    \ stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n    while\
+    \ [ $i -lt $len ]; do\n        local char=${input:$i:1}\n        if [ \"$char\"\
+    \ == \"[\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n\
+    \        else\n            if [ $top -gt 0 ]; then\n                top=$((top-1))\n\
+    \            else\n                return 1\n            fi\n        fi\n    \
+    \    i=$((i+1))\n    done\n    if [ $top -gt 0 ]; then\n        return 1\n   \
+    \ else\n        return 0\n    fi", "    local input=$1\n    local stack=()\n \
+    \   local i\n    for ((i=0; i<${#input}; i++)); do\n        if [[ ${input:$i:1}\
+    \ == \"[\" ]]; then\n            stack+=($i)\n        elif [[ ${input:$i:1} ==\
+    \ \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n            \
+    \    return 1\n            else\n                unset stack[${#stack[@]}-1]\n\
+    \            fi\n        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n\
+    \        return 0\n    else\n        return 1\n    fi", "    local str=$1\n  \
+    \  local stack=()\n    local i=0\n    local len=${#str}\n    local char\n    local\
+    \ top\n    while [ $i -lt $len ]; do\n        char=${str:$i:1}\n        if [ \"\
+    $char\" == \"[\" ]; then\n            stack+=($char)\n        elif [ \"$char\"\
+    \ == \"]\" ]; then\n            top=${stack[-1]}\n            if [ \"$top\" ==\
+    \ \"[\" ]; then\n                stack=(${stack[@]:0:${#stack[@]}-1})\n      \
+    \      else\n                stack+=($char)\n            fi\n        fi\n    \
+    \    i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n    local\
+    \ stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n    local c=''\n\
+    \    local is_nested=false\n    for ((i=0; i<len; i++)); do\n        c=${str:i:1}\n\
+    \        if [[ $c == '[' ]]; then\n            stack[$top]=$c\n            top=$((top+1))\n\
+    \        elif [[ $c == ']' ]]; then\n            if [[ $top -gt 0 ]]; then\n \
+    \               top=$((top-1))\n                if [[ ${stack[$top]} == '[' ]];\
+    \ then\n                    is_nested=true\n                fi\n            fi\n\
+    \        fi\n    done\n    echo $is_nested", "    local str=\"$1\"\n    local\
+    \ stack=()\n    local len=${#str}\n    local i=0\n    local c\n    while [ $i\
+    \ -lt $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n\
+    \            stack+=($c)\n        elif [ \"$c\" == \"]\" ]; then\n           \
+    \ if [ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n          \
+    \      return\n            fi\n            unset stack[${#stack[@]}-1]\n     \
+    \   fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n  \
+    \      echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"\
+    $1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n    local top=0\n\
+    \    local c=''\n    local is_nested=false\n    while [ $i -lt $len ]; do\n  \
+    \      c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n\
+    \            top=$((top+1))\n        elif [ \"$c\" == \"]\" ]; then\n        \
+    \    if [ $top -gt 0 ]; then\n                top=$((top-1))\n               \
+    \ if [ $top -gt 0 ]; then\n                    is_nested=true\n              \
+    \  fi\n            fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested\
+    \ == true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n \
+    \   fi", "    local str=\"$1\"\n    local stack=()\n    local top=0\n    local\
+    \ i=0\n    local c=''\n    local is_nested=false\n    for ((i=0; i<${#str}; i++));\
+    \ do\n        c=${str:$i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n        \
+    \    stack[$top]=$c\n            top=$((top+1))\n        elif [[ \"$c\" == \"\
+    ]\" ]]; then\n            if [[ $top -eq 0 ]]; then\n                break\n \
+    \           fi\n            top=$((top-1))\n            if [[ \"${stack[$top]}\"\
+    \ == \"[\" ]]; then\n                is_nested=true\n            fi\n        fi\n\
+    \    done\n    if [[ $top -eq 0 && $is_nested == true ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n    local\
+    \ stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n    local ch=''\n\
+    \    local is_nested=false\n    while [ $i -lt $len ]; do\n        ch=${str:$i:1}\n\
+    \        if [ \"$ch\" == \"[\" ]; then\n            stack[$top]=$ch\n        \
+    \    top=$((top+1))\n        elif [ \"$ch\" == \"]\" ]; then\n            if [\
+    \ $top -eq 0 ]; then\n                break\n            fi\n            top=$((top-1))\n\
+    \            if [ $top -eq 0 ]; then\n                is_nested=true\n       \
+    \     fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested == true\
+    \ ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", " \
+    \   local str=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    local c=''\n    local is_nested=false\n    for ((i=0; i<len;\
+    \ i++)); do\n        c=${str:i:1}\n        if [[ $c == '[' ]]; then\n        \
+    \    stack[top++]=$c\n        elif [[ $c == ']' ]]; then\n            if [[ $top\
+    \ -eq 0 ]]; then\n                is_nested=false\n                break\n   \
+    \         else\n                top=$((top-1))\n                if [[ $top -eq\
+    \ 0 ]]; then\n                    is_nested=true\n                fi\n       \
+    \     fi\n        fi\n    done\n    if [[ $is_nested == true ]]; then\n      \
+    \  echo \"true\"\n    else\n        echo \"false\"\n    fi", "    # TODO: Implement\
+    \ this function.\n    # Hint: You can use the following command to remove the\
+    \ first character of a string:\n    # ${string:1}\n    # Hint: You can use the\
+    \ following command to remove the last character of a string:\n    # ${string::-1}\n\
+    \    # Hint: You can use the following command to check if a string is empty:\n\
+    \    # [ -z \"$string\" ]\n    # Hint: You can use the following command to check\
+    \ if a string is not empty:\n    # [ -n \"$string\" ]\n    # Hint: You can use\
+    \ the following command to check if a string is equal to another string:\n   \
+    \ # [ \"$string1\" = \"$string2\" ]\n    # Hint: You can use the following command\
+    \ to check if a string is not equal to another string:\n    # [ \"$string1\" !=\
+    \ \"$string2\" ]\n    # Hint: You can use the following command to check if a\
+    \ string is equal to another string:\n    # [ \"$string1\" = \"$string2\" ]\n\
+    \    # Hint: You can use the following command to check if a string is not equal\
+    \ to another string:\n    # [ \"$string1\" != \"$string2\" ]\n    # Hint: You\
+    \ can use the following command to check if a string is equal to another string:\n\
+    \    # [ \"$string1\" = \"$string2\" ]\n    # Hint: You can use the following\
+    \ command to check if a string is not equal to another string:\n    # [ \"$string1\"\
+    \ != \"$string2\" ]\n    # Hint: You can use the following command to check if\
+    \ a string is equal to another string:\n    # [ \"$string1\" = \"$string2\" ]\n\
+    \    # Hint: You can use the following command to check if a string is not equal\
+    \ to another string:\n    # [ \"$string1\" != \"$string2\" ]\n    # Hint: You\
+    \ can use the following command to check if a string is equal to another string:\n\
+    \    # [ \"$string1\" = \"$string2\" ]\n    # Hint: You can use the following\
+    \ command to check if a string is not equal to another string:\n    # [ \"$string1\"\
+    \ != \"$string2\" ]\n    # Hint: You", "    local string=\"$1\"\n    local stack=()\n\
+    \    local top=0\n    for ((i=0; i<${#string}; i++)); do\n        if [[ \"${string:$i:1}\"\
+    \ == \"[\" ]]; then\n            stack[$top]=\"[\"\n            ((top++))\n  \
+    \      elif [[ \"${string:$i:1}\" == \"]\" ]]; then\n            if [[ $top -eq\
+    \ 0 ]]; then\n                echo \"false\"\n                return\n       \
+    \     fi\n            ((top--))\n        fi\n    done\n    if [[ $top -eq 0 ]];\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  \
+    \  local input=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ char=''\n    local len=${#input}\n    while [ $i -lt $len ]; do\n        char=${input:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n    \
+    \        top=$((top+1))\n        elif [ \"$char\" == \"]\" ]; then\n         \
+    \   if [ $top -eq 0 ]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            top=$((top-1))\n            if [ \"${stack[$top]}\"\
+    \ == \"[\" ]; then\n                echo \"true\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    echo \"false\"",
+  "    local str=$1\n    local stack=()\n    local top=0\n    local i=0\n    while\
+    \ [ $i -lt ${#str} ]; do\n        local c=${str:$i:1}\n        if [ $c == \"[\"\
+    \ ]; then\n            stack[$top]=$c\n            top=$((top+1))\n        elif\
+    \ [ $c == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n               \
+    \ echo \"false\"\n                return\n            fi\n            top=$((top-1))\n\
+    \            if [ ${stack[$top]} == \"[\" ]; then\n                echo \"true\"\
+    \n                return\n            fi\n        fi\n        i=$((i+1))\n   \
+    \ done\n    echo \"false\"", "    local input=$1\n    local stack=()\n    local\
+    \ top=0\n    local i=0\n    local len=${#input}\n    local char=''\n    local\
+    \ is_nested=false\n\n    while [ $i -lt $len ]; do\n        char=${input:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack[$top]=$char\n    \
+    \        top=$((top+1))\n        elif [ \"$char\" == \"]\" ]; then\n         \
+    \   if [ $top -eq 0 ]; then\n                is_nested=false\n               \
+    \ break\n            fi\n            top=$((top-1))\n            if [ $top -eq\
+    \ 0 ]; then\n                is_nested=true\n            fi\n        fi\n    \
+    \    i=$((i+1))\n    done\n\n    if [ $is_nested == true ]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local input=$1\n \
+    \   local stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n\
+    \    local char\n    local is_nested=false\n    while [ $i -lt $len ]; do\n  \
+    \      char=${input:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n         \
+    \   stack[$top]=$char\n            top=$((top+1))\n        elif [ \"$char\" ==\
+    \ \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                break\n\
+    \            fi\n            top=$((top-1))\n            if [ $top -eq 0 ]; then\n\
+    \                is_nested=true\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo $is_nested", "    local input=\"$1\"\n    local stack=()\n\
+    \    local i\n    for ((i=0; i<${#input}; i++)); do\n        local c=\"${input:$i:1}\"\
+    \n        if [[ \"$c\" == \"[\" ]]; then\n            stack+=(\"$c\")\n      \
+    \  elif [[ \"$c\" == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]];\
+    \ then\n                echo \"false\"\n                return\n            fi\n\
+    \            unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local str=\"$1\"\n    local stack=()\n    local stack_idx=0\n   \
+    \ local i=0\n    local c\n    local top\n    local is_nested=0\n    for ((i=0;\
+    \ i<${#str}; i++)); do\n        c=${str:$i:1}\n        if [[ \"$c\" == \"[\" ]];\
+    \ then\n            stack[$stack_idx]=\"$c\"\n            stack_idx=$((stack_idx+1))\n\
+    \        elif [[ \"$c\" == \"]\" ]]; then\n            if [[ $stack_idx -eq 0\
+    \ ]]; then\n                echo \"false\"\n                return\n         \
+    \   fi\n            top=${stack[$((stack_idx-1))]}\n            if [[ \"$top\"\
+    \ == \"[\" ]]; then\n                stack_idx=$((stack_idx-1))\n            else\n\
+    \                is_nested=1\n            fi\n        fi\n    done\n    if [[\
+    \ $stack_idx -eq 0 && $is_nested -eq 1 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local input=$1\n    local stack=()\n  \
+    \  local top=0\n    local i=0\n    local len=${#input}\n    local char\n    while\
+    \ [ $i -lt $len ]; do\n        char=${input:$i:1}\n        if [ \"$char\" == \"\
+    [\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n     \
+    \   elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n \
+    \               echo \"false\"\n                return\n            fi\n     \
+    \       top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=$1\n\
+    \    local stack=()\n    local top=0\n    for ((i=0; i<${#str}; i++)); do\n  \
+    \      if [[ ${str:$i:1} == \"[\" ]]; then\n            stack[$top]=$i\n     \
+    \       top=$((top+1))\n        elif [[ ${str:$i:1} == \"]\" ]]; then\n      \
+    \      if [[ $top -eq 0 ]]; then\n                echo \"false\"\n           \
+    \     return\n            fi\n            top=$((top-1))\n            if [[ $i\
+    \ -eq $((stack[$top]+1)) ]]; then\n                echo \"true\"\n           \
+    \     return\n            fi\n        fi\n    done\n    echo \"false\"", "   \
+    \ local str=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#str}\n    while [ $i -lt $len ]; do\n        local c=${str:$i:1}\n  \
+    \      if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=\"$1\"\
+    \n    local i=0\n    local len=${#str}\n    local stack=()\n    local top=0\n\
+    \    while [ $i -lt $len ]; do\n        if [ \"${str:$i:1}\" == \"[\" ]; then\n\
+    \            stack[$top]=$i\n            top=$((top+1))\n        elif [ \"${str:$i:1}\"\
+    \ == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n                echo\
+    \ \"false\"\n                return\n            fi\n            top=$((top-1))\n\
+    \            if [ $top -gt 0 ]; then\n                if [ $((i-stack[$((top-1))]))\
+    \ -eq 1 ]; then\n                    echo \"true\"\n                    return\n\
+    \                fi\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    echo \"false\"", "    local str=\"$1\"\n    local stack=()\n    local top=0\n\
+    \    local i=0\n    local len=${#str}\n    local c\n    while [ $i -lt $len ];\
+    \ do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n          \
+    \  stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ $top -eq 0 ]; then\n                echo \"false\"\
+    \n                return\n            fi\n            top=$((top-1))\n       \
+    \     if [ \"${stack[$top]}\" == \"[\" ]; then\n                echo \"true\"\n\
+    \                return\n            fi\n        fi\n        i=$((i+1))\n    done\n\
+    \    echo \"false\"", "    local str=\"$1\"\n    local stack=()\n    local top=0\n\
+    \    local i=0\n    local len=${#str}\n    local ch\n    while [ $i -lt $len ];\
+    \ do\n        ch=${str:$i:1}\n        if [ \"$ch\" == \"[\" ]; then\n        \
+    \    stack[$top]=$ch\n            top=$((top+1))\n        elif [ \"$ch\" == \"\
+    ]\" ]; then\n            if [ $top -gt 0 ]; then\n                top=$((top-1))\n\
+    \            else\n                echo \"false\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    if [ $top -gt 0 ];\
+    \ then\n        echo \"false\"\n    else\n        echo \"true\"\n    fi", "  \
+    \  local str=$1\n    local stack=()\n    local stack_size=0\n    local i=0\n \
+    \   local c\n    local top\n    for ((i=0; i<${#str}; i++)); do\n        c=${str:$i:1}\n\
+    \        if [[ $c == \"[\" ]]; then\n            stack[$stack_size]=$c\n     \
+    \       ((stack_size++))\n        elif [[ $c == \"]\" ]]; then\n            if\
+    \ [[ $stack_size -eq 0 ]]; then\n                echo \"false\"\n            \
+    \    return\n            fi\n            top=${stack[$((stack_size-1))]}\n   \
+    \         if [[ $top == \"[\" ]]; then\n                ((stack_size--))\n   \
+    \         else\n                echo \"false\"\n                return\n     \
+    \       fi\n        fi\n    done\n    if [[ $stack_size -eq 0 ]]; then\n     \
+    \   echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n\
+    \    local stack=()\n    local i=0\n    local len=${#str}\n    while [ $i -lt\
+    \ $len ]; do\n        local c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n\
+    \            stack+=($c)\n        elif [ \"$c\" == \"]\" ]; then\n           \
+    \ if [ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n          \
+    \      return\n            fi\n            unset stack[${#stack[@]}-1]\n     \
+    \   fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n  \
+    \      echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n\
+    \    local stack=()\n    for ((i=0; i<${#str}; i++)); do\n        local char=${str:$i:1}\n\
+    \        if [[ $char == \"[\" ]]; then\n            stack+=(\"$char\")\n     \
+    \   elif [[ $char == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]];\
+    \ then\n                echo \"false\"\n                return\n            fi\n\
+    \            unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local input=\"$1\"\n    local stack=()\n    local i=0\n    local\
+    \ c\n    local top\n    local is_nested=false\n    while [ $i -lt ${#input} ];\
+    \ do\n        c=${input:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n        \
+    \    stack+=($c)\n        elif [ \"$c\" == \"]\" ]; then\n            if [ ${#stack[@]}\
+    \ -gt 0 ]; then\n                top=${stack[${#stack[@]}-1]}\n              \
+    \  if [ \"$top\" == \"[\" ]; then\n                    stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n                else\n                    stack+=($c)\n                fi\n\
+    \            else\n                stack+=($c)\n            fi\n        fi\n \
+    \       i=$((i+1))\n    done\n    if [ ${#stack[@]} -gt 0 ]; then\n        is_nested=false\n\
+    \    else\n        is_nested=true\n    fi\n    echo \"$is_nested\"", "    local\
+    \ str=\"$1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n    local\
+    \ top=0\n    local c=''\n    local is_nested=false\n    while [ $i -lt $len ];\
+    \ do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n          \
+    \  stack[$top]=$c\n            top=$((top+1))\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ $top -gt 0 ]; then\n                top=$((top-1))\n\
+    \                if [ \"${stack[$top]}\" == \"[\" ]; then\n                  \
+    \  is_nested=true\n                fi\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    echo $is_nested", "  local input=$1\n  local stack=()\n  local\
+    \ top=0\n  local i=0\n  local len=${#input}\n  local is_nested=false\n  while\
+    \ [ $i -lt $len ]; do\n    local char=${input:$i:1}\n    if [ \"$char\" == \"\
+    [\" ]; then\n      stack[$top]=$char\n      top=$((top+1))\n    elif [ \"$char\"\
+    \ == \"]\" ]; then\n      if [ $top -gt 0 ]; then\n        top=$((top-1))\n  \
+    \      if [ $top -gt 0 ]; then\n          is_nested=true\n        fi\n      fi\n\
+    \    fi\n    i=$((i+1))\n  done\n  echo $is_nested", "    local str=\"$1\"\n \
+    \   local stack=\"\"\n    for ((i=0; i<${#str}; i++)); do\n        local char=\"\
+    ${str:$i:1}\"\n        if [[ \"$char\" == \"[\" ]]; then\n            stack=\"\
+    $stack$char\"\n        elif [[ \"$char\" == \"]\" ]]; then\n            if [[\
+    \ \"$stack\" == \"\" ]]; then\n                echo \"false\"\n              \
+    \  return\n            fi\n            stack=\"${stack:0:-1}\"\n        fi\n \
+    \   done\n    if [[ \"$stack\" == \"\" ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n\
+    \    local i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n       \
+    \ local char=${str:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n          \
+    \  stack+=($char)\n        elif [ \"$char\" == \"]\" ]; then\n            if [\
+    \ ${#stack[@]} -eq 0 ]; then\n                echo \"false\"\n               \
+    \ return\n            fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\"\
+    )\n        fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local -i i=0\n    local -i j=0\n    local -i k=0\n    local\
+    \ -i l=0\n    local -i m=0\n    local -i n=0\n    local -i o=0\n    local -i p=0\n\
+    \    local -i q=0\n    local -i r=0\n    local -i s=0\n    local -i t=0\n    local\
+    \ -i u=0\n    local -i v=0\n    local -i w=0\n    local -i x=0\n    local -i y=0\n\
+    \    local -i z=0\n    local -i aa=0\n    local -i bb=0\n    local -i cc=0\n \
+    \   local -i dd=0\n    local -i ee=0\n    local -i ff=0\n    local -i gg=0\n \
+    \   local -i hh=0\n    local -i ii=0\n    local -i jj=0\n    local -i kk=0\n \
+    \   local -i ll=0\n    local -i mm=0\n    local -i nn=0\n    local -i oo=0\n \
+    \   local -i pp=0\n    local -i qq=0\n    local -i rr=0\n    local -i ss=0\n \
+    \   local -i tt=0\n    local -i uu=0\n    local -i vv=0\n    local -i ww=0\n \
+    \   local -i xx=0\n    local -i yy=0\n    local -i zz=0\n    local -i aaa=0\n\
+    \    local -i bbb=0\n    local -i ccc=0\n    local -i ddd=0\n    local -i eee=0\n\
+    \    local -i fff=0\n    local -i ggg=0\n    local -i hhh=0\n    local -i iii=0\n\
+    \    local -i jjj=0\n    local -i kkk=0\n    local -i lll=0\n    local -i mmm=0\n\
+    \    local -i nnn=0\n    local -i ooo=0\n", "    local str=\"$1\"\n    local stack=()\n\
+    \    local i=0\n    local len=${#str}\n    local c\n    local top\n    while [\
+    \ $i -lt $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n\
+    \            stack+=($c)\n        elif [ \"$c\" == \"]\" ]; then\n           \
+    \ top=${stack[-1]}\n            if [ \"$top\" == \"[\" ]; then\n             \
+    \   stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n            else\n             \
+    \   stack+=($c)\n            fi\n        fi\n        i=$((i+1))\n    done\n  \
+    \  if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n        echo\
+    \ \"false\"\n    fi", "    local string=\"$1\"\n    local stack=()\n    local\
+    \ i\n    for ((i=0; i<${#string}; i++)); do\n        local char=\"${string:$i:1}\"\
+    \n        if [[ \"$char\" == \"[\" ]]; then\n            stack+=(\"$char\")\n\
+    \        elif [[ \"$char\" == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq\
+    \ 0 ]]; then\n                echo \"false\"\n                return\n       \
+    \     fi\n            unset stack[${#stack[@]}-1]\n        fi\n    done\n    if\
+    \ [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo\
+    \ \"false\"\n    fi", "    local str=$1\n    local stack=()\n    local i=0\n \
+    \   local len=${#str}\n    local c\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack+=($c)\n        elif [\
+    \ \"$c\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n     \
+    \           echo \"false\"\n                return\n            fi\n         \
+    \   stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\")\n        fi\n        i=$(($i+1))\n\
+    \    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local input=$1\n    local stack=()\n  \
+    \  for ((i=0; i<${#input}; i++)); do\n        local char=${input:$i:1}\n     \
+    \   if [[ $char == \"[\" ]]; then\n            stack+=($char)\n        elif [[\
+    \ $char == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n   \
+    \             echo \"false\"\n                return\n            fi\n       \
+    \     unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n  \
+    \  fi", "    local string=\"$1\"\n    local stack=\"\"\n    local i=0\n    local\
+    \ len=${#string}\n    while [ $i -lt $len ]; do\n        local char=${string:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack=\"$stack$char\"\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ -z \"$stack\" ];\
+    \ then\n                echo \"false\"\n                return\n            fi\n\
+    \            local top=${stack: -1}\n            if [ \"$top\" == \"[\" ]; then\n\
+    \                stack=${stack:0:-1}\n            else\n                echo \"\
+    false\"\n                return\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ -z \"$stack\" ]; then\n        echo \"true\"\n    else\n \
+    \       echo \"false\"\n    fi", "    local input=$1\n    local stack=()\n   \
+    \ local len=${#input}\n    local i=0\n    while [ $i -lt $len ]; do\n        local\
+    \ char=${input:$i:1}\n        if [ \"$char\" == \"[\" ]; then\n            stack+=($char)\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq\
+    \ 0 ]; then\n                echo \"false\"\n                return\n        \
+    \    fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n        fi\n  \
+    \      i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    local string=\"$1\"\
+    \n    local stack=()\n    local stack_index=0\n    local char\n    local top_of_stack\n\
+    \    for (( i=0; i<${#string}; i++ )); do\n        char=\"${string:$i:1}\"\n \
+    \       if [[ \"$char\" == \"[\" ]]; then\n            stack[stack_index]=\"$char\"\
+    \n            ((stack_index++))\n        elif [[ \"$char\" == \"]\" ]]; then\n\
+    \            if [[ $stack_index -eq 0 ]]; then\n                echo \"false\"\
+    \n                return\n            fi\n            top_of_stack=\"${stack[stack_index-1]}\"\
+    \n            if [[ \"$top_of_stack\" == \"[\" ]]; then\n                unset\
+    \ stack[stack_index-1]\n                ((stack_index--))\n            else\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \    fi\n    done\n    if [[ $stack_index -eq 0 ]]; then\n        echo \"true\"\
+    \n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\n    local\
+    \ stack=()\n    local i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n\
+    \        local c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n         \
+    \   stack+=($c)\n        elif [ \"$c\" == \"]\" ]; then\n            if [ ${#stack[@]}\
+    \ -eq 0 ]; then\n                echo \"false\"\n                return\n    \
+    \        fi\n            stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\")\n     \
+    \   fi\n        i=$(($i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n \
+    \       echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"\
+    $1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n    local top=0\n\
+    \    local ch=''\n    local is_nested=false\n    while [ $i -lt $len ]; do\n \
+    \       ch=${str:$i:1}\n        if [ \"$ch\" == \"[\" ]; then\n            stack[$top]=$ch\n\
+    \            top=$((top+1))\n        elif [ \"$ch\" == \"]\" ]; then\n       \
+    \     if [ $top -gt 0 ]; then\n                top=$((top-1))\n              \
+    \  if [ $top -gt 0 ]; then\n                    is_nested=true\n             \
+    \   fi\n            fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested\
+    \ == true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n \
+    \   fi", "    local str=$1\n    local stack=()\n    for ((i=0; i<${#str}; i++));\
+    \ do\n        local ch=${str:$i:1}\n        if [[ $ch == \"[\" ]]; then\n    \
+    \        stack+=($ch)\n        elif [[ $ch == \"]\" ]]; then\n            if [[\
+    \ ${#stack[@]} -eq 0 ]]; then\n                return 1\n            fi\n    \
+    \        unset stack[${#stack[@]}-1]\n        fi\n    done\n    if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n        return 0\n    else\n        return 1\n    fi", "   \
+    \ local str=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    while\
+    \ [ $i -lt ${#str} ]; do\n        local char=${str:$i:1}\n        if [ \"$char\"\
+    \ == \"[\" ]; then\n            stack[$top]=$char\n            top=$((top+1))\n\
+    \        elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                echo \"true\"\n                return\n            fi\n     \
+    \   fi\n        i=$((i+1))\n    done\n    echo \"false\"", "    local str=$1\n\
+    \    local stack=()\n    local i=0\n    for (( i=0; i<${#str}; i++ )); do\n  \
+    \      local c=${str:$i:1}\n        if [[ $c == \"[\" ]]; then\n            stack+=($c)\n\
+    \        elif [[ $c == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]];\
+    \ then\n                echo \"false\"\n                return\n            else\n\
+    \                unset stack[${#stack[@]}-1]\n            fi\n        fi\n   \
+    \ done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local input=\"$1\"\n    local stack=()\n\
+    \    local stack_top=0\n    local i=0\n    local c=''\n    local is_nested=false\n\
+    \    while [ $i -lt ${#input} ]; do\n        c=${input:$i:1}\n        if [ \"\
+    $c\" == \"[\" ]; then\n            stack[$stack_top]=$c\n            stack_top=$((stack_top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $stack_top -gt 0 ];\
+    \ then\n                stack_top=$((stack_top-1))\n                if [ $stack_top\
+    \ -gt 0 ]; then\n                    is_nested=true\n                fi\n    \
+    \        fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested ==\
+    \ true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi",
+  "    local input=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#input}\n    local char=''\n    local is_nested=false\n\n    while [ $i\
+    \ -lt $len ]; do\n        char=${input:$i:1}\n        if [ \"$char\" == \"[\"\
+    \ ]; then\n            stack[$top]=$char\n            top=$(($top + 1))\n    \
+    \    elif [ \"$char\" == \"]\" ]; then\n            if [ $top -gt 0 ]; then\n\
+    \                top=$(($top - 1))\n                if [ $top -gt 0 ]; then\n\
+    \                    is_nested=true\n                fi\n            fi\n    \
+    \    fi\n        i=$(($i + 1))\n    done\n\n    if [ $is_nested == true ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n\
+    \    local c=''\n    local is_nested=false\n    while [ $i -lt $len ]; do\n  \
+    \      c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n            stack[$top]=$c\n\
+    \            top=$((top+1))\n        elif [ \"$c\" == \"]\" ]; then\n        \
+    \    if [ $top -gt 0 ]; then\n                top=$((top-1))\n               \
+    \ if [ $top -gt 0 ]; then\n                    is_nested=true\n              \
+    \  fi\n            fi\n        fi\n        i=$((i+1))\n    done\n    echo $is_nested",
+  "    local str=\"$1\"\n    local stack=()\n    local i\n    for ((i=0; i<${#str};\
+    \ i++)); do\n        local c=${str:i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n\
+    \            stack+=(\"$c\")\n        elif [[ \"$c\" == \"]\" ]]; then\n     \
+    \       if [[ \"${#stack[@]}\" -eq 0 ]]; then\n                echo \"false\"\n\
+    \                return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n    done\n    if [[ \"${#stack[@]}\" -eq 0 ]]; then\n        echo\
+    \ \"true\"\n    else\n        echo \"false\"\n    fi", "    # TODO: Implement\
+    \ this function\n    echo \"true\"", "    local str=$1\n    local i=0\n    local\
+    \ j=0\n    local len=${#str}\n    local stack=()\n    local stack_len=0\n    local\
+    \ top\n    local ret=false\n    while [ $i -lt $len ]; do\n        if [ \"${str:$i:1}\"\
+    \ == \"[\" ]; then\n            stack[$stack_len]=$i\n            stack_len=$((stack_len+1))\n\
+    \        elif [ \"${str:$i:1}\" == \"]\" ]; then\n            if [ $stack_len\
+    \ -gt 0 ]; then\n                top=$((stack_len-1))\n                stack_len=$top\n\
+    \                j=${stack[$top]}\n                if [ $j -lt $((i-1)) ]; then\n\
+    \                    ret=true\n                fi\n            fi\n        fi\n\
+    \        i=$((i+1))\n    done\n    echo $ret", "    local str=$1\n    local stack=()\n\
+    \    local i\n    local c\n    local top\n    for ((i=0; i<${#str}; i++)); do\n\
+    \        c=${str:$i:1}\n        if [[ $c == \"[\" ]]; then\n            stack+=($c)\n\
+    \        elif [[ $c == \"]\" ]]; then\n            top=${stack[-1]}\n        \
+    \    if [[ $top == \"[\" ]]; then\n                unset stack[-1]\n         \
+    \   else\n                stack+=($c)\n            fi\n        fi\n    done\n\
+    \    if [[ ${#stack[@]} -gt 0 ]]; then\n        echo \"false\"\n    else\n   \
+    \     echo \"true\"\n    fi", "    local string=\"$1\"\n    local stack=()\n \
+    \   local top=0\n    local i=0\n    local len=${#string}\n    local char\n   \
+    \ local top_char\n    for ((i=0; i<len; i++)); do\n        char=${string:$i:1}\n\
+    \        if [[ $char == \"[\" ]]; then\n            stack[$top]=$char\n      \
+    \      top=$((top+1))\n        elif [[ $char == \"]\" ]]; then\n            if\
+    \ [[ $top -eq 0 ]]; then\n                echo \"false\"\n                return\n\
+    \            fi\n            top_char=${stack[$((top-1))]}\n            if [[\
+    \ $top_char == \"[\" ]]; then\n                stack[$((top-1))]=\n          \
+    \      top=$((top-1))\n            else\n                echo \"false\"\n    \
+    \            return\n            fi\n        fi\n    done\n    if [[ $top -eq\
+    \ 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi",
+  "    local input=$1\n    local stack=()\n    local top=0\n    local i=0\n    local\
+    \ len=${#input}\n    local char=''\n    local is_nested=false\n\n    while [ $i\
+    \ -lt $len ]; do\n        char=${input:$i:1}\n        if [ \"$char\" == \"[\"\
+    \ ]; then\n            stack[$top]=$char\n            top=$((top+1))\n       \
+    \ elif [ \"$char\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n   \
+    \             is_nested=false\n                break\n            fi\n       \
+    \     top=$((top-1))\n            if [ $top -eq 0 ]; then\n                is_nested=true\n\
+    \            fi\n        fi\n        i=$((i+1))\n    done\n\n    if [ $is_nested\
+    \ == true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n \
+    \   fi", "    local str=\"$1\"\n    local stack=()\n    local stack_top=0\n  \
+    \  local i=0\n    local len=${#str}\n    local c\n    for ((i=0; i<len; i++));\
+    \ do\n        c=${str:i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n         \
+    \   stack[stack_top++]=\"$c\"\n        elif [[ \"$c\" == \"]\" ]]; then\n    \
+    \        if [[ \"${stack[stack_top-1]}\" == \"[\" ]]; then\n                stack_top=$((stack_top-1))\n\
+    \            else\n                return 1\n            fi\n        fi\n    done\n\
+    \    if [[ \"$stack_top\" -eq 0 ]]; then\n        return 0\n    else\n       \
+    \ return 1\n    fi", "    local string=\"$1\"\n    local count=0\n    for (( i=0;\
+    \ i<${#string}; i++ )); do\n        if [[ ${string:$i:1} == \"[\" ]]; then\n \
+    \           (( count++ ))\n        elif [[ ${string:$i:1} == \"]\" ]]; then\n\
+    \            (( count-- ))\n        fi\n        if [[ $count -lt 0 ]]; then\n\
+    \            echo \"false\"\n            return\n        fi\n    done\n    if\
+    \ [[ $count -eq 0 ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\
+    \n    fi", "    local str=\"$1\"\n    local stack=()\n    local i=0\n    local\
+    \ len=${#str}\n    local c\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack+=($c)\n        elif [\
+    \ \"$c\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n     \
+    \           echo \"false\"\n                return\n            fi\n         \
+    \   stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n        fi\n        ((i++))\n  \
+    \  done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local str=\"$1\"\n    local -i level=0\n\
+    \    for ((i=0; i<${#str}; i++)); do\n        if [[ ${str:i:1} == \"[\" ]]; then\n\
+    \            ((level++))\n        elif [[ ${str:i:1} == \"]\" ]]; then\n     \
+    \       ((level--))\n        fi\n        if ((level < 0)); then\n            echo\
+    \ \"false\"\n            return\n        fi\n    done\n    if ((level == 0));\
+    \ then\n        echo \"true\"\n    else\n        echo \"false\"\n    fi", "  \
+    \  local string=\"$1\"\n    local stack=()\n    local i=0\n    local len=${#string}\n\
+    \    while [ $i -lt $len ]; do\n        local char=${string:$i:1}\n        if\
+    \ [ \"$char\" == \"[\" ]; then\n            stack+=(\"$char\")\n        elif [\
+    \ \"$char\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n  \
+    \              echo \"false\"\n                return\n            fi\n      \
+    \      stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\")\n        fi\n        i=$(($i+1))\n\
+    \    done\n    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local string=$1\n    local stack=()\n \
+    \   local stack_index=0\n    local i\n    for ((i=0; i<${#string}; i++)); do\n\
+    \        local char=${string:$i:1}\n        if [[ $char == \"[\" ]]; then\n  \
+    \          stack[$stack_index]=\"$char\"\n            stack_index=$((stack_index+1))\n\
+    \        elif [[ $char == \"]\" ]]; then\n            if [[ $stack_index -eq 0\
+    \ ]]; then\n                echo \"false\"\n                return\n         \
+    \   fi\n            stack_index=$((stack_index-1))\n            unset stack[$stack_index]\n\
+    \        fi\n    done\n    if [[ $stack_index -eq 0 ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\n   \
+    \ local stack=()\n    local i\n    for ((i=0; i<${#str}; i++)); do\n        local\
+    \ c=${str:i:1}\n        if [[ \"$c\" == \"[\" ]]; then\n            stack+=($c)\n\
+    \        elif [[ \"$c\" == \"]\" ]]; then\n            if [[ \"${#stack[@]}\"\
+    \ -eq 0 ]]; then\n                echo \"false\"\n                return\n   \
+    \         fi\n            unset stack[${#stack[@]}-1]\n        fi\n    done\n\
+    \    if [[ \"${#stack[@]}\" -eq 0 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n\
+    \    local i\n    for ((i=0; i<${#str}; i++)); do\n        local char=\"${str:$i:1}\"\
+    \n        if [[ \"$char\" == \"[\" ]]; then\n            stack+=(\"$char\")\n\
+    \        elif [[ \"$char\" == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq\
+    \ 0 ]]; then\n                echo \"false\"\n                return\n       \
+    \     fi\n            stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n        fi\n \
+    \   done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"true\"\n    else\n\
+    \        echo \"false\"\n    fi", "    local stack=()\n    local is_nested=false\n\
+    \    for ((i=0; i<${#1}; i++)); do\n        local char=${1:i:1}\n        if [[\
+    \ \"$char\" == \"[\" ]]; then\n            stack+=(\"$char\")\n        elif [[\
+    \ \"$char\" == \"]\" ]]; then\n            if [[ ${#stack[@]} -eq 0 ]]; then\n\
+    \                is_nested=false\n                break\n            fi\n    \
+    \        stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n            if [[ ${#stack[@]}\
+    \ -eq 0 ]]; then\n                is_nested=true\n            fi\n        fi\n\
+    \    done\n    echo \"$is_nested\"", "    local str=\"$1\"\n    local stack=()\n\
+    \    local i=0\n    local len=${#str}\n    while [ $i -lt $len ]; do\n       \
+    \ local c=${str:$i:1}\n        if [ \"$c\" == \"[\" ]; then\n            stack+=(\"\
+    $c\")\n        elif [ \"$c\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq\
+    \ 0 ]; then\n                echo \"false\"\n                return\n        \
+    \    fi\n            local top=${stack[${#stack[@]}-1]}\n            if [ \"$top\"\
+    \ == \"[\" ]; then\n                stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n\
+    \            else\n                echo \"false\"\n                return\n  \
+    \          fi\n        fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]}\
+    \ -eq 0 ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n   \
+    \ fi", "    local str=$1\n    local stack=()\n    local len=${#str}\n    local\
+    \ i=0\n    local c\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n   \
+    \     if [ \"$c\" == \"[\" ]; then\n            stack+=($c)\n        elif [ \"\
+    $c\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n         \
+    \       echo \"false\"\n                return\n            fi\n            stack=(\"\
+    ${stack[@]:0:$((${#stack[@]}-1))}\")\n        fi\n        i=$(($i+1))\n    done\n\
+    \    if [ ${#stack[@]} -eq 0 ]; then\n        echo \"true\"\n    else\n      \
+    \  echo \"false\"\n    fi", "    local str=$1\n    local len=${#str}\n    local\
+    \ i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n    local n=0\n\
+    \    local o=0\n    local p=0\n    local q=0\n    local r=0\n    local s=0\n \
+    \   local t=0\n    local u=0\n    local v=0\n    local w=0\n    local x=0\n  \
+    \  local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n   \
+    \ local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n    local\
+    \ is_nested=0\n    local is_nested_a=0\n    local is_nested_b=0\n    local is_nested_c=0\n\
+    \    local is_nested_d=0\n    local is_nested_e=0\n    local is_nested_f=0\n \
+    \   local is_nested_g=0\n    local is_nested_h=0\n    local is_nested_i=0\n  \
+    \  local is_nested_j=0\n    local is_nested_k=0\n    local is_nested_l=0\n   \
+    \ local is_nested_m=0\n    local is_nested_n=0\n    local is_nested_o=0\n    local\
+    \ is_nested_p=0\n    local is_nested_q=0\n    local is_nested_r=0\n    local is_nested_s=0\n\
+    \    local is_nested_t=0\n    local is_nested_u=0\n    local is_nested_v=0\n \
+    \   local is_nested_w=0\n    local is_nested_x=0\n    local is_nested_y=0\n  \
+    \  local is_nested_z=0\n    local is_nested_aa=0\n    local is_nested_bb=0\n \
+    \   local is_nested_cc=0\n    local is_nested_dd=0\n   ", "    local str=$1\n\
+    \    local stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n \
+    \   while [ $i -lt $len ]; do\n        local ch=${str:$i:1}\n        if [ \"$ch\"\
+    \ == \"[\" ]; then\n            stack[$top]=$ch\n            top=$((top+1))\n\
+    \        elif [ \"$ch\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                stack[$top]=\"\"\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ $top -eq 0 ]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=$1\n    local len=${#str}\n    local\
+    \ i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n    local n=0\n\
+    \    local o=0\n    local p=0\n    local q=0\n    local r=0\n    local s=0\n \
+    \   local t=0\n    local u=0\n    local v=0\n    local w=0\n    local x=0\n  \
+    \  local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n   \
+    \ local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n    local\
+    \ i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n    local n=0\n\
+    \    local o=0\n    local p=0\n    local q=0\n    local r=0\n    local s=0\n \
+    \   local t=0\n    local u=0\n    local v=0\n    local w=0\n    local x=0\n  \
+    \  local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n   \
+    \ local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n    local\
+    \ i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=0\n    local n=0\n\
+    \    local o=0\n    local p=0\n    local q=0\n    local r=0\n    local s=0\n \
+    \   local t=0\n    local u=0\n    local v=0\n    local w=0\n    local x=0\n  \
+    \  local y=0\n    local z=0\n    local a=0\n    local b=0\n    local c=0\n   \
+    \ local d=0\n    local e=0\n    local f=0\n    local g=0\n    local h=0\n    local\
+    \ i=0\n    local j=0\n    local k=0\n    local l=0\n    local m=", "    local\
+    \ str=\"$1\"\n    local stack=()\n    local i=0\n    local len=${#str}\n    local\
+    \ c\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n        if [ \"$c\"\
+    \ == \"[\" ]; then\n            stack+=(\"$c\")\n        elif [ \"$c\" == \"]\"\
+    \ ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n                echo \"\
+    false\"\n                return\n            fi\n            stack=(\"${stack[@]:0:$((${#stack[@]}-1))}\"\
+    )\n        fi\n        i=$(($i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local stack=()\n    for ((i=0; i<${#str}; i++)); do\n      \
+    \  local char=\"${str:$i:1}\"\n        if [[ \"$char\" == \"[\" ]]; then\n   \
+    \         stack+=(\"$char\")\n        elif [[ \"$char\" == \"]\" ]]; then\n  \
+    \          if [[ ${#stack[@]} -eq 0 ]]; then\n                echo \"false\"\n\
+    \                return\n            fi\n            unset stack[${#stack[@]}-1]\n\
+    \        fi\n    done\n    if [[ ${#stack[@]} -eq 0 ]]; then\n        echo \"\
+    true\"\n    else\n        echo \"false\"\n    fi", "    local str=$1\n    local\
+    \ stack=()\n    local i=0\n    local len=${#str}\n    local top=0\n    local ch=''\n\
+    \    local is_nested=false\n    while [ $i -lt $len ]; do\n        ch=${str:$i:1}\n\
+    \        if [ \"$ch\" == \"[\" ]; then\n            stack[$top]=$ch\n        \
+    \    top=$((top+1))\n        elif [ \"$ch\" == \"]\" ]; then\n            if [\
+    \ $top -eq 0 ]; then\n                is_nested=false\n                break\n\
+    \            else\n                top=$((top-1))\n                stack[$top]=''\n\
+    \                is_nested=true\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ $top -eq 0 ]; then\n        echo $is_nested\n    else\n  \
+    \      echo false\n    fi", "    # TODO: Implement this function\n    # Hint:\
+    \ You can use the following command to remove the first character of a string:\n\
+    \    # ${string:1}\n    # Hint: You can use the following command to remove the\
+    \ last character of a string:\n    # ${string::-1}\n    # Hint: You can use the\
+    \ following command to get the length of a string:\n    # ${#string}\n    # Hint:\
+    \ You can use the following command to get the substring of a string:\n    # ${string:start:length}\n\
+    \    # Hint: You can use the following command to get the index of the first occurrence\
+    \ of a substring in a string:\n    # ${string/substring/}\n    # Hint: You can\
+    \ use the following command to get the index of the last occurrence of a substring\
+    \ in a string:\n    # ${string//substring/}\n    # Hint: You can use the following\
+    \ command to check if a string starts with a substring:\n    # [[ $string == substring*\
+    \ ]]\n    # Hint: You can use the following command to check if a string ends\
+    \ with a substring:\n    # [[ $string == *substring ]]\n    # Hint: You can use\
+    \ the following command to check if a string contains a substring:\n    # [[ $string\
+    \ == *substring* ]]\n    # Hint: You can use the following command to check if\
+    \ a string matches a regular expression:\n    # [[ $string =~ regex ]]\n    #\
+    \ Hint: You can use the following command to check if a string does not match\
+    \ a regular expression:\n    # [[ ! $string =~ regex ]]\n    # Hint: You can use\
+    \ the following command to check if a string is empty:\n    # [[ -z $string ]]\n\
+    \    # Hint: You can use the following command to check if a string is not empty:\n\
+    \    # [[ -n $string ]]\n    # Hint: You can use the following command to check\
+    \ if a string is a valid number:\n    # [[ $string =~ ^[0-9]+$ ]]\n    # Hint:\
+    \ You can use the following command to check if a string is a valid integer:\n\
+    \    # [[ $string =~ ^-?[0-", "    local str=$1\n    local len=${#str}\n    local\
+    \ stack=()\n    local i=0\n    while [ $i -lt $len ]; do\n        local char=${str:$i:1}\n\
+    \        if [ \"$char\" == \"[\" ]; then\n            stack+=($char)\n       \
+    \ elif [ \"$char\" == \"]\" ]; then\n            if [ ${#stack[@]} -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        local top=${stack[-1]}\n            if [ \"$top\" == \"[\" ]; then\n\
+    \                stack=(\"${stack[@]:0:${#stack[@]}-1}\")\n            else\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \    fi\n        i=$((i+1))\n    done\n    if [ ${#stack[@]} -eq 0 ]; then\n \
+    \       echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local string=$1\n\
+    \    local stack=()\n    local top=0\n    local i=0\n    local char=''\n    local\
+    \ is_nested=false\n    while [[ $i -lt ${#string} ]]; do\n        char=${string:$i:1}\n\
+    \        if [[ $char == '[' ]]; then\n            stack[$top]=$char\n        \
+    \    top=$(($top + 1))\n        elif [[ $char == ']' ]]; then\n            if\
+    \ [[ $top -gt 0 ]]; then\n                top=$(($top - 1))\n                if\
+    \ [[ $top -gt 0 ]]; then\n                    is_nested=true\n               \
+    \ fi\n            fi\n        fi\n        i=$(($i + 1))\n    done\n    if [[ $is_nested\
+    \ == true ]]; then\n        echo \"true\"\n    else\n        echo \"false\"\n\
+    \    fi", "    # TODO: Implement this function\n    # Hint: Use a stack to keep\
+    \ track of the brackets\n    # Hint: Use a variable to keep track of the number\
+    \ of nested brackets\n    # Hint: Use a variable to keep track of the number of\
+    \ non-nested brackets\n    # Hint: Use a variable to keep track of the number\
+    \ of brackets\n    # Hint: Use a variable to keep track of the number of open\
+    \ brackets\n    # Hint: Use a variable to keep track of the number of closed brackets\n\
+    \    # Hint: Use a variable to keep track of the number of brackets that are not\
+    \ nested\n    # Hint: Use a variable to keep track of the number of brackets that\
+    \ are nested\n    # Hint: Use a variable to keep track of the number of brackets\
+    \ that are not nested\n    # Hint: Use a variable to keep track of the number\
+    \ of brackets that are nested\n    # Hint: Use a variable to keep track of the\
+    \ number of brackets that are not nested\n    # Hint: Use a variable to keep track\
+    \ of the number of brackets that are nested\n    # Hint: Use a variable to keep\
+    \ track of the number of brackets that are not nested\n    # Hint: Use a variable\
+    \ to keep track of the number of brackets that are nested\n    # Hint: Use a variable\
+    \ to keep track of the number of brackets that are not nested\n    # Hint: Use\
+    \ a variable to keep track of the number of brackets that are nested\n    # Hint:\
+    \ Use a variable to keep track of the number of brackets that are not nested\n\
+    \    # Hint: Use a variable to keep track of the number of brackets that are nested\n\
+    \    # Hint: Use a variable to keep track of the number of brackets that are not\
+    \ nested\n    # Hint: Use a variable to keep track of the number of brackets that\
+    \ are nested\n    # Hint: Use a variable to keep track of the number of brackets\
+    \ that are not nested\n    # Hint: Use a variable to keep track of the number\
+    \ of brackets that are nested\n    # Hint: Use a variable to keep track of the\
+    \ number of brackets that are not nested\n    # Hint: Use a variable to keep track\
+    \ of the number of brackets that are nested\n    # Hint: Use a variable to keep\
+    \ track of the number of brackets that are not nested\n    # Hint:", "    local\
+    \ str=$1\n    local stack=()\n    local stack_top=0\n    local i=0\n    local\
+    \ len=${#str}\n    local c=''\n    while [ $i -lt $len ]; do\n        c=${str:$i:1}\n\
+    \        if [ \"$c\" == \"[\" ]; then\n            stack[$stack_top]=$c\n    \
+    \        stack_top=$((stack_top+1))\n        elif [ \"$c\" == \"]\" ]; then\n\
+    \            if [ $stack_top -eq 0 ]; then\n                echo \"false\"\n \
+    \               return\n            fi\n            stack_top=$((stack_top-1))\n\
+    \        fi\n        i=$((i+1))\n    done\n    if [ $stack_top -eq 0 ]; then\n\
+    \        echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local\
+    \ str=\"$1\"\n    local len=${#str}\n    local stack=()\n    local i=0\n    local\
+    \ top=0\n    local is_nested=false\n    while [ $i -lt $len ]; do\n        if\
+    \ [ \"${str:$i:1}\" == \"[\" ]; then\n            stack[$top]=$i\n           \
+    \ top=$((top+1))\n        elif [ \"${str:$i:1}\" == \"]\" ]; then\n          \
+    \  if [ $top -gt 0 ]; then\n                top=$((top-1))\n                if\
+    \ [ $i -gt ${stack[$top]} ]; then\n                    is_nested=true\n      \
+    \          fi\n            fi\n        fi\n        i=$((i+1))\n    done\n    echo\
+    \ $is_nested", "    local str=\"$1\"\n    local stack=()\n    local i=0\n    local\
+    \ len=${#str}\n    local top=0\n    local c=''\n    local is_nested=false\n  \
+    \  while [[ $i -lt $len ]]; do\n        c=${str:$i:1}\n        if [[ $c == '['\
+    \ ]]; then\n            stack[$top]=$c\n            top=$((top+1))\n        elif\
+    \ [[ $c == ']' ]]; then\n            if [[ $top -gt 0 ]]; then\n             \
+    \   top=$((top-1))\n                if [[ ${stack[$top]} == '[' ]]; then\n   \
+    \                 is_nested=true\n                fi\n            fi\n       \
+    \ fi\n        i=$((i+1))\n    done\n    if [[ $is_nested == true ]]; then\n  \
+    \      echo \"true\"\n    else\n        echo \"false\"\n    fi", "    local input=$1\n\
+    \    local stack=()\n    local top=0\n    local i=0\n    local len=${#input}\n\
+    \    while [ $i -lt $len ]; do\n        local c=${input:$i:1}\n        if [ \"\
+    $c\" == \"[\" ]; then\n            stack[$top]=$c\n            top=$((top+1))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $top -eq 0 ]; then\n\
+    \                echo \"false\"\n                return\n            fi\n    \
+    \        top=$((top-1))\n            if [ \"${stack[$top]}\" == \"[\" ]; then\n\
+    \                stack[$top]=\"\"\n            fi\n        fi\n        i=$((i+1))\n\
+    \    done\n    if [ $top -eq 0 ]; then\n        echo \"true\"\n    else\n    \
+    \    echo \"false\"\n    fi", "    local str=\"$1\"\n    local stack=()\n    local\
+    \ stack_size=0\n    local i=0\n    local c\n    local top\n    local is_nested=false\n\
+    \    while [ $i -lt ${#str} ]; do\n        c=${str:$i:1}\n        if [ \"$c\"\
+    \ == \"[\" ]; then\n            stack[$stack_size]=\"$c\"\n            ((stack_size++))\n\
+    \        elif [ \"$c\" == \"]\" ]; then\n            if [ $stack_size -eq 0 ];\
+    \ then\n                return 1\n            fi\n            top=${stack[$((stack_size-1))]}\n\
+    \            if [ \"$top\" == \"[\" ]; then\n                is_nested=true\n\
+    \            fi\n            ((stack_size--))\n        fi\n        ((i++))\n \
+    \   done\n    if [ $stack_size -eq 0 ]; then\n        if [ \"$is_nested\" == \"\
+    true\" ]; then\n            echo \"true\"\n        else\n            echo \"false\"\
+    \n        fi\n    else\n        echo \"false\"\n    fi", "    local str=\"$1\"\
+    \n    local len=${#str}\n    local i=0\n    local j=0\n    local k=0\n    local\
+    \ l=0\n    local m=0\n    local n=0\n    local o=0\n    local p=0\n    local q=0\n\
+    \    local r=0\n    local s=0\n    local t=0\n    local u=0\n    local v=0\n \
+    \   local w=0\n    local x=0\n    local y=0\n    local z=0\n    local a=0\n  \
+    \  local b=0\n    local c=0\n    local d=0\n    local e=0\n    local f=0\n   \
+    \ local g=0\n    local h=0\n    local ii=0\n    local jj=0\n    local kk=0\n \
+    \   local ll=0\n    local mm=0\n    local nn=0\n    local oo=0\n    local pp=0\n\
+    \    local qq=0\n    local rr=0\n    local ss=0\n    local tt=0\n    local uu=0\n\
+    \    local vv=0\n    local ww=0\n    local xx=0\n    local yy=0\n    local zz=0\n\
+    \    local aa=0\n    local bb=0\n    local cc=0\n    local dd=0\n    local ee=0\n\
+    \    local ff=0\n    local gg=0\n    local hh=0\n    local iii=0\n    local jjj=0\n\
+    \    local kkk=0\n    local lll=0\n    local mmm=0\n    local nnn=0\n    local\
+    \ ooo=0\n    local ppp=0\n    local qqq=0\n    local rrr=0\n    local sss=0\n\
+    \    local ttt=0\n    local uuu=0\n    local vvv=0\n    local www=0\n    local\
+    \ xxx=0\n    local yyy=0\n    local zzz=0\n    local aaaa=0\n    local bbbb=0\n\
+    \    local cccc=0\n    local dddd=0\n    local eeee=0\n    local", "    local\
+    \ str=$1\n    local stack=()\n    local top=0\n    local i=0\n    local len=${#str}\n\
+    \    local ch=''\n    local is_nested=false\n    while [ $i -lt $len ]; do\n \
+    \       ch=${str:$i:1}\n        if [ \"$ch\" == \"[\" ]; then\n            stack[$top]=$ch\n\
+    \            top=$((top+1))\n        elif [ \"$ch\" == \"]\" ]; then\n       \
+    \     if [ $top -eq 0 ]; then\n                break\n            fi\n       \
+    \     top=$((top-1))\n            if [ $top -eq 0 ]; then\n                is_nested=true\n\
+    \            fi\n        fi\n        i=$((i+1))\n    done\n    if [ $is_nested\
+    \ == true ]; then\n        echo \"true\"\n    else\n        echo \"false\"\n \
+    \   fi"]
+stop_tokens:
+- "\n}"
