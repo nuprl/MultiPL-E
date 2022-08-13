@@ -61,14 +61,29 @@ per_problem_new <- merge(per_problem,problem_class, all=TRUE)
 cn <- c("PL","PROBLEM","MODEL","TEMP","EXPT","rate1","n1","rate10","n10","rate100")
 pl <- read_csv("../results/pl_no_args_pass_k.csv")
 colnames(pl) <- cn
-```
 
-```{r}
 pl.o <- subset(per_problem_new,PL=="pl")
 pl.o <- subset(pl.o,select=c(PROBLEM,MODEL,EXPT,rate1,n1))
 pl <- subset(pl,select=c(PROBLEM,MODEL,EXPT,rate1,n1))
 
 pl.args <- rbind(pl.o,pl)
+```
+
+```{r}
+cn <- c("PL","PROBLEM","MODEL","TEMP","EXPT","rate1","n1","rate10","n10","rate100")
+ts.any <- read_csv("../results/ts_all_types_any.csv")
+colnames(ts.any) <- cn
+
+ts.pass <- read_csv("../results/ts_no_check.csv")
+colnames(ts.pass) <- cn
+
+ts.new <- rbind(ts.any,ts.pass)
+
+s.o <- subset(per_problem_new,PL=="ts"|PL=="js")
+s.o <- subset(s.o,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+ts.new <- subset(ts.new,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+
+scripts <- rbind(ts.new,s.o)
 ```
 
 ```{r}
@@ -175,13 +190,24 @@ ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_boxplot(stat = "boxplot",outli
 ```
 
 ```{r}
-s <- subset(per_problem,EXPT=='reworded'&MODEL=='davinci')
 ggplot(data=na.omit(s), aes(x=PL,y=rate1)) + geom_violin() + geom_jitter(height = 0, width = 0.1)
 ```
 
 
 ```{r}
-ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1)) + geom_jitter(height = 0, width = 0.1)
+ggplot(data=na.omit(s), aes(x=factor(PROBLEM),y=rate1,color=PL)) + geom_jitter(height = 0, width = 0.1)
+```
+
+## Perplexity versus pass@1
+
+```{r}
+perp <- s %>% group_by(PL) %>% summarize(perplexity = unique(PERPLEXITY),
+                                         avg_pass1 = mean(rate1)) %>% na.omit()
+
+perp$PL <- recode(perp$PL,"py" = "Python", `sh` = "Bash", `cpp` = "C++", `go` = "Go", `java` = "Java", `js` = "JavaScript", `pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
+ggplot(data=perp,aes(x=perplexity,y=avg_pass1,color=PL, label=PL)) + geom_point()  + ylim(0, 0.6) + ylab("Pass@1 rates") + xlab("Perplexity") 
+cor(perp$perplexity,perp$avg_pass1)
+ggsave("perplexity.pdf",height=4,width=12)
 ```
 
 ## By language feature analysis
@@ -304,4 +330,25 @@ codex.perl.model <- glmer(rate1 ~ EXPT + (1+EXPT||PROBLEM),weights=n1, data=code
 ```
 ```{r}
 summary(codex.perl.model)
+```
+
+### TS v JS experiments
+
+```{r}
+codex.script <- subset(scripts,MODEL=='davinci'&(EXPT=="reworded"|EXPT=="no_check"|EXPT=="all_types_any"))
+
+codex.script <- codex.script %>% mutate(expt = ifelse(PL=="js","JS",EXPT))
+codex.script$expt <- factor(codex.script$expt,levels = c("reworded","JS","no_check","all_types_any"))
+codex.script$PROBLEM <- factor(codex.script$PROBLEM)
+```
+```{r}
+script.sum <- codex.script %>% group_by(expt) %>% summarize(mean = mean(rate1))
+ggplot(data=script.sum,aes(x=expt,y=mean)) + geom_col(position="dodge")
+```
+
+```{r}
+codex.script.model <- glmer(rate1 ~ expt + (1|PROBLEM),weights=n1, data=codex.script,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(codex.script.model)
 ```
