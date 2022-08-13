@@ -76,14 +76,14 @@ class Filters:
     @staticmethod
     def missing_else(e):
         """
-        Generated code contains if with 2 arguments or less, expecting 3.
+        Generated code contains if with 2 arguments or less; expecting 3.
         """
         return 'missing an "else" expression' in e.stderr
 
     @staticmethod
     def bad_match(e):
         """
-        Malformed match statement: either missing a operand for match clause, or syntax error in pattern.
+        Malformed match statement: either missing a operand for match clause; or syntax error in pattern.
         """
         return ' match:' in e.stderr or "match: no matching clause for" in e.stderr
 
@@ -105,7 +105,7 @@ class Filters:
     @staticmethod
     def unknown_escape_sequence(e):
         """
-        Bad escape sequence, caused by a missing backslash \\ in regular expressions (2 required in escape sequences for regular expressions).
+        Bad escape sequence; caused by a missing backslash \\ in regular expressions (2 required in escape sequences for regular expressions).
         """
         return "read-syntax: unknown escape sequence" in e.stderr
 
@@ -148,7 +148,7 @@ class Filters:
     @staticmethod
     def index_out_of_range(e):
         """
-        out-of-range index access for list and string, or ending index smaller than beginning index for substring.
+        out-of-range index access for list and string; or ending index smaller than beginning index for substring.
         """
         return "list-ref: index too large" in e.stderr or \
                "is not an exact nonnegative integer" in e.stderr or \
@@ -157,7 +157,7 @@ class Filters:
     @staticmethod
     def string_index_out_of_range(e):
         """
-        out-of-range index access for string, or ending index smaller than beginning index for substring.
+        out-of-range index access for string; or ending index smaller than beginning index for substring.
         """
         return "index is out of range" in e.stderr or "ending index is smaller than starting index" in e.stderr
 
@@ -317,7 +317,7 @@ def find_errors(path):
         csv_writer = csv.writer(csv_f)
         csv_writer.writerow(['code', 'description', 'count', 'example'])
         for filter_method, filter_name in filters:
-            desc = " ".join([s.strip() for s in filter_method.__doc__.split("\n")]).strip() 
+            desc = " ".join([s.strip() for s in filter_method.__doc__.split("\n")]).strip().replace(",",";")
             csv_writer.writerow([filter_name,\
                  desc,\
                  len(classified[filter_name]),\

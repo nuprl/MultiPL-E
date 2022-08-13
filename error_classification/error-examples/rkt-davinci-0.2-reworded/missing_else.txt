@@ -1,0 +1,3226 @@
+HumanEval_90_next_smallest: 2
+HumanEval_12_longest: 24
+HumanEval_111_histogram: 4
+HumanEval_107_even_odd_palindrome: 1
+HumanEval_129_minPath: 6
+HumanEval_69_search: 1
+HumanEval_143_words_in_sentence: 2
+HumanEval_136_largest_smallest_integers: 1
+HumanEval_153_Strongest_Extension: 4
+HumanEval_140_fix_spaces: 2
+HumanEval_113_odd_count: 4
+HumanEval_158_find_max: 2
+HumanEval_147_get_max_triples: 1
+HumanEval_75_is_multiply_prime: 2
+HumanEval_25_factorize: 1
+HumanEval_41_car_race_collision: 1
+HumanEval_20_find_closest_elements: 3
+HumanEval_96_count_up_to: 1
+HumanEval_94_skjkasdkd: 1
+==========================
+------- Program HumanEval_90_next_smallest --------
+#lang racket
+
+;; You are given a list of integers.
+;; Write a function next_smallest() that returns the 2nd smallest element of the list.
+;; Return #f if there is no such element.
+;; >>> (next_smallest (list 1 2 3 4 5))
+;; 2
+;; >>> (next_smallest (list 5 1 4 3 2))
+;; 2
+;; >>> (next_smallest (list ))
+;; #f
+;; >>> (next_smallest (list 1 1))
+;; #f
+(define (next_smallest lst)
+  (if (null? lst)
+      #f
+      (let ((smallest (car lst))
+            (next-smallest (car lst)))
+        (for ([x (in-list (cdr lst))])
+          (if (< x smallest)
+              (set! smallest x)
+              (if (< x next-smallest)
+                  (set! next-smallest x))))
+        next-smallest)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate next_smallest))
+    (check-equal? (candidate (list 1 2 3 4 5)) 2)
+    (check-equal? (candidate (list 5 1 4 3 2)) 2)
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list 1 1)) #f)
+    (check-equal? (candidate (list 1 1 1 1 0)) 1)
+    (check-equal? (candidate (list 1 1)) #f)
+    (check-equal? (candidate (list -35 34 12 -45)) -35)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp3bnqxl6l.rkt:22:14: if: missing an "else" expression
+  in: (if (< x next-smallest) (set! next-smallest x))
+  location...:
+   /tmp/tmp3bnqxl6l.rkt:22:14
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (if (empty? strings)
+      #f
+      (let ([longest-so-far (first strings)])
+        (for ([s (in-list (rest strings))])
+          (if (> (string-length s) (string-length longest-so-far))
+              (set! longest-so-far s)))
+        longest-so-far)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp3wv_5lvd.rkt:16:10: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmp3wv_5lvd.rkt:16:10
+
+==========================
+------- Program HumanEval_111_histogram --------
+#lang racket
+
+;; Given a string representing a space separated lowercase letters, return a hash
+;; of the letter with the most repetition and containing the corresponding count.
+;; If several letters have the same occurrence, return all of them.
+;; Example:
+;; >>> (histogram "a b c")
+;; #hash(("a" .  1) ("b" .  1) ("c" .  1))
+;; >>> (histogram "a b b a")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "a b c a b")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "b b b b a")
+;; #hash(("b" .  4))
+;; >>> (histogram "")
+;; #hash()
+(define (histogram test)
+  (define (histogram-helper test count)
+    (if (empty? test)
+        count
+        (let* ([letter (first test)]
+               [new-count (hash-update count letter add1 0)])
+          (histogram-helper (rest test) new-count))))
+  (let* ([count (histogram-helper test (make-hash))]
+         [max-count (hash-ref count (first (hash-keys count)))]
+         [result (make-hash)])
+    (hash-for-each
+     (lambda (key value)
+       (if (= value max-count)
+           (hash-set! result key value)))
+     count)
+    result))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate histogram))
+    (check-equal? (candidate "a b b a") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c a b") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c d g") #hash(("a" .  1) ("b" .  1) ("c" .  1) ("d" .  1) ("g" .  1)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "b b b b a") #hash(("b" .  4)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "") #hash())
+    (check-equal? (candidate "a") #hash(("a" .  1)))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp4kzi68mw.rkt:29:7: if: missing an "else" expression
+  in: (if (= value max-count) (hash-set! result key value))
+  location...:
+   /tmp/tmp4kzi68mw.rkt:29:7
+
+==========================
+------- Program HumanEval_107_even_odd_palindrome --------
+#lang racket
+
+;; Given a positive integer n, return a list that has the number of even and odd
+;; integer palindromes that fall within the range(1, n), inclusive.
+;; Example 1:
+;; >>> (even_odd_palindrome 3)
+;; (list 1 2)
+;; Explanation:
+;; Integer palindrome are 1, 2, 3. one of them is even, and two of them are odd.
+;; Example 2:
+;; >>> (even_odd_palindrome 12)
+;; (list 4 6)
+;; Explanation:
+;; Integer palindrome are 1, 2, 3, 4, 5, 6, 7, 8, 9, 11. four of them are even, and 6 of them are odd.
+;; Note:
+;; 1. 1 <= n <= 10^3
+;; 2. returned list has the number of even and odd integer palindromes respectively.
+(define (even_odd_palindrome n)
+  (let ([even 0]
+        [odd 0])
+    (for ([i (in-range 1 n)])
+      (if (palindrome? i)
+          (if (even? i)
+              (set! even (+ even 1))
+              (set! odd (+ odd 1)))))
+    (list even odd)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate even_odd_palindrome))
+    (check-equal? (candidate 123) (list 8 13))
+    (check-equal? (candidate 12) (list 4 6))
+    (check-equal? (candidate 3) (list 1 2))
+    (check-equal? (candidate 63) (list 6 8))
+    (check-equal? (candidate 25) (list 5 6))
+    (check-equal? (candidate 19) (list 4 6))
+    (check-equal? (candidate 9) (list 4 5))
+    (check-equal? (candidate 1) (list 0 1))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp5fxv862v.rkt:22:6: if: missing an "else" expression
+  in: (if (palindrome? i) (if (even? i) (set! even (+ even 1)) (set! odd (+ odd 1))))
+  location...:
+   /tmp/tmp5fxv862v.rkt:22:6
+
+==========================
+------- Program HumanEval_129_minPath --------
+#lang racket
+
+;; Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+;; each cell of the grid contains a value. Every integer in the range [1, N * N]
+;; inclusive appears exactly once on the cells of the grid.
+;; You have to find the minimum path of length k in the grid. You can start
+;; from any cell, and in each step you can move to any of the neighbor cells,
+;; in other words, you can go to cells which share an edge with you current
+;; cell.
+;; Please note that a path of length k means visiting exactly k cells (not
+;; necessarily distinct).
+;; You CANNOT go off the grid.
+;; A path A (of length k) is considered less than a path B (of length k) if
+;; after making the ordered lists of the values on the cells that A and B go
+;; through (let's call them lst_A and lst_B), lst_A is lexicographically less
+;; than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+;; such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+;; lst_A[j] = lst_B[j].
+;; It is guaranteed that the answer is unique.
+;; Return an ordered list of the values on the cells that the minimum path go through.
+;; Examples:    
+;; >>> (minPath (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3)
+;; (list 1 2 1)
+;; >>> (minPath (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1)
+;; (list 1)
+(define (minPath grid k)
+  (define (minPath-helper grid k)
+    (cond ((= k 0) (list (car (car grid))))
+          ((= k 1) (list (car (car grid))))
+          (else (let ((min-path (list (car (car grid)))))
+                  (for ((row (in-list (cdr grid)))
+                        (col (in-list (car grid))))
+                    (let ((path (minPath-helper (cdr grid) (- k 1))))
+                      (if (and (not (null? path))
+                               (or (null? min-path)
+                                   (lexicographic-less? path min-path)))
+                          (set! min-path path))))
+                  (cons (car (car grid)) min-path)))))
+  (minPath-helper grid k))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minPath))
+    (check-equal? (candidate (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3) (list 1 2 1))
+    (check-equal? (candidate (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1) (list 1))
+    (check-equal? (candidate (list (list 1 2 3 4) (list 5 6 7 8) (list 9 10 11 12) (list 13 14 15 16)) 4) (list 1 2 1 2))
+    (check-equal? (candidate (list (list 6 4 13 10) (list 5 7 12 1) (list 3 16 11 15) (list 8 14 9 2)) 7) (list 1 10 1 10 1 10 1))
+    (check-equal? (candidate (list (list 8 14 9 2) (list 6 4 13 15) (list 5 7 1 12) (list 3 10 11 16)) 5) (list 1 7 1 7 1))
+    (check-equal? (candidate (list (list 11 8 7 2) (list 5 16 14 4) (list 9 3 15 6) (list 12 13 10 1)) 9) (list 1 6 1 6 1 6 1 6 1))
+    (check-equal? (candidate (list (list 12 13 10 1) (list 9 3 15 6) (list 5 16 14 4) (list 11 8 7 2)) 12) (list 1 6 1 6 1 6 1 6 1 6 1 6))
+    (check-equal? (candidate (list (list 2 7 4) (list 3 1 5) (list 6 8 9)) 8) (list 1 3 1 3 1 3 1 3))
+    (check-equal? (candidate (list (list 6 1 5) (list 3 8 9) (list 2 7 4)) 8) (list 1 5 1 5 1 5 1 5))
+    (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1 2 1 2))
+    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1 3 1 3 1 3 1 3 1 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp76srift6.rkt:34:22: if: missing an "else" expression
+  in: (if (and (not (null? path)) (or (null? min-path) (lexicographic-less? path min-path))) (set! min-path path))
+  location...:
+   /tmp/tmp76srift6.rkt:34:22
+
+==========================
+------- Program HumanEval_69_search --------
+#lang racket
+
+;; You are given a non-empty list of positive integers. Return the greatest integer that is greater than 
+;; zero, and has a frequency greater than or equal to the value of the integer itself. 
+;; The frequency of an integer is the number of times it appears in the list.
+;; If no such a value exist, return -1.
+;; Examples:
+;; >>> (search (list 4 1 2 2 3 1))
+;; 2
+;; >>> (search (list 1 2 2 3 3 3 4 4 4))
+;; 3
+;; >>> (search (list 5 5 4 4 4))
+;; -1
+(define (search lst)
+  (let ([freq (make-hash)])
+    (for ([i lst])
+      (hash-update! freq i add1 1))
+    (let ([max-freq (apply max (hash-values freq))])
+      (for ([i lst])
+        (when (>= (hash-ref freq i 0) i)
+          (if (>= (hash-ref freq i 0) max-freq)
+              (set! max-freq i))))
+      (if (= max-freq 0)
+          -1
+          max-freq))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate search))
+    (check-equal? (candidate (list 5 5 5 5 1)) 1)
+    (check-equal? (candidate (list 4 1 4 1 4 4)) 4)
+    (check-equal? (candidate (list 3 3)) -1)
+    (check-equal? (candidate (list 8 8 8 8 8 8 8 8)) 8)
+    (check-equal? (candidate (list 2 3 3 2 2)) 2)
+    (check-equal? (candidate (list 2 7 8 8 4 8 7 3 9 6 5 10 4 3 6 7 1 7 4 10 8 1)) 1)
+    (check-equal? (candidate (list 3 2 8 2)) 2)
+    (check-equal? (candidate (list 6 7 1 8 8 10 5 8 5 3 10)) 1)
+    (check-equal? (candidate (list 8 8 3 6 5 6 4)) -1)
+    (check-equal? (candidate (list 6 9 6 7 1 4 7 1 8 8 9 8 10 10 8 4 10 4 10 1 2 9 5 7 9)) 1)
+    (check-equal? (candidate (list 1 9 10 1 3)) 1)
+    (check-equal? (candidate (list 6 9 7 5 8 7 5 3 7 5 10 10 3 6 10 2 8 6 5 4 9 5 3 10)) 5)
+    (check-equal? (candidate (list 1)) 1)
+    (check-equal? (candidate (list 8 8 10 6 4 3 5 8 2 4 2 8 4 6 10 4 2 1 10 2 1 1 5)) 4)
+    (check-equal? (candidate (list 2 10 4 8 2 10 5 1 2 9 5 5 6 3 8 6 4 10)) 2)
+    (check-equal? (candidate (list 1 6 10 1 6 9 10 8 6 8 7 3)) 1)
+    (check-equal? (candidate (list 9 2 4 1 5 1 5 2 5 7 7 7 3 10 1 5 4 2 8 4 1 9 10 7 10 2 8 10 9 4)) 4)
+    (check-equal? (candidate (list 2 6 4 2 8 7 5 6 4 10 4 6 3 7 8 8 3 1 4 2 2 10 7)) 4)
+    (check-equal? (candidate (list 9 8 6 10 2 6 10 2 7 8 10 3 8 2 6 2 3 1)) 2)
+    (check-equal? (candidate (list 5 5 3 9 5 6 3 2 8 5 6 10 10 6 8 4 10 7 7 10 8)) -1)
+    (check-equal? (candidate (list 10)) -1)
+    (check-equal? (candidate (list 9 7 7 2 4 7 2 10 9 7 5 7 2)) 2)
+    (check-equal? (candidate (list 5 4 10 2 1 1 10 3 6 1 8)) 1)
+    (check-equal? (candidate (list 7 9 9 9 3 4 1 5 9 1 2 1 1 10 7 5 6 7 6 7 7 6)) 1)
+    (check-equal? (candidate (list 3 10 10 9 2)) -1)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp7qf45ejk.rkt:21:10: if: missing an "else" expression
+  in: (if (>= (hash-ref freq i 0) max-freq) (set! max-freq i))
+  location...:
+   /tmp/tmp7qf45ejk.rkt:21:10
+
+==========================
+------- Program HumanEval_143_words_in_sentence --------
+#lang racket
+
+;; You are given a string representing a sentence,
+;; the sentence contains some words separated by a space,
+;; and you have to return a string that contains the words from the original sentence,
+;; whose lengths are prime numbers,
+;; the order of the words in the new string should be the same as the original one.
+;; Example 1:
+;; >>> (words_in_sentence "This is a test")
+;; "is"
+;; Example 2:
+;; >>> (words_in_sentence "lets go for swimming")
+;; "go for"
+;; Constraints:
+;; * 1 <= len(sentence) <= 100
+;; * sentence contains only letters
+(define (words_in_sentence sentence)
+  (define (is-prime? n)
+    (define (iter i)
+      (cond ((= i n) #t)
+            ((= (modulo n i) 0) #f)
+            (else (iter (+ i 1)))))
+    (iter 2))
+  (define (word-lengths sentence)
+    (map string-length (string-split sentence #\space)))
+  (define (word-at-index sentence i)
+    (list-ref (string-split sentence #\space) i))
+  (define (word-at-index-is-prime? sentence i)
+    (is-prime? (string-length (word-at-index sentence i))))
+  (define (words-at-indexes-are-prime? sentence indexes)
+    (for/and ([i indexes])
+      (word-at-index-is-prime? sentence i)))
+  (define (indexes-of-prime-words sentence)
+    (for/list ([i (in-range (string-length sentence))])
+      (if (word-at-index-is-prime? sentence i) i)))
+  (define (prime-words-in-sentence sentence)
+    (for/list ([i (indexes-of-prime-words sentence)])
+      (word-at-index sentence i)))
+  (string-join (prime-words-in-sentence sentence) " "))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate words_in_sentence))
+    (check-equal? (candidate "This is a test") "is")
+    (check-equal? (candidate "lets go for swimming") "go for")
+    (check-equal? (candidate "there is no place available here") "there is no place")
+    (check-equal? (candidate "Hi I am Hussein") "Hi am Hussein")
+    (check-equal? (candidate "go for it") "go for it")
+    (check-equal? (candidate "here") "")
+    (check-equal? (candidate "here is") "is")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp7w9av129.rkt:35:6: if: missing an "else" expression
+  in: (if (word-at-index-is-prime? sentence i) i)
+  location...:
+   /tmp/tmp7w9av129.rkt:35:6
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (if (empty? strings)
+      #f
+      (let ([longest-string (first strings)])
+        (for ([s (in-list (rest strings))])
+          (if (> (string-length s) (string-length longest-string))
+              (set! longest-string s)))
+        longest-string)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmp_tu41pd1.rkt:16:10: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-string)) (set! longest-string s))
+  location...:
+   /tmp/tmp_tu41pd1.rkt:16:10
+
+==========================
+------- Program HumanEval_136_largest_smallest_integers --------
+#lang racket
+
+;; Create a function that returns a list (a, b), where 'a' is
+;; the largest of negative integers, and 'b' is the smallest
+;; of positive integers in a list.
+;; If there is no negative or positive integers, return them as #f.
+;; Examples:
+;; >>> (largest_smallest_integers (list 2 4 1 3 5 7))
+;; (list #f 1)
+;; >>> (largest_smallest_integers (list ))
+;; (list #f #f)
+;; >>> (largest_smallest_integers (list 0))
+;; (list #f #f)
+(define (largest_smallest_integers lst)
+  (cond
+    [(null? lst) (list #f #f)]
+    [(not (integer? (car lst))) (largest_smallest_integers (cdr lst))]
+    [(and (integer? (car lst)) (positive? (car lst)))
+     (let ([a (car lst)]
+           [b (car lst)])
+       (for ([i (cdr lst)])
+         (cond
+           [(integer? i)
+            (cond
+              [(positive? i)
+               (if (< i b)
+                   (set! b i))]
+              [(negative? i)
+               (if (> i a)
+                   (set! a i))])]))
+       (list a b))]
+    [(and (integer? (car lst)) (negative? (car lst)))
+     (let ([a (car lst)]
+           [b (car lst)])
+       (for ([i (cdr lst)])
+         (cond
+           [(integer? i)
+            (cond
+              [(positive? i)
+               (if (< i b)
+                   (set! b i))]
+              [(negative? i)
+               (if (> i a)
+                   (set! a i))])]))
+       (list a b))]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate largest_smallest_integers))
+    (check-equal? (candidate (list 2 4 1 3 5 7)) (list #f 1))
+    (check-equal? (candidate (list 2 4 1 3 5 7 0)) (list #f 1))
+    (check-equal? (candidate (list 1 3 2 4 5 6 -2)) (list -2 1))
+    (check-equal? (candidate (list 4 5 3 6 2 7 -7)) (list -7 2))
+    (check-equal? (candidate (list 7 3 8 4 9 2 5 -9)) (list -9 2))
+    (check-equal? (candidate (list )) (list #f #f))
+    (check-equal? (candidate (list 0)) (list #f #f))
+    (check-equal? (candidate (list -1 -3 -5 -6)) (list -1 #f))
+    (check-equal? (candidate (list -1 -3 -5 -6 0)) (list -1 #f))
+    (check-equal? (candidate (list -6 -4 -4 -3 1)) (list -3 1))
+    (check-equal? (candidate (list -6 -4 -4 -3 -100 1)) (list -3 1))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpb5r7j6qa.rkt:26:15: if: missing an "else" expression
+  in: (if (< i b) (set! b i))
+  location...:
+   /tmp/tmpb5r7j6qa.rkt:26:15
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(null? (cdr strings)) (car strings)]
+    [else
+     (let* ([longest-so-far (car strings)]
+            [rest (cdr strings)])
+       (for ([s rest])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpb8pu4xr5.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpb8pu4xr5.rkt:19:9
+
+==========================
+------- Program HumanEval_153_Strongest_Extension --------
+#lang racket
+
+;; You will be given the name of a class (a string) and a list of extensions.
+;; The extensions are to be used to load additional classes to the class. The
+;; strength of the extension is as follows: Let CAP be the number of the uppercase
+;; letters in the extension's name, and let SM be the number of lowercase letters 
+;; in the extension's name, the strength is given by the fraction CAP - SM. 
+;; You should find the strongest extension and return a string in this 
+;; format: ClassName.StrongestExtensionName.
+;; If there are two or more extensions with the same strength, you should
+;; choose the one that comes first in the list.
+;; For example, if you are given "Slices" as the class and a list of the
+;; extensions: ['SErviNGSliCes', 'Cheese', 'StuFfed'] then you should
+;; return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
+;; (its strength is -1).
+;; Example:
+;; >>> (Strongest_Extension "my_class" (list "AA" "Be" "CC"))
+;; "my_class.AA"
+(define (Strongest_Extension class_name extensions)
+  (define (strength ext)
+    (define (count-upper ext)
+      (if (empty? ext)
+          0
+          (if (char-upper-case? (car ext))
+              (+ 1 (count-upper (cdr ext)))
+              (count-upper (cdr ext)))))
+    (define (count-lower ext)
+      (if (empty? ext)
+          0
+          (if (char-lower-case? (car ext))
+              (+ 1 (count-lower (cdr ext)))
+              (count-lower (cdr ext)))))
+    (- (count-upper ext) (count-lower ext)))
+  (define (strongest-extension extensions)
+    (if (empty? extensions)
+        ""
+        (let ((strongest-ext (car extensions)))
+          (for ([ext (cdr extensions)])
+            (if (> (strength ext) (strength strongest-ext))
+                (set! strongest-ext ext)))
+          strongest-ext)))
+  (string-append class_name "." (strongest-extension extensions)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate Strongest_Extension))
+    (check-equal? (candidate "Watashi" (list "tEN" "niNE" "eIGHt8OKe")) "Watashi.eIGHt8OKe")
+    (check-equal? (candidate "Boku123" (list "nani" "NazeDa" "YEs.WeCaNe" "32145tggg")) "Boku123.YEs.WeCaNe")
+    (check-equal? (candidate "__YESIMHERE" (list "t" "eMptY" "nothing" "zeR00" "NuLl__" "123NoooneB321")) "__YESIMHERE.NuLl__")
+    (check-equal? (candidate "K" (list "Ta" "TAR" "t234An" "cosSo")) "K.TAR")
+    (check-equal? (candidate "__HAHA" (list "Tab" "123" "781345" "-_-")) "__HAHA.123")
+    (check-equal? (candidate "YameRore" (list "HhAas" "okIWILL123" "WorkOut" "Fails" "-_-")) "YameRore.okIWILL123")
+    (check-equal? (candidate "finNNalLLly" (list "Die" "NowW" "Wow" "WoW")) "finNNalLLly.WoW")
+    (check-equal? (candidate "_" (list "Bb" "91245")) "_.Bb")
+    (check-equal? (candidate "Sp" (list "671235" "Bb")) "Sp.671235")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpd9fsrgj5.rkt:39:12: if: missing an "else" expression
+  in: (if (> (strength ext) (strength strongest-ext)) (set! strongest-ext ext))
+  location...:
+   /tmp/tmpd9fsrgj5.rkt:39:12
+
+==========================
+------- Program HumanEval_140_fix_spaces --------
+#lang racket
+
+;; Given a string text, replace all spaces in it with underscores, 
+;; and if a string has more than 2 consecutive spaces, 
+;; then replace all consecutive spaces with - 
+;; >>> (fix_spaces " Example")
+;; "Example"
+;; >>> (fix_spaces " Example 1")
+;; "Example_1"
+;; >>> (fix_spaces " Example 2")
+;; "_Example_2"
+;; >>> (fix_spaces " Example 3")
+;; "_Example-3"
+(define (fix_spaces text)
+  (regexp-replace* #rx" +" text
+                   (lambda (m)
+                     (if (regexp-match #rx"  +" (car m))
+                         "-")
+                     "_")))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate fix_spaces))
+    (check-equal? (candidate "Example") "Example")
+    (check-equal? (candidate "Mudasir Hanif ") "Mudasir_Hanif_")
+    (check-equal? (candidate "Yellow Yellow  Dirty  Fellow") "Yellow_Yellow__Dirty__Fellow")
+    (check-equal? (candidate "Exa   mple") "Exa-mple")
+    (check-equal? (candidate "   Exa 1 2 2 mple") "-Exa_1_2_2_mple")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpdkafogds.rkt:17:21: if: missing an "else" expression
+  in: (if (regexp-match #rx"  +" (car m)) "-")
+  location...:
+   /tmp/tmpdkafogds.rkt:17:21
+
+==========================
+------- Program HumanEval_140_fix_spaces --------
+#lang racket
+
+;; Given a string text, replace all spaces in it with underscores, 
+;; and if a string has more than 2 consecutive spaces, 
+;; then replace all consecutive spaces with - 
+;; >>> (fix_spaces " Example")
+;; "Example"
+;; >>> (fix_spaces " Example 1")
+;; "Example_1"
+;; >>> (fix_spaces " Example 2")
+;; "_Example_2"
+;; >>> (fix_spaces " Example 3")
+;; "_Example-3"
+(define (fix_spaces text)
+  (regexp-replace* #rx" +" text
+                   (lambda (m)
+                     (if (regexp-match #rx"  +" (car m))
+                         "-")
+                     "_")))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate fix_spaces))
+    (check-equal? (candidate "Example") "Example")
+    (check-equal? (candidate "Mudasir Hanif ") "Mudasir_Hanif_")
+    (check-equal? (candidate "Yellow Yellow  Dirty  Fellow") "Yellow_Yellow__Dirty__Fellow")
+    (check-equal? (candidate "Exa   mple") "Exa-mple")
+    (check-equal? (candidate "   Exa 1 2 2 mple") "-Exa_1_2_2_mple")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpdkafogds.rkt:17:21: if: missing an "else" expression
+  in: (if (regexp-match #rx"  +" (car m)) "-")
+  location...:
+   /tmp/tmpdkafogds.rkt:17:21
+
+==========================
+------- Program HumanEval_113_odd_count --------
+#lang racket
+
+;; Given a list of strings, where each string consists of only digits, return a list.
+;; Each element i of the output should be "the number of odd elements in the
+;; string i of the input." where all the i's should be replaced by the number
+;; of odd digits in the i'th string of the input.
+;; >>> (odd_count (list "1234567"))
+;; (list "the number of odd elements 4n the str4ng 4 of the 4nput.")
+;; >>> (odd_count (list "3" "11111111"))
+;; (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput.")
+(define (odd_count lst)
+  (map (lambda (str)
+         (let ((count 0))
+           (for ((ch (string->list str)))
+             (if (odd? (string->number ch))
+                 (set! count (+ count 1))))
+           (string-append "the number of odd elements " (number->string count) "n the str" (number->string count) "ng " (number->string count) " of the " (number->string count) "nput.")))
+       lst))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate odd_count))
+    (check-equal? (candidate (list "1234567")) (list "the number of odd elements 4n the str4ng 4 of the 4nput."))
+    (check-equal? (candidate (list "3" "11111111")) (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput."))
+    (check-equal? (candidate (list "271" "137" "314")) (list "the number of odd elements 2n the str2ng 2 of the 2nput." "the number of odd elements 3n the str3ng 3 of the 3nput." "the number of odd elements 2n the str2ng 2 of the 2nput."))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpdrgpp44a.rkt:15:13: if: missing an "else" expression
+  in: (if (odd? (string->number ch)) (set! count (+ count 1)))
+  location...:
+   /tmp/tmpdrgpp44a.rkt:15:13
+
+==========================
+------- Program HumanEval_158_find_max --------
+#lang racket
+
+;; Write a function that accepts a list of strings.
+;; The list contains different words. Return the word with maximum number
+;; of unique characters. If multiple strings have maximum number of unique
+;; characters, return the one which comes first in lexicographical order.
+;; >>> (find_max (list "name" "of" "string"))
+;; "string"
+;; >>> (find_max (list "name" "enam" "game"))
+;; "enam"
+;; >>> (find_max (list "aaaaaaa" "bb" "cc"))
+;; "aaaaaaa"
+(define (find_max words)
+  (define (count-unique word)
+    (length (remove-duplicates (string->list word))))
+  (define (max-unique-word words)
+    (if (null? words)
+        ""
+        (let ((max-word (car words))
+              (max-count (count-unique (car words))))
+          (for ([word (cdr words)])
+            (let ((count (count-unique word)))
+              (if (> count max-count)
+                  (begin
+                    (set! max-word word)
+                    (set! max-count count))
+                  (if (= count max-count)
+                      (if (string<? word max-word)
+                          (set! max-word word))))))
+          max-word)))
+  (max-unique-word words))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate find_max))
+    (check-equal? (candidate (list "name" "of" "string")) "string")
+    (check-equal? (candidate (list "name" "enam" "game")) "enam")
+    (check-equal? (candidate (list "aaaaaaa" "bb" "cc")) "aaaaaaa")
+    (check-equal? (candidate (list "abc" "cba")) "abc")
+    (check-equal? (candidate (list "play" "this" "game" "of" "footbott")) "footbott")
+    (check-equal? (candidate (list "we" "are" "gonna" "rock")) "gonna")
+    (check-equal? (candidate (list "we" "are" "a" "mad" "nation")) "nation")
+    (check-equal? (candidate (list "this" "is" "a" "prrk")) "this")
+    (check-equal? (candidate (list "b")) "b")
+    (check-equal? (candidate (list "play" "play" "play")) "play")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpetjjt2sk.rkt:27:18: if: missing an "else" expression
+  in: (if (= count max-count) (if (string<? word max-word) (set! max-word word)))
+  location...:
+   /tmp/tmpetjjt2sk.rkt:27:18
+
+==========================
+------- Program HumanEval_158_find_max --------
+#lang racket
+
+;; Write a function that accepts a list of strings.
+;; The list contains different words. Return the word with maximum number
+;; of unique characters. If multiple strings have maximum number of unique
+;; characters, return the one which comes first in lexicographical order.
+;; >>> (find_max (list "name" "of" "string"))
+;; "string"
+;; >>> (find_max (list "name" "enam" "game"))
+;; "enam"
+;; >>> (find_max (list "aaaaaaa" "bb" "cc"))
+;; "aaaaaaa"
+(define (find_max words)
+  (define (count-unique word)
+    (length (remove-duplicates (string->list word))))
+  (define (max-unique-word words)
+    (if (null? words)
+        ""
+        (let ((max-word (car words))
+              (max-count (count-unique (car words))))
+          (for ([word (cdr words)])
+            (let ((count (count-unique word)))
+              (if (> count max-count)
+                  (begin
+                    (set! max-word word)
+                    (set! max-count count))
+                  (if (= count max-count)
+                      (if (string<? word max-word)
+                          (set! max-word word))))))
+          max-word)))
+  (max-unique-word words))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate find_max))
+    (check-equal? (candidate (list "name" "of" "string")) "string")
+    (check-equal? (candidate (list "name" "enam" "game")) "enam")
+    (check-equal? (candidate (list "aaaaaaa" "bb" "cc")) "aaaaaaa")
+    (check-equal? (candidate (list "abc" "cba")) "abc")
+    (check-equal? (candidate (list "play" "this" "game" "of" "footbott")) "footbott")
+    (check-equal? (candidate (list "we" "are" "gonna" "rock")) "gonna")
+    (check-equal? (candidate (list "we" "are" "a" "mad" "nation")) "nation")
+    (check-equal? (candidate (list "this" "is" "a" "prrk")) "this")
+    (check-equal? (candidate (list "b")) "b")
+    (check-equal? (candidate (list "play" "play" "play")) "play")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpetjjt2sk.rkt:27:18: if: missing an "else" expression
+  in: (if (= count max-count) (if (string<? word max-word) (set! max-word word)))
+  location...:
+   /tmp/tmpetjjt2sk.rkt:27:18
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (if (null? strings)
+      #f
+      (let ([longest (car strings)])
+        (for ([s (cdr strings)])
+          (if (> (string-length s) (string-length longest))
+              (set! longest s)))
+        longest)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpghlvwk57.rkt:16:10: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest)) (set! longest s))
+  location...:
+   /tmp/tmpghlvwk57.rkt:16:10
+
+==========================
+------- Program HumanEval_129_minPath --------
+#lang racket
+
+;; Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+;; each cell of the grid contains a value. Every integer in the range [1, N * N]
+;; inclusive appears exactly once on the cells of the grid.
+;; You have to find the minimum path of length k in the grid. You can start
+;; from any cell, and in each step you can move to any of the neighbor cells,
+;; in other words, you can go to cells which share an edge with you current
+;; cell.
+;; Please note that a path of length k means visiting exactly k cells (not
+;; necessarily distinct).
+;; You CANNOT go off the grid.
+;; A path A (of length k) is considered less than a path B (of length k) if
+;; after making the ordered lists of the values on the cells that A and B go
+;; through (let's call them lst_A and lst_B), lst_A is lexicographically less
+;; than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+;; such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+;; lst_A[j] = lst_B[j].
+;; It is guaranteed that the answer is unique.
+;; Return an ordered list of the values on the cells that the minimum path go through.
+;; Examples:    
+;; >>> (minPath (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3)
+;; (list 1 2 1)
+;; >>> (minPath (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1)
+;; (list 1)
+(define (minPath grid k)
+  (define (minPath-helper grid k path)
+    (if (= k 0)
+        path
+        (let ([min-path (list)])
+          (for ([row (in-list grid)]
+                [col (in-range (length (car grid)))])
+            (let ([new-path (minPath-helper grid (- k 1) (cons (list-ref (list-ref grid row) col) path))])
+              (if (or (empty? min-path)
+                      (lexicographic-compare new-path min-path))
+                  (set! min-path new-path))))
+          min-path)))
+  (minPath-helper grid k (list)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minPath))
+    (check-equal? (candidate (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3) (list 1 2 1))
+    (check-equal? (candidate (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1) (list 1))
+    (check-equal? (candidate (list (list 1 2 3 4) (list 5 6 7 8) (list 9 10 11 12) (list 13 14 15 16)) 4) (list 1 2 1 2))
+    (check-equal? (candidate (list (list 6 4 13 10) (list 5 7 12 1) (list 3 16 11 15) (list 8 14 9 2)) 7) (list 1 10 1 10 1 10 1))
+    (check-equal? (candidate (list (list 8 14 9 2) (list 6 4 13 15) (list 5 7 1 12) (list 3 10 11 16)) 5) (list 1 7 1 7 1))
+    (check-equal? (candidate (list (list 11 8 7 2) (list 5 16 14 4) (list 9 3 15 6) (list 12 13 10 1)) 9) (list 1 6 1 6 1 6 1 6 1))
+    (check-equal? (candidate (list (list 12 13 10 1) (list 9 3 15 6) (list 5 16 14 4) (list 11 8 7 2)) 12) (list 1 6 1 6 1 6 1 6 1 6 1 6))
+    (check-equal? (candidate (list (list 2 7 4) (list 3 1 5) (list 6 8 9)) 8) (list 1 3 1 3 1 3 1 3))
+    (check-equal? (candidate (list (list 6 1 5) (list 3 8 9) (list 2 7 4)) 8) (list 1 5 1 5 1 5 1 5))
+    (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1 2 1 2))
+    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1 3 1 3 1 3 1 3 1 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpgqhe_hfe.rkt:34:14: if: missing an "else" expression
+  in: (if (or (empty? min-path) (lexicographic-compare new-path min-path)) (set! min-path new-path))
+  location...:
+   /tmp/tmpgqhe_hfe.rkt:34:14
+
+==========================
+------- Program HumanEval_113_odd_count --------
+#lang racket
+
+;; Given a list of strings, where each string consists of only digits, return a list.
+;; Each element i of the output should be "the number of odd elements in the
+;; string i of the input." where all the i's should be replaced by the number
+;; of odd digits in the i'th string of the input.
+;; >>> (odd_count (list "1234567"))
+;; (list "the number of odd elements 4n the str4ng 4 of the 4nput.")
+;; >>> (odd_count (list "3" "11111111"))
+;; (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput.")
+(define (odd_count lst)
+  (map (lambda (str)
+         (let ((odd-count 0))
+           (for ((i (in-range (string-length str))))
+             (if (odd? (string-ref str i))
+                 (set! odd-count (+ odd-count 1))))
+           (string-replace "4" (number->string odd-count)
+                           (string-replace "1" (number->string (add1 (string-length str)))
+                                           (string-replace "8" (number->string (add1 (string-length str)))
+                                                           "the number of odd elements 4n the str4ng 4 of the 4nput.")))))
+        lst))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate odd_count))
+    (check-equal? (candidate (list "1234567")) (list "the number of odd elements 4n the str4ng 4 of the 4nput."))
+    (check-equal? (candidate (list "3" "11111111")) (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput."))
+    (check-equal? (candidate (list "271" "137" "314")) (list "the number of odd elements 2n the str2ng 2 of the 2nput." "the number of odd elements 3n the str3ng 3 of the 3nput." "the number of odd elements 2n the str2ng 2 of the 2nput."))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpgsjm4fib.rkt:15:13: if: missing an "else" expression
+  in: (if (odd? (string-ref str i)) (set! odd-count (+ odd-count 1)))
+  location...:
+   /tmp/tmpgsjm4fib.rkt:15:13
+
+==========================
+------- Program HumanEval_147_get_max_triples --------
+#lang racket
+
+;; You are given a positive integer n. You have to create an integer list a of length n.
+;; For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+;; Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+;; and a[i] + a[j] + a[k] is a multiple of 3.
+;; Example :
+;; >>> (get_max_triples 5)
+;; 1
+;; Explanation: 
+;; a = [1, 3, 7, 13, 21]
+;; The only valid triple is (1, 7, 13).
+(define (get_max_triples n)
+  (define (get-a-list n)
+    (for/list ([i (in-range n)])
+      (+ (* i i) (- i 1))))
+  (define (get-triples a-list)
+    (for/list ([i (in-range (sub1 (length a-list)))])
+      (for/list ([j (in-range (add1 i) (length a-list))])
+        (for/list ([k (in-range (add1 j) (length a-list))])
+          (list (list-ref a-list i) (list-ref a-list j) (list-ref a-list k))))))
+  (define (get-valid-triples triples)
+    (for/list ([triple (in-list triples)])
+      (if (zero? (modulo (+ (list-ref triple 0) (list-ref triple 1) (list-ref triple 2)) 3))
+          triple)))
+  (length (get-valid-triples (get-triples (get-a-list n)))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate get_max_triples))
+    (check-equal? (candidate 5) 1)
+    (check-equal? (candidate 6) 4)
+    (check-equal? (candidate 10) 36)
+    (check-equal? (candidate 100) 53361)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpgszpn95v.rkt:24:6: if: missing an "else" expression
+  in: (if (zero? (modulo (+ (list-ref triple 0) (list-ref triple 1) (list-ref triple 2)) 3)) triple)
+  location...:
+   /tmp/tmpgszpn95v.rkt:24:6
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (if (null? strings)
+      #f
+      (let ((longest-so-far (car strings)))
+        (for-each (lambda (s)
+                    (if (> (string-length s) (string-length longest-so-far))
+                        (set! longest-so-far s)))
+                  (cdr strings))
+        longest-so-far)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmphpk1kxif.rkt:16:20: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmphpk1kxif.rkt:16:20
+
+==========================
+------- Program HumanEval_111_histogram --------
+#lang racket
+
+;; Given a string representing a space separated lowercase letters, return a hash
+;; of the letter with the most repetition and containing the corresponding count.
+;; If several letters have the same occurrence, return all of them.
+;; Example:
+;; >>> (histogram "a b c")
+;; #hash(("a" .  1) ("b" .  1) ("c" .  1))
+;; >>> (histogram "a b b a")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "a b c a b")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "b b b b a")
+;; #hash(("b" .  4))
+;; >>> (histogram "")
+;; #hash()
+(define (histogram test)
+  (define (histogram-helper test count)
+    (if (empty? test)
+        count
+        (let ((letter (first test))
+              (rest (rest test)))
+          (if (hash-has-key? count letter)
+              (hash-update count letter add1)
+              (hash-update count letter (lambda (x) 1)))
+          (histogram-helper rest count))))
+  (define (get-max-count count)
+    (hash-for-each count (lambda (key value)
+                           (if (> value max-count)
+                               (set! max-count value)))))
+  (define (get-max-letters count)
+    (hash-for-each count (lambda (key value)
+                           (if (= value max-count)
+                               (hash-update max-letters key (lambda (x) 1))))))
+  (define (get-max-letters-count count)
+    (get-max-count count)
+    (get-max-letters count)
+    max-letters)
+  (define max-count 0)
+  (define max-letters (make-hash))
+  (get-max-letters-count (histogram-helper test (make-hash))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate histogram))
+    (check-equal? (candidate "a b b a") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c a b") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c d g") #hash(("a" .  1) ("b" .  1) ("c" .  1) ("d" .  1) ("g" .  1)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "b b b b a") #hash(("b" .  4)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "") #hash())
+    (check-equal? (candidate "a") #hash(("a" .  1)))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmphyfada7k.rkt:29:27: if: missing an "else" expression
+  in: (if (> value max-count) (set! max-count value))
+  location...:
+   /tmp/tmphyfada7k.rkt:29:27
+
+==========================
+------- Program HumanEval_113_odd_count --------
+#lang racket
+
+;; Given a list of strings, where each string consists of only digits, return a list.
+;; Each element i of the output should be "the number of odd elements in the
+;; string i of the input." where all the i's should be replaced by the number
+;; of odd digits in the i'th string of the input.
+;; >>> (odd_count (list "1234567"))
+;; (list "the number of odd elements 4n the str4ng 4 of the 4nput.")
+;; >>> (odd_count (list "3" "11111111"))
+;; (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput.")
+(define (odd_count lst)
+  (map (lambda (str)
+         (let ((count 0))
+           (for ((ch (string->list str)))
+             (if (odd? (string->number ch))
+                 (set! count (+ count 1))))
+           (string-append "the number of odd elements "
+                          (number->string count)
+                          "n the str"
+                          (number->string count)
+                          "ng "
+                          (number->string count)
+                          " of the "
+                          (number->string count)
+                          "nput.")))
+       lst))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate odd_count))
+    (check-equal? (candidate (list "1234567")) (list "the number of odd elements 4n the str4ng 4 of the 4nput."))
+    (check-equal? (candidate (list "3" "11111111")) (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput."))
+    (check-equal? (candidate (list "271" "137" "314")) (list "the number of odd elements 2n the str2ng 2 of the 2nput." "the number of odd elements 3n the str3ng 3 of the 3nput." "the number of odd elements 2n the str2ng 2 of the 2nput."))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpjny2j8cu.rkt:15:13: if: missing an "else" expression
+  in: (if (odd? (string->number ch)) (set! count (+ count 1)))
+  location...:
+   /tmp/tmpjny2j8cu.rkt:15:13
+
+==========================
+------- Program HumanEval_75_is_multiply_prime --------
+#lang racket
+
+;; Write a function that returns true if the given number is the multiplication of 3 prime numbers
+;; and false otherwise.
+;; Knowing that (a) is less then 100. 
+;; Example:
+;; >>> (is_multiply_prime 30)
+;; #t
+;; 30 = 2 * 3 * 5
+(define (is_multiply_prime a)
+  (define (is_prime a)
+    (define (divisors a)
+      (for/list ([i (in-range 1 (+ 1 (quotient a 2)))])
+        (if (zero? (modulo a i)) i)))
+    (if (= (length (divisors a)) 1) #t #f))
+  (define (prime_factors a)
+    (for/list ([i (in-range 1 a)])
+      (if (and (is_prime i) (zero? (modulo a i))) i)))
+  (if (= (length (prime_factors a)) 3) #t #f))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate is_multiply_prime))
+    (check-equal? (candidate 5) #f)
+    (check-equal? (candidate 30) #t)
+    (check-equal? (candidate 8) #t)
+    (check-equal? (candidate 10) #f)
+    (check-equal? (candidate 125) #t)
+    (check-equal? (candidate 105) #t)
+    (check-equal? (candidate 126) #f)
+    (check-equal? (candidate 729) #f)
+    (check-equal? (candidate 891) #f)
+    (check-equal? (candidate 1001) #t)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpk110g_8j.rkt:14:8: if: missing an "else" expression
+  in: (if (zero? (modulo a i)) i)
+  location...:
+   /tmp/tmpk110g_8j.rkt:14:8
+
+==========================
+------- Program HumanEval_25_factorize --------
+#lang racket
+
+;; Return list of prime factors of given integer in the order from smallest to largest.
+;; Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
+;; Input number should be equal to the product of all factors
+;; >>> (factorize 8)
+;; (list 2 2 2)
+;; >>> (factorize 25)
+;; (list 5 5)
+;; >>> (factorize 70)
+;; (list 2 5 7)
+(define (factorize n)
+  (define (divisors n)
+    (for/list ([i (in-range 1 (add1 (quotient n 2)))])
+      (if (zero? (modulo n i)) i)))
+  (define (prime? n)
+    (empty? (divisors n)))
+  (define (prime-factors n)
+    (for/list ([i (in-range 2 (add1 n))])
+      (if (prime? i) i)))
+  (define (prime-factors-of n)
+    (for/list ([i (in-range 2 (add1 n))])
+      (if (prime? i)
+          (if (zero? (modulo n i)) i))))
+  (define (factorize-helper n)
+    (if (prime? n) (list n)
+        (for/list ([i (in-range 2 (add1 n))])
+          (if (prime? i)
+              (if (zero? (modulo n i))
+                  (append (list i) (factorize-helper (quotient n i))))))))
+  (factorize-helper n))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate factorize))
+    (check-equal? (candidate 2) (list 2))
+    (check-equal? (candidate 4) (list 2 2))
+    (check-equal? (candidate 8) (list 2 2 2))
+    (check-equal? (candidate 57) (list 3 19))
+    (check-equal? (candidate 3249) (list 3 3 19 19))
+    (check-equal? (candidate 185193) (list 3 3 3 19 19 19))
+    (check-equal? (candidate 20577) (list 3 19 19 19))
+    (check-equal? (candidate 18) (list 2 3 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpk4_ag41n.rkt:15:6: if: missing an "else" expression
+  in: (if (zero? (modulo n i)) i)
+  location...:
+   /tmp/tmpk4_ag41n.rkt:15:6
+
+==========================
+------- Program HumanEval_75_is_multiply_prime --------
+#lang racket
+
+;; Write a function that returns true if the given number is the multiplication of 3 prime numbers
+;; and false otherwise.
+;; Knowing that (a) is less then 100. 
+;; Example:
+;; >>> (is_multiply_prime 30)
+;; #t
+;; 30 = 2 * 3 * 5
+(define (is_multiply_prime a)
+  (define (is_prime a)
+    (define (divisors a)
+      (for/list ([i (in-range 1 (+ 1 (quotient a 2)))])
+        (if (zero? (modulo a i)) i)))
+    (cond [(= 1 (length (divisors a))) #t]
+          [else #f]))
+  (define (prime_factors a)
+    (for/list ([i (in-range 1 (+ 1 (quotient a 2)))])
+      (if (and (is_prime i) (zero? (modulo a i))) i)))
+  (cond [(= 3 (length (prime_factors a))) #t]
+        [else #f]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate is_multiply_prime))
+    (check-equal? (candidate 5) #f)
+    (check-equal? (candidate 30) #t)
+    (check-equal? (candidate 8) #t)
+    (check-equal? (candidate 10) #f)
+    (check-equal? (candidate 125) #t)
+    (check-equal? (candidate 105) #t)
+    (check-equal? (candidate 126) #f)
+    (check-equal? (candidate 729) #f)
+    (check-equal? (candidate 891) #f)
+    (check-equal? (candidate 1001) #t)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpkew3xfzq.rkt:14:8: if: missing an "else" expression
+  in: (if (zero? (modulo a i)) i)
+  location...:
+   /tmp/tmpkew3xfzq.rkt:14:8
+
+==========================
+------- Program HumanEval_41_car_race_collision --------
+#lang racket
+
+;; Imagine a road that's a perfectly straight infinitely long line.
+;; n cars are driving left to right;  simultaneously, a different set of n cars
+;; are driving right to left.   The two sets of cars start out being very far from
+;; each other.  All cars move in the same speed.  Two cars are said to collide
+;; when a car that's moving left to right hits a car that's moving right to left.
+;; However, the cars are infinitely sturdy and strong; as a result, they continue moving
+;; in their trajectory as if they did not collide.
+;; This function outputs the number of such collisions.
+(define (car_race_collision n)
+  (letrec ([cars (build-list n (λ (i) (cons (random) (random))))]
+           [collisions (build-list n (λ (i) 0))])
+    (for ([i (in-range n)])
+      (for ([j (in-range n)])
+        (if (and (not (= i j))
+                 (and (< (car (list-ref cars i)) (car (list-ref cars j)))
+                      (> (cdr (list-ref cars i)) (cdr (list-ref cars j)))))
+            (set! (list-ref collisions i) (+ 1 (list-ref collisions i))))))
+    (for ([i (in-range n)])
+      (printf "Car ~a collided ~a times.\n" i (list-ref collisions i)))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate car_race_collision))
+    (check-equal? (candidate 2) 4)
+    (check-equal? (candidate 3) 9)
+    (check-equal? (candidate 4) 16)
+    (check-equal? (candidate 8) 64)
+    (check-equal? (candidate 10) 100)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpnsend_pp.rkt:16:8: if: missing an "else" expression
+  in: (if (and (not (= i j)) (and (< (car (list-ref cars i)) (car (list-ref cars j))) (> (cdr (list-ref cars i)) (cdr (list-ref cars j))))) (set! (list-ref collisions i) (+ 1 (list-ref collisions i))))
+  location...:
+   /tmp/tmpnsend_pp.rkt:16:8
+
+==========================
+------- Program HumanEval_153_Strongest_Extension --------
+#lang racket
+
+;; You will be given the name of a class (a string) and a list of extensions.
+;; The extensions are to be used to load additional classes to the class. The
+;; strength of the extension is as follows: Let CAP be the number of the uppercase
+;; letters in the extension's name, and let SM be the number of lowercase letters 
+;; in the extension's name, the strength is given by the fraction CAP - SM. 
+;; You should find the strongest extension and return a string in this 
+;; format: ClassName.StrongestExtensionName.
+;; If there are two or more extensions with the same strength, you should
+;; choose the one that comes first in the list.
+;; For example, if you are given "Slices" as the class and a list of the
+;; extensions: ['SErviNGSliCes', 'Cheese', 'StuFfed'] then you should
+;; return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
+;; (its strength is -1).
+;; Example:
+;; >>> (Strongest_Extension "my_class" (list "AA" "Be" "CC"))
+;; "my_class.AA"
+(define (Strongest_Extension class_name extensions)
+  (define (strength ext)
+    (let* ([caps (for/list ([c (in-string ext)])
+                   (if (char-upper-case? c) c))]
+           [smalls (for/list ([c (in-string ext)])
+                     (if (char-lower-case? c) c))])
+      (- (length caps) (length smalls))))
+  (define (strongest_extension_name extensions)
+    (define (strongest_extension_name_helper extensions strongest_extension_name strongest_extension_strength)
+      (cond
+        [(empty? extensions) strongest_extension_name]
+        [(> (strength (first extensions)) strongest_extension_strength)
+         (strongest_extension_name_helper (rest extensions) (first extensions) (strength (first extensions)))]
+        [else (strongest_extension_name_helper (rest extensions) strongest_extension_name strongest_extension_strength)]))
+    (strongest_extension_name_helper extensions (first extensions) (strength (first extensions))))
+  (string-append class_name "." (strongest_extension_name extensions)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate Strongest_Extension))
+    (check-equal? (candidate "Watashi" (list "tEN" "niNE" "eIGHt8OKe")) "Watashi.eIGHt8OKe")
+    (check-equal? (candidate "Boku123" (list "nani" "NazeDa" "YEs.WeCaNe" "32145tggg")) "Boku123.YEs.WeCaNe")
+    (check-equal? (candidate "__YESIMHERE" (list "t" "eMptY" "nothing" "zeR00" "NuLl__" "123NoooneB321")) "__YESIMHERE.NuLl__")
+    (check-equal? (candidate "K" (list "Ta" "TAR" "t234An" "cosSo")) "K.TAR")
+    (check-equal? (candidate "__HAHA" (list "Tab" "123" "781345" "-_-")) "__HAHA.123")
+    (check-equal? (candidate "YameRore" (list "HhAas" "okIWILL123" "WorkOut" "Fails" "-_-")) "YameRore.okIWILL123")
+    (check-equal? (candidate "finNNalLLly" (list "Die" "NowW" "Wow" "WoW")) "finNNalLLly.WoW")
+    (check-equal? (candidate "_" (list "Bb" "91245")) "_.Bb")
+    (check-equal? (candidate "Sp" (list "671235" "Bb")) "Sp.671235")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpoopdakfu.rkt:22:19: if: missing an "else" expression
+  in: (if (char-upper-case? c) c)
+  location...:
+   /tmp/tmpoopdakfu.rkt:22:19
+
+==========================
+------- Program HumanEval_20_find_closest_elements --------
+#lang racket
+
+;; From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+;; other and return them in order (smaller number, larger number).
+;; >>> (find_closest_elements (list 1.0 2.0 3.0 4.0 5.0 2.2))
+;; (list 2.0 2.2)
+;; >>> (find_closest_elements (list 1.0 2.0 3.0 4.0 5.0 2.0))
+;; (list 2.0 2.0)
+(define (find_closest_elements numbers)
+  (cond
+    [(empty? numbers) empty]
+    [(empty? (rest numbers)) empty]
+    [else
+     (let* ([closest-pair (list (first numbers) (first (rest numbers)))]
+            [closest-distance (abs (- (first numbers) (first (rest numbers))))])
+       (for ([n (in-list (rest (rest numbers)))])
+         (let* ([distance (abs (- (first numbers) n))])
+           (if (< distance closest-distance)
+               (begin
+                 (set! closest-pair (list (first numbers) n))
+                 (set! closest-distance distance))))
+         (set! numbers (rest numbers))))
+     (sort closest-pair <)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate find_closest_elements))
+    (check-equal? (candidate (list 1.0 2.0 3.9 4.0 5.0 2.2)) (list 3.9 4.0))
+    (check-equal? (candidate (list 1.0 2.0 5.9 4.0 5.0)) (list 5.0 5.9))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.2)) (list 2.0 2.2))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.0)) (list 2.0 2.0))
+    (check-equal? (candidate (list 1.1 2.2 3.1 4.1 5.1)) (list 2.2 3.1))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpp0_ty054.rkt:18:11: if: missing an "else" expression
+  in: (if (< distance closest-distance) (begin (set! closest-pair (list (first numbers) n)) (set! closest-distance distance)))
+  location...:
+   /tmp/tmpp0_ty054.rkt:18:11
+
+==========================
+------- Program HumanEval_129_minPath --------
+#lang racket
+
+;; Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+;; each cell of the grid contains a value. Every integer in the range [1, N * N]
+;; inclusive appears exactly once on the cells of the grid.
+;; You have to find the minimum path of length k in the grid. You can start
+;; from any cell, and in each step you can move to any of the neighbor cells,
+;; in other words, you can go to cells which share an edge with you current
+;; cell.
+;; Please note that a path of length k means visiting exactly k cells (not
+;; necessarily distinct).
+;; You CANNOT go off the grid.
+;; A path A (of length k) is considered less than a path B (of length k) if
+;; after making the ordered lists of the values on the cells that A and B go
+;; through (let's call them lst_A and lst_B), lst_A is lexicographically less
+;; than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+;; such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+;; lst_A[j] = lst_B[j].
+;; It is guaranteed that the answer is unique.
+;; Return an ordered list of the values on the cells that the minimum path go through.
+;; Examples:    
+;; >>> (minPath (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3)
+;; (list 1 2 1)
+;; >>> (minPath (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1)
+;; (list 1)
+(define (minPath grid k)
+  (define (get-cell x y)
+    (list-ref (list-ref grid y) x))
+  (define (get-neighbors x y)
+    (define (get-neighbor x y)
+      (cond
+        [(= x 0) (list (get-cell (+ x 1) y))]
+        [(= x (- (length grid) 1)) (list (get-cell (- x 1) y))]
+        [(= y 0) (list (get-cell x (+ y 1)))]
+        [(= y (- (length grid) 1)) (list (get-cell x (- y 1)))]
+        [else (list (get-cell x (+ y 1)) (get-cell x (- y 1)) (get-cell (+ x 1) y) (get-cell (- x 1) y))]))
+    (get-neighbor x y))
+  (define (get-min-path x y k)
+    (cond
+      [(= k 0) (list (get-cell x y))]
+      [else (let ([min-path (list (get-cell x y))])
+              (for ([neighbor (get-neighbors x y)])
+                (let ([path (get-min-path (car neighbor) (cadr neighbor) (- k 1))])
+                  (if (or (empty? min-path) (lexicographic-less? path min-path))
+                      (set! min-path path))))
+              min-path)]))
+  (get-min-path 0 0 k))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minPath))
+    (check-equal? (candidate (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3) (list 1 2 1))
+    (check-equal? (candidate (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1) (list 1))
+    (check-equal? (candidate (list (list 1 2 3 4) (list 5 6 7 8) (list 9 10 11 12) (list 13 14 15 16)) 4) (list 1 2 1 2))
+    (check-equal? (candidate (list (list 6 4 13 10) (list 5 7 12 1) (list 3 16 11 15) (list 8 14 9 2)) 7) (list 1 10 1 10 1 10 1))
+    (check-equal? (candidate (list (list 8 14 9 2) (list 6 4 13 15) (list 5 7 1 12) (list 3 10 11 16)) 5) (list 1 7 1 7 1))
+    (check-equal? (candidate (list (list 11 8 7 2) (list 5 16 14 4) (list 9 3 15 6) (list 12 13 10 1)) 9) (list 1 6 1 6 1 6 1 6 1))
+    (check-equal? (candidate (list (list 12 13 10 1) (list 9 3 15 6) (list 5 16 14 4) (list 11 8 7 2)) 12) (list 1 6 1 6 1 6 1 6 1 6 1 6))
+    (check-equal? (candidate (list (list 2 7 4) (list 3 1 5) (list 6 8 9)) 8) (list 1 3 1 3 1 3 1 3))
+    (check-equal? (candidate (list (list 6 1 5) (list 3 8 9) (list 2 7 4)) 8) (list 1 5 1 5 1 5 1 5))
+    (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1 2 1 2))
+    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1 3 1 3 1 3 1 3 1 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpqa2zwgec.rkt:44:18: if: missing an "else" expression
+  in: (if (or (empty? min-path) (lexicographic-less? path min-path)) (set! min-path path))
+  location...:
+   /tmp/tmpqa2zwgec.rkt:44:18
+
+==========================
+------- Program HumanEval_129_minPath --------
+#lang racket
+
+;; Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+;; each cell of the grid contains a value. Every integer in the range [1, N * N]
+;; inclusive appears exactly once on the cells of the grid.
+;; You have to find the minimum path of length k in the grid. You can start
+;; from any cell, and in each step you can move to any of the neighbor cells,
+;; in other words, you can go to cells which share an edge with you current
+;; cell.
+;; Please note that a path of length k means visiting exactly k cells (not
+;; necessarily distinct).
+;; You CANNOT go off the grid.
+;; A path A (of length k) is considered less than a path B (of length k) if
+;; after making the ordered lists of the values on the cells that A and B go
+;; through (let's call them lst_A and lst_B), lst_A is lexicographically less
+;; than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+;; such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+;; lst_A[j] = lst_B[j].
+;; It is guaranteed that the answer is unique.
+;; Return an ordered list of the values on the cells that the minimum path go through.
+;; Examples:    
+;; >>> (minPath (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3)
+;; (list 1 2 1)
+;; >>> (minPath (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1)
+;; (list 1)
+(define (minPath grid k)
+  (define (get-neighbors i j)
+    (define (get-neighbor-if-valid i j)
+      (if (and (<= 0 i (- (length grid) 1)) (<= 0 j (- (length (car grid)) 1)))
+          (list (list i j))
+          '()))
+    (append (get-neighbor-if-valid (- i 1) j)
+            (get-neighbor-if-valid (+ i 1) j)
+            (get-neighbor-if-valid i (- j 1))
+            (get-neighbor-if-valid i (+ j 1))))
+  (define (get-paths i j k)
+    (if (= k 0)
+        (list (list (list-ref (list-ref grid i) j)))
+        (for/list ([neighbor (in-list (get-neighbors i j))])
+          (for/list ([path (in-list (get-paths (car neighbor) (cadr neighbor) (- k 1)))])
+            (cons (list-ref (list-ref grid i) j) path)))))
+  (define (get-min-path paths)
+    (if (= (length paths) 1)
+        (car paths)
+        (let ([min-path (car paths)])
+          (for ([path (in-list (cdr paths))])
+            (if (for/and ([i (in-range (length min-path))])
+                         (and (< (list-ref min-path i) (list-ref path i))
+                              (= (list-ref min-path i) (list-ref path i))))
+                (set! min-path path)))
+          min-path)))
+  (get-min-path (apply append (for/list ([i (in-range (length grid))])
+                                        (for/list ([j (in-range (length (car grid)))])
+                                          (get-paths i j k))))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minPath))
+    (check-equal? (candidate (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3) (list 1 2 1))
+    (check-equal? (candidate (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1) (list 1))
+    (check-equal? (candidate (list (list 1 2 3 4) (list 5 6 7 8) (list 9 10 11 12) (list 13 14 15 16)) 4) (list 1 2 1 2))
+    (check-equal? (candidate (list (list 6 4 13 10) (list 5 7 12 1) (list 3 16 11 15) (list 8 14 9 2)) 7) (list 1 10 1 10 1 10 1))
+    (check-equal? (candidate (list (list 8 14 9 2) (list 6 4 13 15) (list 5 7 1 12) (list 3 10 11 16)) 5) (list 1 7 1 7 1))
+    (check-equal? (candidate (list (list 11 8 7 2) (list 5 16 14 4) (list 9 3 15 6) (list 12 13 10 1)) 9) (list 1 6 1 6 1 6 1 6 1))
+    (check-equal? (candidate (list (list 12 13 10 1) (list 9 3 15 6) (list 5 16 14 4) (list 11 8 7 2)) 12) (list 1 6 1 6 1 6 1 6 1 6 1 6))
+    (check-equal? (candidate (list (list 2 7 4) (list 3 1 5) (list 6 8 9)) 8) (list 1 3 1 3 1 3 1 3))
+    (check-equal? (candidate (list (list 6 1 5) (list 3 8 9) (list 2 7 4)) 8) (list 1 5 1 5 1 5 1 5))
+    (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1 2 1 2))
+    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1 3 1 3 1 3 1 3 1 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpr6ks23ph.rkt:47:12: if: missing an "else" expression
+  in: (if (for/and ((i (in-range (length min-path)))) (and (< (list-ref min-path i) (list-ref path i)) (= (list-ref min-path i) (list-ref path i)))) (set! min-path path))
+  location...:
+   /tmp/tmpr6ks23ph.rkt:47:12
+
+==========================
+------- Program HumanEval_111_histogram --------
+#lang racket
+
+;; Given a string representing a space separated lowercase letters, return a hash
+;; of the letter with the most repetition and containing the corresponding count.
+;; If several letters have the same occurrence, return all of them.
+;; Example:
+;; >>> (histogram "a b c")
+;; #hash(("a" .  1) ("b" .  1) ("c" .  1))
+;; >>> (histogram "a b b a")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "a b c a b")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "b b b b a")
+;; #hash(("b" .  4))
+;; >>> (histogram "")
+;; #hash()
+(define (histogram test)
+  (define (histogram-helper test count)
+    (if (empty? test)
+        count
+        (let ([letter (first test)]
+              [rest (rest test)])
+          (if (hash-has-key? count letter)
+              (hash-update! count letter add1)
+              (hash-set! count letter 1))
+          (histogram-helper rest count))))
+  (define (get-max-count count)
+    (let ([max-count (hash-ref count (first (hash-keys count)))]
+          [max-count-keys (list (first (hash-keys count)))])
+      (for ([key (in-hash count)])
+        (if (> (hash-ref count key) max-count)
+            (begin
+              (set! max-count (hash-ref count key))
+              (set! max-count-keys (list key)))))
+      (for ([key (in-hash count)])
+        (if (= (hash-ref count key) max-count)
+            (set! max-count-keys (append max-count-keys (list key)))))
+      max-count-keys))
+  (define (get-max-count-hash count max-count-keys)
+    (let ([max-count-hash (make-hash)])
+      (for ([key (in-list max-count-keys)])
+        (hash-set! max-count-hash key (hash-ref count key)))
+      max-count-hash))
+  (get-max-count-hash (histogram-helper test (make-hash)) (get-max-count (histogram-helper test (make-hash)))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate histogram))
+    (check-equal? (candidate "a b b a") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c a b") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c d g") #hash(("a" .  1) ("b" .  1) ("c" .  1) ("d" .  1) ("g" .  1)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "b b b b a") #hash(("b" .  4)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "") #hash())
+    (check-equal? (candidate "a") #hash(("a" .  1)))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpr6y65nrz.rkt:31:8: if: missing an "else" expression
+  in: (if (> (hash-ref count key) max-count) (begin (set! max-count (hash-ref count key)) (set! max-count-keys (list key))))
+  location...:
+   /tmp/tmpr6y65nrz.rkt:31:8
+
+==========================
+------- Program HumanEval_153_Strongest_Extension --------
+#lang racket
+
+;; You will be given the name of a class (a string) and a list of extensions.
+;; The extensions are to be used to load additional classes to the class. The
+;; strength of the extension is as follows: Let CAP be the number of the uppercase
+;; letters in the extension's name, and let SM be the number of lowercase letters 
+;; in the extension's name, the strength is given by the fraction CAP - SM. 
+;; You should find the strongest extension and return a string in this 
+;; format: ClassName.StrongestExtensionName.
+;; If there are two or more extensions with the same strength, you should
+;; choose the one that comes first in the list.
+;; For example, if you are given "Slices" as the class and a list of the
+;; extensions: ['SErviNGSliCes', 'Cheese', 'StuFfed'] then you should
+;; return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
+;; (its strength is -1).
+;; Example:
+;; >>> (Strongest_Extension "my_class" (list "AA" "Be" "CC"))
+;; "my_class.AA"
+(define (Strongest_Extension class_name extensions)
+  (define (strength extension)
+    (define (count-upper str)
+      (if (empty? str)
+          0
+          (if (char-upper-case? (first str))
+              (+ 1 (count-upper (rest str)))
+              (count-upper (rest str)))))
+    (define (count-lower str)
+      (if (empty? str)
+          0
+          (if (char-lower-case? (first str))
+              (+ 1 (count-lower (rest str)))
+              (count-lower (rest str)))))
+    (- (count-upper extension) (count-lower extension)))
+  (define (find-strongest extensions)
+    (if (empty? extensions)
+        ""
+        (let ((strongest (first extensions)))
+          (for ([ext (in-list extensions)])
+            (if (< (strength ext) (strength strongest))
+                (set! strongest ext)))
+          strongest)))
+  (string-append class_name "." (find-strongest extensions)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate Strongest_Extension))
+    (check-equal? (candidate "Watashi" (list "tEN" "niNE" "eIGHt8OKe")) "Watashi.eIGHt8OKe")
+    (check-equal? (candidate "Boku123" (list "nani" "NazeDa" "YEs.WeCaNe" "32145tggg")) "Boku123.YEs.WeCaNe")
+    (check-equal? (candidate "__YESIMHERE" (list "t" "eMptY" "nothing" "zeR00" "NuLl__" "123NoooneB321")) "__YESIMHERE.NuLl__")
+    (check-equal? (candidate "K" (list "Ta" "TAR" "t234An" "cosSo")) "K.TAR")
+    (check-equal? (candidate "__HAHA" (list "Tab" "123" "781345" "-_-")) "__HAHA.123")
+    (check-equal? (candidate "YameRore" (list "HhAas" "okIWILL123" "WorkOut" "Fails" "-_-")) "YameRore.okIWILL123")
+    (check-equal? (candidate "finNNalLLly" (list "Die" "NowW" "Wow" "WoW")) "finNNalLLly.WoW")
+    (check-equal? (candidate "_" (list "Bb" "91245")) "_.Bb")
+    (check-equal? (candidate "Sp" (list "671235" "Bb")) "Sp.671235")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmprhkemb0u.rkt:39:12: if: missing an "else" expression
+  in: (if (< (strength ext) (strength strongest)) (set! strongest ext))
+  location...:
+   /tmp/tmprhkemb0u.rkt:39:12
+
+==========================
+------- Program HumanEval_129_minPath --------
+#lang racket
+
+;; Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+;; each cell of the grid contains a value. Every integer in the range [1, N * N]
+;; inclusive appears exactly once on the cells of the grid.
+;; You have to find the minimum path of length k in the grid. You can start
+;; from any cell, and in each step you can move to any of the neighbor cells,
+;; in other words, you can go to cells which share an edge with you current
+;; cell.
+;; Please note that a path of length k means visiting exactly k cells (not
+;; necessarily distinct).
+;; You CANNOT go off the grid.
+;; A path A (of length k) is considered less than a path B (of length k) if
+;; after making the ordered lists of the values on the cells that A and B go
+;; through (let's call them lst_A and lst_B), lst_A is lexicographically less
+;; than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+;; such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+;; lst_A[j] = lst_B[j].
+;; It is guaranteed that the answer is unique.
+;; Return an ordered list of the values on the cells that the minimum path go through.
+;; Examples:    
+;; >>> (minPath (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3)
+;; (list 1 2 1)
+;; >>> (minPath (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1)
+;; (list 1)
+(define (minPath grid k)
+  (define (minPath-helper grid k)
+    (cond ((= k 0) (list))
+          ((= k 1) (list (car (car grid))))
+          (else (let ((min-path (list)))
+                  (for ((row (in-list grid)))
+                    (for ((col (in-list row)))
+                      (let ((path (minPath-helper grid (- k 1))))
+                        (if (and (not (empty? path))
+                                 (or (empty? min-path)
+                                     (lexicographic-less? (cons col path) min-path)))
+                            (set! min-path (cons col path))))))
+                  min-path))))
+  (minPath-helper grid k))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minPath))
+    (check-equal? (candidate (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3) (list 1 2 1))
+    (check-equal? (candidate (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1) (list 1))
+    (check-equal? (candidate (list (list 1 2 3 4) (list 5 6 7 8) (list 9 10 11 12) (list 13 14 15 16)) 4) (list 1 2 1 2))
+    (check-equal? (candidate (list (list 6 4 13 10) (list 5 7 12 1) (list 3 16 11 15) (list 8 14 9 2)) 7) (list 1 10 1 10 1 10 1))
+    (check-equal? (candidate (list (list 8 14 9 2) (list 6 4 13 15) (list 5 7 1 12) (list 3 10 11 16)) 5) (list 1 7 1 7 1))
+    (check-equal? (candidate (list (list 11 8 7 2) (list 5 16 14 4) (list 9 3 15 6) (list 12 13 10 1)) 9) (list 1 6 1 6 1 6 1 6 1))
+    (check-equal? (candidate (list (list 12 13 10 1) (list 9 3 15 6) (list 5 16 14 4) (list 11 8 7 2)) 12) (list 1 6 1 6 1 6 1 6 1 6 1 6))
+    (check-equal? (candidate (list (list 2 7 4) (list 3 1 5) (list 6 8 9)) 8) (list 1 3 1 3 1 3 1 3))
+    (check-equal? (candidate (list (list 6 1 5) (list 3 8 9) (list 2 7 4)) 8) (list 1 5 1 5 1 5 1 5))
+    (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1 2 1 2))
+    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1 3 1 3 1 3 1 3 1 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmprkke2eey.rkt:34:24: if: missing an "else" expression
+  in: (if (and (not (empty? path)) (or (empty? min-path) (lexicographic-less? (cons col path) min-path))) (set! min-path (cons col path)))
+  location...:
+   /tmp/tmprkke2eey.rkt:34:24
+
+==========================
+------- Program HumanEval_113_odd_count --------
+#lang racket
+
+;; Given a list of strings, where each string consists of only digits, return a list.
+;; Each element i of the output should be "the number of odd elements in the
+;; string i of the input." where all the i's should be replaced by the number
+;; of odd digits in the i'th string of the input.
+;; >>> (odd_count (list "1234567"))
+;; (list "the number of odd elements 4n the str4ng 4 of the 4nput.")
+;; >>> (odd_count (list "3" "11111111"))
+;; (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput.")
+(define (odd_count lst)
+  (map (lambda (str)
+         (let ((count 0))
+           (for ((c (string->list str)))
+             (if (odd? (string->number (string c)))
+                 (set! count (+ count 1))))
+           (string-replace (string-replace (string-replace (string-replace (string-replace "the number of odd elements in the string of the input." "in" "n") "string" (number->string count)) "of" "f") "the" (number->string count)) "input" (number->string count))))
+       lst))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate odd_count))
+    (check-equal? (candidate (list "1234567")) (list "the number of odd elements 4n the str4ng 4 of the 4nput."))
+    (check-equal? (candidate (list "3" "11111111")) (list "the number of odd elements 1n the str1ng 1 of the 1nput." "the number of odd elements 8n the str8ng 8 of the 8nput."))
+    (check-equal? (candidate (list "271" "137" "314")) (list "the number of odd elements 2n the str2ng 2 of the 2nput." "the number of odd elements 3n the str3ng 3 of the 3nput." "the number of odd elements 2n the str2ng 2 of the 2nput."))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmps4yrwi8w.rkt:15:13: if: missing an "else" expression
+  in: (if (odd? (string->number (string c))) (set! count (+ count 1)))
+  location...:
+   /tmp/tmps4yrwi8w.rkt:15:13
+
+==========================
+------- Program HumanEval_143_words_in_sentence --------
+#lang racket
+
+;; You are given a string representing a sentence,
+;; the sentence contains some words separated by a space,
+;; and you have to return a string that contains the words from the original sentence,
+;; whose lengths are prime numbers,
+;; the order of the words in the new string should be the same as the original one.
+;; Example 1:
+;; >>> (words_in_sentence "This is a test")
+;; "is"
+;; Example 2:
+;; >>> (words_in_sentence "lets go for swimming")
+;; "go for"
+;; Constraints:
+;; * 1 <= len(sentence) <= 100
+;; * sentence contains only letters
+(define (words_in_sentence sentence)
+  (define (is-prime? n)
+    (define (divisors n)
+      (for/list ([i (in-range 1 (add1 (quotient n 2)))])
+        (if (zero? (modulo n i)) i)))
+    (empty? (divisors n)))
+  (define (word-lengths sentence)
+    (map string-length (string-split sentence #\space)))
+  (define (prime-word-lengths sentence)
+    (filter is-prime? (word-lengths sentence)))
+  (define (prime-words sentence)
+    (define (prime-words-helper sentence word-lengths)
+      (cond [(empty? word-lengths) '()]
+            [(is-prime? (car word-lengths))
+             (cons (car sentence) (prime-words-helper (cdr sentence) (cdr word-lengths)))]
+            [else (prime-words-helper (cdr sentence) (cdr word-lengths))]))
+    (prime-words-helper (string-split sentence #\space) (word-lengths sentence)))
+  (string-join (prime-words sentence) #\space))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate words_in_sentence))
+    (check-equal? (candidate "This is a test") "is")
+    (check-equal? (candidate "lets go for swimming") "go for")
+    (check-equal? (candidate "there is no place available here") "there is no place")
+    (check-equal? (candidate "Hi I am Hussein") "Hi am Hussein")
+    (check-equal? (candidate "go for it") "go for it")
+    (check-equal? (candidate "here") "")
+    (check-equal? (candidate "here is") "is")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpskp1dwk0.rkt:21:8: if: missing an "else" expression
+  in: (if (zero? (modulo n i)) i)
+  location...:
+   /tmp/tmpskp1dwk0.rkt:21:8
+
+==========================
+------- Program HumanEval_96_count_up_to --------
+#lang racket
+
+;; Implement a function that takes an non-negative integer and returns a list of the first n
+;; integers that are prime numbers and less than n.
+;; for example:
+;; >>> (count_up_to 5)
+;; (list 2 3)
+;; >>> (count_up_to 11)
+;; (list 2 3 5 7)
+;; >>> (count_up_to 0)
+;; (list )
+;; >>> (count_up_to 20)
+;; (list 2 3 5 7 11 13 17 19)
+;; >>> (count_up_to 1)
+;; (list )
+;; >>> (count_up_to 18)
+;; (list 2 3 5 7 11 13 17)
+(define (count_up_to n)
+  (define (is_prime? n)
+    (define (divisors n)
+      (for/list ([i (in-range 2 n)])
+        (if (zero? (modulo n i)) i)))
+    (empty? (divisors n)))
+  (define (primes n)
+    (for/list ([i (in-range 2 n)])
+      (if (is_prime? i) i)))
+  (primes n))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate count_up_to))
+    (check-equal? (candidate 5) (list 2 3))
+    (check-equal? (candidate 6) (list 2 3 5))
+    (check-equal? (candidate 7) (list 2 3 5))
+    (check-equal? (candidate 10) (list 2 3 5 7))
+    (check-equal? (candidate 0) (list ))
+    (check-equal? (candidate 22) (list 2 3 5 7 11 13 17 19))
+    (check-equal? (candidate 1) (list ))
+    (check-equal? (candidate 18) (list 2 3 5 7 11 13 17))
+    (check-equal? (candidate 47) (list 2 3 5 7 11 13 17 19 23 29 31 37 41 43))
+    (check-equal? (candidate 101) (list 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpslx21k8s.rkt:22:8: if: missing an "else" expression
+  in: (if (zero? (modulo n i)) i)
+  location...:
+   /tmp/tmpslx21k8s.rkt:22:8
+
+==========================
+------- Program HumanEval_20_find_closest_elements --------
+#lang racket
+
+;; From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+;; other and return them in order (smaller number, larger number).
+;; >>> (find_closest_elements (list 1.0 2.0 3.0 4.0 5.0 2.2))
+;; (list 2.0 2.2)
+;; >>> (find_closest_elements (list 1.0 2.0 3.0 4.0 5.0 2.0))
+;; (list 2.0 2.0)
+(define (find_closest_elements numbers)
+  (let ((closest-elements (list (car numbers) (cadr numbers))))
+    (for ((i 1) (numbers (cdr numbers)))
+      (for ((j 0) (numbers (cdr numbers)))
+        (let ((distance (abs (- (car numbers) (car (cdr numbers))))))
+          (if (< distance (abs (- (car closest-elements) (cadr closest-elements))))
+              (set! closest-elements (list (car numbers) (car (cdr numbers))))))))
+    closest-elements))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate find_closest_elements))
+    (check-equal? (candidate (list 1.0 2.0 3.9 4.0 5.0 2.2)) (list 3.9 4.0))
+    (check-equal? (candidate (list 1.0 2.0 5.9 4.0 5.0)) (list 5.0 5.9))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.2)) (list 2.0 2.2))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.0)) (list 2.0 2.0))
+    (check-equal? (candidate (list 1.1 2.2 3.1 4.1 5.1)) (list 2.2 3.1))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpu__khvgc.rkt:14:10: if: missing an "else" expression
+  in: (if (< distance (abs (- (car closest-elements) (cadr closest-elements)))) (set! closest-elements (list (car numbers) (car (cdr numbers)))))
+  location...:
+   /tmp/tmpu__khvgc.rkt:14:10
+
+==========================
+------- Program HumanEval_94_skjkasdkd --------
+#lang racket
+
+;; You are given a list of integers.
+;; You need to find the largest prime value and return the sum of its digits.
+;; Examples:
+;; >>> (skjkasdkd (list 0 3 2 1 3 5 7 4 5 5 5 2 181 32 4 32 3 2 32 324 4 3))
+;; 10
+;; >>> (skjkasdkd (list 1 0 1 8 2 4597 2 1 3 40 1 2 1 2 4 2 5 1))
+;; 25
+;; >>> (skjkasdkd (list 1 3 1 32 5107 34 83278 109 163 23 2323 32 30 1 9 3))
+;; 13
+;; >>> (skjkasdkd (list 0 724 32 71 99 32 6 0 5 91 83 0 5 6))
+;; 11
+;; >>> (skjkasdkd (list 0 81 12 3 1 21))
+;; 3
+;; >>> (skjkasdkd (list 0 8 1 2 1 7))
+;; 7
+(define (skjkasdkd lst)
+  (define (is-prime? n)
+    (define (divisors n)
+      (for/list ([i (in-range 1 (add1 (quotient n 2)))])
+        (if (zero? (modulo n i)) i)))
+    (null? (divisors n)))
+  (define (digits n)
+    (if (zero? n) '()
+        (cons (remainder n 10) (digits (quotient n 10)))))
+  (define (sum-digits lst)
+    (if (null? lst) 0
+        (+ (car lst) (sum-digits (cdr lst)))))
+  (sum-digits (digits (apply max (filter is-prime? lst)))))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate skjkasdkd))
+    (check-equal? (candidate (list 0 3 2 1 3 5 7 4 5 5 5 2 181 32 4 32 3 2 32 324 4 3)) 10)
+    (check-equal? (candidate (list 1 0 1 8 2 4597 2 1 3 40 1 2 1 2 4 2 5 1)) 25)
+    (check-equal? (candidate (list 1 3 1 32 5107 34 83278 109 163 23 2323 32 30 1 9 3)) 13)
+    (check-equal? (candidate (list 0 724 32 71 99 32 6 0 5 91 83 0 5 6)) 11)
+    (check-equal? (candidate (list 0 81 12 3 1 21)) 3)
+    (check-equal? (candidate (list 0 8 1 2 1 7)) 7)
+    (check-equal? (candidate (list 8191)) 19)
+    (check-equal? (candidate (list 8191 123456 127 7)) 19)
+    (check-equal? (candidate (list 127 97 8192)) 10)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpugaj8qy_.rkt:22:8: if: missing an "else" expression
+  in: (if (zero? (modulo n i)) i)
+  location...:
+   /tmp/tmpugaj8qy_.rkt:22:8
+
+==========================
+------- Program HumanEval_20_find_closest_elements --------
+#lang racket
+
+;; From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+;; other and return them in order (smaller number, larger number).
+;; >>> (find_closest_elements (list 1.0 2.0 3.0 4.0 5.0 2.2))
+;; (list 2.0 2.2)
+;; >>> (find_closest_elements (list 1.0 2.0 3.0 4.0 5.0 2.0))
+;; (list 2.0 2.0)
+(define (find_closest_elements numbers)
+  (let ((closest-pair (list (car numbers) (cadr numbers))))
+    (for ([i (in-range (length numbers))])
+      (for ([j (in-range (add1 i))])
+        (let* ([a (list-ref numbers i)]
+               [b (list-ref numbers j)]
+               [distance (abs (- a b))])
+          (if (< distance (abs (- (car closest-pair) (cadr closest-pair))))
+              (set! closest-pair (list a b))))))
+    closest-pair))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate find_closest_elements))
+    (check-equal? (candidate (list 1.0 2.0 3.9 4.0 5.0 2.2)) (list 3.9 4.0))
+    (check-equal? (candidate (list 1.0 2.0 5.9 4.0 5.0)) (list 5.0 5.9))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.2)) (list 2.0 2.2))
+    (check-equal? (candidate (list 1.0 2.0 3.0 4.0 5.0 2.0)) (list 2.0 2.0))
+    (check-equal? (candidate (list 1.1 2.2 3.1 4.1 5.1)) (list 2.2 3.1))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpuvoiyf56.rkt:16:10: if: missing an "else" expression
+  in: (if (< distance (abs (- (car closest-pair) (cadr closest-pair)))) (set! closest-pair (list a b)))
+  location...:
+   /tmp/tmpuvoiyf56.rkt:16:10
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-strings (rest strings)])
+       (for ([s rest-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpwk06m751.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpwk06m751.rkt:19:9
+
+==========================
+------- Program HumanEval_111_histogram --------
+#lang racket
+
+;; Given a string representing a space separated lowercase letters, return a hash
+;; of the letter with the most repetition and containing the corresponding count.
+;; If several letters have the same occurrence, return all of them.
+;; Example:
+;; >>> (histogram "a b c")
+;; #hash(("a" .  1) ("b" .  1) ("c" .  1))
+;; >>> (histogram "a b b a")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "a b c a b")
+;; #hash(("a" .  2) ("b" .  2))
+;; >>> (histogram "b b b b a")
+;; #hash(("b" .  4))
+;; >>> (histogram "")
+;; #hash()
+(define (histogram test)
+  (define (histogram-helper test max-count max-count-letters)
+    (if (empty? test)
+        max-count-letters
+        (let* ([letter (first test)]
+               [count (hash-ref max-count-letters letter 0)])
+          (hash-set! max-count-letters letter (+ count 1))
+          (if (> count (hash-ref max-count "max" 0))
+              (hash-set! max-count "max" count))
+          (histogram-helper (rest test) max-count max-count-letters))))
+  (let* ([max-count (make-hash)]
+         [max-count-letters (make-hash)])
+    (hash-set! max-count "max" 0)
+    (histogram-helper (string-split test) max-count max-count-letters)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate histogram))
+    (check-equal? (candidate "a b b a") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c a b") #hash(("a" .  2) ("b" .  2)))
+    (check-equal? (candidate "a b c d g") #hash(("a" .  1) ("b" .  1) ("c" .  1) ("d" .  1) ("g" .  1)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "b b b b a") #hash(("b" .  4)))
+    (check-equal? (candidate "r t g") #hash(("r" .  1) ("t" .  1) ("g" .  1)))
+    (check-equal? (candidate "") #hash())
+    (check-equal? (candidate "a") #hash(("a" .  1)))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx8ty1q47.rkt:24:10: if: missing an "else" expression
+  in: (if (> count (hash-ref max-count "max" 0)) (hash-set! max-count "max" count))
+  location...:
+   /tmp/tmpx8ty1q47.rkt:24:10
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_12_longest --------
+#lang racket
+
+;; Out of list of strings, return the longest one. Return the first one in case of multiple
+;; strings of the same length. Return #f in case the input list is empty.
+;; >>> (longest (list ))
+;; #f
+;; >>> (longest (list "a" "b" "c"))
+;; "a"
+;; >>> (longest (list "a" "bb" "ccc"))
+;; "ccc"
+(define (longest strings)
+  (cond
+    [(empty? strings) #f]
+    [(empty? (rest strings)) (first strings)]
+    [else
+     (let ([longest-so-far (first strings)]
+           [rest-of-strings (rest strings)])
+       (for ([s rest-of-strings])
+         (if (> (string-length s) (string-length longest-so-far))
+             (set! longest-so-far s)))
+       longest-so-far)]))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate longest))
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list "x" "y" "z")) "x")
+    (check-equal? (candidate (list "x" "yyy" "zzzz" "www" "kkkk" "abc")) "zzzz")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpx_2n_8jj.rkt:19:9: if: missing an "else" expression
+  in: (if (> (string-length s) (string-length longest-so-far)) (set! longest-so-far s))
+  location...:
+   /tmp/tmpx_2n_8jj.rkt:19:9
+
+==========================
+------- Program HumanEval_129_minPath --------
+#lang racket
+
+;; Given a grid with N rows and N columns (N >= 2) and a positive integer k, 
+;; each cell of the grid contains a value. Every integer in the range [1, N * N]
+;; inclusive appears exactly once on the cells of the grid.
+;; You have to find the minimum path of length k in the grid. You can start
+;; from any cell, and in each step you can move to any of the neighbor cells,
+;; in other words, you can go to cells which share an edge with you current
+;; cell.
+;; Please note that a path of length k means visiting exactly k cells (not
+;; necessarily distinct).
+;; You CANNOT go off the grid.
+;; A path A (of length k) is considered less than a path B (of length k) if
+;; after making the ordered lists of the values on the cells that A and B go
+;; through (let's call them lst_A and lst_B), lst_A is lexicographically less
+;; than lst_B, in other words, there exist an integer index i (1 <= i <= k)
+;; such that lst_A[i] < lst_B[i] and for any j (1 <= j < i) we have
+;; lst_A[j] = lst_B[j].
+;; It is guaranteed that the answer is unique.
+;; Return an ordered list of the values on the cells that the minimum path go through.
+;; Examples:    
+;; >>> (minPath (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3)
+;; (list 1 2 1)
+;; >>> (minPath (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1)
+;; (list 1)
+(define (minPath grid k)
+  (define (minPath-helper grid k)
+    (if (equal? k 0)
+        (list (list (car (car grid))))
+        (let ((min-path (list (list (car (car grid)))))
+              (min-path-value (car (car grid))))
+          (for ((i (in-range (length grid)))
+                (j (in-range (length (car grid)))))
+            (let ((current-value (list-ref (list-ref grid i) j)))
+              (if (and (< current-value min-path-value)
+                       (not (equal? current-value (car (car min-path)))))
+                  (begin
+                    (set! min-path (minPath-helper (list-ref grid i) (- k 1)))
+                    (set! min-path-value (car (car min-path)))))))
+          (cons (list min-path-value) min-path))))
+  (car (minPath-helper grid k)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate minPath))
+    (check-equal? (candidate (list (list 1 2 3) (list 4 5 6) (list 7 8 9)) 3) (list 1 2 1))
+    (check-equal? (candidate (list (list 5 9 3) (list 4 1 6) (list 7 8 2)) 1) (list 1))
+    (check-equal? (candidate (list (list 1 2 3 4) (list 5 6 7 8) (list 9 10 11 12) (list 13 14 15 16)) 4) (list 1 2 1 2))
+    (check-equal? (candidate (list (list 6 4 13 10) (list 5 7 12 1) (list 3 16 11 15) (list 8 14 9 2)) 7) (list 1 10 1 10 1 10 1))
+    (check-equal? (candidate (list (list 8 14 9 2) (list 6 4 13 15) (list 5 7 1 12) (list 3 10 11 16)) 5) (list 1 7 1 7 1))
+    (check-equal? (candidate (list (list 11 8 7 2) (list 5 16 14 4) (list 9 3 15 6) (list 12 13 10 1)) 9) (list 1 6 1 6 1 6 1 6 1))
+    (check-equal? (candidate (list (list 12 13 10 1) (list 9 3 15 6) (list 5 16 14 4) (list 11 8 7 2)) 12) (list 1 6 1 6 1 6 1 6 1 6 1 6))
+    (check-equal? (candidate (list (list 2 7 4) (list 3 1 5) (list 6 8 9)) 8) (list 1 3 1 3 1 3 1 3))
+    (check-equal? (candidate (list (list 6 1 5) (list 3 8 9) (list 2 7 4)) 8) (list 1 5 1 5 1 5 1 5))
+    (check-equal? (candidate (list (list 1 2) (list 3 4)) 10) (list 1 2 1 2 1 2 1 2 1 2))
+    (check-equal? (candidate (list (list 1 3) (list 3 2)) 10) (list 1 3 1 3 1 3 1 3 1 3))
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpxn2qyg4a.rkt:35:14: if: missing an "else" expression
+  in: (if (and (< current-value min-path-value) (not (equal? current-value (car (car min-path))))) (begin (set! min-path (minPath-helper (list-ref grid i) (- k 1))) (set! min-path-value (car (car min-path)))))
+  location...:
+   /tmp/tmpxn2qyg4a.rkt:35:14
+
+==========================
+------- Program HumanEval_90_next_smallest --------
+#lang racket
+
+;; You are given a list of integers.
+;; Write a function next_smallest() that returns the 2nd smallest element of the list.
+;; Return #f if there is no such element.
+;; >>> (next_smallest (list 1 2 3 4 5))
+;; 2
+;; >>> (next_smallest (list 5 1 4 3 2))
+;; 2
+;; >>> (next_smallest (list ))
+;; #f
+;; >>> (next_smallest (list 1 1))
+;; #f
+(define (next_smallest lst)
+  (if (null? lst)
+      #f
+      (let ((min (apply min lst))
+            (min2 #f))
+        (for ([x lst])
+          (if (and (not (eq? x min))
+                   (or (not min2)
+                       (< x min2)))
+              (set! min2 x)))
+        min2)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate next_smallest))
+    (check-equal? (candidate (list 1 2 3 4 5)) 2)
+    (check-equal? (candidate (list 5 1 4 3 2)) 2)
+    (check-equal? (candidate (list )) #f)
+    (check-equal? (candidate (list 1 1)) #f)
+    (check-equal? (candidate (list 1 1 1 1 0)) 1)
+    (check-equal? (candidate (list 1 1)) #f)
+    (check-equal? (candidate (list -35 34 12 -45)) -35)
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpygi88qdv.rkt:20:10: if: missing an "else" expression
+  in: (if (and (not (eq? x min)) (or (not min2) (< x min2))) (set! min2 x))
+  location...:
+   /tmp/tmpygi88qdv.rkt:20:10
+
+==========================
+------- Program HumanEval_153_Strongest_Extension --------
+#lang racket
+
+;; You will be given the name of a class (a string) and a list of extensions.
+;; The extensions are to be used to load additional classes to the class. The
+;; strength of the extension is as follows: Let CAP be the number of the uppercase
+;; letters in the extension's name, and let SM be the number of lowercase letters 
+;; in the extension's name, the strength is given by the fraction CAP - SM. 
+;; You should find the strongest extension and return a string in this 
+;; format: ClassName.StrongestExtensionName.
+;; If there are two or more extensions with the same strength, you should
+;; choose the one that comes first in the list.
+;; For example, if you are given "Slices" as the class and a list of the
+;; extensions: ['SErviNGSliCes', 'Cheese', 'StuFfed'] then you should
+;; return 'Slices.SErviNGSliCes' since 'SErviNGSliCes' is the strongest extension 
+;; (its strength is -1).
+;; Example:
+;; >>> (Strongest_Extension "my_class" (list "AA" "Be" "CC"))
+;; "my_class.AA"
+(define (Strongest_Extension class_name extensions)
+  (define (strength str)
+    (let ([caps (count (lambda (c) (char-upper-case? c)) str)]
+          [smalls (count (lambda (c) (char-lower-case? c)) str)])
+      (- caps smalls)))
+  (define (strongest_extension_name extensions)
+    (let ([strongest_extension (car extensions)]
+          [strongest_extension_strength (strength (car extensions))])
+      (for ([extension (in-list (cdr extensions))])
+        (let ([extension_strength (strength extension)])
+          (if (> extension_strength strongest_extension_strength)
+              (begin
+                (set! strongest_extension extension)
+                (set! strongest_extension_strength extension_strength)))))
+      strongest_extension))
+  (string-append class_name "." (strongest_extension_name extensions)))
+
+(require rackunit)
+
+(define (test-humaneval) 
+
+  (let (( candidate Strongest_Extension))
+    (check-equal? (candidate "Watashi" (list "tEN" "niNE" "eIGHt8OKe")) "Watashi.eIGHt8OKe")
+    (check-equal? (candidate "Boku123" (list "nani" "NazeDa" "YEs.WeCaNe" "32145tggg")) "Boku123.YEs.WeCaNe")
+    (check-equal? (candidate "__YESIMHERE" (list "t" "eMptY" "nothing" "zeR00" "NuLl__" "123NoooneB321")) "__YESIMHERE.NuLl__")
+    (check-equal? (candidate "K" (list "Ta" "TAR" "t234An" "cosSo")) "K.TAR")
+    (check-equal? (candidate "__HAHA" (list "Tab" "123" "781345" "-_-")) "__HAHA.123")
+    (check-equal? (candidate "YameRore" (list "HhAas" "okIWILL123" "WorkOut" "Fails" "-_-")) "YameRore.okIWILL123")
+    (check-equal? (candidate "finNNalLLly" (list "Die" "NowW" "Wow" "WoW")) "finNNalLLly.WoW")
+    (check-equal? (candidate "_" (list "Bb" "91245")) "_.Bb")
+    (check-equal? (candidate "Sp" (list "671235" "Bb")) "Sp.671235")
+))
+
+(test-humaneval)
+------- Status: Exception --------
+-------- stderr -------
+/tmp/tmpyzdmy_11.rkt:29:10: if: missing an "else" expression
+  in: (if (> extension_strength strongest_extension_strength) (begin (set! strongest_extension extension) (set! strongest_extension_strength extension_strength)))
+  location...:
+   /tmp/tmpyzdmy_11.rkt:29:10
+
