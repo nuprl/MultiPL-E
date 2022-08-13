@@ -125,7 +125,7 @@ TYPE = [
   {
     "Theme": "InvalidTypeConversion",
     "C#": ["TypeConversion"],
-    "Python": [],
+    "Python": ["TypeError"],
     "Swift": [
       "CompileError-TypeCheck-UnwrappedNonOptional", 
       "CompileError-TypeCheck-ShouldHaveUnwrappedOptional", 
