@@ -142,17 +142,18 @@ class PythonProblem(object):
     def record_error_types(self, error: str, completion):
       if error == None or str(error) == "None":
         return
-
+      
+      found_error_class = False
       for error_name in self.error_categories.keys():
         if re.findall(self.error_categories[error_name]["regex"], error, re.IGNORECASE) != []:
           self.increment_error_code(error_name, completion)
-          return
+          found_error_class = True
 
       if '/tmp/tmp125ptmgu.py' in error or '/tmp/tmp0x72crx8.py' in error or '/tmp/tmp4uvuxbt9.py' in error or '/tmp/tmpev48bzdh.py' in error:
         self.increment_error_code("SyntaxError", completion)
-      
-      print (error)
-      raise Exception("Error not found")
+      if not found_error_class:
+        print (error)
+        raise Exception("Error not found")
 
     def from_yaml_files(self, lang:str, yaml_path: Path, results_yaml_path: Path) -> Problem:
         with open(yaml_path, 'r') as f:
