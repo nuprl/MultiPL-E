@@ -17,10 +17,7 @@ def get_description(code: str) -> str:
     return CSV_DICT[code][1]
 
 def get_total_failures() -> int:
-    # In Swift I did:
-    # return get_code_count('CompileError') + get_code_count('Timeout') + get_code_count('Exception')
-    # Not sure what your racket equivalent is.
-    return 0 # TODO(yt)
+    return get_code_count("total")
 
 def get_code_count(code: str) -> int:
     if code not in CSV_DICT:

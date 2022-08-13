@@ -49,6 +49,7 @@ RUNTIME = [
     "Theme": "TimeoutOrInfiniteRecursion",
     "Swift": ["Timeout"],
     "Python": ["RecursionError"],
+    "Racket": ["timeout"]
   }
 ]
 
@@ -143,12 +144,13 @@ LANGUAGE = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
-    "Racket": ["Escape sequence error in Racket (\\w) ", "treat and as char #\\and"],
+    "Racket": ["unknown_escape_sequence", "bad_char_const"],
     "Python": ["EOFError"]
   },
   {
     "Theme": "Niche Language",
-    "Racket": ["if-else extra arguments", "all unclassified errors"] 
+    "Racket": ["A03_if_extra_args", "missing_else", "bad_syntax", "else_as_expression",  "missing_or_unmatched_braces", "unclassified"] 
+    # default_value_exp_missing means racket completions is hallucinating Haskell perhaps? 
   }
 ]
 
@@ -157,7 +159,7 @@ MODEL = [
     "Theme": "OutOfTokens",
     "C#": ["SyntaxError"],
     "Python" : ["SyntaxError"],
-    "Racket": ["bracket or brace not matched", "double-quotes not matched"],
+    "Racket": ["A02_incomplete_generation"],
     "Swift": [
       "CompileError-RanOutOfTokens", 
       "CompileError-CompilerErrorCutoff",
@@ -169,11 +171,11 @@ MODEL = [
     "C#": ["NotImplementedException"],
     "Python": ["NotImplementedError"],
     "Swift": [],
-    # "Racket": [] # TODO(yt)
+    "Racket": [] 
   },
   {
     "Theme": "GenerateAnotherLang",
-    "Racket": [],
+    "Racket": ["default_value_exp_missing", "A01_generating_webpage_or_markdown"],
     "Swift": []
   }
 ]
@@ -198,4 +200,4 @@ def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
-# print(RACKET_CODES_DATA) 
+print(RACKET_CODES_DATA) 

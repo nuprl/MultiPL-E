@@ -109,6 +109,7 @@ class Filters:
     def default_value_exp_missing(e):
         """
         Racket requiring the nested function (with same name but a "'" character at the end) to have a default value for the last argument.
+        The "'" character at the end might be Haskell syntax.
         """
         return "default-value expression missing" in e.stderr
 
@@ -263,10 +264,11 @@ def find_errors(path):
                  desc,\
                  len(classified[filter_name]),\
                  f"{SOURCE}/{filter_name}.txt"])
-        csv_writer.writerow(["unclassifed",\
+        csv_writer.writerow(["unclassified",\
             "Does not fit in all above descriptions",\
             len(unclassified),\
             f"{SOURCE}/unclassified.txt"])
+        csv_writer.writerow(["total", "", total, ""])
         
 
 def main():
