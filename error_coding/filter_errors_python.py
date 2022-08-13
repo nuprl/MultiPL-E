@@ -137,7 +137,7 @@ class PythonProblem(object):
       self.error_categories[error]["count"] += 1
       self.error_categories[error]["completions"] += [completion]
 
-    def record_error_types(self, error, completion):
+    def record_error_types(self, error: str, completion):
       if error == None or str(error) == "None":
         return
 
@@ -145,7 +145,7 @@ class PythonProblem(object):
         if re.findall(self.error_categories[error_name]["regex"], error, re.IGNORECASE) != []:
           self.increment_error_code(error_name, completion)
           return
-      print(error)
+
       if '/tmp/tmp125ptmgu.py' in error or '/tmp/tmp0x72crx8.py' in error or '/tmp/tmp4uvuxbt9.py' in error or '/tmp/tmpev48bzdh.py' in error:
         return
       
@@ -175,13 +175,14 @@ class PythonProblem(object):
             if self.filter_result(r):
               completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
               comps.append(completion)
-              
-              self.record_error_types(r['stderr'], completion)
+              if r['stderr'] != "":
+                self.record_error_types(r['stderr'], completion)
+              else:
+                self.record_error_types(r['stdout'], completion)
             elif r['status'] == 'Timeout':
               completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
               comps.append(completion)
               self.increment_error_code('Timeout', completion)
-              
 
 
 if __name__ == "__main__":
