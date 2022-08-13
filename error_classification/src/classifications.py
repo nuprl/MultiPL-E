@@ -117,7 +117,7 @@ STATIC = [
   {
     "Theme": "ArityMismatch",
     "Racket": ["arity_mismatch"],
-    "C#": ["Invalid argument"]
+    "C#": ["InvalidArgument"]
   }
 ]
 
@@ -153,7 +153,7 @@ TYPE = [
 LANGUAGE = [
   {
     "Theme": "Language specific problems",
-    "C#": ["InvalidAssignment", "Exception: Invalid beat:"],
+    "C#": ["InvalidAssignment"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
       "CompileError-UseOfDeprecatedUnavailableThings", 
@@ -188,7 +188,7 @@ MODEL = [
   },
   {
     "Theme": "ExceptionInGeneratedCode", 
-    "C#": ["NotImplementedException"],
+    "C#": ["NotImplementedException", "InvalidBeat"],
     "Python": ["NotImplementedError"],
     "Swift": [],
     "Racket": [] 
