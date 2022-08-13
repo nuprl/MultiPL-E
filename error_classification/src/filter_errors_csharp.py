@@ -35,7 +35,9 @@ class CSharpProblem(PythonProblem):
         'InvalidAssignment' : {"regex": "Cannot assign", "desc": "Cannot assign to a variable, such as assigning void to a variable", "count": 0, "gold": "HumanEval_104_unique_digits --- completion 11","completions": []},
         # 'InvalidMethodCall' : {"regex": "No overload for method", "desc": "No overload for method  takes 2 arguments", "count": 0, "completions": []},
         # 'Cannot assign void' : {"regex": "Cannot assign void to an implicitly-typed variable", "desc": "Cannot assign void to an implicitly-typed variable", "count": 0, "completions": []},
-        'Timeout' : {"regex":"", "gold": "---- HumanEval_100_make_a_pile --- completion 106 ----", "desc":"Program is running for more than 5 mins", "count" : 0, "gold":" HumanEval_100_make_a_pile --- completion 111", "completions":[]}
+        'Timeout' : {"regex":"", "gold": "---- HumanEval_100_make_a_pile --- completion 106 ----", "desc":"Program is running for more than 5 mins", "count" : 0, "gold":" HumanEval_100_make_a_pile --- completion 111", "completions":[]},
+        'OK' : {"regex":"", "gold": "", "desc":"Program ran fine", "count" : 0, "completions":[]},
+        'AssertionError' : {"regex":"", "gold": "", "desc":"Assertion failed", "count" : 0, "completions":[]}
       }
 
     def program_for_completion(self, completion_idx: int) -> str:

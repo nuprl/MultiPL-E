@@ -52,6 +52,20 @@ RUNTIME = [
     "Swift": ["Timeout"],
     "Python": ["RecursionError"],
     "Racket": ["timeout"]
+  },
+  {
+    "Theme": "AssertionFailed",
+    "Swift": [],
+    "Python": ["AssertionError"],
+    "Racket": [],
+    "C#" : ["AssertionError"]
+  },
+  {
+    "Theme": "OK",
+    "Swift": ["OK"],
+    "Python": ["OK"],
+    "Racket": ["OK"],
+    "C#": ["OK"]
   }
 ]
 
@@ -202,3 +216,5 @@ SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
 PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
 CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
+# print(SWIFT_CODES_DATA)
+print(PYTHON_CODES_DATA)
