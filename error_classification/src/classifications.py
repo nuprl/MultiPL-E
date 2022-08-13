@@ -52,6 +52,20 @@ RUNTIME = [
     "Swift": ["Timeout"],
     "Python": ["RecursionError"],
     "Racket": ["timeout"]
+  },
+  {
+    "Theme": "AssertionFailed",
+    "Swift": [],
+    "Python": ["AssertionError"],
+    "Racket": [],
+    "C#" : ["AssertionError"]
+  },
+  {
+    "Theme": "OK",
+    "Swift": ["OK"],
+    "Python": ["OK"],
+    "Racket": ["OK"],
+    "C#": ["OK"]
   }
 ]
 
