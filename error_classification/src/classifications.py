@@ -33,7 +33,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": ["indexOutOfRange"],
+    "Racket": ["indexOutOfRange", "hashmapNoValueForKey"],
     "Python": [
       "AttributeError", 
       "KeyError", 
