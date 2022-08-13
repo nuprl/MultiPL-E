@@ -16,7 +16,7 @@ class CSharpProblem(PythonProblem):
         'NotImplementedException' : {"regex": "NotImplementedException", "desc": "The method or operation is not implemented", "count": 0, "gold": "HumanEval_136_largest_smallest_integers --- completion 76","completions": []},
         'ArgumentException' : {"regex": "ArgumentException", "desc": "Invalid number", "count": 0, "gold": " HumanEval_19_sort_numbers --- completion 6","completions": []},
         'KeyNotFoundException' : {"regex": "KeyNotFoundException", "desc": "The given key was not present in the dictionary.", "count": 0, "gold": "HumanEval_19_sort_numbers --- completion 57","completions": []},
-        'Exception: Invalid beat:' : {"regex": "Exception: Invalid beat:", "desc": "Exception: Invalid beat:", "count": 0, "gold": "HumanEval_17_parse_music --- completion 8","completions": []},
+        'InvalidBeat' : {"regex": "Exception: Invalid beat:", "desc": "Exception: Invalid beat:", "count": 0, "gold": "HumanEval_17_parse_music --- completion 8","completions": []},
         
         "TypeConversion" : {"regex": r"cannot(.+)convert", "desc": "Cannot convert types", "count": 0, "gold": "HumanEval_155_even_odd_count --- completion 2","completions": []},
         "MissingReturn" : {"regex": "not all code paths return a value", "desc": "Not all code paths return a value", "count": 0, "gold": "HumanEval_129_minPath --- completion 116","completions": []},
@@ -27,7 +27,7 @@ class CSharpProblem(PythonProblem):
         # 'Syntax error:  ; expected' : {"regex": "; expected", "desc": "; expected", "count": 0, "completions": []},
         'Re-declaration' : {"regex": "cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter", "desc": "A local or parameter named 'i' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter", "count": 0, "gold": "HumanEval_86_anti_shuffle --- completion 3","completions": []},
         'TypeNotFound' : {"regex": "could not be found", "desc": "Type not found", "count": 0, "gold": "HumanEval_116_sort_array --- completion 0 ","completions": []},
-        'Invalid argument' : {"regex": "(There is no argument given that corresponds to the required formal parameter)|(No overload for method)", "desc": "There is no argument given that corresponds to the required formal parameter", "count": 0, "gold": "HumanEval_33_sort_third --- completion 0","completions": []},
+        'InvalidArgument' : {"regex": "(There is no argument given that corresponds to the required formal parameter)|(No overload for method)", "desc": "There is no argument given that corresponds to the required formal parameter", "count": 0, "gold": "HumanEval_33_sort_third --- completion 0","completions": []},
         'MethodNotFound' : {"regex": "does not contain a definition for", "desc": "does not contain a definition for", "count": 0, "gold": "HumanEval_82_prime_length --- completion 7","completions": []},
         # 'Convert convert type' : {"regex": "Cannot convert null", "desc": "Cannot convert null to 'long' because it is a non-nullable value type", "count": 0, "completions": []},
 

@@ -33,7 +33,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": ["index_out_of_range"],
+    "Racket": ["indexOutOfRange"],
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -45,7 +45,7 @@ RUNTIME = [
     "Swift": ["Exception-DivisionByZeroInRemainder"],
     "C#": [],
     "Python": ["ZeroDivisionError"],
-    "Racket": ["division_by_0"]
+    "Racket": ["divisionBy0"]
   },
   {
     "Theme": "TimeoutOrInfiniteRecursion",
@@ -90,7 +90,7 @@ STATIC = [
       "CompileError-TypeCheck-CallingNonFunctionType",
       "CompileError-InvalidSyntax"
     ],
-    "Racket": ["unbound_identifier", "use_before_init", "application_on_not_a_function"]
+    "Racket": ["unboundIdentifier", "useBeforeInit", "applicationOnNotAFunction"]
   },
   {
     "Theme": "MissingReturn",
@@ -106,18 +106,18 @@ STATIC = [
       "CompileError-TypeMismatch-StringIndices",
       "CompileError-TypeMismatch-StringsArentCharArrays"
     ],
-    "Racket": ["bad_built_in_fn_app_call"], 
+    "Racket": ["badBuiltInFnAppCall"], 
   },
   {
     "Theme": "Re-Declaration",
     "C#": ["Re-declaration"],
-    "Racket": ["let_duplicate_identifier"], 
+    "Racket": ["letDuplicateIdentifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
   },
   {
     "Theme": "ArityMismatch",
-    "Racket": ["arity_mismatch"],
-    "C#": ["Invalid argument"]
+    "Racket": ["arityMismatch"],
+    "C#": ["InvalidArgument"]
   }
 ]
 
@@ -145,7 +145,7 @@ TYPE = [
       "CompileError-TypeMismatch-CollectionAndInner",
       "CompileError-TypeMismatch-Else"
     ],
-    "Racket": ["contract_violation"]
+    "Racket": ["contractViolation"]
   }
   
 ]
@@ -153,7 +153,7 @@ TYPE = [
 LANGUAGE = [
   {
     "Theme": "Language specific problems",
-    "C#": ["InvalidAssignment", "Exception: Invalid beat:"],
+    "C#": ["InvalidAssignment"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
       "CompileError-UseOfDeprecatedUnavailableThings", 
@@ -164,12 +164,12 @@ LANGUAGE = [
       "CompileError-IncorrectArgumentLabel", 
       "CompileError-ExtraArgument"
     ],
-    "Racket": ["unknown_escape_sequence", "bad_char_const"],
+    "Racket": ["unknownEscapeSequence", "badCharConst"],
     "Python": ["EOFError"]
   },
   {
     "Theme": "Niche Language",
-    "Racket": ["A03_if_extra_args", "missing_else", "bad_syntax", "else_as_expression",  "missing_or_unmatched_braces", "unclassified"] 
+    "Racket": ["A03IfExtraArgs", "missingElse", "badSyntax", "elseAsExpression",  "missingOrUnmatchedBraces", "unclassified"] 
     # default_value_exp_missing means racket completions is hallucinating Haskell perhaps? 
   }
 ]
@@ -188,14 +188,14 @@ MODEL = [
   },
   {
     "Theme": "ExceptionInGeneratedCode", 
-    "C#": ["NotImplementedException"],
+    "C#": ["NotImplementedException", "InvalidBeat"],
     "Python": ["NotImplementedError"],
     "Swift": [],
     "Racket": [] 
   },
   {
     "Theme": "GenerateAnotherLang",
-    "Racket": ["default_value_exp_missing", "A01_generating_webpage_or_markdown"],
+    "Racket": ["defaultValueExpMissing", "A01GeneratingWebpageOrMarkdown"],
     "Swift": []
   }
 ]

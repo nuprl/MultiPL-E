@@ -1,4 +1,4 @@
-# ---- HumanEval_19_sort_numbers --- completion 51 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 55 ---- 
 def sort_numbers(numbers: str) -> str:
     """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
     Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
@@ -48,7 +48,7 @@ AttributeError: 'dict_values' object has no attribute 'index'
 
 
 
-# ---- HumanEval_137_compare_one --- completion 0 ---- 
+# ---- HumanEval_137_compare_one --- completion 2 ---- 
 from typing import Union
 
 def compare_one(a: Union[int, float, str], b: Union[int, float, str]) -> Union[int, float, str, None]:
@@ -128,7 +128,7 @@ AttributeError: 'float' object has no attribute 'replace'
 
 
 
-# ---- HumanEval_92_any_int --- completion 0 ---- 
+# ---- HumanEval_92_any_int --- completion 133 ---- 
 def any_int(x: float, y: float, z: float) -> bool:
     """
     Create a function that takes 3 numbers.
@@ -200,7 +200,7 @@ AttributeError: 'int' object has no attribute 'is_integer'
 
 
 
-# ---- HumanEval_92_any_int --- completion 1 ---- 
+# ---- HumanEval_92_any_int --- completion 190 ---- 
 def any_int(x: float, y: float, z: float) -> bool:
     """
     Create a function that takes 3 numbers.
@@ -265,7 +265,7 @@ AttributeError: 'int' object has no attribute 'is_integer'
 
 
 
-# ---- HumanEval_95_check_dict_case --- completion 0 ---- 
+# ---- HumanEval_95_check_dict_case --- completion 126 ---- 
 from typing import Dict
 
 def check_dict_case(dict: Dict[str, str]) -> bool:

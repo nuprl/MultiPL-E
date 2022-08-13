@@ -1,4 +1,4 @@
-# ---- HumanEval_41_car_race_collision --- completion 1 ---- 
+# ---- HumanEval_41_car_race_collision --- completion 53 ---- 
 def car_race_collision(n: int) -> int:
     """
     Imagine a road that's a perfectly straight infinitely long line.

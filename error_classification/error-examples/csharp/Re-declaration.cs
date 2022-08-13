@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 85 ---- 
+# ---- HumanEval_129_minPath --- completion 90 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -113,7 +113,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_86_anti_shuffle --- completion 3 ---- 
+# ---- HumanEval_86_anti_shuffle --- completion 139 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
