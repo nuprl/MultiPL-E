@@ -126,6 +126,17 @@ php <- rbind(php.multi,php.o)
 ```
 
 ```{r}
+python.notype <- read_csv("../results/py-davinci-0.2-notypes.csv")
+colnames(python.notype) <- cn
+
+py.o <- subset(per_problem_new,PL=="py")
+py.o <- subset(py.o,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+py.new <- subset(python.notype,select=c(PROBLEM,PL,MODEL,EXPT,rate1,n1))
+
+py <- rbind(py.new,py.o)
+```
+
+```{r}
 pl_labs <- c(`py` = "Python", `sh` = "Bash", `cpp` = "C++", `go` = "Go", `java` = "Java", `js` = "JavaScript", `pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
 ```
 
@@ -461,3 +472,23 @@ php.model <- glmer(rate1 ~ EXPT + (1+EXPT|PROBLEM),weights=n1, data=subset(multi
 ```{r}
 summary(php.model)
 ```
+
+### Python experiment
+
+
+```{r}
+py.davinci <- subset(py,MODEL=='davinci')
+py.expt <- subset(py.davinci,EXPT=="notypes"|EXPT=="reworded")
+py.expt$PROBLEM <- factor(py.expt$PROBLEM)
+py.expt$EXPT <- factor(py.expt$EXPT,c("reworded","notypes"))
+
+py.sum <- py.expt %>% group_by(EXPT) %>% summarize(mean = mean(rate1))
+ggplot(data=py.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge")
+```
+```{r}
+py.model <- glmer(rate1 ~ EXPT + (1+EXPT|PROBLEM),weights=n1, data=py.expt,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(py.model)
+```
+
