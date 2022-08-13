@@ -3,7 +3,7 @@ import csv
 LANG_NAME = "Swift"
 
 CSV_DICT = {}
-with open('error_examples/swift_codes.csv', 'r') as csv_f:
+with open('swift_codes.csv', 'r') as csv_f:
     csv_reader = csv.reader(csv_f)
     for r in csv_reader:
         CSV_DICT[r[0]] = r

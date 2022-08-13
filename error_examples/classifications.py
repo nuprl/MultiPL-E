@@ -1,6 +1,8 @@
 from typing import Dict, NamedTuple
 import swift_category_data
 import racket_category_data
+import python_category_data
+import csharp_category_data
 
 # Classifications in progress
 # These are four overall categories, but we aren't going to be stuck with that.
@@ -41,7 +43,7 @@ RUNTIME = [
   {
     "Theme": "DivisionByZero",
     "Swift": ["Exception-DivisionByZeroInRemainder"],
-    "C#": [""],
+    "C#": [],
     "Python": ["ZeroDivisionError"],
     "Racket": ["division_by_0"]
   },
@@ -57,14 +59,13 @@ STATIC = [
   {
     "Theme": "UndefinedIdentifier",
     "Python": [
-      "AttributeError", 
       "NameError", 
       "UnboundLocalError"
     ],
     "C#": [
-      "Name does not exist", 
+      "UndefinedIdentifier", 
       "TypeNotFound", 
-      "Method not found"
+      "MethodNotFound"
     ],
     "Swift": [
       "CompileError-LinkerError", 
@@ -78,8 +79,8 @@ STATIC = [
   },
   {
     "Theme": "MissingReturn",
-    "Python": ["None"],
-    "C#": ["no return in all branches"],
+    "Python": [],
+    "C#": ["MissingReturn"],
     "Racket": [],
     "Swift": [],
   },
@@ -94,7 +95,7 @@ STATIC = [
   },
   {
     "Theme": "Re-Declaration",
-    "C#": ["Declaration error"],
+    "C#": ["Re-declaration"],
     "Racket": ["let_duplicate_identifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
   }
@@ -103,7 +104,7 @@ STATIC = [
 TYPE = [ 
   {
     "Theme": "InvalidTypeConversion",
-    "C#": ["Type Conversion Error"],
+    "C#": ["TypeConversion"],
     "Python": [],
     "Swift": [
       "CompileError-TypeCheck-UnwrappedNonOptional", 
@@ -132,7 +133,7 @@ TYPE = [
 LANGUAGE = [
   {
     "Theme": "Language specific problems",
-    "C#": ["Invalid Assignment"],
+    "C#": ["InvalidAssignment", "Exception: Invalid beat:"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
       "CompileError-UseOfDeprecatedUnavailableThings", 
@@ -192,10 +193,12 @@ def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
                            for theme in g 
                            for code in (theme[lang_module.LANG_NAME] if lang_module.LANG_NAME in theme else [])]
   # Verify each code appears only once
-  assert len(codes) == len(set(codes))
-
+  assert len(codes) == len(set(codes)), codes
   return dict((code, CategoryInfo(code, lang_module.get_description(code), lang_module.get_code_count(code), lang_module.get_total_failures())) for code in codes)
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
-# print(RACKET_CODES_DATA) 
+PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
+CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
+# print(CSHARP_CODES_DATA)
+# print(RACKET_CODES_DATA)
