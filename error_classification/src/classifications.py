@@ -200,8 +200,5 @@ def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
-# print(RACKET_CODES_DATA) 
 PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
 CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
-# print(CSHARP_CODES_DATA)
-# print(RACKET_CODES_DATA)
