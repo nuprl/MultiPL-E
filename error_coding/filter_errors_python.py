@@ -18,11 +18,11 @@ except ImportError:
 
 
 def main(Problem):
-    parser = argparse.ArgumentParser(description='Categorize errors')
+    parser = argparse.ArgumentParser(description='Categorize errors. An example python filter_errors_python.py --lang py --in-dir ../experiments/py-davinci-0.2-reworded/ --examples-out-dir python-error-examples --csv-out ../error_examples/python_codes.csv')
     parser.add_argument('--lang', type=str, help="Language should one of [py, swift, cs, rkt", default=None)
-    parser.add_argument('--in-dir', type=str, help='the directory .yaml and .results.yaml files.', default='experiments/swift-davinci-0.2-reworded')
-    parser.add_argument('--examples-out-dir', type=str, help='the directory in which to place examples', default='swift_error_examples')
-    parser.add_argument('--csv-out', type=str, help='where to write the CSV', default='error_examples/swift_codes.csv')
+    parser.add_argument('--in-dir', type=str, help='the directory .yaml and .results.yaml files.', required=True)
+    parser.add_argument('--examples-out-dir', type=str, help='the directory in which to place examples', required=True)
+    parser.add_argument('--csv-out', type=str, help='where to write the CSV', required=True)
     parser.add_argument('--n-examples', type=int, help='How many examples for each error code', default=None),
     parser.add_argument('--no-shuffle-examples', action='store_false', help='Disabling shuffling of examples', dest='shuffle_examples', default=True)
 
@@ -51,26 +51,28 @@ def main(Problem):
     load_problems(Problem, args.lang, in_dir)
     
     with csv_out.open('w', newline='') as csv_f:
-      example_out = examples_out_dir / f"{args.lang}"
-
-      with open(example_out, 'w') as example_f:
         csv_writer = csv.writer(csv_f)
-        csv_writer.writerow(['code', 'description', 'count', 'example'])
+        csv_writer.writerow(['code', 'description', 'count', 'gold', 'examples'])
 
         for error_name in Problem.error_categories.keys():
-          # print(error_name)
-          # print (error_categories[error_name])
-          print (error_name)
-          count = Problem.error_categories[error_name]["count"]
-          csv_writer.writerow([error_name, "", count, ""])
-          for completion in Problem.error_categories[error_name]["completions"]:
-            example_f.write(f"// ----------- error {error_name} ------------\n")
-            example_f.write(f"{completion.completion}\n")
-            example_f.write(f"// status = {completion.status}\n")
-            example_f.write(f"// exit_code = {completion.exit_code}\n")
-            example_f.write(f"/* stderr = \n{completion.stderr}\n*/\n")
-            example_f.write(f"/* stdout = \n{completion.stdout}\n*/\n\n")
-            example_f.write("\n\n\n\n")
+          example_out = examples_out_dir / f"{error_name}.{args.lang}"
+
+          with open(example_out, 'w') as example_f:
+            # print(error_name)
+            # print (error_categories[error_name])
+            print (error_name)
+            count = Problem.error_categories[error_name]["count"]
+            desc = Problem.error_categories[error_name]["desc"]
+            gold = Problem.error_categories[error_name]["gold"]
+            csv_writer.writerow([error_name, desc, count, gold, example_out])
+            for completion in Problem.error_categories[error_name]["completions"]:
+              example_f.write(f"{Problem.single_line_comments} ---- {completion.prob_name} --- completion {completion.completion_idx} ---- \n")
+              example_f.write(f"{completion.completion}\n")
+              example_f.write(f"{Problem.single_line_comments} status = {completion.status}\n")
+              example_f.write(f"{Problem.single_line_comments} exit_code = {completion.exit_code}\n")
+              example_f.write(f"{Problem.multi_line_comments} stderr = \n{completion.stderr}\n{Problem.multi_line_comments}\n")
+              example_f.write(f"{Problem.multi_line_comments} stdout = \n{completion.stdout}\n{Problem.multi_line_comments}\n\n")
+              example_f.write("\n\n\n\n")
 
 def load_problems(Problem, lang:str, in_dir: Path) -> Dict[str, Problem]:
     for entry in in_dir.iterdir():
@@ -86,8 +88,10 @@ def load_problems(Problem, lang:str, in_dir: Path) -> Dict[str, Problem]:
             Problem.from_yaml_files(lang, entry, results_entry)
 
 class ProblemCompletion(object):
-    def __init__(self, completion: str, exit_code: int, status: str, stderr: str, stdout: str) -> None:
+    def __init__(self, completion: str, prob_name: str, completion_idx: int, exit_code: int, status: str, stderr: str, stdout: str) -> None:
         self.completion = completion
+        self.prob_name = prob_name
+        self.completion_idx = completion_idx
         self.exit_code = exit_code
         self.status = status
         self.stdout = stdout
@@ -96,24 +100,28 @@ class ProblemCompletion(object):
 class PythonProblem(object):
     def __init__(self) -> None:
       self.error_categories = {
-        'IndexError' : {"regex": "IndexError", "desc": "", "count": 0, "completions": []},
-        'NameError' : {"regex": "NameError", "desc": "", "count": 0, "completions": []},
-        'TypeError' : {"regex": "TypeError", "desc": "", "count": 0, "completions": []},
-        'ValueError' : {"regex": "ValueError", "desc": "", "count": 0, "completions": []},
-        'NotImplementedError' : {"regex": "NotImplementedError", "desc": "", "count": 0, "completions": []},
-        'IndentationError' : {"regex": "IndentationError", "desc": "", "count": 0, "completions": []},
-        'KeyError' : {"regex": "KeyError", "desc": "", "count": 0, "completions": []},
-        'UnboundLocalError' : {"regex": "UnboundLocalError", "desc": "", "count": 0, "completions": []},
-        'AttributeError' : {"regex": "AttributeError", "desc": "", "count": 0, "completions": []},
-        'RecursionError' : {"regex": "RecursionError", "desc": "", "count": 0, "completions": []},
-        'ZeroDivisionError' : {"regex": "ZeroDivisionError", "desc": "", "count": 0, "completions": []},
-        'EOFError' : {"regex": "EOFError", "desc": "", "count": 0, "completions": []},
-        'SyntaxError: BracketNeverClose' : {"regex": "was never close", "desc": "'[' never closed", "count": 0, "completions": []},
-        'SyntaxError: Invalid Syntax' : {"regex": "invalid syntax", "desc": "", "count": 0, "completions": []},
-        'SyntaxError: UnterminatedStringLiteral' : {"regex": "unterminated string literal", "desc": "string literal never closed", "count": 0, "completions": []},
-        "SyntaxError: Expected 'else' after 'if'" : {"regex": "expected 'else' after 'if' expression", "desc": "", "count": 0, "completions": []},
-        "SyntaxError: Expected ':'" : {"regex": "expected ':'", "desc": "Expected ':'", "count": 0, "completions": []},
+        'IndexError' : {"regex": "IndexError", "desc": "List index out of range", "gold":" ---- HumanEval_89_encrypt --- completion 7", "count": 0, "completions": []},
+        'NameError' : {"regex": "NameError", "desc": "The name is not defined", "gold":" ---- HumanEval_127_intersection --- completion 0 ","count": 0, "completions": []},
+        'TypeError' : {"regex": "TypeError", "desc": "Type of objects in an operation is inappropriate", "count": 0, "gold": "---- HumanEval_137_compare_one --- completion 1 ----", "completions": []},
+        'ValueError' : {"regex": "ValueError", "desc": "A function received an argument of the correct type but an inappropriate value", "gold":"HumanEval_155_even_odd_count --- completion 0", "count": 0, "completions": []},
+        'NotImplementedError' : {"regex": "NotImplementedError", "desc": "Raised by Codex generated code", "gold":"HumanEval_20_find_closest_elements --- completion 0", "count": 0, "completions": []},
+        'IndentationError' : {"regex": "IndentationError", "desc": "Indentation of a line is wrong", "gold":"HumanEval_129_minPath --- completion 27", "count": 0, "completions": []},
+        'KeyError' : {"regex": "KeyError", "desc": "Request key is not present in dictionary", "gold":"HumanEval_19_sort_numbers --- completion 29", "count": 0, "completions": []},
+        'UnboundLocalError' : {"regex": "UnboundLocalError", "desc": "A local variable is referenced before assignment", "gold":"HumanEval_129_minPath --- completion 31", "count": 0, "completions": []},
+        'AttributeError' : {"regex": "AttributeError", "desc": "Requested attribute is not present in the object", "gold":"---- HumanEval_92_any_int --- completion 0 ----", "count": 0, "completions": []},
+        'RecursionError' : {"regex": "RecursionError", "desc": "Maximum recursion depth exceeded", "gold":"HumanEval_138_is_equal_to_sum_even --- completion 1", "count": 0, "completions": []},
+        'ZeroDivisionError' : {"regex": "ZeroDivisionError", "desc": "Division by zero", "gold":"HumanEval_128_prod_signs --- completion 2", "count": 0, "completions": []},
+        'EOFError' : {"regex": "EOFError", "desc": "EOF when reading a line", "gold": "HumanEval_41_car_race_collision --- completion 1", "count": 0, "completions": []},
+        # 'SyntaxError: BracketNeverClose' : {"regex": "was never close", "desc": "'[' never closed", "count": 0, "completions": []},
+        # 'SyntaxError: Invalid Syntax' : {"regex": "invalid syntax", "desc": "", "count": 0, "completions": []},
+        # 'SyntaxError: UnterminatedStringLiteral' : {"regex": "unterminated string literal", "desc": "string literal never closed", "count": 0, "completions": []},
+        # "SyntaxError: Expected 'else' after 'if'" : {"regex": "expected 'else' after 'if' expression", "desc": "", "count": 0, "completions": []},
+        # "SyntaxError: Expected ':'" : {"regex": "expected ':'", "desc": "Expected ':'", "count": 0, "completions": []},
+        'SyntaxError' : {"regex": "(was never close)|(invalid syntax)|(unterminated string literal)|(expected)", "gold":" HumanEval_43_pairs_sum_to_zero --- completion 0", "desc": "Invalid syntax due to un-matched closing brace, bracket, or colon ':'", "count": 0, "completions": []},
+        'Timeout' : {"regex":"", "gold": "---- HumanEval_100_make_a_pile --- completion 106 ----", "desc":"Program is running for more than 5 mins", "count" : 0, "completions":[]}
       }
+      self.single_line_comments = "#"
+      self.multi_line_comments = "'''"
 
     def program_for_completion(self, completion_idx: int) -> str:
         return self.prompt + self.completions[completion_idx].completion + "\n" + self.tests
@@ -165,10 +173,15 @@ class PythonProblem(object):
         for c, r in zip(completions_raw, results):
             assert prompt + c + "\n" + tests == r['program']
             if self.filter_result(r):
-              completion = ProblemCompletion(c, r['exit_code'], r['status'], r['stderr'], r['stdout'])
+              completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
               comps.append(completion)
               
               self.record_error_types(r['stderr'], completion)
+            elif r['status'] == 'Timeout':
+              completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
+              comps.append(completion)
+              self.increment_error_code('Timeout', completion)
+              
 
 
 if __name__ == "__main__":
