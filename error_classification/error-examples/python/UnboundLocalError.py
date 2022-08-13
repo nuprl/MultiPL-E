@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 31 ---- 
+# ---- HumanEval_129_minPath --- completion 188 ---- 
 from typing import List
 
 def minPath(grid: List[List[int]], k: int) -> List[int]:

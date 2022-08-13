@@ -1,4 +1,4 @@
-# ---- HumanEval_129_minPath --- completion 150 ---- 
+# ---- HumanEval_129_minPath --- completion 157 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -159,7 +159,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_116_sort_array --- completion 9 ---- 
+# ---- HumanEval_116_sort_array --- completion 64 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -211,7 +211,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 2 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 8 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -257,7 +257,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 17 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 42 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -303,7 +303,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 67 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 155 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -349,7 +349,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_19_sort_numbers --- completion 80 ---- 
+# ---- HumanEval_19_sort_numbers --- completion 182 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -395,7 +395,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 1 ---- 
+# ---- HumanEval_120_maximum --- completion 3 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -469,7 +469,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 16 ---- 
+# ---- HumanEval_120_maximum --- completion 25 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -537,7 +537,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 39 ---- 
+# ---- HumanEval_120_maximum --- completion 73 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -611,7 +611,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 53 ---- 
+# ---- HumanEval_120_maximum --- completion 90 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -679,7 +679,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 98 ---- 
+# ---- HumanEval_120_maximum --- completion 167 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -744,7 +744,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_120_maximum --- completion 101 ---- 
+# ---- HumanEval_120_maximum --- completion 172 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;
@@ -812,7 +812,72 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 
 
-# ---- HumanEval_154_cycpattern_check --- completion 0 ---- 
+# ---- HumanEval_39_prime_fib --- completion 159 ---- 
+using System;
+using System.Numerics;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Security.Cryptography;
+class Problem {
+    // prime_fib returns n-th number that is a Fibonacci number and it's also prime.
+    // >>> PrimeFib((1L))
+    // (2L)
+    // >>> PrimeFib((2L))
+    // (3L)
+    // >>> PrimeFib((3L))
+    // (5L)
+    // >>> PrimeFib((4L))
+    // (13L)
+    // >>> PrimeFib((5L))
+    // (89L)
+    public static long PrimeFib(long n) {
+        var f = new Fibonacci();
+        long i = 0;
+        long p = 0;
+        while (i < n) {
+            p = f.Next();
+            if (IsPrime(p)) {
+                i++;
+            }
+        }
+        return p;
+    }
+    public static void Main(string[] args) {
+    Debug.Assert(PrimeFib((1L)) == (2L));
+    Debug.Assert(PrimeFib((2L)) == (3L));
+    Debug.Assert(PrimeFib((3L)) == (5L));
+    Debug.Assert(PrimeFib((4L)) == (13L));
+    Debug.Assert(PrimeFib((5L)) == (89L));
+    Debug.Assert(PrimeFib((6L)) == (233L));
+    Debug.Assert(PrimeFib((7L)) == (1597L));
+    Debug.Assert(PrimeFib((8L)) == (28657L));
+    Debug.Assert(PrimeFib((9L)) == (514229L));
+    Debug.Assert(PrimeFib((10L)) == (433494437L));
+    }
+
+}
+
+# status = SyntaxError
+# exit_code = 1
+''' stderr = 
+
+'''
+''' stdout = 
+Microsoft (R) Visual C# Compiler version 3.6.0-4.20224.5 (ec77c100)
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+/tmp/tmp8ruta3ww.cs(21,21): error CS0246: The type or namespace name 'Fibonacci' could not be found (are you missing a using directive or an assembly reference?)
+/tmp/tmp8ruta3ww.cs(26,17): error CS0103: The name 'IsPrime' does not exist in the current context
+
+'''
+
+
+
+
+
+# ---- HumanEval_154_cycpattern_check --- completion 15 ---- 
 using System;
 using System.Numerics;
 using System.Diagnostics;

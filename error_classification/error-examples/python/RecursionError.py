@@ -1,4 +1,4 @@
-# ---- HumanEval_123_get_odd_collatz --- completion 0 ---- 
+# ---- HumanEval_123_get_odd_collatz --- completion 188 ---- 
 from typing import List
 
 def get_odd_collatz(n: int) -> List[int]:
@@ -67,7 +67,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_102_choose_num --- completion 2 ---- 
+# ---- HumanEval_102_choose_num --- completion 60 ---- 
 def choose_num(x: int, y: int) -> int:
     """This function takes two positive numbers x and y and returns the
     biggest even integer number that is in the range [x, y] inclusive. If 
@@ -137,7 +137,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 1 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 11 ---- 
 def is_equal_to_sum_even(n: int) -> bool:
     """Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
     Example
@@ -200,7 +200,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 5 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 37 ---- 
 def is_equal_to_sum_even(n: int) -> bool:
     """Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
     Example
@@ -263,7 +263,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 7 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 41 ---- 
 def is_equal_to_sum_even(n: int) -> bool:
     """Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
     Example
@@ -328,7 +328,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 10 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 66 ---- 
 def is_equal_to_sum_even(n: int) -> bool:
     """Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
     Example
@@ -391,7 +391,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_138_is_equal_to_sum_even --- completion 32 ---- 
+# ---- HumanEval_138_is_equal_to_sum_even --- completion 191 ---- 
 def is_equal_to_sum_even(n: int) -> bool:
     """Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
     Example
@@ -588,7 +588,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 2 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 3 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -656,7 +656,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 4 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 5 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -724,7 +724,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 6 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 7 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -790,7 +790,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 7 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 8 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -857,7 +857,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 8 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 10 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -924,7 +924,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 9 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 11 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -992,7 +992,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 11 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 13 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1057,7 +1057,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 12 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 14 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1125,7 +1125,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 13 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 15 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1192,7 +1192,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 15 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 17 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1258,7 +1258,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 16 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 18 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1325,7 +1325,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 17 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 23 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1393,7 +1393,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 18 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 24 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1459,7 +1459,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 20 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 26 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1527,7 +1527,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 21 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 27 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1592,7 +1592,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 22 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 28 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1656,7 +1656,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 23 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 30 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1723,7 +1723,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 24 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 31 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1790,7 +1790,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 25 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 32 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1858,7 +1858,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 28 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 36 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1926,7 +1926,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 29 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 39 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -1993,7 +1993,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 32 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 44 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2062,7 +2062,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 37 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 50 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2128,7 +2128,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 38 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 51 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2194,7 +2194,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 40 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 53 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2258,7 +2258,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 41 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 54 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2326,7 +2326,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 42 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 56 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2394,7 +2394,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 43 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 58 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2449,340 +2449,6 @@ Traceback (most recent call last):
     return [n] + make_a_pile(n + 2)
   [Previous line repeated 993 more times]
   File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 45 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 46 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer.")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpv8j_evkq.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpv8j_evkq.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpv8j_evkq.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpv8j_evkq.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 50 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 55 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 58 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmp_xb5djsz.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
     if n < 1:
 RecursionError: maximum recursion depth exceeded in comparison
 
@@ -2861,7 +2527,341 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 63 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 62 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer.")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpv8j_evkq.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpv8j_evkq.py", line 34, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpv8j_evkq.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpv8j_evkq.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 69 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 77 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 81 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
+    check(make_a_pile)
+  File "/tmp/tmp_xb5djsz.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 87 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpon6mhbre.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 91 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2927,7 +2927,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 67 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 97 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -2995,7 +2995,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 68 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 98 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -3061,7 +3061,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 70 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 101 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -3129,7 +3129,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 72 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 107 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -3195,1870 +3195,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 73 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 77 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 35, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 33, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 26, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 78 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmp_xb5djsz.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 79 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    return [n] + make_a_pile(n + 2)
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmprp2us7fx.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmprp2us7fx.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmprp2us7fx.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmprp2us7fx.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 80 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    elif n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpiqc_yb0u.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 81 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmppugp3wjj.py", line 35, in <module>
-    test_check()
-  File "/tmp/tmppugp3wjj.py", line 33, in test_check
-    check(make_a_pile)
-  File "/tmp/tmppugp3wjj.py", line 26, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmppugp3wjj.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmppugp3wjj.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmppugp3wjj.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmppugp3wjj.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 82 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 84 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 35, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 33, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 26, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 87 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmp_xb5djsz.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 88 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 33, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 31, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 24, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 21, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 21, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 21, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 90 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n <= 0:
-        return []
-    else:
-        return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpe9fmlni7.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmpe9fmlni7.py", line 30, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpe9fmlni7.py", line 23, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpe9fmlni7.py", line 20, in make_a_pile
-    return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
-  File "/tmp/tmpe9fmlni7.py", line 20, in make_a_pile
-    return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
-  File "/tmp/tmpe9fmlni7.py", line 20, in make_a_pile
-    return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpe9fmlni7.py", line 17, in make_a_pile
-    if n <= 0:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 91 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    return [n] + make_a_pile(n + 2)
-
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpr0pmm268.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpr0pmm268.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpr0pmm268.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpr0pmm268.py", line 21, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmpr0pmm268.py", line 21, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmpr0pmm268.py", line 21, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpr0pmm268.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 93 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    elif n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpiqc_yb0u.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 94 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    elif n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpj94ffz7c.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpj94ffz7c.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpj94ffz7c.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpj94ffz7c.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmpj94ffz7c.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmpj94ffz7c.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpj94ffz7c.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 95 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 96 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError('n must be a positive integer')
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpf9n0800t.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpf9n0800t.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpf9n0800t.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpf9n0800t.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpf9n0800t.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpf9n0800t.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpf9n0800t.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 99 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    return [n] + make_a_pile(n + 2)
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmprp2us7fx.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmprp2us7fx.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmprp2us7fx.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmprp2us7fx.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 100 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer.")
-    if n == 1:
-        return [1]
-    else:
-        if n % 2 == 0:
-            return [n] + make_a_pile(n+1)
-        else:
-            return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpsbzm2975.py", line 37, in <module>
-    test_check()
-  File "/tmp/tmpsbzm2975.py", line 35, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpsbzm2975.py", line 28, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpsbzm2975.py", line 25, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpsbzm2975.py", line 25, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpsbzm2975.py", line 25, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpsbzm2975.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 101 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 102 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 103 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    elif n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpiqc_yb0u.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 104 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer.")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpv8j_evkq.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmpv8j_evkq.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpv8j_evkq.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpv8j_evkq.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 105 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n <= 0:
-        return []
-    else:
-        return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp8jzeqcaq.py", line 32, in <module>
-    test_check()
-  File "/tmp/tmp8jzeqcaq.py", line 30, in test_check
-    check(make_a_pile)
-  File "/tmp/tmp8jzeqcaq.py", line 23, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmp8jzeqcaq.py", line 20, in make_a_pile
-    return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
-  File "/tmp/tmp8jzeqcaq.py", line 20, in make_a_pile
-    return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
-  File "/tmp/tmp8jzeqcaq.py", line 20, in make_a_pile
-    return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmp8jzeqcaq.py", line 17, in make_a_pile
-    if n <= 0:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
 # ---- HumanEval_100_make_a_pile --- completion 109 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n <= 0:
-        return []
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 34, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 17, in make_a_pile
-    if n <= 0:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 110 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    elif n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
-    test_check()
-  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
-    check(make_a_pile)
-  File "/tmp/tmpiqc_yb0u.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 112 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n < 1:
-        raise ValueError("n must be a positive integer")
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n+1)
-    else:
-        return [n] + make_a_pile(n+2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
-    test_check()
-  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
-    check(make_a_pile)
-  File "/tmp/tmp_xb5djsz.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n+2)
-  [Previous line repeated 993 more times]
-  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
-    if n < 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 114 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
-    if n == 1:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 115 ---- 
-from typing import List
-
-def make_a_pile(n: int) -> List[int]:
-    """
-    Given a positive integer n, you have to make a pile of n levels of stones.
-    The first level has n stones.
-    The number of stones in the next level is:
-        - the next odd number if n is odd.
-        - the next even number if n is even.
-    Return the number of stones in each level in a list, where element at index
-    i represents the number of stones in the level (i+1).
-
-    Examples:
-    >>> make_a_pile(3)
-    [3, 5, 7]
-    """
-    if n <= 0:
-        return []
-    if n == 1:
-        return [1]
-    if n % 2 == 0:
-        return [n] + make_a_pile(n + 1)
-    else:
-        return [n] + make_a_pile(n + 2)
-
-def check(candidate):
-    assert candidate(3) == [3, 5, 7]
-    assert candidate(4) == [4, 6, 8, 10]
-    assert candidate(5) == [5, 7, 9, 11, 13]
-    assert candidate(6) == [6, 8, 10, 12, 14, 16]
-    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
-
-def test_check():
-    check(make_a_pile)
-
-test_check()
-
-# status = Exception
-# exit_code = -1
-''' stderr = 
-Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 36, in <module>
-    test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 34, in test_check
-    check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 27, in check
-    assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
-    return [n] + make_a_pile(n + 2)
-  [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 17, in make_a_pile
-    if n <= 0:
-RecursionError: maximum recursion depth exceeded in comparison
-
-'''
-''' stdout = 
-
-'''
-
-
-
-
-
-# ---- HumanEval_100_make_a_pile --- completion 117 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -5141,8 +3278,75 @@ def make_a_pile(n: int) -> List[int]:
     >>> make_a_pile(3)
     [3, 5, 7]
     """
-    if n <= 0:
-        return []
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 35, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 33, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 26, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmphm87y78k.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 120 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
     if n == 1:
         return [1]
     if n % 2 == 0:
@@ -5166,21 +3370,21 @@ test_check()
 # exit_code = -1
 ''' stderr = 
 Traceback (most recent call last):
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 36, in <module>
+  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
     test_check()
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 34, in test_check
+  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
     check(make_a_pile)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 27, in check
+  File "/tmp/tmp_xb5djsz.py", line 27, in check
     assert candidate(3) == [3, 5, 7]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 24, in make_a_pile
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
     return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 24, in make_a_pile
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
     return [n] + make_a_pile(n+2)
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 24, in make_a_pile
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
     return [n] + make_a_pile(n+2)
   [Previous line repeated 993 more times]
-  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 17, in make_a_pile
-    if n <= 0:
+  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
+    if n < 1:
 RecursionError: maximum recursion depth exceeded in comparison
 
 '''
@@ -5192,7 +3396,206 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 119 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 121 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    return [n] + make_a_pile(n + 2)
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmprp2us7fx.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmprp2us7fx.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmprp2us7fx.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmprp2us7fx.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 122 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    elif n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpiqc_yb0u.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 123 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmppugp3wjj.py", line 35, in <module>
+    test_check()
+  File "/tmp/tmppugp3wjj.py", line 33, in test_check
+    check(make_a_pile)
+  File "/tmp/tmppugp3wjj.py", line 26, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmppugp3wjj.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmppugp3wjj.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmppugp3wjj.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmppugp3wjj.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 124 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -5258,7 +3661,1604 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 121 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 129 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 35, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 33, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 26, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2cvhow9y.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 132 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
+    check(make_a_pile)
+  File "/tmp/tmp_xb5djsz.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 133 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 33, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 31, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 24, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 21, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 21, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 21, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpo6r6h9x_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 137 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n <= 0:
+        return []
+    else:
+        return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpe9fmlni7.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmpe9fmlni7.py", line 30, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpe9fmlni7.py", line 23, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpe9fmlni7.py", line 20, in make_a_pile
+    return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
+  File "/tmp/tmpe9fmlni7.py", line 20, in make_a_pile
+    return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
+  File "/tmp/tmpe9fmlni7.py", line 20, in make_a_pile
+    return [n] + make_a_pile(n + 2) if n % 2 == 1 else [n] + make_a_pile(n + 1)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpe9fmlni7.py", line 17, in make_a_pile
+    if n <= 0:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 138 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    return [n] + make_a_pile(n + 2)
+
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpr0pmm268.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpr0pmm268.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpr0pmm268.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpr0pmm268.py", line 21, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmpr0pmm268.py", line 21, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmpr0pmm268.py", line 21, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpr0pmm268.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 143 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    elif n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpiqc_yb0u.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 144 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    elif n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpj94ffz7c.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpj94ffz7c.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpj94ffz7c.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpj94ffz7c.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmpj94ffz7c.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmpj94ffz7c.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpj94ffz7c.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 145 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 146 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError('n must be a positive integer')
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpf9n0800t.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpf9n0800t.py", line 34, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpf9n0800t.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpf9n0800t.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpf9n0800t.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpf9n0800t.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpf9n0800t.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 151 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    return [n] + make_a_pile(n + 2)
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmprp2us7fx.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmprp2us7fx.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmprp2us7fx.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/tmp/tmprp2us7fx.py", line 23, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmprp2us7fx.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 152 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer.")
+    if n == 1:
+        return [1]
+    else:
+        if n % 2 == 0:
+            return [n] + make_a_pile(n+1)
+        else:
+            return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpsbzm2975.py", line 37, in <module>
+    test_check()
+  File "/tmp/tmpsbzm2975.py", line 35, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpsbzm2975.py", line 28, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpsbzm2975.py", line 25, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpsbzm2975.py", line 25, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpsbzm2975.py", line 25, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpsbzm2975.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 155 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 156 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 158 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    elif n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpiqc_yb0u.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 162 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer.")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpv8j_evkq.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmpv8j_evkq.py", line 34, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpv8j_evkq.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpv8j_evkq.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpv8j_evkq.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 164 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n <= 0:
+        return []
+    else:
+        return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp8jzeqcaq.py", line 32, in <module>
+    test_check()
+  File "/tmp/tmp8jzeqcaq.py", line 30, in test_check
+    check(make_a_pile)
+  File "/tmp/tmp8jzeqcaq.py", line 23, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmp8jzeqcaq.py", line 20, in make_a_pile
+    return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
+  File "/tmp/tmp8jzeqcaq.py", line 20, in make_a_pile
+    return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
+  File "/tmp/tmp8jzeqcaq.py", line 20, in make_a_pile
+    return [n] + make_a_pile(n + 2 if n % 2 == 0 else n + 1)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmp8jzeqcaq.py", line 17, in make_a_pile
+    if n <= 0:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 168 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n <= 0:
+        return []
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 34, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 17, in make_a_pile
+    if n <= 0:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 171 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    elif n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmpiqc_yb0u.py", line 34, in <module>
+    test_check()
+  File "/tmp/tmpiqc_yb0u.py", line 32, in test_check
+    check(make_a_pile)
+  File "/tmp/tmpiqc_yb0u.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmpiqc_yb0u.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmpiqc_yb0u.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 177 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/tmp/tmp_xb5djsz.py", line 36, in <module>
+    test_check()
+  File "/tmp/tmp_xb5djsz.py", line 34, in test_check
+    check(make_a_pile)
+  File "/tmp/tmp_xb5djsz.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/tmp/tmp_xb5djsz.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/tmp/tmp_xb5djsz.py", line 17, in make_a_pile
+    if n < 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 179 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 180 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n <= 0:
+        return []
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 34, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp9gqhwdzk.py", line 17, in make_a_pile
+    if n <= 0:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 185 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 187 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n <= 0:
+        return []
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n+1)
+    else:
+        return [n] + make_a_pile(n+2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 36, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 34, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 27, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 24, in make_a_pile
+    return [n] + make_a_pile(n+2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmp2l35zgtv.py", line 17, in make_a_pile
+    if n <= 0:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 189 ---- 
+from typing import List
+
+def make_a_pile(n: int) -> List[int]:
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    if n == 1:
+        return [1]
+    if n % 2 == 0:
+        return [n] + make_a_pile(n + 1)
+    else:
+        return [n] + make_a_pile(n + 2)
+
+def check(candidate):
+    assert candidate(3) == [3, 5, 7]
+    assert candidate(4) == [4, 6, 8, 10]
+    assert candidate(5) == [5, 7, 9, 11, 13]
+    assert candidate(6) == [6, 8, 10, 12, 14, 16]
+    assert candidate(8) == [8, 10, 12, 14, 16, 18, 20, 22]
+
+def test_check():
+    check(make_a_pile)
+
+test_check()
+
+# status = Exception
+# exit_code = -1
+''' stderr = 
+Traceback (most recent call last):
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 34, in <module>
+    test_check()
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 32, in test_check
+    check(make_a_pile)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 25, in check
+    assert candidate(3) == [3, 5, 7]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 22, in make_a_pile
+    return [n] + make_a_pile(n + 2)
+  [Previous line repeated 993 more times]
+  File "/var/folders/2x/0c5d4d9j4dzd7354ndbb_gwr0000gq/T/tmpitewi13_.py", line 17, in make_a_pile
+    if n == 1:
+RecursionError: maximum recursion depth exceeded in comparison
+
+'''
+''' stdout = 
+
+'''
+
+
+
+
+
+# ---- HumanEval_100_make_a_pile --- completion 193 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -5323,7 +5323,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_100_make_a_pile --- completion 123 ---- 
+# ---- HumanEval_100_make_a_pile --- completion 197 ---- 
 from typing import List
 
 def make_a_pile(n: int) -> List[int]:
@@ -5389,7 +5389,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_109_move_one_ball --- completion 41 ---- 
+# ---- HumanEval_109_move_one_ball --- completion 106 ---- 
 from typing import List
 
 def move_one_ball(arr: List[int]) -> bool:
@@ -5475,7 +5475,7 @@ RecursionError: maximum recursion depth exceeded while calling a Python object
 
 
 
-# ---- HumanEval_109_move_one_ball --- completion 80 ---- 
+# ---- HumanEval_109_move_one_ball --- completion 199 ---- 
 from typing import List
 
 def move_one_ball(arr: List[int]) -> bool:
@@ -5565,7 +5565,7 @@ RecursionError: maximum recursion depth exceeded while calling a Python object
 
 
 
-# ---- HumanEval_49_modp --- completion 0 ---- 
+# ---- HumanEval_49_modp --- completion 14 ---- 
 def modp(n: int, p: int) -> int:
     """Return 2^n modulo p (be aware of numerics).
     >>> modp(3, 5)
@@ -5631,7 +5631,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_49_modp --- completion 1 ---- 
+# ---- HumanEval_49_modp --- completion 148 ---- 
 def modp(n: int, p: int) -> int:
     """Return 2^n modulo p (be aware of numerics).
     >>> modp(3, 5)
@@ -5695,7 +5695,7 @@ RecursionError: maximum recursion depth exceeded in comparison
 
 
 
-# ---- HumanEval_59_largest_prime_factor --- completion 42 ---- 
+# ---- HumanEval_59_largest_prime_factor --- completion 106 ---- 
 def largest_prime_factor(n: int) -> int:
     """Return the largest prime factor of n. Assume n > 1 and is not a prime.
     >>> largest_prime_factor(13195)
