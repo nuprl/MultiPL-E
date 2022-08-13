@@ -118,7 +118,9 @@ class PythonProblem(object):
         # "SyntaxError: Expected 'else' after 'if'" : {"regex": "expected 'else' after 'if' expression", "desc": "", "count": 0, "completions": []},
         # "SyntaxError: Expected ':'" : {"regex": "expected ':'", "desc": "Expected ':'", "count": 0, "completions": []},
         'SyntaxError' : {"regex": "(was never close)|(invalid syntax)|(unterminated string literal)|(expected)", "gold":" HumanEval_43_pairs_sum_to_zero --- completion 0", "desc": "Invalid syntax due to un-matched closing brace, bracket, or colon ':'", "count": 0, "completions": []},
-        'Timeout' : {"regex":"", "gold": "---- HumanEval_100_make_a_pile --- completion 106 ----", "desc":"Program is running for more than 5 mins", "count" : 0, "completions":[]}
+        'Timeout' : {"regex":"", "gold": "---- HumanEval_100_make_a_pile --- completion 106 ----", "desc":"Program is running for more than 5 mins", "count" : 0, "completions":[]},
+        'OK' : {"regex":"", "gold": "", "desc":"Program ran fine", "count" : 0, "completions":[]},
+        'AssertionError' : {"regex":"", "gold": "", "desc":"Assertion failed", "count" : 0, "completions":[]}
       }
       self.single_line_comments = "#"
       self.multi_line_comments = "'''"
@@ -147,11 +149,10 @@ class PythonProblem(object):
           return
 
       if '/tmp/tmp125ptmgu.py' in error or '/tmp/tmp0x72crx8.py' in error or '/tmp/tmp4uvuxbt9.py' in error or '/tmp/tmpev48bzdh.py' in error:
-        return
+        self.increment_error_code("SyntaxError", completion)
       
       print (error)
       raise Exception("Error not found")
-
 
     def from_yaml_files(self, lang:str, yaml_path: Path, results_yaml_path: Path) -> Problem:
         with open(yaml_path, 'r') as f:
@@ -183,6 +184,16 @@ class PythonProblem(object):
               completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
               comps.append(completion)
               self.increment_error_code('Timeout', completion)
+            elif r['status'] == 'OK':
+              completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
+              comps.append(completion)
+              self.increment_error_code('OK', completion)
+            elif r['status'] == 'Exception':
+              completion = ProblemCompletion(r['program'], prob_name, len(comps), r['exit_code'], r['status'], r['stderr'], r['stdout'])
+              comps.append(completion)
+              self.increment_error_code('AssertionError', completion)
+            else:
+              print(r['status'])
 
 
 if __name__ == "__main__":

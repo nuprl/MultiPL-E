@@ -52,6 +52,20 @@ RUNTIME = [
     "Swift": ["Timeout"],
     "Python": ["RecursionError"],
     "Racket": ["timeout"]
+  },
+  {
+    "Theme": "AssertionFailed",
+    "Swift": [],
+    "Python": ["AssertionError"],
+    "Racket": [],
+    "C#" : ["AssertionError"]
+  },
+  {
+    "Theme": "OK",
+    "Swift": ["OK"],
+    "Python": ["OK"],
+    "Racket": ["OK"],
+    "C#": ["OK"]
   }
 ]
 
@@ -180,6 +194,13 @@ MODEL = [
     "Swift": []
   }
 ]
+
+for d in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL]:
+  for theme in d: 
+    for v in ['C#', 'Python', 'Swift', 'Racket']:
+      if v in theme:
+        for value in theme[v]:
+          print(f"{theme['Theme']},{value},{v}")
 
 
 

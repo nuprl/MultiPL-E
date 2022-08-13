@@ -13,7 +13,7 @@ def get_description(code: str) -> str:
     return CSV_DICT[code][1]
 
 def get_total_failures() -> int:
-    return sum([int(CSV_DICT[l][2]) for l in CSV_DICT.keys()])
+    return sum([int(CSV_DICT[l][2]) for l in CSV_DICT.keys()]) - int(CSV_DICT["OK"][2])
 
 def get_code_count(code: str) -> int:
     return int(CSV_DICT[code][2])
