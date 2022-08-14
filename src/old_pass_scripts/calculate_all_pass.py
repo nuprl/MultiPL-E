@@ -1,9 +1,6 @@
 '''
 Adapted from the evaluation scripts as part of https://github.com/openai/human-eval
 
-Remainder of the processing here written by Molly Q Feldman for the format of the 
-translated dataset (some parts adapted from Arjun Guha)
-
 LICENSE FOR PART OF THE ADAPTATION: 
 The MIT License
 
