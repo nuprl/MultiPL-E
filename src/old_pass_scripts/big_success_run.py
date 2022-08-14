@@ -1,9 +1,7 @@
 '''
 Run to get all pass@k results for provided combinations.
 
-CAUTION: will produce output regardless of completion situation
-
-written by Molly Feldman, based on code by Arjun Guha 
+CAUTION: may produce output regardless of completion situation
 '''
 from summary_generator import makeSummary
 from calculate_all_pass import evaluate_functional_correctness
