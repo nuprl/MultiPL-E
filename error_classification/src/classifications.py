@@ -33,7 +33,7 @@ RUNTIME = [
         "ArgumentOutOfRangeException", 
         "InvalidOperationException"
     ],
-    "Racket": ["indexOutOfRange", "hashmapNoValueForKey"],
+    "Racket": ["listIndexOutOfRange", "stringIndexOutOfRange", "hashmapNoValueForKey"],
     "Python": [
       "AttributeError", 
       "KeyError", 
@@ -57,7 +57,7 @@ RUNTIME = [
     "Theme": "AssertionFailed",
     "Swift": [],
     "Python": ["AssertionError"],
-    "Racket": [],
+    "Racket": ["assertionError"],
     "C#" : ["AssertionError"]
   },
   {
@@ -169,7 +169,7 @@ LANGUAGE = [
   },
   {
     "Theme": "Niche Language",
-    "Racket": ["A03IfExtraArgs", "missingElse", "badSyntax", "elseAsExpression",  "missingOrUnmatchedBraces", "unclassified"] 
+    "Racket": ["ifExtraArgs", "missingElse", "badSyntax", "elseAsExpression",  "missingOrUnmatchedBraces", "unclassified"] 
     # default_value_exp_missing means racket completions is hallucinating Haskell perhaps? 
   }
 ]
@@ -179,7 +179,7 @@ MODEL = [
     "Theme": "OutOfTokens",
     "C#": ["SyntaxError"],
     "Python" : ["SyntaxError"],
-    "Racket": ["A02_incomplete_generation"],
+    "Racket": ["incompleteGeneration"],
     "Swift": [
       "CompileError-RanOutOfTokens", 
       "CompileError-CompilerErrorCutoff",
@@ -195,7 +195,7 @@ MODEL = [
   },
   {
     "Theme": "GenerateAnotherLang",
-    "Racket": ["defaultValueExpMissing", "A01GeneratingWebpageOrMarkdown"],
+    "Racket": ["defaultValueExpMissing", "generatingWebpageOrMarkdown"],
     "Swift": []
   }
 ]
