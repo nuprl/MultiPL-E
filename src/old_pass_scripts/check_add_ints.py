@@ -27,9 +27,7 @@ def validateAddInt():
                         for problem in problemReader:
                             if problem[0] == 'HumanEval_53_add':
                                 seen = True
-                                #print(path)
-                                #THIS SHOULD ALWAYS ALWAYS SUCCEED
-                                if int(problem[1]) == 0: #int(problem[1]) != 200 and int(problem[1]) != 20:
+                                if int(problem[1]) != 200:
                                     print('CHECK', path[:-12], int(problem[1]))
 
                     if not seen:
