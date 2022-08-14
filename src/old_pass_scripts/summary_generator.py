@@ -1,6 +1,4 @@
 '''
-Written by Molly Q Feldman, based on code from Arjun Guha 
-
 Given a *.results.yaml file, calculates the summary statistics for model success.
 '''
 import argparse
@@ -54,7 +52,6 @@ def makeSummary(dir, lang, model, temp, doc, term, printToShell=False, writeToFi
             if test_results is None: 
                 continue 
             print(problem_yaml_path)
-            #TODO (molly): these need to factor out "OtherError" for different types for error analysis stage
             counts = {"OK": 0, "OtherError": 0, "Exception": 0}
             results = test_results['results']
             for res in results: #res is not a single instance, count it's status

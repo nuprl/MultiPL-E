@@ -168,7 +168,7 @@ LANGUAGE = [
     "Python": ["EOFError"]
   },
   {
-    "Theme": "Niche Language",
+    "Theme": "DoesNotKnowSyntax",
     "Racket": ["ifExtraArgs", "missingElse", "badSyntax", "elseAsExpression",  "missingOrUnmatchedBraces", "unclassified"] 
     # default_value_exp_missing means racket completions is hallucinating Haskell perhaps? 
   }
