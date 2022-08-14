@@ -415,7 +415,9 @@ summary(ablation.int.model)
 ```{r}
 codex.pl <- subset(pl.args,MODEL=='davinci'&(EXPT=="reworded"|EXPT=="no_args"))
 pl.sum <- codex.pl %>% group_by(EXPT) %>% summarize(mean = mean(rate1))
-ggplot(data=pl.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge")
+pl.sum$EXPT <- recode(pl.sum$EXPT,"reworded"="Full Translation with Argument-Naming","no_args"="Full Translation, No Argument-Naming")
+ggplot(data=pl.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge") + xlab("Experiment") + ylab("Average Codex pass@1")
+ggsave("perlexpt.pdf")
 ```
 
 
@@ -437,7 +439,9 @@ codex.script$PROBLEM <- factor(codex.script$PROBLEM)
 ```
 ```{r}
 script.sum <- codex.script %>% group_by(expt) %>% summarize(mean = mean(rate1))
-ggplot(data=script.sum,aes(x=expt,y=mean)) + geom_col(position="dodge")
+script.sum$expt <- recode(script.sum$expt,"reworded"="Type-checked TypeScript with Precise Types","JS"="JavaScript","reworded_nocheck"="Unchecked TypeScript with Precise Types","all_types_any"="TypeScript, All Types Any")
+ggplot(data=script.sum,aes(x=expt,y=mean)) + geom_col(position="dodge") + xlab("Experiment") + ylab("Average Codex pass@1")
+ggsave("tsexpt.pdf")
 ```
 
 ```{r}
@@ -452,16 +456,15 @@ summary(codex.script.model)
 ```{r}
 bash.davinci <- subset(bash.all,MODEL=='davinci')
 bash.expt <- subset(bash.davinci,EXPT!="keep"&EXPT!="remove")
-bash.expt$EXPT <- recode(bash.expt$EXPT,"notypes_cleanedvocab"="notypes_reworded","notypes_originalvocab"="notypes_transform")
-```
-
-```{r}
+bash.expt$EXPT <- recode(bash.expt$EXPT,"notypes_originalvocab"="notypes_transform","notypes_cleanedvocab"="notypes_reworded")
 bash.expt$EXPT <- factor(bash.expt$EXPT,levels = c("notypes_transform","notypes_reworded","transform","reworded"))
 bash.expt$PROBLEM <- factor(bash.expt$PROBLEM)
-```
-```{r}
+
 bash.sum <- bash.expt %>% group_by(EXPT) %>% summarize(mean = mean(rate1))
-ggplot(data=bash.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge")
+bash.sum$EXPT <- recode(bash.sum$EXPT,"notypes_transform"="No comments\nNo NL translation","notypes_reworded"="No comments\nFull translation","transform"="Comments\nNo NL translation","reworded"="Comments\nFull translation")
+bash.sum$EXPT <- factor(bash.sum$EXPT,levels = c("No comments\nNo NL translation","No comments\nFull translation","Comments\nNo NL translation","Comments\nFull translation"))
+ggplot(data=bash.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge") + xlab("Experiment") + ylab("Average Codex pass@1")
+ggsave("bashexpt.pdf")
 ```
 ```{r}
 bash.mem <- bash.expt %>% mutate(annotations = ifelse(grepl("notypes",EXPT),0,1),
@@ -482,7 +485,10 @@ multi.expt$PROBLEM <- factor(multi.expt$PROBLEM)
 multi.expt$EXPT <- factor(multi.expt$EXPT,c("reworded","multiline"))
 
 multi.sum <- multi.expt %>% group_by(PL,EXPT) %>% summarize(mean = mean(rate1))
-ggplot(data=multi.sum,aes(x=EXPT,y=mean,fill=PL)) + geom_col(position="dodge")
+multi.sum$EXPT <- recode(multi.sum$EXPT,"reworded"="Single-line","multiline"="Multi-line")
+multi.sum$PL <- recode(multi.sum$PL,"rkt"="Racket","php"="PHP")
+ggplot(data=multi.sum,aes(x=EXPT,y=mean,fill=PL)) + geom_col(position="dodge") + xlab("Experiment") + ylab("Average Codex pass@1")
+ggsave("commentexpt.pdf")
 ```
 
 ```{r}
@@ -509,7 +515,9 @@ py.expt$PROBLEM <- factor(py.expt$PROBLEM)
 py.expt$EXPT <- factor(py.expt$EXPT,c("reworded","notypes"))
 
 py.sum <- py.expt %>% group_by(EXPT) %>% summarize(mean = mean(rate1))
-ggplot(data=py.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge")
+py.sum$EXPT <- recode(py.sum$EXPT,"reworded"="Full translation","notypes"="No type annotations")
+ggplot(data=py.sum,aes(x=EXPT,y=mean)) + geom_col(position="dodge") + xlab("Experiment") + ylab("Average Codex pass@1")
+ggsave("pyexpt.pdf")
 ```
 ```{r}
 py.model <- glmer(rate1 ~ EXPT + (1+EXPT|PROBLEM),weights=n1, data=py.expt,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
