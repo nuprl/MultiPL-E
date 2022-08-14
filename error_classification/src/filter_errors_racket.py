@@ -39,7 +39,7 @@ class Filters:
     # hack: since dir() sorts members alphabetically, we do this so this 
     # is the first to be checked.
     @staticmethod
-    def A01GeneratingWebpageOrMarkdown(e):
+    def generatingWebpageOrMarkdown(e):
         """
         Generated code seems to be part of webpage or markdown source file.
         """
@@ -49,7 +49,7 @@ class Filters:
                'read-syntax: bad syntax `##`' in e.stderr # generating Markdown headers
     
     @staticmethod
-    def A02IncompleteGeneration(e):
+    def incompleteGeneration(e):
         """
         Quick heuristic: programs that have generation timeouts will not have correct matching brackets.
         We treat all kinds of braces as the same (i.e. (] is a matching pair).
@@ -57,7 +57,7 @@ class Filters:
         return count_braces_balance(e.program) != 0
 
     @staticmethod
-    def A03IfExtraArgs(e):
+    def ifExtraArgs(e):
         """Generated code contains if with more than 3 arguments."""
         return "if: bad syntax" in e.stderr
 
@@ -146,7 +146,7 @@ class Filters:
         return "contract violation" in e.stderr
 
     @staticmethod
-    def indexOutOfRange(e):
+    def listIndexOutOfRange(e):
         """
         out-of-range index access for list and string; or ending index smaller than beginning index for substring.
         """
@@ -198,7 +198,7 @@ class Filters:
         return "division by zero" in e.stderr
     
     @staticmethod
-    def zz99ValueFailure(e):
+    def assertionError(e):
         """
         returned value is different than the expected value in tests.
         """
