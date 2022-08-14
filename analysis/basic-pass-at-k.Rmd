@@ -378,7 +378,9 @@ summary(codex.feat.model)
 ```
 
 ```{r}
-codex.feat.l.model <- glmer(rate1 ~ (List+Bool+Tuple+Dictionary)*PL + (1+(List+Bool+Tuple+Dictionary)*PL||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+pl_order <- c("py","sh","cpp", "cs","d", "go","java","jl", "js","lua",  "pl",   "php", "r", "rb", "rkt", "rs", "scala","swift","ts")
+davinci$PL <- factor(davinci$PL,levels=pl_order)
+codex.feat.l.model <- glmer(rate1 ~ (List+Bool+Tuple+Dictionary)*PL + (1|PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
 ```
 ```{r}
 summary(codex.feat.l.model)
@@ -419,6 +421,27 @@ ablation.sint.model <- glmer(rate1 ~ EXPT*PL + (1|PROBLEM),weights=n1, data=abla
 summary(ablation.sint.model)
 ```
 
+
+```{r}
+
+in.ablation <- subset(per_problem_new,MODEL=="incoder")
+in.ablation$PROBLEM <- factor(in.ablation$PROBLEM)
+in.ablation$EXPT <- factor(in.ablation$EXPT,levels=c("transform","reworded","keep","remove"))
+
+sum.in <- in.ablation %>% group_by(EXPT) %>% summarize(mean= mean(rate1))
+
+in.ab.new <- in.ablation %>% group_by(EXPT) %>% mutate(reworded = ifelse(EXPT=="reworded",1,0),
+                                                       keep = ifelse(EXPT=="keep",1,0),
+                                                       remove = ifelse(EXPT=="remove",1,0))
+```
+
+```{r}
+in.ablation.model <- glmer(rate1 ~ EXPT + (1+EXPT|PL),weights=n1, data=in.ab.new,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+
+```{r}
+summary(in.ablation.model)
+```
 
 ### Effect of perl arg naming
 
