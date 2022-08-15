@@ -18,7 +18,6 @@ def eval_script(path: Path):
         }
 
     run_result = run([basename])
-    # Northeastern Discovery cluster is amazing. Except when it is a pain.
     if "In file included from /shared/centos7/gcc/9.2.0-skylake/" in run_result.stderr:
         raise Exception("Skylake bug encountered")
     if "/4.8.2" in run_result.stderr:
