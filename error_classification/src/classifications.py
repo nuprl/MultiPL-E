@@ -4,10 +4,6 @@ import racket_category_data
 import python_category_data
 import csharp_category_data
 
-# Classifications in progress
-# These are four overall categories, but we aren't going to be stuck with that.
-# Let's make this a JSON file that maps different error categories in languages to a single category
-
 RUNTIME = [
   { 
     "Theme": "NullReference",
@@ -170,7 +166,6 @@ LANGUAGE = [
   {
     "Theme": "DoesNotKnowSyntax",
     "Racket": ["ifExtraArgs", "missingElse", "badSyntax", "elseAsExpression",  "missingOrUnmatchedBraces", "unclassified"] 
-    # default_value_exp_missing means racket completions is hallucinating Haskell perhaps? 
   }
 ]
 
@@ -200,16 +195,6 @@ MODEL = [
   }
 ]
 
-for d in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL]:
-  for theme in d: 
-    for v in ['C#', 'Python', 'Swift', 'Racket']:
-      if v in theme:
-        for value in theme[v]:
-          print(f"{theme['Theme']},{value},{v}")
-
-
-
-
 class CategoryInfo(NamedTuple):
   name: str
   description: str
@@ -228,3 +213,11 @@ SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
 RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
 PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
 CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
+
+def getThemeLabelMap():
+  for d in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL]:
+    for theme in d: 
+      for v in ['C#', 'Python', 'Swift', 'Racket']:
+        if v in theme:
+          for value in theme[v]:
+            print(f"{theme['Theme']},{value},{v}")
