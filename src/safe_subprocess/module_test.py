@@ -1,10 +1,13 @@
 from safe_subprocess import run
 import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent / "evil_programs"
 
 
 def assert_no_running_evil():
     result = run(
-        ["pgrep", "-f", "evil_programs"], timeout_seconds=1, max_output_size=1024
+        ["pgrep", "-f", ROOT], timeout_seconds=1, max_output_size=1024
     )
     assert (
         result.exit_code == 1
@@ -17,7 +20,7 @@ def test_fork_once():
     # The program exits cleanly and immediately. But, it forks a child that runs
     # forever.
     result = run(
-        ["python3", "./evil_programs/fork_once.py"],
+        ["python3", ROOT / "fork_once.py"],
         timeout_seconds=2,
         max_output_size=1024,
     )
@@ -31,7 +34,7 @@ def test_fork_once():
 def test_close_outputs():
     # The program prints to stdout, closes its output, and then runs forever.
     result = run(
-        ["python3", "./evil_programs/close_outputs.py"],
+        ["python3", ROOT / "close_outputs.py"],
         timeout_seconds=2,
         max_output_size=1024,
     )
@@ -44,7 +47,7 @@ def test_close_outputs():
 
 def test_unbounded_output():
     result = run(
-        ["python3", "./evil_programs/unbounded_output.py"],
+        ["python3", ROOT / "unbounded_output.py"],
         timeout_seconds=3,
         max_output_size=1024,
     )
@@ -57,7 +60,7 @@ def test_unbounded_output():
 
 def test_sleep_forever():
     result = run(
-        ["python3", "./evil_programs/sleep_forever.py"],
+        ["python3", ROOT / "sleep_forever.py"],
         timeout_seconds=2,
         max_output_size=1024,
     )
@@ -70,7 +73,7 @@ def test_sleep_forever():
 
 def test_fork_bomb():
     result = run(
-        ["python3", "./evil_programs/fork_bomb.py"],
+        ["python3", ROOT / "fork_bomb.py"],
         timeout_seconds=2,
         max_output_size=1024,
     )
@@ -81,7 +84,7 @@ def test_fork_bomb():
     # Unfortunately, this sleep seems to be necessary. My theories:
     # 1. os.killpg doesn't block until the whole process group is dead.
     # 2. pgrep can produce stale output
-    time.sleep(1)
+    time.sleep(2)
     assert_no_running_evil()
 
 
@@ -89,7 +92,7 @@ def test_block_on_inputs():
     # We run the subprocess with /dev/null as input. So, any program that tries
     # to read input will error.
     result = run(
-        ["python3", "./evil_programs/block_on_inputs.py"],
+        ["python3", ROOT / "block_on_inputs.py"],
         timeout_seconds=2,
         max_output_size=1024,
     )
