@@ -51,7 +51,7 @@ RUNTIME = [
   },
   {
     "Theme": "AssertionFailed",
-    "Swift": [],
+    "Swift": ["Exception-AssertionFail"],
     "Python": ["AssertionError"],
     "Racket": ["assertionError"],
     "C#" : ["AssertionError"]
