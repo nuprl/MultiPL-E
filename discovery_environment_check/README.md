@@ -1,8 +1,11 @@
+Use this script to sanity-checking the running environment on the
+Discovery cluster.
+
 To check:
 
 ```
 cd ../src
-sbatch --array=0 polyglot.sh ../slurm_environment_check/test_job.txt
+sbatch --array=0 polyglot.sh ../discovery_environment_check/test_job.txt
 ```
 
 - Verify that there aren't crashes reported in the .out file in ../src.
