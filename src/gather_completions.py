@@ -1,20 +1,17 @@
 """
 This script produces completions from Codex, or any model that fudges the
-completions API. For an example of a fudge:
-
-https://github.com/arjunguha/research_model_server
+completions API.
 
 To run this script, create a file called model_keys.csv with the columns:
 
 ```
 Label,Model,Key
 My OpenAI Key,,sk-YOUR-OPENAI-KEY
-Luna's OpenAI Key,,sk-LUNAS-KEY
-Wellesley A6000,incoder,http://localhost:8080/v1/completions
-Steven Holtzen's A40,incoder,http://localhost:8080/v1/completions
+A100,codegen,http://localhost:8080/v1/completions
+A40,incoder,http://localhost:8080/v1/completions
 ```
    
-OpenAI API key will only work if you are in the Codex beta.
+OpenAI API keys will only work if you are in the Codex beta.
 
 Then run:
 

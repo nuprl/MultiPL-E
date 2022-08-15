@@ -1,8 +1,4 @@
-# Authored by  Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
-#
-# This script translates problems from the OpenAI HumanEval dataset into csharp.
-
+# This script translates problems from the OpenAI HumanEval dataset into C#.
 import re
 import ast
 from typing import List, Optional, Tuple

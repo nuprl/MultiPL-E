@@ -1,12 +1,9 @@
-# Authored by Carolyn Anderson, based on script by Arjun Guha.
-# Modified by Sydney Nguyen
-#
-# This script translates problems from the OpenAI HumanEval dataset into TypeScript.
+# This script translates problems from the OpenAI HumanEval dataset into 
+# TypeScript, but uses "Any" as the only type annotation.
 import re
 import ast
 from typing import List
 from generic_translator import main
-from base_language_translator import LanguageTranslator
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
@@ -21,7 +18,7 @@ def coerce(expr: str, type) -> str:
 
 class Translator:
 
-    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ] # NOTE(carolyn): My guess
+    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ]
 
     def __init__(self):
         global needs_hashmap

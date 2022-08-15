@@ -1,7 +1,3 @@
-# Authored by Arjun Guha, edited by Federico Cassano
-# Copyright (c) 2022, Roblox Inc.
-#
-# This script runs Gopherfied code - the key functionality is eval_script
 import argparse
 from sys import exit
 import subprocess

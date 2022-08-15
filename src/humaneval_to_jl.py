@@ -1,7 +1,4 @@
-# Authored by John Gouwar - based on scripts by Arjun Guha, Abhinav Jangda, and Luna Phipps-Costin
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-# 
-# This script translates problems from the OpenAI HumanEval dataset into Rust.
+# This script translates problems from the OpenAI HumanEval dataset into Julia.
 # 
 # Julia is a very similar language to python, therefore, most of the translation 
 # is just between various keywords. Julia includes support for arbitrary Union 

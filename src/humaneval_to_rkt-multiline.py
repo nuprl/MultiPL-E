@@ -1,5 +1,3 @@
-# Authored by Carolyn Anderson, based on script by Arjun Guha.
-#
 # This script translates problems from the OpenAI HumanEval dataset into Racket.
 import re
 import ast
@@ -53,7 +51,7 @@ class Translator:
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
-            return "#f" # NOTE(arjun): My guess
+            return "#f"
         return repr(c)
 
     def gen_var(self, v: str) -> str:

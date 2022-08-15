@@ -1,11 +1,3 @@
-# Authored by Arjun Guha and Ming-Ho Yee
-# Copyright (c) 2022, Roblox Inc and Northeastern University
-#
-# Main goal: provide an eval_script implementation 
-# This gets called by problem_evaluator.py for all generated code 
-#
-# See generic_eval.py for instructions on how to run.
-
 import os
 import signal
 import subprocess

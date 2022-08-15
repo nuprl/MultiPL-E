@@ -1,7 +1,3 @@
-# Authored by Arjun Guha, edited by John Gouwar
-# Copyright (c) 2022, Roblox Inc.
-#
-# This script runs the Pythoned HumanEval programs
 import os
 import subprocess
 from pathlib import Path

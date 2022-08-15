@@ -1,6 +1,3 @@
-# Authored by Luna Phipps-Costin.
-# Reviewed by Arjun Guha.
-#
 # This script translates problems from the OpenAI HumanEval dataset into Python.
 # It may seem silly, since the HumanEval dataset is already in Python. But,
 # we use this script uniformly across all languages to translate the dataset

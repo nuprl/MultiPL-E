@@ -1,6 +1,3 @@
-# Authored by Arjun Guha and Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This script translates problems from the OpenAI HumanEval dataset into Lua.
 import re
 import ast
@@ -17,7 +14,6 @@ TargetExp = str
 class Translator(LanguageTranslator[TargetExp]):
 
     def stop(self):
-        # NOTE(arjun): Seems like reasonable stop sequences for Lua
         return ["\nlocal", "\nfunction", "\n--", "\n\n"]
 
     def file_ext(self) -> str:
@@ -54,7 +50,6 @@ class Translator(LanguageTranslator[TargetExp]):
         """
         return "    lu.assertEquals({}, {})".format(left, right)
 
-    # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float | None) -> TargetExp:
         """Translate a literal expression
         c: is the literal value

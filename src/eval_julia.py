@@ -1,7 +1,3 @@
-# Authored by Arjun Guha, edited by Molly Q Feldman and Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc.
-#
-# This script runs Rubified code - the key functionality is eval_script 
 import argparse
 from sys import exit
 import subprocess

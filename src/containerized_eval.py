@@ -70,7 +70,6 @@ def eval_string_script(language, program):
         # Only save the first 2K of output from the running program. Any futher
         # output is very likely an exceptionally long stack trace or a long
         # series of prints.
-        #TODO(molly, arjun): make this eyesore not an eyesore
         if type(result["stdout"]) == bytes:
             result["stdout"] = result["stdout"].decode("utf-8", errors="ignore")
         if result["stdout"] is None:

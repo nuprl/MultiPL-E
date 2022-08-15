@@ -1,11 +1,8 @@
-# Authored by Arjun Guha and Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This script translates problems from the OpenAI HumanEval dataset into Rust.
 #
 # Some rust specific notes:
 # 
-# Obviously we have types, this is mostly alright for the prompt because Dan
+# Obviously we have types, this is mostly alright for the prompt because
 # and Sydney thankfully went and added types to all the benchmarks.  There are
 # a few explicitly or implicitly untyped, or that use Union, and we just blow up
 # on them
@@ -200,7 +197,6 @@ class Translator:
         # never on the rhs
         return f"    assert_eq!({left}, {right});"
 
-    # NOTE(arjun): Really, no Nones?
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
         c: is the literal value

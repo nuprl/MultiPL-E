@@ -1,6 +1,3 @@
-# Authored by Ming-Ho Yee
-# Copyright (c) 2022 Northeastern University
-#
 # This is a helper script for evaluating benchmarks that have been translated to
 # different languages.
 #
