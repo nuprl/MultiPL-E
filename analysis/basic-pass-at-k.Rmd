@@ -19,20 +19,7 @@ not at all final, but the idea is to do a first pass at reading in the data.
 
 ```{r load-pass-1}
 frequency_map <- read_csv("frequency-map.csv", col_names = c('PL','FREQ','TYPES',"PERPLEXITY"))
-cn<- c("PL","MODEL","TEMP","DOCS","TERMS","MIN_COMPLETE","K","MIN_PROBLEM","RES")
-pass_at_1 <- read_csv("../model_results/all-pass-at-1-eval-run.csv",col_names = cn)
-pass_at_1 <- pass_at_1 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
-pass_at_1 <- merge(pass_at_1,frequency_map)
-```
-
-```{r load-pass-1}
-pass_at_10 <- read_csv("../model_results/all-pass-at-10-eval-run.csv",col_names = cn)
-pass_at_10 <- pass_at_10 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
-pass_at_10 <- merge(pass_at_10,frequency_map)
-
-pass_at_100 <- read_csv("../model_results/all-pass-at-100-eval-run.csv",col_names = cn)
-pass_at_100 <- pass_at_100 %>% mutate(EXPT = paste0(DOCS,'_',TERMS))
-pass_at_100 <- merge(pass_at_100,frequency_map)
+problem_class <- read_csv("../analysis/type_classification.csv")
 ```
 
 ```{r}
@@ -44,11 +31,6 @@ per_problem$rate100 <- as.numeric(per_problem$rate100)
 per_problem$n1 <- as.numeric(per_problem$n1)
 per_problem$n10 <- as.numeric(per_problem$n10)
 per_problem$PROB <- sub('([^_]*_[^_]*)_\\w+', '\\1', per_problem$PROBLEM)
-```
-
-```{r}
-problem_class <- read_csv("../analysis/type_classification.csv")
-#problem_class <- subset(problem_class,select=-c(Original,Notes))
 ```
 
 ```{r}
@@ -139,56 +121,6 @@ py <- rbind(py.new,py.o)
 ```{r}
 pl_labs <- c(`py` = "Python", `sh` = "Bash", `cpp` = "C++", `go` = "Go", `java` = "Java", `js` = "JavaScript", `pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
 ```
-
-```{r load-at-10}
-cn<- c("PL","MODEL","TEMP","DOCS","TERMS","MIN_COMPLETE","K","MIN_PROBLEM","RES10")
-pass_at_10 <- read_csv("~/polyglot-codegen-evaluation/model_results/all-pass-at-10-eval-run.csv", col_names = cn)
-
-
-
-#pass_results<- tibble::add_column(pass_at_1, pass_at_10$RES10)
-
-#pass_results<- dplyr::rename(pass_results, RES10 = `pass_at_10$RES10`)
-
-#remove unneeded columns
-#pass_results %>% dplyr::select(-c(MIN_COMPLETE, MIN_PROBLEM, K))
-
-#make a davinci only data set 
-davinci_only <- dplyr::filter(pass_at_1, pass_at_1$MODEL == 'davinci')
-```
-
-As a first pass, let's just plot all of the versions of the Python runs, 
-which are arguably relatively simple to handle
-
-```{r only-python}
-# python_only <- dplyr::filter(pass_results, (pass_results$PL == "py"))
-# print(python_only)
-# ggplot(python_only, aes(x=DOCS, y=RES, col=factor(MODEL))) + geom_point()+ geom_point(data=python_only,aes(DOCS, RES10)) + facet_grid(~ TERMS, scales = 'free') + theme_bw() + ylab("Pass@k") + xlab("Variation")
-```
-
-Plot only JavaScript versus TypeScript on Davinci:
-```{r js_v_ts}
-js_v_ts <- dplyr::filter(davinci_only, (davinci_only$PL == "js" | davinci_only$PL == "ts"))
-ggplot(js_v_ts, aes(x=DOCS, y=RES, col=factor(PL))) +
-  ylab("Pass at K Rate") + xlab("Variation") +
-  geom_point()  +
-  facet_grid(~ TERMS, scales = 'free') + theme_bw() + ylab("Pass@k") + xlab("Variation")
-```
-
-Plot all languages on Davinci 0.2:
-```{r everything}
-ggplot(davinci_only, aes(x=DOCS, y=RES, col=factor(PL))) +  
-  ylab("Pass at K Rate") + xlab("Variation") +
-  geom_point() +
-  facet_grid(~ TERMS, scales = 'free') +  theme_bw() + ylab("Pass@k") + xlab("Variation")
-```
-
-Plot pass at 1 by model and experiment, Python-only
-
-```{r}
-ggplot(subset(pass_at_1,PL=="py"),aes(x=EXPT,y=RES,fill=MODEL)) + geom_col(position="dodge")
-```
-
 
 Plot all passes, by model and language for all experiments
 
@@ -308,12 +240,6 @@ by.feature$name <- factor(by.feature$name,levels = feature_order)
 ggplot(data=by.feature, aes(x=name,y=means,color=PL=="py",fill=name)) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~PL) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) +  geom_vline(xintercept=c(0,1.5),linetype="dotted")
 ```
 
-
-## Do Some High Level Stats 
-
-```{r frequency}
-category_data <- dplyr::left_join(davinci_only, frequency_map)
-```
 
 ## Mixed effects modeling
 
