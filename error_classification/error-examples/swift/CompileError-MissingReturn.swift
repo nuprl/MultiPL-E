@@ -1,143 +1,3 @@
-// ----------- problem HumanEval_83_starts_one_ends, completion 67 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpoj5n3izh.swift:105:1: error: missing return in global function expected to return 'Int'
-}
-^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given a positive integer n, return the count of the numbers of n-digit
-/// positive integers that start or end with 1.
-func starts_one_ends(n: Int) -> Int {
-    if n == 1 {
-        return 2
-    }
-    if n == 2 {
-        return 4
-    }
-    if n == 3 {
-        return 8
-    }
-    if n == 4 {
-        return 16
-    }
-    if n == 5 {
-        return 32
-    }
-    if n == 6 {
-        return 64
-    }
-    if n == 7 {
-        return 128
-    }
-    if n == 8 {
-        return 256
-    }
-    if n == 9 {
-        return 512
-    }
-    if n == 10 {
-        return 1024
-    }
-    if n == 11 {
-        return 2048
-    }
-    if n == 12 {
-        return 4096
-    }
-    if n == 13 {
-        return 8192
-    }
-    if n == 14 {
-        return 16384
-    }
-    if n == 15 {
-        return 32768
-    }
-    if n == 16 {
-        return 65536
-    }
-    if n == 17 {
-        return 131072
-    }
-    if n == 18 {
-        return 262144
-    }
-    if n == 19 {
-        return 524288
-    }
-    if n == 20 {
-        return 1048576
-    }
-    if n == 21 {
-        return 2097152
-    }
-    if n == 22 {
-        return 4194304
-    }
-    if n == 23 {
-        return 8388608
-    }
-    if n == 24 {
-        return 16777216
-    }
-    if n == 25 {
-        return 33554432
-    }
-    if n == 26 {
-        return 67108864
-    }
-    if n == 27 {
-        return 134217728
-    }
-    if n == 28 {
-        return 268435456
-    }
-    if n == 29 {
-        return 536870912
-    }
-    if n == 30 {
-        return 1073741824
-    }
-    if n == 31 {
-        return 2147483648
-    }
-    if n == 32 {
-        return 4294967296
-    }
-    if n == 33 {
-        return 8589934592
-    }
-
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(starts_one_ends(n: 1) == 1)
-assert(starts_one_ends(n: 2) == 18)
-assert(starts_one_ends(n: 3) == 180)
-assert(starts_one_ends(n: 4) == 1800)
-assert(starts_one_ends(n: 5) == 18000)
-
-
-
 // ----------- problem HumanEval_83_starts_one_ends, completion 114 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -333,6 +193,146 @@ func starts_one_ends(n: Int) -> Int {
     //
     // The number of n-digit numbers that start or end with 1 is the same as
     // the number of n-digit numbers that start
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(starts_one_ends(n: 1) == 1)
+assert(starts_one_ends(n: 2) == 18)
+assert(starts_one_ends(n: 3) == 180)
+assert(starts_one_ends(n: 4) == 1800)
+assert(starts_one_ends(n: 5) == 18000)
+
+
+
+// ----------- problem HumanEval_83_starts_one_ends, completion 67 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpoj5n3izh.swift:105:1: error: missing return in global function expected to return 'Int'
+}
+^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given a positive integer n, return the count of the numbers of n-digit
+/// positive integers that start or end with 1.
+func starts_one_ends(n: Int) -> Int {
+    if n == 1 {
+        return 2
+    }
+    if n == 2 {
+        return 4
+    }
+    if n == 3 {
+        return 8
+    }
+    if n == 4 {
+        return 16
+    }
+    if n == 5 {
+        return 32
+    }
+    if n == 6 {
+        return 64
+    }
+    if n == 7 {
+        return 128
+    }
+    if n == 8 {
+        return 256
+    }
+    if n == 9 {
+        return 512
+    }
+    if n == 10 {
+        return 1024
+    }
+    if n == 11 {
+        return 2048
+    }
+    if n == 12 {
+        return 4096
+    }
+    if n == 13 {
+        return 8192
+    }
+    if n == 14 {
+        return 16384
+    }
+    if n == 15 {
+        return 32768
+    }
+    if n == 16 {
+        return 65536
+    }
+    if n == 17 {
+        return 131072
+    }
+    if n == 18 {
+        return 262144
+    }
+    if n == 19 {
+        return 524288
+    }
+    if n == 20 {
+        return 1048576
+    }
+    if n == 21 {
+        return 2097152
+    }
+    if n == 22 {
+        return 4194304
+    }
+    if n == 23 {
+        return 8388608
+    }
+    if n == 24 {
+        return 16777216
+    }
+    if n == 25 {
+        return 33554432
+    }
+    if n == 26 {
+        return 67108864
+    }
+    if n == 27 {
+        return 134217728
+    }
+    if n == 28 {
+        return 268435456
+    }
+    if n == 29 {
+        return 536870912
+    }
+    if n == 30 {
+        return 1073741824
+    }
+    if n == 31 {
+        return 2147483648
+    }
+    if n == 32 {
+        return 4294967296
+    }
+    if n == 33 {
+        return 8589934592
+    }
+
 }
 
 

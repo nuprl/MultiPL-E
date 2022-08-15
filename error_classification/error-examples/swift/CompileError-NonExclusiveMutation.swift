@@ -1,14 +1,14 @@
-// ----------- problem HumanEval_33_sort_third, completion 79 ------------
+// ----------- problem HumanEval_33_sort_third, completion 24 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmp3559_3kk.swift:15:18: error: overlapping accesses to 'l', but modification requires exclusive access; consider calling MutableCollection.swapAt(_:_:)
-            swap(&l[j - 2], &l[j])
-            ~~~~~^~~~~~~~~~~~~~~~~
-            l.swapAt(j - 2, j)
-/tmp/tmp3559_3kk.swift:15:29: note: conflicting access is here
-            swap(&l[j - 2], &l[j])
-                            ^~~~~
+/tmp/tmptqawp55m.swift:15:18: error: overlapping accesses to 'l_prime', but modification requires exclusive access; consider calling MutableCollection.swapAt(_:_:)
+            swap(&l_prime[j], &l_prime[j - 1])
+            ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            l_prime.swapAt(j, j - 1)
+/tmp/tmptqawp55m.swift:15:31: note: conflicting access is here
+            swap(&l_prime[j], &l_prime[j - 1])
+                              ^~~~~~~~~~~~~~~
 
 */
 /* stdout = 
@@ -24,17 +24,17 @@
 /// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
 /// [2, 6, 3, 4, 8, 9, 5]
 func sort_third(l: [Int]) -> [Int] {
-    var l = l
+    var l_prime = l
     var i = 2
     while i < l.count {
         var j = i
-        while j > 0 && l[j - 2] > l[j] {
-            swap(&l[j - 2], &l[j])
-            j -= 2
+        while j > 0 && l_prime[j] < l_prime[j - 1] {
+            swap(&l_prime[j], &l_prime[j - 1])
+            j -= 1
         }
         i += 3
     }
-    return l
+    return l_prime
 }
 
 
@@ -116,17 +116,17 @@ assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
 
 
 
-// ----------- problem HumanEval_33_sort_third, completion 24 ------------
+// ----------- problem HumanEval_33_sort_third, completion 79 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmptqawp55m.swift:15:18: error: overlapping accesses to 'l_prime', but modification requires exclusive access; consider calling MutableCollection.swapAt(_:_:)
-            swap(&l_prime[j], &l_prime[j - 1])
-            ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            l_prime.swapAt(j, j - 1)
-/tmp/tmptqawp55m.swift:15:31: note: conflicting access is here
-            swap(&l_prime[j], &l_prime[j - 1])
-                              ^~~~~~~~~~~~~~~
+/tmp/tmp3559_3kk.swift:15:18: error: overlapping accesses to 'l', but modification requires exclusive access; consider calling MutableCollection.swapAt(_:_:)
+            swap(&l[j - 2], &l[j])
+            ~~~~~^~~~~~~~~~~~~~~~~
+            l.swapAt(j - 2, j)
+/tmp/tmp3559_3kk.swift:15:29: note: conflicting access is here
+            swap(&l[j - 2], &l[j])
+                            ^~~~~
 
 */
 /* stdout = 
@@ -142,17 +142,17 @@ assert(sort_third(l: [5, 6, 3, 4, 8, 9, 2, 1]) == [2, 6, 3, 4, 8, 9, 5, 1])
 /// >>> sort_third(l: [5, 6, 3, 4, 8, 9, 2])
 /// [2, 6, 3, 4, 8, 9, 5]
 func sort_third(l: [Int]) -> [Int] {
-    var l_prime = l
+    var l = l
     var i = 2
     while i < l.count {
         var j = i
-        while j > 0 && l_prime[j] < l_prime[j - 1] {
-            swap(&l_prime[j], &l_prime[j - 1])
-            j -= 1
+        while j > 0 && l[j - 2] > l[j] {
+            swap(&l[j - 2], &l[j])
+            j -= 2
         }
         i += 3
     }
-    return l_prime
+    return l
 }
 
 

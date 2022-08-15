@@ -1,2742 +1,3 @@
-// ----------- problem HumanEval_160_do_algebra, completion 18 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 121 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 144 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 94 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 33 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 132 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 104 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 77 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 171 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 102 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 184 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 49 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 191 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 164 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp9jmdto1z.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9jmdto1z.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9jmdto1z.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmp9jmdto1z.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            print("Invalid operator")
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 6 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 69 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 196 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 92 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 114 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 11 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 73 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 26 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 180 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp3c0zo5bv.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp3c0zo5bv.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp3c0zo5bv.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmp3c0zo5bv.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            result = 0
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 78 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 162 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 187 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 93 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 84 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 165 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 161 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 59 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 16 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 10 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 56 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
 // ----------- problem HumanEval_160_do_algebra, completion 131 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -2872,963 +133,6 @@ assert(iscube(a: 180) == false)
 assert(iscube(a: 1000) == true)
 assert(iscube(a: 0) == true)
 assert(iscube(a: 1729) == false)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 154 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 15 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 194 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 51 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 8 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 109 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 199 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 112 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 163 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 95 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 166 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 116 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
@@ -3994,7 +298,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 140 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 62 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -4075,1126 +379,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 156 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 127 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 125 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 150 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 155 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 80 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 55 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 88 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 115 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 128 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpdk7s3c68.swift:19:55: error: unary operator cannot be separated from its operand
-    let sortedArray = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                      ^~
-                                                       
-/tmp/tmpdk7s3c68.swift:19:57: error: expected expression after '?' in ternary expression
-    let sortedArray = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                        ^
-/tmp/tmpdk7s3c68.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 0 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sortedArray = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sortedArray
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 5 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 19 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 24 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp9jmdto1z.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9jmdto1z.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9jmdto1z.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmp9jmdto1z.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            print("Invalid operator")
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 142 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 197 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 94 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -5276,1544 +461,6 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 // ----------- problem HumanEval_160_do_algebra, completion 195 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 20 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 41 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 66 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 64 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 17 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 25 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp9i30wdjx.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9i30wdjx.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9i30wdjx.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmp9i30wdjx.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            print("Invalid operator")
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_46_fib4, completion 149 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp3h8s25_n.swift:60:9: error: keyword 'as' cannot be used as an identifier here
-    var as = 0
-        ^
-/tmp/tmp3h8s25_n.swift:60:9: note: if this name is unavoidable, use backticks to escape it
-    var as = 0
-        ^~
-        `as`
-/tmp/tmp3h8s25_n.swift:16:9: warning: initialization of variable 'a' was never used; consider replacing with assignment to '_' or removing it
-    var a = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:17:9: warning: initialization of variable 'b' was never used; consider replacing with assignment to '_' or removing it
-    var b = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:18:9: warning: initialization of variable 'c' was never used; consider replacing with assignment to '_' or removing it
-    var c = 2
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:19:9: warning: initialization of variable 'd' was never used; consider replacing with assignment to '_' or removing it
-    var d = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:20:9: warning: initialization of variable 'e' was never used; consider replacing with assignment to '_' or removing it
-    var e = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:21:9: warning: initialization of variable 'f' was never used; consider replacing with assignment to '_' or removing it
-    var f = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:22:9: warning: initialization of variable 'g' was never used; consider replacing with assignment to '_' or removing it
-    var g = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:23:9: warning: initialization of variable 'h' was never used; consider replacing with assignment to '_' or removing it
-    var h = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:24:9: warning: initialization of variable 'i' was never used; consider replacing with assignment to '_' or removing it
-    var i = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:25:9: warning: initialization of variable 'j' was never used; consider replacing with assignment to '_' or removing it
-    var j = 0
-    ~~~~^
-    _
-/tmp/tmp3h8s25_n.swift:26:9: warning: initialization of variable 'k' was never used; co
-*/
-/* stdout = 
-
-*/
-
-
-/// The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
-/// fib4(0) -> 0
-/// fib4(1) -> 0
-/// fib4(2) -> 2
-/// fib4(3) -> 0
-/// fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).
-/// Please write a function to efficiently compute the n-th element of the fib4 number sequence.  Do not use recursion.
-/// >>> fib4(n: 5)
-/// 4
-/// >>> fib4(n: 6)
-/// 8
-/// >>> fib4(n: 7)
-/// 14
-func fib4(n: Int) -> Int {
-    var a = 0
-    var b = 0
-    var c = 2
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
-    var h = 0
-    var i = 0
-    var j = 0
-    var k = 0
-    var l = 0
-    var m = 0
-    var n = 0
-    var o = 0
-    var p = 0
-    var q = 0
-    var r = 0
-    var s = 0
-    var t = 0
-    var u = 0
-    var v = 0
-    var w = 0
-    var x = 0
-    var y = 0
-    var z = 0
-    var aa = 0
-    var ab = 0
-    var ac = 0
-    var ad = 0
-    var ae = 0
-    var af = 0
-    var ag = 0
-    var ah = 0
-    var ai = 0
-    var aj = 0
-    var ak = 0
-    var al = 0
-    var am = 0
-    var an = 0
-    var ao = 0
-    var ap = 0
-    var aq = 0
-    var ar = 0
-    var as = 0
-    var at = 0
-    var au = 0
-    var av = 0
-    var aw = 0
-    var ax = 0
-    var ay = 0
-    var az = 0
-    var ba = 0
-    var bb = 0
-    var bc = 0
-    var bd = 0
-    var be = 0
-    var bf = 0
-    var bg = 0
-    var bh = 0
-    var bi = 0
-    var bj = 0
-    var bk = 0
-    var bl = 0
-    var bm = 0
-    var bn = 0
-    var bo = 0
-    var bp = 0
-    var bq = 0
-    var br = 0
-    var bs = 0
-    var bt = 0
-    var bu = 0
-    var bv = 0
-    var bw = 0
-    var bx = 0
-    var by = 0
-    var bz = 0
-    var ca = 0
-    var cb = 0
-    var cc = 0
-   
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(fib4(n: 5) == 4)
-assert(fib4(n: 8) == 28)
-assert(fib4(n: 10) == 104)
-assert(fib4(n: 12) == 386)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 153 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 97 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 75 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 189 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 31 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 53 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 29 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 139 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 138 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 21 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 60 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -7070,7 +717,7 @@ assert(fib4(n: 12) == 386)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 146 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 133 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -7151,2665 +798,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 105 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 37 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 45 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 176 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 158 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 10 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 191 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 30 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 97 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 182 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 106 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 193 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 28 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 143 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 85 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 44 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 130 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 57 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 83 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 188 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 178 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 12 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 95 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 137 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 34 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 52 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 173 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 177 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 134 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 70 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 113 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 96 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 35 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 147 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 172 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -9971,330 +960,6 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 14 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 39 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 43 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 76 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
 // ----------- problem HumanEval_160_do_algebra, completion 145 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -10376,7 +1041,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 74 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 10 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -10457,7 +1122,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 148 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 171 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -10538,7 +1203,73 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 101 ------------
+// ----------- problem HumanEval_88_sort_array, completion 84 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 34 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -10619,7 +1350,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 136 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 80 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -10700,813 +1431,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 72 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 100 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 32 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 174 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 36 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 133 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 129 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 135 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 192 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp0kx1xkj2.swift:23:15: error: expected expression after operator
-    while i < operator.count {
-              ^
-/tmp/tmp0kx1xkj2.swift:23:23: error: '.' is not allowed in operator names
-    while i < operator.count {
-                      ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    var i = 0
-    while i < operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-        i += 1
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 65 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 117 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 69 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -11668,7 +1593,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 82 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 173 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -11749,7 +1674,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 185 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 83 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -11830,7 +1755,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 108 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 176 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -11911,817 +1836,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 40 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 3 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 63 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 107 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 23 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 123 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 67 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 186 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 190 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 179 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 13 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 50 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -12883,7 +1998,88 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 152 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 27 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 109 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -12964,7 +2160,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 119 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 17 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -13045,7 +2241,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 54 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 121 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -13126,7 +2322,88 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 103 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 82 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 164 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -13207,7 +2484,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 9 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 32 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -13288,7 +2565,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 81 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 158 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -13343,249 +2620,6 @@ func do_algebra(operator: [String], operand: [Int]) -> Int {
             result /= operand[i+1]
         case "**":
             result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 151 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 90 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 46 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
         default:
             break
         }
@@ -13693,7 +2727,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 68 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 36 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -13774,169 +2808,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 79 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp9jmdto1z.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9jmdto1z.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmp9jmdto1z.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmp9jmdto1z.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            print("Invalid operator")
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 27 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 159 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 167 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14017,7 +2889,736 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 42 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 115 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 126 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 163 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 12 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 150 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 95 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 58 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 190 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 19 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 148 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14216,6 +3817,87 @@ assert(file_name_check(file_name: "s.") == "No")
 
 
 
+// ----------- problem HumanEval_160_do_algebra, completion 137 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
 // ----------- problem HumanEval_160_do_algebra, completion 1 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -14297,7 +3979,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 128 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 60 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14378,73 +4060,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_88_sort_array, completion 153 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 126 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 30 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14525,7 +4141,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 71 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 38 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14606,7 +4222,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 124 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 156 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14687,7 +4303,88 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 2 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 79 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp9jmdto1z.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9jmdto1z.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9jmdto1z.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmp9jmdto1z.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            print("Invalid operator")
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 16 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14768,7 +4465,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 141 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 153 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -14849,1678 +4546,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 50 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 86 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 58 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 4 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 181 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 121 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 111 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 89 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 87 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 157 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 47 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 7 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 149 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 61 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 98 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 22 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i + 1]
-        case "-":
-            result -= operand[i + 1]
-        case "*":
-            result *= operand[i + 1]
-        case "//":
-            result /= operand[i + 1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i + 1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 168 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_88_sort_array, completion 84 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                 ^~
-                                                  
-/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-                                                   ^
-/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
-    let sum = array[0] + array[array.count - 1]
-    ~~~~^~~
-    _
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given an array of non-negative integers, return a coswift of the given array after sorting,
-/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
-/// or sort it in descending order if the sum( first index value, last index value) is even.
-/// Note:
-/// * don't change the given array.
-/// Examples:
-/// >>> sort_array(array: [] as [Int])
-/// [] as [Int]
-/// >>> sort_array(array: [5])
-/// [5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
-/// [0, 1, 2, 3, 4, 5]
-/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
-/// [6, 5, 4, 3, 2, 1, 0]
-func sort_array(array: [Int]) -> [Int] {
-    guard array.count > 1 else { return array }
-    let sum = array[0] + array[array.count - 1]
-    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
-    return sorted
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(sort_array(array: [] as [Int]) == [] as [Int])
-assert(sort_array(array: [5]) == [5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
-assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
-assert(sort_array(array: [2, 1]) == [1, 2])
-assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
-assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 110 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 167 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 48 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
-    for i in 0..<operator.count {
-                 ^
-/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
-        switch operator[i] {
-               ^
-/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
-        switch operator[i] {
-                       ^
-
-*/
-/* stdout = 
-
-*/
-
-
-/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
-/// the second array is an array of integers. Use the two given arrays to build the algebric 
-/// expression and return the evaluation of this expression.
-/// The basic algebra operations:
-/// Addition ( + ) 
-/// Subtraction ( - ) 
-/// Multiplication ( * ) 
-/// Floor division ( // ) 
-/// Exponentiation ( ** ) 
-/// Example:
-/// operator['+', '*', '-']
-/// array = [2, 3, 4, 5]
-/// result = 2 + 3 * 4 - 5
-/// => result = 9
-/// Note:
-/// The length of operator array is equal to the length of operand array minus one.
-/// Operand is an array of of non-negative integers.
-/// Operator array has at least one operator, and operand array has at least two operands.
-func do_algebra(operator: [String], operand: [Int]) -> Int {
-    var result = operand[0]
-    for i in 0..<operator.count {
-        switch operator[i] {
-        case "+":
-            result += operand[i+1]
-        case "-":
-            result -= operand[i+1]
-        case "*":
-            result *= operand[i+1]
-        case "//":
-            result /= operand[i+1]
-        case "**":
-            result = Int(pow(Double(result), Double(operand[i+1])))
-        default:
-            break
-        }
-    }
-    return result
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
-assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
-assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
-
-
-
-// ----------- problem HumanEval_160_do_algebra, completion 91 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 107 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -16777,7 +4803,154 @@ assert(fib4(n: 12) == 386)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 172 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 40 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 97 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 6 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -16858,7 +5031,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 122 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 43 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -16939,7 +5112,88 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 170 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 25 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp9i30wdjx.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9i30wdjx.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9i30wdjx.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmp9i30wdjx.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            print("Invalid operator")
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 55 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -17020,7 +5274,412 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 183 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 159 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 3 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 197 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 116 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 168 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 98 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -17182,6 +5841,9013 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
+// ----------- problem HumanEval_160_do_algebra, completion 105 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 4 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 5 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 192 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp0kx1xkj2.swift:23:15: error: expected expression after operator
+    while i < operator.count {
+              ^
+/tmp/tmp0kx1xkj2.swift:23:23: error: '.' is not allowed in operator names
+    while i < operator.count {
+                      ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    var i = 0
+    while i < operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+        i += 1
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 119 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 57 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 154 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 89 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 20 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 181 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 134 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 90 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 141 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 76 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 135 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 49 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 129 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 191 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 151 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 143 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 106 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 92 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_46_fib4, completion 149 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp3h8s25_n.swift:60:9: error: keyword 'as' cannot be used as an identifier here
+    var as = 0
+        ^
+/tmp/tmp3h8s25_n.swift:60:9: note: if this name is unavoidable, use backticks to escape it
+    var as = 0
+        ^~
+        `as`
+/tmp/tmp3h8s25_n.swift:16:9: warning: initialization of variable 'a' was never used; consider replacing with assignment to '_' or removing it
+    var a = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:17:9: warning: initialization of variable 'b' was never used; consider replacing with assignment to '_' or removing it
+    var b = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:18:9: warning: initialization of variable 'c' was never used; consider replacing with assignment to '_' or removing it
+    var c = 2
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:19:9: warning: initialization of variable 'd' was never used; consider replacing with assignment to '_' or removing it
+    var d = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:20:9: warning: initialization of variable 'e' was never used; consider replacing with assignment to '_' or removing it
+    var e = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:21:9: warning: initialization of variable 'f' was never used; consider replacing with assignment to '_' or removing it
+    var f = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:22:9: warning: initialization of variable 'g' was never used; consider replacing with assignment to '_' or removing it
+    var g = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:23:9: warning: initialization of variable 'h' was never used; consider replacing with assignment to '_' or removing it
+    var h = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:24:9: warning: initialization of variable 'i' was never used; consider replacing with assignment to '_' or removing it
+    var i = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:25:9: warning: initialization of variable 'j' was never used; consider replacing with assignment to '_' or removing it
+    var j = 0
+    ~~~~^
+    _
+/tmp/tmp3h8s25_n.swift:26:9: warning: initialization of variable 'k' was never used; co
+*/
+/* stdout = 
+
+*/
+
+
+/// The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
+/// fib4(0) -> 0
+/// fib4(1) -> 0
+/// fib4(2) -> 2
+/// fib4(3) -> 0
+/// fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).
+/// Please write a function to efficiently compute the n-th element of the fib4 number sequence.  Do not use recursion.
+/// >>> fib4(n: 5)
+/// 4
+/// >>> fib4(n: 6)
+/// 8
+/// >>> fib4(n: 7)
+/// 14
+func fib4(n: Int) -> Int {
+    var a = 0
+    var b = 0
+    var c = 2
+    var d = 0
+    var e = 0
+    var f = 0
+    var g = 0
+    var h = 0
+    var i = 0
+    var j = 0
+    var k = 0
+    var l = 0
+    var m = 0
+    var n = 0
+    var o = 0
+    var p = 0
+    var q = 0
+    var r = 0
+    var s = 0
+    var t = 0
+    var u = 0
+    var v = 0
+    var w = 0
+    var x = 0
+    var y = 0
+    var z = 0
+    var aa = 0
+    var ab = 0
+    var ac = 0
+    var ad = 0
+    var ae = 0
+    var af = 0
+    var ag = 0
+    var ah = 0
+    var ai = 0
+    var aj = 0
+    var ak = 0
+    var al = 0
+    var am = 0
+    var an = 0
+    var ao = 0
+    var ap = 0
+    var aq = 0
+    var ar = 0
+    var as = 0
+    var at = 0
+    var au = 0
+    var av = 0
+    var aw = 0
+    var ax = 0
+    var ay = 0
+    var az = 0
+    var ba = 0
+    var bb = 0
+    var bc = 0
+    var bd = 0
+    var be = 0
+    var bf = 0
+    var bg = 0
+    var bh = 0
+    var bi = 0
+    var bj = 0
+    var bk = 0
+    var bl = 0
+    var bm = 0
+    var bn = 0
+    var bo = 0
+    var bp = 0
+    var bq = 0
+    var br = 0
+    var bs = 0
+    var bt = 0
+    var bu = 0
+    var bv = 0
+    var bw = 0
+    var bx = 0
+    var by = 0
+    var bz = 0
+    var ca = 0
+    var cb = 0
+    var cc = 0
+   
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(fib4(n: 5) == 4)
+assert(fib4(n: 8) == 28)
+assert(fib4(n: 10) == 104)
+assert(fib4(n: 12) == 386)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 138 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 72 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 100 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 70 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 54 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 73 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 64 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 101 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 182 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 85 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 45 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 75 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 8 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 123 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 161 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 132 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 128 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 153 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 128 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpdk7s3c68.swift:19:55: error: unary operator cannot be separated from its operand
+    let sortedArray = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                      ^~
+                                                       
+/tmp/tmpdk7s3c68.swift:19:57: error: expected expression after '?' in ternary expression
+    let sortedArray = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                        ^
+/tmp/tmpdk7s3c68.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 0 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sortedArray = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sortedArray
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 139 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 180 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp3c0zo5bv.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp3c0zo5bv.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp3c0zo5bv.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmp3c0zo5bv.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            result = 0
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 35 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 157 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 189 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 136 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 130 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 124 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 87 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 193 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 52 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 81 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 183 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 170 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 144 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 97 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 186 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 22 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 165 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 23 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 187 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 174 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 41 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 77 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 31 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 13 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 10 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 51 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 74 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 96 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 71 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 11 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 24 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp9jmdto1z.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9jmdto1z.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9jmdto1z.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmp9jmdto1z.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            print("Invalid operator")
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 147 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 191 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 91 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 179 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 149 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 39 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 199 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 108 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 29 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 93 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 155 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 102 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 37 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 114 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 113 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 46 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 121 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 33 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 44 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 125 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 88 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 140 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 184 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 26 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 127 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 166 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 15 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 9 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 146 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 56 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 194 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 142 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 53 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 110 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 111 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 59 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
 // ----------- problem HumanEval_160_do_algebra, completion 118 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -17263,7 +14929,7 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 62 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 188 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
@@ -17344,7 +15010,2341 @@ assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
 
 
 
-// ----------- problem HumanEval_160_do_algebra, completion 38 ------------
+// ----------- problem HumanEval_160_do_algebra, completion 18 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 103 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp9jmdto1z.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9jmdto1z.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmp9jmdto1z.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmp9jmdto1z.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            print("Invalid operator")
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 78 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 68 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 28 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 2 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 67 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 152 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 177 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 47 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 185 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 66 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 122 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 7 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 178 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 21 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpg60_blx1.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpg60_blx1.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpg60_blx1.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i + 1]
+        case "-":
+            result -= operand[i + 1]
+        case "*":
+            result *= operand[i + 1]
+        case "//":
+            result /= operand[i + 1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i + 1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 84 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 196 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 14 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 65 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 112 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 162 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 61 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 42 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 63 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_88_sort_array, completion 95 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpink_5xr1.swift:19:50: error: unary operator cannot be separated from its operand
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                 ^~
+                                                  
+/tmp/tmpink_5xr1.swift:19:52: error: expected expression after '?' in ternary expression
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+                                                   ^
+/tmp/tmpink_5xr1.swift:18:9: warning: initialization of immutable value 'sum' was never used; consider replacing with assignment to '_' or removing it
+    let sum = array[0] + array[array.count - 1]
+    ~~~~^~~
+    _
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given an array of non-negative integers, return a coswift of the given array after sorting,
+/// you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+/// or sort it in descending order if the sum( first index value, last index value) is even.
+/// Note:
+/// * don't change the given array.
+/// Examples:
+/// >>> sort_array(array: [] as [Int])
+/// [] as [Int]
+/// >>> sort_array(array: [5])
+/// [5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5])
+/// [0, 1, 2, 3, 4, 5]
+/// >>> sort_array(array: [2, 4, 3, 0, 1, 5, 6])
+/// [6, 5, 4, 3, 2, 1, 0]
+func sort_array(array: [Int]) -> [Int] {
+    guard array.count > 1 else { return array }
+    let sum = array[0] + array[array.count - 1]
+    let sorted = array.sorted(by: sum % 2 == 0 ? > : <)
+    return sorted
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(sort_array(array: [] as [Int]) == [] as [Int])
+assert(sort_array(array: [5]) == [5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5]) == [0, 1, 2, 3, 4, 5])
+assert(sort_array(array: [2, 4, 3, 0, 1, 5, 6]) == [6, 5, 4, 3, 2, 1, 0])
+assert(sort_array(array: [2, 1]) == [1, 2])
+assert(sort_array(array: [15, 42, 87, 32, 11, 0]) == [0, 11, 15, 32, 42, 87])
+assert(sort_array(array: [21, 14, 23, 11]) == [23, 21, 14, 11])
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 48 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 86 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 104 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpwd7fnoii.swift:22:18: error: expected expression after operator
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:22:18: error: expected '{' to start the body of for-each loop
+    for i in 0..<operator.count {
+                 ^
+/tmp/tmpwd7fnoii.swift:23:16: error: expected expression in 'switch' statement
+        switch operator[i] {
+               ^
+/tmp/tmpwd7fnoii.swift:23:24: error: '[' is not allowed in operator names
+        switch operator[i] {
+                       ^
+
+*/
+/* stdout = 
+
+*/
+
+
+/// Given two arrays operator, and operand. The first array has basic algebra operations, and 
+/// the second array is an array of integers. Use the two given arrays to build the algebric 
+/// expression and return the evaluation of this expression.
+/// The basic algebra operations:
+/// Addition ( + ) 
+/// Subtraction ( - ) 
+/// Multiplication ( * ) 
+/// Floor division ( // ) 
+/// Exponentiation ( ** ) 
+/// Example:
+/// operator['+', '*', '-']
+/// array = [2, 3, 4, 5]
+/// result = 2 + 3 * 4 - 5
+/// => result = 9
+/// Note:
+/// The length of operator array is equal to the length of operand array minus one.
+/// Operand is an array of of non-negative integers.
+/// Operator array has at least one operator, and operand array has at least two operands.
+func do_algebra(operator: [String], operand: [Int]) -> Int {
+    var result = operand[0]
+    for i in 0..<operator.count {
+        switch operator[i] {
+        case "+":
+            result += operand[i+1]
+        case "-":
+            result -= operand[i+1]
+        case "*":
+            result *= operand[i+1]
+        case "//":
+            result /= operand[i+1]
+        case "**":
+            result = Int(pow(Double(result), Double(operand[i+1])))
+        default:
+            break
+        }
+    }
+    return result
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(do_algebra(operator: ["**", "*", "+"], operand: [2, 3, 4, 5]) == 37)
+assert(do_algebra(operator: ["+", "*", "-"], operand: [2, 3, 4, 5]) == 9)
+assert(do_algebra(operator: ["//", "*"], operand: [7, 3, 4]) == 8)
+
+
+
+// ----------- problem HumanEval_160_do_algebra, completion 117 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 

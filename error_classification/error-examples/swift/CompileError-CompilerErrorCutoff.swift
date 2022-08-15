@@ -136,177 +136,6 @@ assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
 
 
 
-// ----------- problem HumanEval_119_match_parens, completion 43 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmp28g79cg5.swift:16:9: warning: initialization of variable 's1' was never used; consider replacing with assignment to '_' or removing it
-    var s1 = lst[0]
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:17:9: warning: initialization of variable 's2' was never used; consider replacing with assignment to '_' or removing it
-    var s2 = lst[1]
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:18:9: warning: initialization of variable 's3' was never used; consider replacing with assignment to '_' or removing it
-    var s3 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:19:9: warning: initialization of variable 's4' was never used; consider replacing with assignment to '_' or removing it
-    var s4 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:20:9: warning: initialization of variable 's5' was never used; consider replacing with assignment to '_' or removing it
-    var s5 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:21:9: warning: initialization of variable 's6' was never used; consider replacing with assignment to '_' or removing it
-    var s6 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:22:9: warning: initialization of variable 's7' was never used; consider replacing with assignment to '_' or removing it
-    var s7 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:23:9: warning: initialization of variable 's8' was never used; consider replacing with assignment to '_' or removing it
-    var s8 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:24:9: warning: initialization of variable 's9' was never used; consider replacing with assignment to '_' or removing it
-    var s9 = ""
-    ~~~~^~
-    _
-/tmp/tmp28g79cg5.swift:25:9: warning: initialization of variable 's10' was never used; consider replacing with assignment to '_' or removing it
-    var s10 = ""
-    ~~~~^~~
-    _
-/tmp/tmp28g79cg5.swift:26:9: warning: initialization of variable 's11' was never used; consider replacing with assignment to '_' or removing it
-    var s11 = ""
-    ~~~~^~~
-    _
-/tmp/tmp28g79cg5.swift:27:9: warning: initialization of variable 's12' was never used; consider re
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given an array of two strings, both strings consist of open
-/// parentheses '(' or close parentheses ')' only.
-/// Your job is to check if it is possible to concatenate the two strings in
-/// some order, that the resulting string will be good.
-/// A string S is considered to be good if and only if all parentheses in S
-/// are balanced. For example: the string '(())()' is good, while the string
-/// '())' is not.
-/// Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.
-/// Examples:
-/// >>> match_parens(lst: ["()(", ")"])
-/// "Yes"
-/// >>> match_parens(lst: [")", ")"])
-/// "No"
-func match_parens(lst: [String]) -> String {
-    var s1 = lst[0]
-    var s2 = lst[1]
-    var s3 = ""
-    var s4 = ""
-    var s5 = ""
-    var s6 = ""
-    var s7 = ""
-    var s8 = ""
-    var s9 = ""
-    var s10 = ""
-    var s11 = ""
-    var s12 = ""
-    var s13 = ""
-    var s14 = ""
-    var s15 = ""
-    var s16 = ""
-    var s17 = ""
-    var s18 = ""
-    var s19 = ""
-    var s20 = ""
-    var s21 = ""
-    var s22 = ""
-    var s23 = ""
-    var s24 = ""
-    var s25 = ""
-    var s26 = ""
-    var s27 = ""
-    var s28 = ""
-    var s29 = ""
-    var s30 = ""
-    var s31 = ""
-    var s32 = ""
-    var s33 = ""
-    var s34 = ""
-    var s35 = ""
-    var s36 = ""
-    var s37 = ""
-    var s38 = ""
-    var s39 = ""
-    var s40 = ""
-    var s41 = ""
-    var s42 = ""
-    var s43 = ""
-    var s44 = ""
-    var s45 = ""
-    var s46 = ""
-    var s47 = ""
-    var s48 = ""
-    var s49 = ""
-    var s50 = ""
-    var s51 = ""
-    var s52 = ""
-    var s53 = ""
-    var s54 = ""
-    var s55 = ""
-    var s56 = ""
-    var s57 = ""
-    var s58 = ""
-    var s59 = ""
-    var s60 = ""
-    var s61 = ""
-    var s62 = ""
-    var s63 = ""
-    var s64 = ""
-    var s65 = ""
-    var s66 = ""
-    var s67 = ""
-    var s68 = ""
-    var s69 = ""
-    var s70 = ""
-    var s71 = ""
-    var s72 = ""
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(match_parens(lst: ["()(", ")"]) == "Yes")
-assert(match_parens(lst: [")", ")"]) == "No")
-assert(match_parens(lst: ["(()(())", "())())"]) == "No")
-assert(match_parens(lst: [")())", "(()()("]) == "Yes")
-assert(match_parens(lst: ["(())))", "(()())(("]) == "Yes")
-assert(match_parens(lst: ["()", "())"]) == "No")
-assert(match_parens(lst: ["(()(", "()))()"]) == "Yes")
-assert(match_parens(lst: ["((((", "((())"]) == "No")
-assert(match_parens(lst: [")(()", "(()("]) == "No")
-assert(match_parens(lst: [")(", ")("]) == "No")
-assert(match_parens(lst: ["(", ")"]) == "Yes")
-assert(match_parens(lst: [")", "("]) == "Yes")
-
-
-
 // ----------- problem HumanEval_67_fruit_distribution, completion 85 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -579,139 +408,6 @@ func get_closest_vowel(word: String) -> String {
     var is_fifteenth_vowel = false
     var is_fifteenth_consonant = false
     var is_sixteenth_vowel = false
-
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(get_closest_vowel(word: "yogurt") == "u")
-assert(get_closest_vowel(word: "full") == "u")
-assert(get_closest_vowel(word: "easy") == "")
-assert(get_closest_vowel(word: "eAsy") == "")
-assert(get_closest_vowel(word: "ali") == "")
-assert(get_closest_vowel(word: "bad") == "a")
-assert(get_closest_vowel(word: "most") == "o")
-assert(get_closest_vowel(word: "ab") == "")
-assert(get_closest_vowel(word: "ba") == "")
-assert(get_closest_vowel(word: "quick") == "")
-assert(get_closest_vowel(word: "anime") == "i")
-assert(get_closest_vowel(word: "Asia") == "")
-assert(get_closest_vowel(word: "Above") == "o")
-
-
-
-// ----------- problem HumanEval_118_get_closest_vowel, completion 48 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpnp3yzp0c.swift:17:9: warning: initialization of immutable value 'vowels' was never used; consider replacing with assignment to '_' or removing it
-    let vowels = "aeiouAEIOU"
-    ~~~~^~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:18:9: warning: initialization of immutable value 'consonants' was never used; consider replacing with assignment to '_' or removing it
-    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
-    ~~~~^~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:19:9: warning: initialization of variable 'result' was never used; consider replacing with assignment to '_' or removing it
-    var result = ""
-    ~~~~^~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:20:9: warning: initialization of variable 'is_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_consonant = false
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:21:9: warning: initialization of variable 'is_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_vowel = false
-    ~~~~^~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:22:9: warning: initialization of variable 'is_first_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_first_vowel = false
-    ~~~~^~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:23:9: warning: initialization of variable 'is_first_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_first_consonant = false
-    ~~~~^~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:24:9: warning: initialization of variable 'is_second_vowel' was never used; consider replacing with assignment to '_' or removing it
-    var is_second_vowel = false
-    ~~~~^~~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:25:9: warning: initialization of variable 'is_second_consonant' was never used; consider replacing with assignment to '_' or removing it
-    var is_second_consonant = false
-    ~~~~^~~~~~~~~~~~~~~~~~~
-    _
-/tmp/tmpnp3yzp0c.swift:26:9: warning: initialization of variable 'is_third_vowel' was never used; consider rep
-*/
-/* stdout = 
-
-*/
-
-
-/// You are given a word. Your task is to find the closest vowel that stands between 
-/// two consonants from the right side of the word (case sensitive).
-/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-/// find any vowel met the above condition. 
-/// You may assume that the given string contains English letter only.
-/// Example:
-/// >>> get_closest_vowel(word: "yogurt")
-/// "u"
-/// >>> get_closest_vowel(word: "FULL")
-/// "U"
-/// >>> get_closest_vowel(word: "quick")
-/// ""
-/// >>> get_closest_vowel(word: "ab")
-/// ""
-func get_closest_vowel(word: String) -> String {
-    let vowels = "aeiouAEIOU"
-    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
-    var result = ""
-    var is_consonant = false
-    var is_vowel = false
-    var is_first_vowel = false
-    var is_first_consonant = false
-    var is_second_vowel = false
-    var is_second_consonant = false
-    var is_third_vowel = false
-    var is_third_consonant = false
-    var is_fourth_vowel = false
-    var is_fourth_consonant = false
-    var is_fifth_vowel = false
-    var is_fifth_consonant = false
-    var is_sixth_vowel = false
-    var is_sixth_consonant = false
-    var is_seventh_vowel = false
-    var is_seventh_consonant = false
-    var is_eighth_vowel = false
-    var is_eighth_consonant = false
-    var is_ninth_vowel = false
-    var is_ninth_consonant = false
-    var is_tenth_vowel = false
-    var is_tenth_consonant = false
-    var is_eleventh_vowel = false
-    var is_eleventh_consonant = false
-    var is_twelfth_vowel = false
-    var is_twelfth_consonant = false
-    var is_thirteenth_vowel = false
-    var is_thirteenth_consonant = false
-    var is_fourteenth_vowel = false
-    var is_fourteenth_consonant = false
-    var is_fifteenth_vowel = false
-    var is_fifteenth_consonant = false
-    var is_sixteenth_vowel = false
-    var is_sixteenth_consonant = false
-    var is_seventeenth_vowel = false
-    var is_seventeenth_consonant = false
 
 }
 
@@ -1031,139 +727,6 @@ assert(minPath(grid: [[1, 3], [3, 2]], k: 10) == [1, 3, 1, 3, 1, 3, 1, 3, 1, 3])
 
 
 
-// ----------- problem HumanEval_110_exchange, completion 57 ------------
-// status = SyntaxError
-// exit_code = 1
-/* stderr = 
-/tmp/tmpu8rbvte_.swift:16:9: warning: variable 'lst1' was never mutated; consider changing to 'let' constant
-    var lst1 = lst1
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:17:9: warning: variable 'lst2' was never mutated; consider changing to 'let' constant
-    var lst2 = lst2
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:18:9: warning: variable 'lst1Even' was never mutated; consider changing to 'let' constant
-    var lst1Even = lst1.filter { $0 % 2 == 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:19:9: warning: variable 'lst2Even' was never mutated; consider changing to 'let' constant
-    var lst2Even = lst2.filter { $0 % 2 == 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:20:9: warning: variable 'lst1Odd' was never mutated; consider changing to 'let' constant
-    var lst1Odd = lst1.filter { $0 % 2 != 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:21:9: warning: variable 'lst2Odd' was never mutated; consider changing to 'let' constant
-    var lst2Odd = lst2.filter { $0 % 2 != 0 }
-    ~~~ ^
-    let
-/tmp/tmpu8rbvte_.swift:22:9: warning: initialization of variable 'lst1EvenCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst1EvenCount = lst1Even.count
-    ~~~~^~~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:23:9: warning: initialization of variable 'lst2EvenCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst2EvenCount = lst2Even.count
-    ~~~~^~~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:24:9: warning: initialization of variable 'lst1OddCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst1OddCount = lst1Odd.count
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:25:9: warning: initialization of variable 'lst2OddCount' was never used; consider replacing with assignment to '_' or removing it
-    var lst2OddCount = lst2Odd.count
-    ~~~~^~~~~~~~~~~~
-    _
-/tmp/tmpu8rbvte_.swift:26:9: warning: initialization of variable 'lst1Count' was never used; consider replacing with assignment to '_' or removing it
-    var lst1Count = 
-*/
-/* stdout = 
-
-*/
-
-
-/// In this problem, you will implement a function that takes two arrays of numbers,
-/// and determines whether it is possible to perform an exchange of elements
-/// between them to make lst1 an array of only even numbers.
-/// There is no limit on the number of exchanged elements between lst1 and lst2.
-/// If it is possible to exchange elements between the lst1 and lst2 to make
-/// all the elements of lst1 to be even, return "YES".
-/// Otherwise, return "NO".
-/// For example:
-/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4])
-/// "YES"
-/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4])
-/// "NO"
-/// It is assumed that the input arrays will be non-empty.
-func exchange(lst1: [Int], lst2: [Int]) -> String {
-    var lst1 = lst1
-    var lst2 = lst2
-    var lst1Even = lst1.filter { $0 % 2 == 0 }
-    var lst2Even = lst2.filter { $0 % 2 == 0 }
-    var lst1Odd = lst1.filter { $0 % 2 != 0 }
-    var lst2Odd = lst2.filter { $0 % 2 != 0 }
-    var lst1EvenCount = lst1Even.count
-    var lst2EvenCount = lst2Even.count
-    var lst1OddCount = lst1Odd.count
-    var lst2OddCount = lst2Odd.count
-    var lst1Count = lst1.count
-    var lst2Count = lst2.count
-    var lst1EvenIndex = 0
-    var lst2EvenIndex = 0
-    var lst1OddIndex = 0
-    var lst2OddIndex = 0
-    var lst1Index = 0
-    var lst2Index = 0
-    var lst1EvenIndex2 = 0
-    var lst2EvenIndex2 = 0
-    var lst1OddIndex2 = 0
-    var lst2OddIndex2 = 0
-    var lst1Index2 = 0
-    var lst2Index2 = 0
-    var lst1EvenIndex3 = 0
-    var lst2EvenIndex3 = 0
-    var lst1OddIndex3 = 0
-    var lst2OddIndex3 = 0
-    var lst1Index3 = 0
-    var lst2Index3 = 0
-    var lst1EvenIndex4 = 0
-    var lst2EvenIndex4 = 0
-    var lst1OddIndex4 = 0
-    var lst2OddIndex4 = 0
-    var lst1Index4 = 0
-    var lst2Index4 = 0
-    var lst1EvenIndex5 = 0
-    var lst2EvenIndex5 = 0
-    var lst1OddIndex5 = 0
-    var lst2OddIndex5 = 0
-    var lst1Index5 = 0
-   
-}
-
-
-func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
-    if left.count != right.count {
-        return false
-    }
-    for (l, r) in zip(left, right) {
-        if l != r {
-            return false
-        }
-    }
-    return true
-}
-            
-assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4]) == "YES")
-assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4]) == "NO")
-assert(exchange(lst1: [1, 2, 3, 4], lst2: [2, 1, 4, 3]) == "YES")
-assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 4]) == "YES")
-assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 3]) == "NO")
-assert(exchange(lst1: [3, 2, 6, 1, 8, 9], lst2: [3, 5, 5, 1, 1, 1]) == "NO")
-assert(exchange(lst1: [100, 200], lst2: [200, 200]) == "YES")
-
-
-
 // ----------- problem HumanEval_75_is_multiply_prime, completion 25 ------------
 // status = SyntaxError
 // exit_code = 1
@@ -1328,6 +891,443 @@ assert(is_multiply_prime(a: 126) == false)
 assert(is_multiply_prime(a: 729) == false)
 assert(is_multiply_prime(a: 891) == false)
 assert(is_multiply_prime(a: 1001) == true)
+
+
+
+// ----------- problem HumanEval_110_exchange, completion 57 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpu8rbvte_.swift:16:9: warning: variable 'lst1' was never mutated; consider changing to 'let' constant
+    var lst1 = lst1
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:17:9: warning: variable 'lst2' was never mutated; consider changing to 'let' constant
+    var lst2 = lst2
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:18:9: warning: variable 'lst1Even' was never mutated; consider changing to 'let' constant
+    var lst1Even = lst1.filter { $0 % 2 == 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:19:9: warning: variable 'lst2Even' was never mutated; consider changing to 'let' constant
+    var lst2Even = lst2.filter { $0 % 2 == 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:20:9: warning: variable 'lst1Odd' was never mutated; consider changing to 'let' constant
+    var lst1Odd = lst1.filter { $0 % 2 != 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:21:9: warning: variable 'lst2Odd' was never mutated; consider changing to 'let' constant
+    var lst2Odd = lst2.filter { $0 % 2 != 0 }
+    ~~~ ^
+    let
+/tmp/tmpu8rbvte_.swift:22:9: warning: initialization of variable 'lst1EvenCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst1EvenCount = lst1Even.count
+    ~~~~^~~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:23:9: warning: initialization of variable 'lst2EvenCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst2EvenCount = lst2Even.count
+    ~~~~^~~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:24:9: warning: initialization of variable 'lst1OddCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst1OddCount = lst1Odd.count
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:25:9: warning: initialization of variable 'lst2OddCount' was never used; consider replacing with assignment to '_' or removing it
+    var lst2OddCount = lst2Odd.count
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpu8rbvte_.swift:26:9: warning: initialization of variable 'lst1Count' was never used; consider replacing with assignment to '_' or removing it
+    var lst1Count = 
+*/
+/* stdout = 
+
+*/
+
+
+/// In this problem, you will implement a function that takes two arrays of numbers,
+/// and determines whether it is possible to perform an exchange of elements
+/// between them to make lst1 an array of only even numbers.
+/// There is no limit on the number of exchanged elements between lst1 and lst2.
+/// If it is possible to exchange elements between the lst1 and lst2 to make
+/// all the elements of lst1 to be even, return "YES".
+/// Otherwise, return "NO".
+/// For example:
+/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4])
+/// "YES"
+/// >>> exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4])
+/// "NO"
+/// It is assumed that the input arrays will be non-empty.
+func exchange(lst1: [Int], lst2: [Int]) -> String {
+    var lst1 = lst1
+    var lst2 = lst2
+    var lst1Even = lst1.filter { $0 % 2 == 0 }
+    var lst2Even = lst2.filter { $0 % 2 == 0 }
+    var lst1Odd = lst1.filter { $0 % 2 != 0 }
+    var lst2Odd = lst2.filter { $0 % 2 != 0 }
+    var lst1EvenCount = lst1Even.count
+    var lst2EvenCount = lst2Even.count
+    var lst1OddCount = lst1Odd.count
+    var lst2OddCount = lst2Odd.count
+    var lst1Count = lst1.count
+    var lst2Count = lst2.count
+    var lst1EvenIndex = 0
+    var lst2EvenIndex = 0
+    var lst1OddIndex = 0
+    var lst2OddIndex = 0
+    var lst1Index = 0
+    var lst2Index = 0
+    var lst1EvenIndex2 = 0
+    var lst2EvenIndex2 = 0
+    var lst1OddIndex2 = 0
+    var lst2OddIndex2 = 0
+    var lst1Index2 = 0
+    var lst2Index2 = 0
+    var lst1EvenIndex3 = 0
+    var lst2EvenIndex3 = 0
+    var lst1OddIndex3 = 0
+    var lst2OddIndex3 = 0
+    var lst1Index3 = 0
+    var lst2Index3 = 0
+    var lst1EvenIndex4 = 0
+    var lst2EvenIndex4 = 0
+    var lst1OddIndex4 = 0
+    var lst2OddIndex4 = 0
+    var lst1Index4 = 0
+    var lst2Index4 = 0
+    var lst1EvenIndex5 = 0
+    var lst2EvenIndex5 = 0
+    var lst1OddIndex5 = 0
+    var lst2OddIndex5 = 0
+    var lst1Index5 = 0
+   
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 2, 3, 4]) == "YES")
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [1, 5, 3, 4]) == "NO")
+assert(exchange(lst1: [1, 2, 3, 4], lst2: [2, 1, 4, 3]) == "YES")
+assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 4]) == "YES")
+assert(exchange(lst1: [5, 7, 3], lst2: [2, 6, 3]) == "NO")
+assert(exchange(lst1: [3, 2, 6, 1, 8, 9], lst2: [3, 5, 5, 1, 1, 1]) == "NO")
+assert(exchange(lst1: [100, 200], lst2: [200, 200]) == "YES")
+
+
+
+// ----------- problem HumanEval_119_match_parens, completion 43 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmp28g79cg5.swift:16:9: warning: initialization of variable 's1' was never used; consider replacing with assignment to '_' or removing it
+    var s1 = lst[0]
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:17:9: warning: initialization of variable 's2' was never used; consider replacing with assignment to '_' or removing it
+    var s2 = lst[1]
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:18:9: warning: initialization of variable 's3' was never used; consider replacing with assignment to '_' or removing it
+    var s3 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:19:9: warning: initialization of variable 's4' was never used; consider replacing with assignment to '_' or removing it
+    var s4 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:20:9: warning: initialization of variable 's5' was never used; consider replacing with assignment to '_' or removing it
+    var s5 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:21:9: warning: initialization of variable 's6' was never used; consider replacing with assignment to '_' or removing it
+    var s6 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:22:9: warning: initialization of variable 's7' was never used; consider replacing with assignment to '_' or removing it
+    var s7 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:23:9: warning: initialization of variable 's8' was never used; consider replacing with assignment to '_' or removing it
+    var s8 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:24:9: warning: initialization of variable 's9' was never used; consider replacing with assignment to '_' or removing it
+    var s9 = ""
+    ~~~~^~
+    _
+/tmp/tmp28g79cg5.swift:25:9: warning: initialization of variable 's10' was never used; consider replacing with assignment to '_' or removing it
+    var s10 = ""
+    ~~~~^~~
+    _
+/tmp/tmp28g79cg5.swift:26:9: warning: initialization of variable 's11' was never used; consider replacing with assignment to '_' or removing it
+    var s11 = ""
+    ~~~~^~~
+    _
+/tmp/tmp28g79cg5.swift:27:9: warning: initialization of variable 's12' was never used; consider re
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given an array of two strings, both strings consist of open
+/// parentheses '(' or close parentheses ')' only.
+/// Your job is to check if it is possible to concatenate the two strings in
+/// some order, that the resulting string will be good.
+/// A string S is considered to be good if and only if all parentheses in S
+/// are balanced. For example: the string '(())()' is good, while the string
+/// '())' is not.
+/// Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.
+/// Examples:
+/// >>> match_parens(lst: ["()(", ")"])
+/// "Yes"
+/// >>> match_parens(lst: [")", ")"])
+/// "No"
+func match_parens(lst: [String]) -> String {
+    var s1 = lst[0]
+    var s2 = lst[1]
+    var s3 = ""
+    var s4 = ""
+    var s5 = ""
+    var s6 = ""
+    var s7 = ""
+    var s8 = ""
+    var s9 = ""
+    var s10 = ""
+    var s11 = ""
+    var s12 = ""
+    var s13 = ""
+    var s14 = ""
+    var s15 = ""
+    var s16 = ""
+    var s17 = ""
+    var s18 = ""
+    var s19 = ""
+    var s20 = ""
+    var s21 = ""
+    var s22 = ""
+    var s23 = ""
+    var s24 = ""
+    var s25 = ""
+    var s26 = ""
+    var s27 = ""
+    var s28 = ""
+    var s29 = ""
+    var s30 = ""
+    var s31 = ""
+    var s32 = ""
+    var s33 = ""
+    var s34 = ""
+    var s35 = ""
+    var s36 = ""
+    var s37 = ""
+    var s38 = ""
+    var s39 = ""
+    var s40 = ""
+    var s41 = ""
+    var s42 = ""
+    var s43 = ""
+    var s44 = ""
+    var s45 = ""
+    var s46 = ""
+    var s47 = ""
+    var s48 = ""
+    var s49 = ""
+    var s50 = ""
+    var s51 = ""
+    var s52 = ""
+    var s53 = ""
+    var s54 = ""
+    var s55 = ""
+    var s56 = ""
+    var s57 = ""
+    var s58 = ""
+    var s59 = ""
+    var s60 = ""
+    var s61 = ""
+    var s62 = ""
+    var s63 = ""
+    var s64 = ""
+    var s65 = ""
+    var s66 = ""
+    var s67 = ""
+    var s68 = ""
+    var s69 = ""
+    var s70 = ""
+    var s71 = ""
+    var s72 = ""
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(match_parens(lst: ["()(", ")"]) == "Yes")
+assert(match_parens(lst: [")", ")"]) == "No")
+assert(match_parens(lst: ["(()(())", "())())"]) == "No")
+assert(match_parens(lst: [")())", "(()()("]) == "Yes")
+assert(match_parens(lst: ["(())))", "(()())(("]) == "Yes")
+assert(match_parens(lst: ["()", "())"]) == "No")
+assert(match_parens(lst: ["(()(", "()))()"]) == "Yes")
+assert(match_parens(lst: ["((((", "((())"]) == "No")
+assert(match_parens(lst: [")(()", "(()("]) == "No")
+assert(match_parens(lst: [")(", ")("]) == "No")
+assert(match_parens(lst: ["(", ")"]) == "Yes")
+assert(match_parens(lst: [")", "("]) == "Yes")
+
+
+
+// ----------- problem HumanEval_118_get_closest_vowel, completion 48 ------------
+// status = SyntaxError
+// exit_code = 1
+/* stderr = 
+/tmp/tmpnp3yzp0c.swift:17:9: warning: initialization of immutable value 'vowels' was never used; consider replacing with assignment to '_' or removing it
+    let vowels = "aeiouAEIOU"
+    ~~~~^~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:18:9: warning: initialization of immutable value 'consonants' was never used; consider replacing with assignment to '_' or removing it
+    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
+    ~~~~^~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:19:9: warning: initialization of variable 'result' was never used; consider replacing with assignment to '_' or removing it
+    var result = ""
+    ~~~~^~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:20:9: warning: initialization of variable 'is_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_consonant = false
+    ~~~~^~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:21:9: warning: initialization of variable 'is_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_vowel = false
+    ~~~~^~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:22:9: warning: initialization of variable 'is_first_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_first_vowel = false
+    ~~~~^~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:23:9: warning: initialization of variable 'is_first_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_first_consonant = false
+    ~~~~^~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:24:9: warning: initialization of variable 'is_second_vowel' was never used; consider replacing with assignment to '_' or removing it
+    var is_second_vowel = false
+    ~~~~^~~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:25:9: warning: initialization of variable 'is_second_consonant' was never used; consider replacing with assignment to '_' or removing it
+    var is_second_consonant = false
+    ~~~~^~~~~~~~~~~~~~~~~~~
+    _
+/tmp/tmpnp3yzp0c.swift:26:9: warning: initialization of variable 'is_third_vowel' was never used; consider rep
+*/
+/* stdout = 
+
+*/
+
+
+/// You are given a word. Your task is to find the closest vowel that stands between 
+/// two consonants from the right side of the word (case sensitive).
+/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+/// find any vowel met the above condition. 
+/// You may assume that the given string contains English letter only.
+/// Example:
+/// >>> get_closest_vowel(word: "yogurt")
+/// "u"
+/// >>> get_closest_vowel(word: "FULL")
+/// "U"
+/// >>> get_closest_vowel(word: "quick")
+/// ""
+/// >>> get_closest_vowel(word: "ab")
+/// ""
+func get_closest_vowel(word: String) -> String {
+    let vowels = "aeiouAEIOU"
+    let consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
+    var result = ""
+    var is_consonant = false
+    var is_vowel = false
+    var is_first_vowel = false
+    var is_first_consonant = false
+    var is_second_vowel = false
+    var is_second_consonant = false
+    var is_third_vowel = false
+    var is_third_consonant = false
+    var is_fourth_vowel = false
+    var is_fourth_consonant = false
+    var is_fifth_vowel = false
+    var is_fifth_consonant = false
+    var is_sixth_vowel = false
+    var is_sixth_consonant = false
+    var is_seventh_vowel = false
+    var is_seventh_consonant = false
+    var is_eighth_vowel = false
+    var is_eighth_consonant = false
+    var is_ninth_vowel = false
+    var is_ninth_consonant = false
+    var is_tenth_vowel = false
+    var is_tenth_consonant = false
+    var is_eleventh_vowel = false
+    var is_eleventh_consonant = false
+    var is_twelfth_vowel = false
+    var is_twelfth_consonant = false
+    var is_thirteenth_vowel = false
+    var is_thirteenth_consonant = false
+    var is_fourteenth_vowel = false
+    var is_fourteenth_consonant = false
+    var is_fifteenth_vowel = false
+    var is_fifteenth_consonant = false
+    var is_sixteenth_vowel = false
+    var is_sixteenth_consonant = false
+    var is_seventeenth_vowel = false
+    var is_seventeenth_consonant = false
+
+}
+
+
+func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
+    if left.count != right.count {
+        return false
+    }
+    for (l, r) in zip(left, right) {
+        if l != r {
+            return false
+        }
+    }
+    return true
+}
+            
+assert(get_closest_vowel(word: "yogurt") == "u")
+assert(get_closest_vowel(word: "full") == "u")
+assert(get_closest_vowel(word: "easy") == "")
+assert(get_closest_vowel(word: "eAsy") == "")
+assert(get_closest_vowel(word: "ali") == "")
+assert(get_closest_vowel(word: "bad") == "a")
+assert(get_closest_vowel(word: "most") == "o")
+assert(get_closest_vowel(word: "ab") == "")
+assert(get_closest_vowel(word: "ba") == "")
+assert(get_closest_vowel(word: "quick") == "")
+assert(get_closest_vowel(word: "anime") == "i")
+assert(get_closest_vowel(word: "Asia") == "")
+assert(get_closest_vowel(word: "Above") == "o")
 
 
 

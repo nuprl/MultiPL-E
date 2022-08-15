@@ -347,7 +347,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, str, Callable[[int, str, str, 
     ('CompileError-InvalidSyntax', ('Invalid syntax in the completion.', 'problem HumanEval_160_do_algebra, completion 196', 
         f_and(compile_error_category, invalid_syntax)
     )),
-    ('CompileError-UseOfDeprecatedUnavailableThings', ('The completion uses a function / method that existed in an old version of Swift.', 'problem HumanEval_111_histogram, completion 19', 
+    ('CompileError-UseOfDeprecatedIdentifiers', ('The completion uses a function / method that existed in an old version of Swift.', 'problem HumanEval_111_histogram, completion 19', 
         f_and(compile_error_category, use_of_deprecated_unavailable_things)
     )),
     ('CompileError-UseOfModWithFloat', ('The completion uses % on a float / double.', 'problem HumanEval_151_double_the_difference, completion 92', 

@@ -1,11 +1,15 @@
-// ----------- problem HumanEval_141_file_name_check, completion 40 ------------
+// ----------- problem HumanEval_118_get_closest_vowel, completion 45 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpjt0jyqax.swift:17:32: error: extraneous argument label 'pattern:' in call
-    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
-                               ^~~~~~~~~~
-                                
+/tmp/tmpu3a_0ynk.swift:22:78: error: extraneous argument label 'after:' in call
+                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
+                                                                             ^~~~~~~~
+                                                                              
+/tmp/tmpu3a_0ynk.swift:22:185: error: extraneous argument label 'after:' in call
+                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
+                                                                                                                                                                                        ^~~~~~~~
+                                                                                                                                                                                         
 
 */
 /* stdout = 
@@ -13,23 +17,34 @@
 */
 
 
-/// Create a function which takes a string representing a file's name, and returns
-/// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
-/// A file's name is considered to be valid if and only if all the following conditions 
-/// are met:
-/// - There should not be more than three digits ('0'-'9') in the file's name.
-/// - The file's name contains exactly one dot '.'
-/// - The substring before the dot should not be empty, and it starts with a letter from 
-/// the latin alphapet ('a'-'z' and 'A'-'Z').
-/// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
-/// Examples:
-/// >>> file_name_check(file_name: "example.txt")
-/// "Yes"
-/// >>> file_name_check(file_name: "1example.dll")
-/// "No"
-func file_name_check(file_name: String) -> String {
-    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
-    return file_name_regex.test(input: file_name) ? "Yes" : "No"
+/// You are given a word. Your task is to find the closest vowel that stands between 
+/// two consonants from the right side of the word (case sensitive).
+/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+/// find any vowel met the above condition. 
+/// You may assume that the given string contains English letter only.
+/// Example:
+/// >>> get_closest_vowel(word: "yogurt")
+/// "u"
+/// >>> get_closest_vowel(word: "FULL")
+/// "U"
+/// >>> get_closest_vowel(word: "quick")
+/// ""
+/// >>> get_closest_vowel(word: "ab")
+/// ""
+func get_closest_vowel(word: String) -> String {
+    let vowels = ["a", "e", "i", "o", "u"]
+    var closest_vowel = ""
+    for (index, letter) in word.enumerated() {
+        if vowels.contains(String(letter)) {
+            if index != 0 && index != word.count - 1 {
+                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
+                    closest_vowel = String(letter)
+                    break
+                }
+            }
+        }
+    }
+    return closest_vowel
 }
 
 
@@ -45,32 +60,19 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     return true
 }
             
-assert(file_name_check(file_name: "example.txt") == "Yes")
-assert(file_name_check(file_name: "1example.dll") == "No")
-assert(file_name_check(file_name: "s1sdf3.asd") == "No")
-assert(file_name_check(file_name: "K.dll") == "Yes")
-assert(file_name_check(file_name: "MY16FILE3.exe") == "Yes")
-assert(file_name_check(file_name: "His12FILE94.exe") == "No")
-assert(file_name_check(file_name: "_Y.txt") == "No")
-assert(file_name_check(file_name: "?aREYA.exe") == "No")
-assert(file_name_check(file_name: "/this_is_valid.dll") == "No")
-assert(file_name_check(file_name: "this_is_valid.wow") == "No")
-assert(file_name_check(file_name: "this_is_valid.txt") == "Yes")
-assert(file_name_check(file_name: "this_is_valid.txtexe") == "No")
-assert(file_name_check(file_name: "#this2_i4s_5valid.ten") == "No")
-assert(file_name_check(file_name: "@this1_is6_valid.exe") == "No")
-assert(file_name_check(file_name: "this_is_12valid.6exe4.txt") == "No")
-assert(file_name_check(file_name: "all.exe.txt") == "No")
-assert(file_name_check(file_name: "I563_No.exe") == "Yes")
-assert(file_name_check(file_name: "Is3youfault.txt") == "Yes")
-assert(file_name_check(file_name: "no_one#knows.dll") == "Yes")
-assert(file_name_check(file_name: "1I563_Yes3.exe") == "No")
-assert(file_name_check(file_name: "I563_Yes3.txtt") == "No")
-assert(file_name_check(file_name: "final..txt") == "No")
-assert(file_name_check(file_name: "final132") == "No")
-assert(file_name_check(file_name: "_f4indsartal132.") == "No")
-assert(file_name_check(file_name: ".txt") == "No")
-assert(file_name_check(file_name: "s.") == "No")
+assert(get_closest_vowel(word: "yogurt") == "u")
+assert(get_closest_vowel(word: "full") == "u")
+assert(get_closest_vowel(word: "easy") == "")
+assert(get_closest_vowel(word: "eAsy") == "")
+assert(get_closest_vowel(word: "ali") == "")
+assert(get_closest_vowel(word: "bad") == "a")
+assert(get_closest_vowel(word: "most") == "o")
+assert(get_closest_vowel(word: "ab") == "")
+assert(get_closest_vowel(word: "ba") == "")
+assert(get_closest_vowel(word: "quick") == "")
+assert(get_closest_vowel(word: "anime") == "i")
+assert(get_closest_vowel(word: "Asia") == "")
+assert(get_closest_vowel(word: "Above") == "o")
 
 
 
@@ -235,18 +237,14 @@ assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
 
 
 
-// ----------- problem HumanEval_118_get_closest_vowel, completion 45 ------------
+// ----------- problem HumanEval_141_file_name_check, completion 40 ------------
 // status = SyntaxError
 // exit_code = 1
 /* stderr = 
-/tmp/tmpu3a_0ynk.swift:22:78: error: extraneous argument label 'after:' in call
-                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
-                                                                             ^~~~~~~~
-                                                                              
-/tmp/tmpu3a_0ynk.swift:22:185: error: extraneous argument label 'after:' in call
-                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
-                                                                                                                                                                                        ^~~~~~~~
-                                                                                                                                                                                         
+/tmp/tmpjt0jyqax.swift:17:32: error: extraneous argument label 'pattern:' in call
+    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
+                               ^~~~~~~~~~
+                                
 
 */
 /* stdout = 
@@ -254,34 +252,23 @@ assert(intersperse(numbers: [2, 2, 2], delimeter: 2) == [2, 2, 2, 2, 2])
 */
 
 
-/// You are given a word. Your task is to find the closest vowel that stands between 
-/// two consonants from the right side of the word (case sensitive).
-/// Vowels in the beginning and ending doesn't count. Return empty string if you didn't
-/// find any vowel met the above condition. 
-/// You may assume that the given string contains English letter only.
-/// Example:
-/// >>> get_closest_vowel(word: "yogurt")
-/// "u"
-/// >>> get_closest_vowel(word: "FULL")
-/// "U"
-/// >>> get_closest_vowel(word: "quick")
-/// ""
-/// >>> get_closest_vowel(word: "ab")
-/// ""
-func get_closest_vowel(word: String) -> String {
-    let vowels = ["a", "e", "i", "o", "u"]
-    var closest_vowel = ""
-    for (index, letter) in word.enumerated() {
-        if vowels.contains(String(letter)) {
-            if index != 0 && index != word.count - 1 {
-                if !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) && !vowels.contains(String(word[word.index(before: word.index(after: word.startIndex, offsetBy: index))])) {
-                    closest_vowel = String(letter)
-                    break
-                }
-            }
-        }
-    }
-    return closest_vowel
+/// Create a function which takes a string representing a file's name, and returns
+/// 'Yes' if the the file's name is valid, and returns 'No' otherwise.
+/// A file's name is considered to be valid if and only if all the following conditions 
+/// are met:
+/// - There should not be more than three digits ('0'-'9') in the file's name.
+/// - The file's name contains exactly one dot '.'
+/// - The substring before the dot should not be empty, and it starts with a letter from 
+/// the latin alphapet ('a'-'z' and 'A'-'Z').
+/// - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
+/// Examples:
+/// >>> file_name_check(file_name: "example.txt")
+/// "Yes"
+/// >>> file_name_check(file_name: "1example.dll")
+/// "No"
+func file_name_check(file_name: String) -> String {
+    let file_name_regex = Regex(pattern: "^[a-zA-Z][a-zA-Z0-9]{0,3}\\.(txt|exe|dll)$")
+    return file_name_regex.test(input: file_name) ? "Yes" : "No"
 }
 
 
@@ -297,19 +284,32 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     return true
 }
             
-assert(get_closest_vowel(word: "yogurt") == "u")
-assert(get_closest_vowel(word: "full") == "u")
-assert(get_closest_vowel(word: "easy") == "")
-assert(get_closest_vowel(word: "eAsy") == "")
-assert(get_closest_vowel(word: "ali") == "")
-assert(get_closest_vowel(word: "bad") == "a")
-assert(get_closest_vowel(word: "most") == "o")
-assert(get_closest_vowel(word: "ab") == "")
-assert(get_closest_vowel(word: "ba") == "")
-assert(get_closest_vowel(word: "quick") == "")
-assert(get_closest_vowel(word: "anime") == "i")
-assert(get_closest_vowel(word: "Asia") == "")
-assert(get_closest_vowel(word: "Above") == "o")
+assert(file_name_check(file_name: "example.txt") == "Yes")
+assert(file_name_check(file_name: "1example.dll") == "No")
+assert(file_name_check(file_name: "s1sdf3.asd") == "No")
+assert(file_name_check(file_name: "K.dll") == "Yes")
+assert(file_name_check(file_name: "MY16FILE3.exe") == "Yes")
+assert(file_name_check(file_name: "His12FILE94.exe") == "No")
+assert(file_name_check(file_name: "_Y.txt") == "No")
+assert(file_name_check(file_name: "?aREYA.exe") == "No")
+assert(file_name_check(file_name: "/this_is_valid.dll") == "No")
+assert(file_name_check(file_name: "this_is_valid.wow") == "No")
+assert(file_name_check(file_name: "this_is_valid.txt") == "Yes")
+assert(file_name_check(file_name: "this_is_valid.txtexe") == "No")
+assert(file_name_check(file_name: "#this2_i4s_5valid.ten") == "No")
+assert(file_name_check(file_name: "@this1_is6_valid.exe") == "No")
+assert(file_name_check(file_name: "this_is_12valid.6exe4.txt") == "No")
+assert(file_name_check(file_name: "all.exe.txt") == "No")
+assert(file_name_check(file_name: "I563_No.exe") == "Yes")
+assert(file_name_check(file_name: "Is3youfault.txt") == "Yes")
+assert(file_name_check(file_name: "no_one#knows.dll") == "Yes")
+assert(file_name_check(file_name: "1I563_Yes3.exe") == "No")
+assert(file_name_check(file_name: "I563_Yes3.txtt") == "No")
+assert(file_name_check(file_name: "final..txt") == "No")
+assert(file_name_check(file_name: "final132") == "No")
+assert(file_name_check(file_name: "_f4indsartal132.") == "No")
+assert(file_name_check(file_name: ".txt") == "No")
+assert(file_name_check(file_name: "s.") == "No")
 
 
 

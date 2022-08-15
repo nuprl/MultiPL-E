@@ -152,7 +152,7 @@ LANGUAGE = [
     "C#": ["InvalidAssignment"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
-      "CompileError-UseOfDeprecatedUnavailableThings", 
+      "CompileError-UseOfDeprecatedIdentifiers", 
       "CompileError-NonExclusiveMutation", 
       "CompileError-ImmutableViolation", 
       "CompileError-MissingArgumentLabel", 
