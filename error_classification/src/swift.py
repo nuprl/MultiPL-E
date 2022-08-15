@@ -615,7 +615,7 @@ def main():
                     
     with csv_out.open('w', newline='') as csv_f:
         csv_writer = csv.writer(csv_f)
-        csv_writer.writerow(['code', 'description', 'count', 'gold', 'example file'])
+        csv_writer.writerow(['code', 'description', 'count', 'gold', 'examples'])
 
         for cat_name, example_keys in category_results.items():
             desc = 'SHOULD BE EMPTY' if cat_name == 'fallthrough' else CATEGORY_DEFINITIONS[cat_name][0]
