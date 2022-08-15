@@ -1,0 +1,41 @@
+---
+title: "basic-pass-at-k"
+output: pdf_document
+date: "2022-08-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Error Classification
+
+Goal of this R file is to read in the data from ``error_classification/LANG_codes.csv``
+and plot it according to language and error category.
+
+```{r}
+
+csharp <- read.csv("../error_classification/csharp_codes.csv")
+csharp <- csharp %>% mutate(language = "C#")
+csharp <- subset(csharp,select=-c(gold))
+racket <- read.csv("../error_classification/racket_codes.csv")
+racket <- racket %>% mutate(language = "Racket")
+swift <- read.csv("../error_classification/swift_codes.csv")
+swift <- swift %>% mutate(language = "Swift")
+swift <- subset(swift,select=-c(gold))
+python <- read.csv("../error_classification/python_codes.csv")
+python <- python %>% mutate(language = "Python")
+python <- subset(python,select=-c(gold))
+
+all <- rbind(rbind(csharp,racket),rbind(python,swift))
+all <- subset(all,category!='')
+all <- all %>% mutate(Category= ifelse(grepl("Assertion",theme),"Test Failure",category))
+all$Category <- factor(all$Category,levels=c("Static","Type","Runtime","Test Failure","Language","Model"))
+all <- subset(all,Category!="Test Failure")
+```
+
+```{r}
+ggplot(data=all,aes(x=language,y=count,fill=Category)) + geom_col(position="dodge") + scale_fill_manual(name="Category",values=c("#FFB000", "#FE6100","#DC267F","#000000","#56B4E9","#0072B2")) +ylab("Error Count") + xlab("Language") + facet_wrap(~Category) + theme(legend.position = c(0.8,0.2))
+ggsave("errorsbycategory.pdf")
+```
