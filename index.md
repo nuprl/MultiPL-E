@@ -23,7 +23,13 @@ other models.
     conda activate multipl-env
     ```
 
-3. You will need an OpenAI API key and access to the Codex beta.
+3. You will need to install some Python packages:
+
+    ```
+    pip3 install aiohttp numpy pyyaml tqdm yamlize
+    ```
+
+4. You will need an OpenAI API key and access to the Codex beta.
 
 First, check out the repository in a terminal:
 
