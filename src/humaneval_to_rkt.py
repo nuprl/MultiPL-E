@@ -50,7 +50,7 @@ class Translator:
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
-            return "#f" # NOTE(arjun): My guess
+            return "#f" # NOTE: My guess
         return repr(c)
 
     def gen_var(self, v: str) -> str:
