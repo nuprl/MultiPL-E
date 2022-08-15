@@ -1,5 +1,3 @@
-# Authored by Carolyn Anderson, based on script by Arjun Guha.
-#
 # This script translates problems from the OpenAI HumanEval dataset into Perl.
 import re
 import ast

@@ -1,6 +1,3 @@
-# Authored by Arjun Guha and Yangtian Zi
-# Copyright (c) 2022, Roblox Inc and Northeastern University
-#
 # The dmd executable is downloaded from the D language official website:
 # https://dlang.org/download.html
 #

@@ -1,5 +1,3 @@
-# Authored by Carolyn Anderson. Reviewed by Arjun Guha.
-#
 # This script translates problems from the OpenAI HumanEval dataset into
 # JavaScript.
 import re
@@ -58,7 +56,7 @@ class Translator:
             return "true" if c else "false"
         elif type(c) == str:
             return f'"{c}"'
-        # NOTE(arjun): I believe undefined is the canonical equivalent of None.
+        # NOTE: I believe undefined is the canonical equivalent of None.
         # Unfortunately, JavaScript also has a "null" value, but that is used
         # far less. One could write a version of deep equality that equates
         # undefined and null. Ironically, the "==" operator in JavaScript does

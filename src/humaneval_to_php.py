@@ -1,6 +1,3 @@
-# Authored by Arjun Guha, Abhinav Jangda, and Ming-Ho Yee
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This script translates problems from the OpenAI HumanEval dataset into PHP.
 #
 # PHP can be installed with:

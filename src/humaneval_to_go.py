@@ -1,6 +1,3 @@
-# Authored by Arjun Guha and Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This script translates problems from the OpenAI HumanEval dataset into Go.
 #
 # ----- Some specific issues about Go -----

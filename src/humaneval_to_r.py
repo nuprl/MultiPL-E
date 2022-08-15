@@ -1,8 +1,4 @@
-# Authored by Arjun Guha, modified by Sydney Nguyen
-# Copyright (c) 2022, Roblox Inc.
-#
 # This script translates problems from the OpenAI HumanEval dataset into R.
-
 import ast
 import re
 from typing import List

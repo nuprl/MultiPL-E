@@ -1,6 +1,3 @@
-# Authored by Arjun Guha and Abhinav Jangda
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This is a helper script for translating problems from the OpenAI HumanEval
 # problems to Language L.
 import ast
@@ -179,7 +176,7 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
         case ast.Module(body=[ast.Assign(), ast.FunctionDef(body=body)]):
             body_ast = body
         case _other:
-            return None  # TODO(arjun): Should this blow up?
+            return None  # TODO: Should this blow up?
     for item_ast in body_ast:
         match item_ast:
             case ast.Assert(

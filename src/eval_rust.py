@@ -1,7 +1,3 @@
-# Authored by Arjun Guha
-# Copyright (c) 2022, Roblox Inc.
-#
-# This script runs the Rustified HumanEval programs in datasets/rs
 import os
 import subprocess
 import tempfile

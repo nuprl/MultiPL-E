@@ -1,5 +1,3 @@
-# Authored by Carolyn Anderson, based on script by Arjun Guha.
-#
 # This script translates problems from the OpenAI HumanEval dataset into TypeScript.
 import re
 import ast
@@ -72,7 +70,7 @@ def coerce(expr: str, type) -> str:
 
 class Translator:
 
-    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ] # NOTE(carolyn): My guess
+    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ]
 
     def __init__(self):
         global needs_hashmap

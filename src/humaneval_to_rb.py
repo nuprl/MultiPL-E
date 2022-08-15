@@ -1,12 +1,5 @@
 '''
-Authored by Molly Q Feldman - based on scripts by Arjun Guha & Abhinav Jangda
-
 This script translates problems from the OpenAI HumanEval dataset into Ruby.
-
-INSTALLS REQUIRED ON VM:
-sudo apt install ruby
-
-RUBY_VERSION is 3.0.2
 '''
 
 import re

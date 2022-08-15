@@ -1,6 +1,3 @@
-# Authored by Donald Pinckney, based on scripts by Arjun Guha and others
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This script translates problems from the OpenAI HumanEval dataset into Swift.
 #
 # ----- Some specifics with the Swift translation -----
@@ -647,7 +644,7 @@ class Translator(LanguageTranslator[TargetExp]):
         return [
             "}",
             "",
-            # TODO(donald): autogenerate this for other types
+            # TODO: autogenerate this for other types
             """
 func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
     if left.count != right.count {

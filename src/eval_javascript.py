@@ -1,4 +1,3 @@
-# Authored by Carolyn Anderson
 import os
 import subprocess
 from pathlib import Path
@@ -6,7 +5,6 @@ from pathlib import Path
 def eval_script(path: Path):
     try: 
         # Assumes exit-code 0 is all okay
-        # Run racket on the file, capturing stderr
         output = subprocess.run(["node", str(path)], capture_output=True, timeout=5)
         
         if output.returncode == 0:

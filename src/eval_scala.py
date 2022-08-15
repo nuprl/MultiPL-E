@@ -1,7 +1,3 @@
-# Authored by Abhinav Jangda based on eval_scala.py
-# Copyright (c) 2022, Roblox Inc and University of Massachusetts Amherst
-#
-# This script runs the C++ Translated HumanEval programs in datasets/cpp-*
 import os
 import subprocess
 from pathlib import Path

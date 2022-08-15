@@ -1,10 +1,9 @@
-# Authored by Arjun Guha, Abhinav Jangda, and Ming-Ho Yee
-# Copyright (c) 2022, Roblox Inc, Northeastern University, and University of Massachusetts Amherst
-#
 # This script translates problems from the OpenAI HumanEval dataset into bash.
 #
 # Installed version is:
 # GNU bash, version 5.1.16(1)-release (x86_64-pc-linux-gnu)
+#
+# Note: We evaluate with Bash 4.2
 #
 # Bash is not a general-purpose programming language, and has its own quirks to work around.
 # In particular, the main datatype is string. While Bash has arrays and associative arrays,
