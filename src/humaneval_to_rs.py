@@ -2,8 +2,7 @@
 #
 # Some rust specific notes:
 # 
-# Obviously we have types, this is mostly alright for the prompt because
-# and Sydney thankfully went and added types to all the benchmarks.  There are
+# There are
 # a few explicitly or implicitly untyped, or that use Union, and we just blow up
 # on them
 #
