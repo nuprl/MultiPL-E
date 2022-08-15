@@ -15,7 +15,7 @@ MultiPL-E is authored by:
 - Yangtian Zi (Northeastern University)
 - Carolyn Jane Anderson (Wellesley College)
 - Molly Q Feldman (Oberlin College)
-- Arjun Guha (Northeastern University)
+- Arjun Guha (Northeastern University and Roblox Research)
 - Michael Greenberg (Stevens Institute of Technology)
 - Abhinav Jangda (University of Massachusetts Amherst)
 
