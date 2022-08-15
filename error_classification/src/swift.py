@@ -431,7 +431,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, str, Callable[[int, str, str, 
     ('CompileError-MissingReturn', ('A return statement is missing.', 'problem HumanEval_83_starts_one_ends, completion 171', 
         f_and(compile_error_category, missing_return)
     )),
-    ('CompileError-TypeMismatch-Numerics', ('Type mismatch between numeric types.', 'problem HumanEval_66_digitSum, completion 140', 
+    ('CompileError-TypeMismatch-NumericsTypeError', ('Type mismatch between numeric types.', 'problem HumanEval_66_digitSum, completion 140', 
         f_and(compile_error_category, type_mismatch_both_numeric)
     )),
     ('CompileError-TypeMismatch-CollectionAndInner', ('Type mismatch between the collection type and element type, e.g. [String] and String.', 'problem HumanEval_27_flip_case, completion 2', 
@@ -443,7 +443,7 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, str, Callable[[int, str, str, 
     ('CompileError-TypeMismatch-StringsArentCharArrays', ('A string is not an array of characters.', 'problem HumanEval_161_solve, completion 3', 
         f_and(compile_error_category, type_mismatch_strings_arent_char_arrays)
     )),
-    ('CompileError-TypeMismatch-Else', ('Type mismatch else case', 'N/A',
+    ('CompileError-TypeMismatch-OtherLocation', ('Type mismatch else case', 'N/A',
         f_and(compile_error_category, type_mismatch_else_case)
     )),
     # ('CompileError-Else', ('Other compilation errors', 
@@ -561,8 +561,8 @@ CATEGORY_DEFINITIONS: OrderedDict[str, Tuple[str, str, Callable[[int, str, str, 
 def main():
     parser = argparse.ArgumentParser(description='Categorize Swift errors')
     parser.add_argument('--in-dir', type=str, help='the directory .yaml and .results.yaml files.', default='experiments/swift-davinci-0.2-reworded')
-    parser.add_argument('--examples-out-dir', type=str, help='the directory in which to place examples', default='swift_error_examples')
-    parser.add_argument('--csv-out', type=str, help='where to write the CSV', default='error_examples/swift_codes.csv')
+    parser.add_argument('--examples-out-dir', type=str, help='the directory in which to place examples', default='error_classification/error-examples/swift')
+    parser.add_argument('--csv-out', type=str, help='where to write the CSV', default='error_classification/swift_codes.csv')
     parser.add_argument('--n-examples', type=int, help='How many examples for each error code', default=None),
     parser.add_argument('--no-shuffle-examples', action='store_false', help='Disabling shuffling of examples', dest='shuffle_examples', default=True)
     parser.add_argument('--allow-fallthrough', action='store_true', help='Should fallthrough be allowed?')

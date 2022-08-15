@@ -1,8 +1,8 @@
-from typing import Dict, NamedTuple
+from typing import Dict, NamedTuple, Tuple
 import swift_category_data
-import racket_category_data
-import python_category_data
-import csharp_category_data
+# import racket_category_data
+# import python_category_data
+# import csharp_category_data
 
 RUNTIME = [
   { 
@@ -105,7 +105,7 @@ STATIC = [
     "Racket": ["badBuiltInFnAppCall"], 
   },
   {
-    "Theme": "Re-Declaration",
+    "Theme": "ReDeclaration",
     "C#": ["Re-declaration"],
     "Racket": ["letDuplicateIdentifier"], 
     "Swift": ["CompileError-RedeclarationOfVariable"],
@@ -137,9 +137,9 @@ TYPE = [
       "CompileError-TypeCheck-MiscTypeError",
       "CompileError-TypeCheck-WeirdSubscriptTypeError",
       "CompileError-TypeCheck-UnknownTypeErrorInCall",
-      "CompileError-TypeMismatch-Numerics",
+      "CompileError-TypeMismatch-NumericsTypeError",
       "CompileError-TypeMismatch-CollectionAndInner",
-      "CompileError-TypeMismatch-Else"
+      "CompileError-TypeMismatch-OtherLocation"
     ],
     "Racket": ["contractViolation"]
   }
@@ -148,7 +148,7 @@ TYPE = [
 
 LANGUAGE = [
   {
-    "Theme": "Language specific problems",
+    "Theme": "LanguageSpecific",
     "C#": ["InvalidAssignment"],
     "Swift": [
       "Exception-OverflowUnderflowTrap", 
@@ -195,24 +195,26 @@ MODEL = [
   }
 ]
 
-class CategoryInfo(NamedTuple):
-  name: str
+class CodeInfo(NamedTuple):
+  category: str
+  theme: str
+  code_name: str
   description: str
   count: int
   total_failures: int
 
-def build_code_data_dict(lang_module) -> Dict[str, CategoryInfo]:
-  codes: list[str] = [code for g in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL] 
-                           for theme in g 
+def build_code_data_dict(lang_module) -> Dict[str, CodeInfo]:
+  codes: list[Tuple[str, str, str]] = [(code, theme["Theme"], category_name) for (category, category_name) in zip([RUNTIME, STATIC, TYPE, LANGUAGE, MODEL], ['Runtime', 'Static', 'Type', 'Language', 'Model'])
+                           for theme in category
                            for code in (theme[lang_module.LANG_NAME] if lang_module.LANG_NAME in theme else [])]
   # Verify each code appears only once
   assert len(codes) == len(set(codes)), codes
-  return dict((code, CategoryInfo(code, lang_module.get_description(code), lang_module.get_code_count(code), lang_module.get_total_failures())) for code in codes)
+  return dict((code, CodeInfo(cat, theme, code, lang_module.get_description(code), lang_module.get_code_count(code), lang_module.get_total_failures())) for (code, theme, cat) in codes)
 
 SWIFT_CODES_DATA = build_code_data_dict(swift_category_data)
-RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
-PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
-CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
+# RACKET_CODES_DATA = build_code_data_dict(racket_category_data)
+# PYTHON_CODES_DATA = build_code_data_dict(python_category_data)
+# CSHARP_CODES_DATA = build_code_data_dict(csharp_category_data)
 
 def getThemeLabelMap():
   for d in [RUNTIME, STATIC, TYPE, LANGUAGE, MODEL]:
@@ -221,3 +223,14 @@ def getThemeLabelMap():
         if v in theme:
           for value in theme[v]:
             print(f"{theme['Theme']},{value},{v}")
+
+# getThemeLabelMap()
+
+print("Category,Theme,Error,Count")
+cat_names = ['Runtime', 'Static', 'Type', 'Language', 'Model']
+swift_rows = sorted(SWIFT_CODES_DATA.values(), key=lambda code_info: (cat_names.index(code_info.category), -code_info.count))
+for code_info in swift_rows:
+  if code_info.code_name == 'OK':
+    continue
+  nice_code = code_info.code_name.replace("Exception-", "").replace("CompileError-", "").replace("TypeCheck-", "").replace("TypeMismatch-", "")
+  print(f"{code_info.category},{code_info.theme},{nice_code},{code_info.count}")
