@@ -13,7 +13,7 @@ program that looks like the following:
 def my_function(n: int) -> int:
     """
     Given a positive integer n, return a tuple of positive integers (a, b, c)
-    such that a^n + b^n = c^n.
+    such that a ** n + b ** n = c ** n.
     """
     pass
 
