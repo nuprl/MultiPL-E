@@ -6,10 +6,8 @@ nav_order: 3
 
 # Evaluate a New Programming Language
 
-*So you want to add a new language, huh?*
-
-Excellent! One of the goals of this work is to ensure that the benchmark set is 
-extensible. In trying out the completions above, you may have noticed a number 
+One of the goals of this work is to ensure that the benchmark set is 
+extensible. In trying out the completions in [Evaluating a New Model], you may have noticed a number 
 of files with prefixes `humaneval_to_` and `eval_` in `src/`. These are the 
 only two files required for adding a new language to the benchmark. 
 
@@ -105,7 +103,7 @@ well-documented version of `humaneval_to_ts.py` for TypeScript as an example. Fe
 to also consult translations for other languages in the benchmark, although your 
 mileage may vary. 
 
-### Creating eval_foo
+### Creating eval_L
 
 Now that you're done converting Python to your language of choice, you need 
 to define how to evaluate the generated programs. As a reminder, one of the 
