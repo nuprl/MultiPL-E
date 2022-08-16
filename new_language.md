@@ -7,7 +7,7 @@ nav_order: 3
 # Evaluate a New Programming Language
 
 One of the goals of this work is to ensure that the benchmark set is 
-extensible. In trying out the completions in [Evaluating a New Model](new_model.md), you may have noticed a number 
+extensible. In trying out the completions in [Evaluate a New Model](new_model.md), you may have noticed a number 
 of files with prefixes `humaneval_to_` and `eval_` in `src/`. These are the 
 only two files required for adding a new language to the benchmark. 
 
