@@ -21,7 +21,7 @@ Python     | py        | Conda
 JavaScript | js        | Conda
 TypeScript | ts        | Conda
 Java       | java      | Conda
-D          | d         | Manual install (we have dmd 2.100.0)
+D          | d         | Manual install (we have dmd)
 C++        | cpp       | System (we have g++ 9.2.0)
 R          | r         | Manually install (we use R 4.2)
 Julia      | jl        | Conda
