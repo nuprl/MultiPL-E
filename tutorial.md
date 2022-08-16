@@ -65,9 +65,9 @@ If you want to evaluate the performance of an OpenAI Codex model, you will need
 an OpenAI API Key and access to the [Codex beta].
 
 Alternatively, you can use MultiPL-E to evaluate any other model, as long as you
-can build a web server that uses the OpenAI HTTP API. evalate *any* model that
-uses the OpenAI HTTP API. For example, we have written a web server that serves
-[Incoder] and tested it on RTX A6000 (48 GB) and Quadro RTX 6000 (24 GB) GPUs.
+can serve completions over the web with the OpenAI HTTP API.  For example, we
+have written a web server that serves [Incoder] and tested it on RTX A6000 (48
+GB) and Quadro RTX 6000 (24 GB) GPUs.
 
 ## Prepare Prompts
 
