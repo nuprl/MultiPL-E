@@ -41,20 +41,14 @@ in depth analyses. Some of our findings include:
 The MultiPL-E benchmark and associated tools are open source and easy to extend.
 Each compiler translates Python unit tests, doctests, and function signatures to
 its target language. Because these program regions do not contain arbitrary
-Python code, each compiler is much simpler than a full-fledged
-compiler. It is easy to add new benchmark programs and to
-extend the benchmark to additional languages. The [Tutorial] on this website
-walks you through running our benchmarks and gives guidance on adding support
-for new languages and benchmarks, and evaluating new models.
+Python code, each compiler is much simpler than a full-fledged compiler. It is
+easy to add new benchmark programs and to extend the benchmark to additional
+languages. The [tutorial](./tutorial.html) walks you through
+running our benchmarks and gives guidance on adding support for [new languages],
+[new benchmarks], and evaluating [new code generation models].
 
-
-
-TODO: Description here, lifted from the paper
-
-TODO: Arxiv link here
-
-TODO: Carousel here
-
-TODO: Awesome graph here.
 
 [Chen et al. 2021]: https://arxiv.org/abs/2107.03374
+[new languages]: ./new_language.html
+[new benchmarks]: ./new_benchmark.html
+[evaluating new models]: ./new_model.html

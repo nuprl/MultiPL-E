@@ -20,3 +20,4 @@ and `gather_completions.py`.
 
 [Incoder model server]: https://github.com/arjunguha/research_model_server
 [POST handler]: https://github.com/arjunguha/research_model_server/blob/main/incoder_server.py#L80
+[Tutorial]: ./tutorial.html
