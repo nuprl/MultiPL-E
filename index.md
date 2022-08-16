@@ -8,310 +8,296 @@ nav_order: 0
 
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap");
-.carousel__wrapper {
-  padding: 20px;
-}
-.carousel__content {
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-}
-.carousel__container {
-  overflow-x: scroll;
-  overflow-y: hidden;
-  display: flex;
-  align-items: center;
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-}
-.carousel__container::-webkit-scrollbar {
-  display: none;
-}
-.carousel__slide {
-  min-width: 90%;
-}
-.card__description {
-  display: flex;
-  column-gap: 10px;
-  align-items: center;
-}
-.card__description img {
-  width: 20px;
-}
-.card__description span {
-  padding: 5px 15px;
-  border-radius: 5px;
-  color: #fff;
-}
-.card__description span.fire {
-  background-color: orange;
-}
-.card__description span.psychic {
-  background-color: rgb(146, 100, 108);
-}
-.card__description span.electric {
-  background-color: rgb(231, 210, 88);
-}
-.card__description span.rock {
-  background-color: rgb(114, 102, 32);
-}
-.card__description span.grass {
-  background-color: rgb(32, 114, 69);
-}
-
-.card__inner {
-  box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 15px;
-  flex-direction: column;
-  row-gap: 0.5rem;
-  height: 300px;
-  border-radius: 15px;
-  background-color: #fff;
-  padding: 2rem 4rem;
-}
-.card__inner h4 {
-  font-size: 1.5rem;
-  margin: 0;
-  color: rgb(170, 155, 155);
-}
-.card__image img {
-  max-height: 150px;
-  margin-bottom: 1rem;
-}
-.arrow {
-  display: none;
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  top: calc(50% - 10px);
-  background-color: rgba(3, 101, 214, 0.664);
-  padding: 5px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.arrow i {
-  font-size: 1.5rem;
-  color: #fff;
-}
-.arrow.arrow--right {
-  right: 0%;
-}
-.arrow.arrow--left {
-  left: 0%;
-}
-
-@media screen and (min-width: 1180px) {
-  .carousel__wrapper {
-    padding: 50px;
+@keyframes tonext {
+  75% {
+    left: 0;
   }
-  .carousel__slide {
-    min-width: 33.33%;
+  95% {
+    left: 100%;
+  }
+  98% {
+    left: 100%;
+  }
+  99% {
+    left: 0;
+  }
+}
+
+@keyframes tostart {
+  75% {
+    left: 0;
+  }
+  95% {
+    left: -300%;
+  }
+  98% {
+    left: -300%;
+  }
+  99% {
+    left: 0;
+  }
+}
+
+@keyframes snap {
+  96% {
     scroll-snap-align: center;
-    position: relative;
   }
-  .arrow {
-    display: flex;
+  97% {
+    scroll-snap-align: none;
   }
+  99% {
+    scroll-snap-align: none;
+  }
+  100% {
+    scroll-snap-align: center;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-color: transparent transparent; /* thumb and track color */
+  scrollbar-width: 0px;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: none;
+}
+
+* {
+  -ms-overflow-style: none;
+}
+
+ol, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carousel {
+  position: relative;
+  padding-top: 75%;
+  filter: drop-shadow(0 0 10px #0003);
+  perspective: 100px;
+}
+
+.carousel__viewport {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  overflow-x: scroll;
+  counter-reset: item;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+}
+
+.carousel__slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  background-color: #f99;
+  counter-increment: item;
+}
+
+.carousel__slide:nth-child(even) {
+  background-color: #99f;
+}
+
+.carousel__slide:before {
+  content: counter(item);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%,-40%,70px);
+  color: #fff;
+  font-size: 2em;
+}
+
+.carousel__snapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: center;
+}
+
+@media (hover: hover) {
+  .carousel__snapper {
+    animation-name: tonext, snap;
+    animation-timing-function: ease;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+  }
+
+  .carousel__slide:last-child .carousel__snapper {
+    animation-name: tostart, snap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__snapper {
+    animation-name: none;
+  }
+}
+
+.carousel:hover .carousel__snapper,
+.carousel:focus-within .carousel__snapper {
+  animation-name: none;
+}
+
+.carousel__navigation {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+.carousel__navigation-list,
+.carousel__navigation-item {
+  display: inline-block;
+}
+
+.carousel__navigation-button {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: #333;
+  background-clip: content-box;
+  border: 0.25rem solid transparent;
+  border-radius: 50%;
+  font-size: 0;
+  transition: transform 0.1s;
+}
+
+.carousel::before,
+.carousel::after,
+.carousel__prev,
+.carousel__next {
+  position: absolute;
+  top: 0;
+  margin-top: 37.5%;
+  width: 4rem;
+  height: 4rem;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  font-size: 0;
+  outline: 0;
+}
+
+.carousel::before,
+.carousel__prev {
+  left: -1rem;
+}
+
+.carousel::after,
+.carousel__next {
+  right: -1rem;
+}
+
+.carousel::before,
+.carousel::after {
+  content: '';
+  z-index: 1;
+  background-color: #333;
+  background-size: 1.5rem 1.5rem;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: #fff;
+  font-size: 2.5rem;
+  line-height: 4rem;
+  text-align: center;
+  pointer-events: none;
+}
+
+.carousel::before {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,50 80,100 80,0' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+.carousel::after {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
 }
 </style>
-<link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
-<section class="carousel" id="carousel">
-  <div class="carousel__wrapper">
-    <div>
-      <div class="carousel__content">
-        <div class="carousel__container">
-          <div class="carousel__slide">
-            <div class="card">
-              <div class="card__inner">
-                <div class="card__image">
-                  <img src="https://i.imgur.com/p3FfEL6.png" alt="Charmander" />
-                </div>
-                <h4>Charmander</h4>
-                <div class="card__description">
-                  <img src="https://i.imgur.com/FldDlNb.png" alt="Pokeball" />
-                  <span class="fire">Fire</span>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="carousel__slide">
-            <div class="card">
-              <div class="card__inner">
-                <div class="card__image">
-                  <img src="https://i.imgur.com/pGKpAlb.png" alt="Psyduck" />
-                </div>
-                <h4>Psyduck</h4>
-                <div class="card__description">
-                  <img src="https://i.imgur.com/FldDlNb.png" alt="Pokeball" />
-                  <span class="psychic">Psychic</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="carousel__slide">
-            <div class="card">
-              <div class="card__inner">
-                <div class="card__image">
-                  <img src="https://i.imgur.com/KQ4FREg.png" alt="Pikachu" />
-                </div>
-                <h4>Pikachu</h4>
-                <div class="card__description">
-                  <img src="https://i.imgur.com/FldDlNb.png" alt="Pokeball" />
-                  <span class="electric">Electric</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="carousel__slide">
-            <div class="card">
-              <div class="card__inner">
-                <div class="card__image">
-                  <img src="https://i.imgur.com/JpHWJa4.png" alt="Sandshrew" />
-                </div>
-                <h4>Sandshrew</h4>
-                <div class="card__description">
-                  <img src="https://i.imgur.com/FldDlNb.png" alt="Pokeball" />
-                  <span class="rock">Rock</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="carousel__slide">
-            <div class="card">
-              <div class="card__inner">
-                <div class="card__image">
-                  <img src="https://i.imgur.com/vJZ4agX.png" alt="Caterpie" />
-                </div>
-                <h4>Caterpie</h4>
-                <div class="card__description">
-                  <img src="https://i.imgur.com/FldDlNb.png" alt="Pokeball" />
-                  <span class="grass">Grass</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="prev-slide" class="arrow arrow--left">
-          <i class="bx bx-chevron-left"></i>
-        </div>
-        <div id="next-slide" class="arrow arrow--right">
-          <i class="bx bx-chevron-right"></i>
-        </div>
+<section class="carousel" aria-label="Gallery">
+  <ol class="carousel__viewport">
+    <li id="carousel__slide1"
+        tabindex="0"
+        class="carousel__slide">
+      <div class="carousel__snapper">
+        <a href="#carousel__slide4"
+           class="carousel__prev">Go to last slide</a>
+        <a href="#carousel__slide2"
+           class="carousel__next">Go to next slide</a>
       </div>
-    </div>
-  </div>
+    </li>
+    <li id="carousel__slide2"
+        tabindex="0"
+        class="carousel__slide">
+      <div class="carousel__snapper"></div>
+      <a href="#carousel__slide1"
+         class="carousel__prev">Go to previous slide</a>
+      <a href="#carousel__slide3"
+         class="carousel__next">Go to next slide</a>
+    </li>
+    <li id="carousel__slide3"
+        tabindex="0"
+        class="carousel__slide">
+      <div class="carousel__snapper"></div>
+      <a href="#carousel__slide2"
+         class="carousel__prev">Go to previous slide</a>
+      <a href="#carousel__slide4"
+         class="carousel__next">Go to next slide</a>
+    </li>
+    <li id="carousel__slide4"
+        tabindex="0"
+        class="carousel__slide">
+      <div class="carousel__snapper"></div>
+      <a href="#carousel__slide3"
+         class="carousel__prev">Go to previous slide</a>
+      <a href="#carousel__slide1"
+         class="carousel__next">Go to first slide</a>
+    </li>
+  </ol>
+  <aside class="carousel__navigation">
+    <ol class="carousel__navigation-list">
+      <li class="carousel__navigation-item">
+        <a href="#carousel__slide1"
+           class="carousel__navigation-button">Go to slide 1</a>
+      </li>
+      <li class="carousel__navigation-item">
+        <a href="#carousel__slide2"
+           class="carousel__navigation-button">Go to slide 2</a>
+      </li>
+      <li class="carousel__navigation-item">
+        <a href="#carousel__slide3"
+           class="carousel__navigation-button">Go to slide 3</a>
+      </li>
+      <li class="carousel__navigation-item">
+        <a href="#carousel__slide4"
+           class="carousel__navigation-button">Go to slide 4</a>
+      </li>
+    </ol>
+  </aside>
 </section>
-<script>
-/*--------------------------------------------------------
-    Set carousel config here
 
-    @autoload : true / false
-    @itemsToBeVisible: Defines how many items should be visible
-    @speed: Speed at which items will be passed in milliseconds
-    ----------------------------------------------------------*/
-const config = {
-  autoload: true,
-  itemsToBeVisible: 1,
-  speed: 5000
-};
-
-/*-------------------
-  Entry point 
-  ---------------------*/
-function start() {
-  window.onload = function () {
-    setSlidersStyle(config);
-
-    const prevSlideButton = document.getElementById("prev-slide");
-    const nextSlideButton = document.getElementById("next-slide");
-
-    prevSlideButton.addEventListener("click", () => {
-      navigate("backward", config);
-    });
-
-    nextSlideButton.addEventListener("click", () => {
-      navigate("forward", config);
-    });
-
-    if (config.autoload) {
-      playCarousel(nextSlideButton, config);
-    }
-  };
-}
-
-/*--------------------------------------------------------------
-    Sets the style of slides based on the number of visible items.
-  ---------------------------------------------------------------*/
-function setSlidersStyle(config) {
-  document.querySelector(
-    "style"
-  ).textContent += `@media screen and (min-width:1180px) { .carousel__slide{ min-width: ${
-    100 / config.itemsToBeVisible
-  }% } }`;
-}
-
-/*----------------------------------------
-   Performs the sliding behavior of items.
-  ----------------------------------------*/
-function navigate(position, config) {
-  const carouselEl = document.getElementById("carousel");
-  const slideContainerEl = carouselEl.querySelector(".carousel__container");
-  const slideEl = carouselEl.querySelector(".carousel__slide");
-  let slideWidth = slideEl.offsetWidth;
-  slideContainerEl.scrollLeft = this.getNewScrollPosition(
-    position,
-    slideContainerEl,
-    slideWidth,
-    config
-  );
-}
-
-/*-------------------------------
-   Get the new scroll position.
-  ---------------------------------*/
-function getNewScrollPosition(position, slideContainerEl, slideWidth, config) {
-  const maxScrollLeft =
-    slideContainerEl.scrollWidth - slideWidth * config.itemsToBeVisible;
-  if (position === "forward") {
-    const x = slideContainerEl.scrollLeft + slideWidth;
-    return x <= maxScrollLeft ? x : 0;
-  } else {
-    const x = slideContainerEl.scrollLeft - slideWidth;
-    return x >= 0 ? x : maxScrollLeft;
-  }
-}
-
-/*-------------------------------
-  Autoplay
-  ---------------------------------*/
-function playCarousel(nextButton, config) {
-  const play = () => {
-    nextButton.click();
-    setTimeout(play, config.speed);
-  };
-  play();
-}
-
-start();
-</script>
-
-
-*MultiPL-E* is a multi-programming language benchmark for evaluating the code
+_MultiPL-E_ is a multi-programming language benchmark for evaluating the code
 generation performance of large language model (LLMs) of code.
 
 We use a suite of compilers to translate the Python benchmarks from [Chen et al.
-2021] into parallel benchmarks in 18 languages.  MultiPL-E provides a way to
+2021] into parallel benchmarks in 18 languages. MultiPL-E provides a way to
 evaluate code generation models on a consistent set of benchmark problems across
 many languages. The 18 languages capture a broad spectrum of language features,
 application areas, and popularity, allowing us to explore the impact of these
@@ -348,8 +334,7 @@ languages. The [tutorial](./tutorial.html) walks you through
 running our benchmarks and gives guidance on adding support for [new languages],
 [new benchmarks], and evaluating [new code generation models].
 
-
-[Chen et al. 2021]: https://arxiv.org/abs/2107.03374
+[chen et al. 2021]: https://arxiv.org/abs/2107.03374
 [new languages]: ./new_language.html
 [new benchmarks]: ./new_benchmark.html
 [evaluating new models]: ./new_model.html
