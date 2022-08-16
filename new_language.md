@@ -1,8 +1,10 @@
 ---
 layout: default
-title: Evaluate a new Language
+title: Evaluate a New Programming Language
 nav_order: 2
 ---
+
+# Evaluate a New Programming Language
 
 *So you want to add a new language, huh?*
 
