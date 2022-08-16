@@ -10,17 +10,18 @@ This is the really easy part. All you need to do is write a Python
 program that looks like the following:
 
 ```python
-def my_function(n: int) -> int:
+def my_function(a: int, b: int, c: int, k: int) -> int:
     """
-    Given a positive integer n, return a tuple of positive integers (a, b, c)
-    such that a ** n + b ** n = c ** n.
+    Given positive integers a, b, and c, return an integer n > k such that
+    (a ** n) + (b ** n) = (c ** n).
     """
     pass
+    
 
 ### Unit tests below ###
 def check(candidate):
-    assert candidate(1) == (1, 1, 2)
-    assert candidate(2) == (3, 4, 5)
+    assert candidate(1, 1, 2, 0) == 1
+    assert candidate(3, 4, 5, 0) == 2
 
 def test_check():
     check(my_function)
