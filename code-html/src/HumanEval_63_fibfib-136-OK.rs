@@ -9,25 +9,16 @@
 /// n-th element of the fibfib number sequence.
 fn fibfib(n: isize) -> isize {
     if n < 0 {
-        panic!("n must be non-negative");
-    }
-    if n == 0 {
-        return 0;
-    }
-    if n == 1 {
-        return 0;
-    }
-    if n == 2 {
-        return 1;
+        return -1;
     }
     let mut a = 0;
     let mut b = 0;
     let mut c = 1;
-    for _ in 3..(n + 1) {
+    for _ in 0..n {
         let d = a + b + c;
         a = b;
         b = c;
         c = d;
     }
-    c
+    a
 }
