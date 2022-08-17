@@ -9,8 +9,8 @@ nav_order: 0
 
 <style>
 .carousel {
-    margin-left: 15%;
-    margin-right: 15%;
+    margin-left: 0%;
+    margin-right: 0%;
 }
 
 ul.slides {
@@ -145,7 +145,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-1" checked />
       <li class="slide-container">
         <div class="slide-image">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Timisoara_-_Regional_Business_Centre.jpg">
+            <iframe src="./code-html/test.html"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-3" class="prev-slide">
@@ -159,7 +159,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-2" />
       <li class="slide-container">
         <div class="slide-image">
-          <img src="https://content.r9cdn.net/rimg/dimg/db/02/06b291e8-city-14912-171317ad83a.jpg?width=1750&height=1000&xhint=3040&yhint=2553&crop=true">
+            <iframe src="new_benchmark.md"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-1" class="prev-slide">
@@ -173,7 +173,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-3" />
       <li class="slide-container">
         <div class="slide-image">
-          <img src="https://speakzeasy.files.wordpress.com/2015/05/twa_blogpic_timisoara-4415.jpg">
+            <iframe src="new_benchmark.md"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-2" class="prev-slide">
