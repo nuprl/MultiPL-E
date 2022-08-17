@@ -257,7 +257,7 @@ Here are some examples of translated problems in a selection of languages:
 </div>
 
 
-For example, the following graph shows the success rate of OpenAI Codex on the
+The following graph shows the success rate of OpenAI Codex on the
 benchmark problems across the full suite of programming languages:
 
 <img src="codex.png">

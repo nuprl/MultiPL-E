@@ -4,6 +4,8 @@ title: Credits
 nav_order: 1000
 ---
 
+# Credits
+
 MultiPL-E is authored by:
 
 - Federico Cassano (Northeastern University)
@@ -23,6 +25,11 @@ MultiPL-E is authored by:
 We thank Steven Holtzen for loaning us his GPUs for a few weeks. We thank
 [Research Computing at Northeastern University] for supporting the
 Discovery cluster.
+
+## Contact
+
+For more information, please contact: carolyn.anderson@wellesley.edu,
+mfeldman@oberlin.edu, a.guha@northeastern.edu.
 
 
 [Research Computing at Northeastern University]: https://rc.northeastern.edu/
