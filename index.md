@@ -6,7 +6,6 @@ nav_order: 0
 
 # Introduction
 
-
 <style>
 .carousel {
     margin-left: 0%;
@@ -66,6 +65,16 @@ ul.slides input {
     font-size: 100px;
     line-height: 600px;
     color: #fff;
+}
+
+.carousel-controls button {
+    display: none;
+    padding: 5 5px;
+    margin: 20px;
+    cursor: pointer;
+    font-size: xx-large;
+    float: right;
+    clear: right;
 }
 
 .carousel-controls label {
@@ -128,6 +137,10 @@ input:checked + .slide-container .carousel-controls label {
      display: block; 
 }
 
+input:checked + .slide-container .carousel-controls button {
+     display: block; 
+}
+
 input#img-1:checked ~ .carousel-dots label#img-dot-1,
 input#img-2:checked ~ .carousel-dots label#img-dot-2,
 input#img-3:checked ~ .carousel-dots label#img-dot-3,
@@ -147,7 +160,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-1" checked />
       <li class="slide-container">
         <div class="slide-image">
-            <iframe src="./code-html/test.html"></iframe>
+            <iframe src="./code-html/test.html" id="code-1"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-3" class="prev-slide">
@@ -156,6 +169,7 @@ input:checked + .slide-container .nav label { display: block; }
           <label for="img-2" class="next-slide">
             <span>&rsaquo;</span>
           </label>
+          <button title="Click to copy!" onclick="clipCopy('code-1')">📋</button>
         </div>
       </li>
       <input type="radio" name="radio-buttons" id="img-2" />
@@ -194,6 +208,15 @@ input:checked + .slide-container .nav label { display: block; }
     </ul>
   </div>
 </div>
+<script>
+function clipCopy(id) {
+  var copyText = document.getElementById(id);
+
+  var content = copyText.contentWindow.document.body.innerText;
+
+  navigator.clipboard.writeText(content);
+}
+</script>
 
 _MultiPL-E_ is a multi-programming language benchmark for evaluating the code
 generation performance of large language model (LLMs) of code.
