@@ -1,9 +1,11 @@
-/// The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
+/// The FibFib number sequence is a sequence similar to the
+/// Fibbonacci sequnece that's defined as follows:
 /// fibfib(0) == 0
 /// fibfib(1) == 0
 /// fibfib(2) == 1
 /// fibfib(n) == fibfib(n-1) + fibfib(n-2) + fibfib(n-3).
-/// Please write a function to efficiently compute the n-th element of the fibfib number sequence.
+/// Please write a function to efficiently compute the
+/// n-th element of the fibfib number sequence.
 fn fibfib(n: isize) -> isize {
     if n < 0 {
         panic!("n must be non-negative");
@@ -27,15 +29,4 @@ fn fibfib(n: isize) -> isize {
         c = d;
     }
     c
-}
-
-fn main() {
-    let candidate = fibfib;
-    assert_eq!(candidate(2), 1);
-    assert_eq!(candidate(1), 0);
-    assert_eq!(candidate(5), 4);
-    assert_eq!(candidate(8), 24);
-    assert_eq!(candidate(10), 81);
-    assert_eq!(candidate(12), 274);
-    assert_eq!(candidate(14), 927);
 }
