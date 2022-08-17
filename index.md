@@ -162,7 +162,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-1" checked />
       <li class="slide-container">
         <div class="slide-image">
-            <iframe src="./code-html/test1.html" id="code-1"></iframe>
+            <iframe src="./code-html/HumanEval_63_fibfib-133-OK.cpp.html" id="code-1"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-5" class="prev-slide">
@@ -177,7 +177,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-2" />
       <li class="slide-container">
         <div class="slide-image">
-            <iframe src="./code-html/test2.html" id="code-2"></iframe>
+            <iframe src="./code-html/HumanEval_63_fibfib-133-OK.r.html" id="code-2"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-1" class="prev-slide">
@@ -192,7 +192,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-3" />
       <li class="slide-container">
         <div class="slide-image">
-            <iframe src="./code-html/test3.html" id="code-3"></iframe>
+            <iframe src="./code-html/HumanEval_63_fibfib-133-OK.rkt.html" id="code-3"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-2" class="prev-slide">
@@ -207,7 +207,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-4" />
       <li class="slide-container">
         <div class="slide-image">
-            <iframe src="./code-html/test4.html" id="code-4"></iframe>
+            <iframe src="./code-html/HumanEval_63_fibfib-133-OK.rs.html" id="code-4"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-3" class="prev-slide">
@@ -222,7 +222,7 @@ input:checked + .slide-container .nav label { display: block; }
       <input type="radio" name="radio-buttons" id="img-5" />
       <li class="slide-container">
         <div class="slide-image">
-            <iframe src="./code-html/test5.html" id="code-5"></iframe>
+            <iframe src="./code-html/HumanEval_63_fibfib-133-OK.ts.html" id="code-5"></iframe>
         </div>
         <div class="carousel-controls">
           <label for="img-4" class="prev-slide">
