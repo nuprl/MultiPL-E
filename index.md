@@ -152,7 +152,27 @@ input#img-6:checked ~ .carousel-dots label#img-dot-6 {
 
 
 input:checked + .slide-container .nav label { display: block; }
+
+iframe {
+    border: none;
+}
+
 </style>
+
+# Introduction
+
+_MultiPL-E_ is a multi-programming language benchmark for evaluating the code
+generation performance of large language model (LLMs) of code.
+
+We use a suite of compilers to translate the Python benchmarks from [Chen et al.
+2021] into parallel benchmarks in 18 languages. MultiPL-E provides a way to
+evaluate code generation models on a consistent set of benchmark problems across
+many languages. The 18 languages capture a broad spectrum of language features,
+application areas, and popularity, allowing us to explore the impact of these
+factors on model performance.
+
+Here are some examples of translated problems in a selection of languages:
+
 
 <div class="carousel">
   <ul class="slides">
@@ -168,7 +188,6 @@ input:checked + .slide-container .nav label { display: block; }
         <label for="img-2" class="next-slide">
           <span>&rsaquo;</span>
         </label>
-        <button title="Click to copy!" onclick="clipCopy('code-1')">📋</button>
       </div>
     </li>
     <input type="radio" name="radio-buttons" id="img-2" />
@@ -183,7 +202,6 @@ input:checked + .slide-container .nav label { display: block; }
         <label for="img-3" class="next-slide">
           <span>&rsaquo;</span>
         </label>
-        <button title="Click to copy!" onclick="clipCopy('code-2')">📋</button>
       </div>
     </li>
     <input type="radio" name="radio-buttons" id="img-3" />
@@ -198,7 +216,6 @@ input:checked + .slide-container .nav label { display: block; }
         <label for="img-4" class="next-slide">
           <span>&rsaquo;</span>
         </label>
-        <button title="Click to copy!" onclick="clipCopy('code-3')">📋</button>
       </div>
     </li>
     <input type="radio" name="radio-buttons" id="img-4" />
@@ -213,7 +230,6 @@ input:checked + .slide-container .nav label { display: block; }
         <label for="img-5" class="next-slide">
           <span>&rsaquo;</span>
         </label>
-        <button title="Click to copy!" onclick="clipCopy('code-4')">📋</button>
       </div>
     </li>
     <input type="radio" name="radio-buttons" id="img-5" />
@@ -228,7 +244,6 @@ input:checked + .slide-container .nav label { display: block; }
         <label for="img-1" class="next-slide">
           <span>&rsaquo;</span>
         </label>
-        <button title="Click to copy!" onclick="clipCopy('code-5')">📋</button>
       </div>
     </li>
     <div class="carousel-dots">
@@ -240,27 +255,7 @@ input:checked + .slide-container .nav label { display: block; }
     </div>
   </ul>
 </div>
-<script>
-function clipCopy(id) {
-  var copyText = document.getElementById(id);
 
-var content = copyText.contentWindow.document.body.innerText;
-
-navigator.clipboard.writeText(content);
-}
-</script>
-
-# Introduction
-
-_MultiPL-E_ is a multi-programming language benchmark for evaluating the code
-generation performance of large language model (LLMs) of code.
-
-We use a suite of compilers to translate the Python benchmarks from [Chen et al.
-2021] into parallel benchmarks in 18 languages. MultiPL-E provides a way to
-evaluate code generation models on a consistent set of benchmark problems across
-many languages. The 18 languages capture a broad spectrum of language features,
-application areas, and popularity, allowing us to explore the impact of these
-factors on model performance.
 
 For example, the following graph shows the success rate of OpenAI Codex on the
 benchmark problems across the full suite of programming languages:
