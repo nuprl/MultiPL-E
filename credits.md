@@ -12,6 +12,7 @@ MultiPL-E is authored by:
 - Sydney Nguyen (Wellesley College)
 - Luna Phipps-Costin (Northeastern University)
 - Donald Pinckney (Northeastern University)
+- Ming-Ho Yee (Northeastern University)
 - Yangtian Zi (Northeastern University)
 - Carolyn Jane Anderson (Wellesley College)
 - Molly Q Feldman (Oberlin College)
