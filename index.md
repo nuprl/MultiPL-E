@@ -42,7 +42,7 @@ ul.slides input {
 }
 
 .slide-image {
-    display: block;
+    display: flex;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -51,7 +51,7 @@ ul.slides input {
     transition: all .7s ease-in-out;
 }   
 
-.slide-image img {
+.slide-image iframe {
     width: auto;
     min-width: 100%;
     height: 100%;
@@ -86,13 +86,15 @@ ul.slides input {
 }
 
 .carousel-controls .prev-slide {
-    width: 49%;
+    width: 20%;
+    height: 20%;
     text-align: left;
     left: 0;
 }
 
 .carousel-controls .next-slide {
-    width: 49%;
+    width: 20%;
+    height: 20%;
     text-align: right;
     right: 0;
 }
