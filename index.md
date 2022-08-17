@@ -165,14 +165,13 @@ _MultiPL-E_ is a multi-programming language benchmark for evaluating the code
 generation performance of large language model (LLMs) of code.
 
 We use a suite of compilers to translate the Python benchmarks from [Chen et al.
-2021] into parallel benchmarks in 18 languages. MultiPL-E provides a way to
-evaluate code generation models on a consistent set of benchmark problems across
-many languages. The 18 languages capture a broad spectrum of language features,
-application areas, and popularity, allowing us to explore the impact of these
-factors on model performance.
+2021] into parallel benchmarks in 18 programming languages. Thus MultiPL-E
+provides a way to evaluate code generation models on a consistent set of
+benchmark problems across many languages. The 18 languages capture a broad
+spectrum of language features, application areas, and popularity, allowing us to
+explore the impact of these factors on model performance.
 
 Here are some examples of translated problems in a selection of languages:
-
 
 <div class="carousel">
   <ul class="slides">
@@ -256,9 +255,8 @@ Here are some examples of translated problems in a selection of languages:
   </ul>
 </div>
 
-
 The following graph shows the success rate of OpenAI Codex on the
-benchmark problems across the full suite of programming languages:
+complete benchmark across the full suite of programming languages:
 
 <img src="codex.png">
 
