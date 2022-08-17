@@ -4,7 +4,6 @@ title: Introduction
 nav_order: 0
 ---
 
-
 <style>
 .carousel {
     margin-left: 0%;
@@ -14,7 +13,7 @@ nav_order: 0
 ul.slides {
     display: block;
     position: relative;
-    height: 600px;
+    height: 430px;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -62,7 +61,7 @@ ul.slides input {
     right: 0;
     z-index: 999;
     font-size: 100px;
-    line-height: 600px;
+    line-height: 430px;
     color: #fff;
 }
 
@@ -155,93 +154,91 @@ input#img-6:checked ~ .carousel-dots label#img-dot-6 {
 input:checked + .slide-container .nav label { display: block; }
 </style>
 
-<div>
-  <div class="carousel">
-    <ul class="slides">
-      <input type="radio" name="radio-buttons" id="img-1" checked />
-      <li class="slide-container">
-        <div class="slide-image">
-            <iframe src="code-html/HumanEval_78_hex_key-188-OK.cpp.html" id="code-1"></iframe>
-        </div>
-        <div class="carousel-controls">
-          <label for="img-5" class="prev-slide">
-            <span>&lsaquo;</span>
-          </label>
-          <label for="img-2" class="next-slide">
-            <span>&rsaquo;</span>
-          </label>
-          <button title="Click to copy!" onclick="clipCopy('code-1')">📋</button>
-        </div>
-      </li>
-      <input type="radio" name="radio-buttons" id="img-2" />
-      <li class="slide-container">
-        <div class="slide-image">
-            <iframe src="./code-html/HumanEval_63_fibfib-133-OK.r.html" id="code-2"></iframe>
-        </div>
-        <div class="carousel-controls">
-          <label for="img-1" class="prev-slide">
-            <span>&lsaquo;</span>
-          </label>
-          <label for="img-3" class="next-slide">
-            <span>&rsaquo;</span>
-          </label>
-          <button title="Click to copy!" onclick="clipCopy('code-2')">📋</button>
-        </div>
-      </li>
-      <input type="radio" name="radio-buttons" id="img-3" />
-      <li class="slide-container">
-        <div class="slide-image">
-            <iframe src="code-html/HumanEval_47_median-196-OK.cs.html" id="code-3"></iframe>
-        </div>
-        <div class="carousel-controls">
-          <label for="img-2" class="prev-slide">
-            <span>&lsaquo;</span>
-          </label>
-          <label for="img-4" class="next-slide">
-            <span>&rsaquo;</span>
-          </label>
-          <button title="Click to copy!" onclick="clipCopy('code-3')">📋</button>
-        </div>
-      </li>
-      <input type="radio" name="radio-buttons" id="img-4" />
-      <li class="slide-container">
-        <div class="slide-image">
-            <iframe src="code-html/HumanEval_89_encrypt-191-OK.rs.html" id="code-4"></iframe>
-        </div>
-        <div class="carousel-controls">
-          <label for="img-3" class="prev-slide">
-            <span>&lsaquo;</span>
-          </label>
-          <label for="img-5" class="next-slide">
-            <span>&rsaquo;</span>
-          </label>
-          <button title="Click to copy!" onclick="clipCopy('code-4')">📋</button>
-        </div>
-      </li>
-      <input type="radio" name="radio-buttons" id="img-5" />
-      <li class="slide-container">
-        <div class="slide-image">
-            <iframe src="code-html/HumanEval_15_string_sequence-190-OK.ts.html" id="code-5"></iframe>
-        </div>
-        <div class="carousel-controls">
-          <label for="img-4" class="prev-slide">
-            <span>&lsaquo;</span>
-          </label>
-          <label for="img-1" class="next-slide">
-            <span>&rsaquo;</span>
-          </label>
-          <button title="Click to copy!" onclick="clipCopy('code-5')">📋</button>
-        </div>
-      </li>
-      <div class="carousel-dots">
-        <label for="img-1" class="carousel-dot" id="img-dot-1"></label>
-        <label for="img-2" class="carousel-dot" id="img-dot-2"></label>
-        <label for="img-3" class="carousel-dot" id="img-dot-3"></label>
-        <label for="img-4" class="carousel-dot" id="img-dot-4"></label>
-        <label for="img-5" class="carousel-dot" id="img-dot-5"></label>
+<div class="carousel">
+  <ul class="slides">
+    <input type="radio" name="radio-buttons" id="img-1" checked />
+    <li class="slide-container">
+      <div class="slide-image">
+          <iframe src="code-html/HumanEval_78_hex_key-188-OK.cpp.html" id="code-1"></iframe>
       </div>
-    </ul>
-  </div>
+      <div class="carousel-controls">
+        <label for="img-5" class="prev-slide">
+          <span>&lsaquo;</span>
+        </label>
+        <label for="img-2" class="next-slide">
+          <span>&rsaquo;</span>
+        </label>
+        <button title="Click to copy!" onclick="clipCopy('code-1')">📋</button>
+      </div>
+    </li>
+    <input type="radio" name="radio-buttons" id="img-2" />
+    <li class="slide-container">
+      <div class="slide-image">
+          <iframe src="./code-html/HumanEval_63_fibfib-133-OK.r.html" id="code-2"></iframe>
+      </div>
+      <div class="carousel-controls">
+        <label for="img-1" class="prev-slide">
+          <span>&lsaquo;</span>
+        </label>
+        <label for="img-3" class="next-slide">
+          <span>&rsaquo;</span>
+        </label>
+        <button title="Click to copy!" onclick="clipCopy('code-2')">📋</button>
+      </div>
+    </li>
+    <input type="radio" name="radio-buttons" id="img-3" />
+    <li class="slide-container">
+      <div class="slide-image">
+          <iframe src="code-html/HumanEval_47_median-196-OK.cs.html" id="code-3"></iframe>
+      </div>
+      <div class="carousel-controls">
+        <label for="img-2" class="prev-slide">
+          <span>&lsaquo;</span>
+        </label>
+        <label for="img-4" class="next-slide">
+          <span>&rsaquo;</span>
+        </label>
+        <button title="Click to copy!" onclick="clipCopy('code-3')">📋</button>
+      </div>
+    </li>
+    <input type="radio" name="radio-buttons" id="img-4" />
+    <li class="slide-container">
+      <div class="slide-image">
+          <iframe src="code-html/HumanEval_89_encrypt-191-OK.rs.html" id="code-4"></iframe>
+      </div>
+      <div class="carousel-controls">
+        <label for="img-3" class="prev-slide">
+          <span>&lsaquo;</span>
+        </label>
+        <label for="img-5" class="next-slide">
+          <span>&rsaquo;</span>
+        </label>
+        <button title="Click to copy!" onclick="clipCopy('code-4')">📋</button>
+      </div>
+    </li>
+    <input type="radio" name="radio-buttons" id="img-5" />
+    <li class="slide-container">
+      <div class="slide-image">
+          <iframe src="code-html/HumanEval_15_string_sequence-190-OK.ts.html" id="code-5"></iframe>
+      </div>
+      <div class="carousel-controls">
+        <label for="img-4" class="prev-slide">
+          <span>&lsaquo;</span>
+        </label>
+        <label for="img-1" class="next-slide">
+          <span>&rsaquo;</span>
+        </label>
+        <button title="Click to copy!" onclick="clipCopy('code-5')">📋</button>
+      </div>
+    </li>
+    <div class="carousel-dots">
+      <label for="img-1" class="carousel-dot" id="img-dot-1"></label>
+      <label for="img-2" class="carousel-dot" id="img-dot-2"></label>
+      <label for="img-3" class="carousel-dot" id="img-dot-3"></label>
+      <label for="img-4" class="carousel-dot" id="img-dot-4"></label>
+      <label for="img-5" class="carousel-dot" id="img-dot-5"></label>
+    </div>
+  </ul>
 </div>
 <script>
 function clipCopy(id) {
