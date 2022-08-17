@@ -81,9 +81,10 @@ ul.slides input {
     display: none;
     position: absolute;
     padding: 0 20px;
-    opacity: 0;
+    opacity: 0.2;
     transition: opacity .2s;
     cursor: pointer;
+    color: #000;
 }
 
 .slide-image:hover + .carousel-controls label{
@@ -96,14 +97,14 @@ ul.slides input {
 
 .carousel-controls .prev-slide {
     width: 20%;
-    height: 20%;
+    height: 0%;
     text-align: left;
     left: 0;
 }
 
 .carousel-controls .next-slide {
     width: 20%;
-    height: 20%;
+    height: 0%;
     text-align: right;
     right: 0;
 }
@@ -122,9 +123,10 @@ ul.slides input {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: #000;
     opacity: 0.5;
     margin: 10px;
+    cursor: pointer;
 }
 
 input:checked + .slide-container .slide-image {
