@@ -260,7 +260,7 @@ complete benchmark across the full suite of programming languages:
 
 <img src="codex.png">
 
-Our paper also reports the performance on InCoder, and presents more
+[Our paper] also reports the performance on InCoder, and presents more
 in depth analyses. Some of our findings include:
 
 1. Codex performs best on JavaScript and equally well on C++, Scala, and
@@ -290,3 +290,4 @@ running our benchmarks and gives guidance on adding support for [new languages],
 [new languages]: ./new_language.html
 [new benchmarks]: ./new_benchmark.html
 [evaluating new models]: ./new_model.html
+[our paper]: https://arxiv.org/abs/2208.08227
