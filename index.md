@@ -192,7 +192,7 @@ Here are some examples of translated problems in a selection of languages:
     <input type="radio" name="radio-buttons" id="img-2" />
     <li class="slide-container">
       <div class="slide-image">
-          <iframe src="./code-html/HumanEval_63_fibfib-133-OK.r.html" id="code-2"></iframe>
+          <iframe src="code-html/HumanEval_117_select_words-124-OK.sh.html" id="code-2"></iframe>
       </div>
       <div class="carousel-controls">
         <label for="img-1" class="prev-slide">
