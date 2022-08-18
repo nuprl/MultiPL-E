@@ -15,11 +15,9 @@
 long hex_key(std::string num) {
   long sum = 0;
   for (int i = 0; i < num.length(); i++) {
-    if (num[i] == '2' || num[i] == '3' 
-        || num[i] == '5' || num[i] == '7' 
-        || num[i] == 'B' || num[i] == 'D') {
-      sum++;
-    }
+    if (num[i] == '2' || num[i] == '3' || num[i] == '5'
+     || num[i] == '7' || num[i] == 'B' || num[i] == 'D') {
+      sum++; }
   }
   return sum;
 }
