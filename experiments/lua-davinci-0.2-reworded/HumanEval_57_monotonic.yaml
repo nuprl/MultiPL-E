@@ -1,671 +1,2605 @@
+---
 name: HumanEval_57_monotonic
 language: lua
-prompt: "-- Return true is table elements are monotonically increasing or decreasing.\n\
-  -- >>> monotonic({1, 2, 4, 20})\n-- true\n-- >>> monotonic({1, 20, 4, 10})\n-- false\n\
-  -- >>> monotonic({4, 1, 0, -10})\n-- true\nlocal function monotonic(l)\n"
-tests: "lu = require('luaunit')\n\nfunction test_humaneval()\nlocal candidate = monotonic\n\
-  \    lu.assertEquals(candidate({1, 2, 4, 10}), true)\n    lu.assertEquals(candidate({1,\
-  \ 2, 4, 20}), true)\n    lu.assertEquals(candidate({1, 20, 4, 10}), false)\n   \
-  \ lu.assertEquals(candidate({4, 1, 0, -10}), true)\n    lu.assertEquals(candidate({4,\
-  \ 1, 1, 0}), true)\n    lu.assertEquals(candidate({1, 2, 3, 2, 5, 60}), false)\n\
-  \    lu.assertEquals(candidate({1, 2, 3, 4, 5, 60}), true)\n    lu.assertEquals(candidate({9,\
-  \ 9, 9, 9}), true)\nend\n\nos.exit(lu.LuaUnit.run())"
-completions: ["    local n = #l\n    if n < 2 then\n        return true\n    end\n\
-    \    local inc = l[2] > l[1]\n    for i = 3, n do\n        if inc ~= (l[i] > l[i\
-    \ - 1]) then\n            return false\n        end\n    end\n    return true\n\
-    end", "  local increasing = true\n  local decreasing = true\n  for i = 2, #l do\n\
-    \    if l[i] < l[i - 1] then\n      increasing = false\n    elseif l[i] > l[i\
-    \ - 1] then\n      decreasing = false\n    end\n  end\n  return increasing or\
-    \ decreasing\nend", "    local increasing = true\n    local decreasing = true\n\
-    \    for i = 2, #l do\n        if l[i] < l[i - 1] then\n            increasing\
-    \ = false\n        elseif l[i] > l[i - 1] then\n            decreasing = false\n\
-    \        end\n    end\n    return increasing or decreasing\nend", "    local n\
-    \ = #l\n    if n < 2 then\n        return true\n    end\n    local inc = l[2]\
-    \ > l[1]\n    for i = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n    \
-    \        return false\n        end\n    end\n    return true\nend", "  local direction\
-    \ = 0\n  for i = 2, #l do\n    local diff = l[i] - l[i - 1]\n    if diff == 0\
-    \ then\n      -- Do nothing\n    elseif diff > 0 then\n      if direction == -1\
-    \ then\n        return false\n      else\n        direction = 1\n      end\n \
-    \   elseif diff < 0 then\n      if direction == 1 then\n        return false\n\
-    \      else\n        direction = -1\n      end\n    end\n  end\n  return true\n\
-    end", "    local direction = 0\n    for i = 2, #l do\n        local d = l[i] -\
-    \ l[i - 1]\n        if direction == 0 then\n            direction = d\n      \
-    \  elseif direction * d < 0 then\n            return false\n        end\n    end\n\
-    \    return true\nend", "    local direction = 0\n    for i = 2, #l do\n     \
-    \   local diff = l[i] - l[i - 1]\n        if diff == 0 then\n            -- do\
-    \ nothing\n        elseif diff > 0 then\n            if direction == 0 then\n\
-    \                direction = 1\n            elseif direction == -1 then\n    \
-    \            return false\n            end\n        elseif diff < 0 then\n   \
-    \         if direction == 0 then\n                direction = -1\n           \
-    \ elseif direction == 1 then\n                return false\n            end\n\
-    \        end\n    end\n    return true\nend", "    local inc = true\n    local\
-    \ dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n        \
-    \    inc = false\n        elseif l[i] > l[i - 1] then\n            dec = false\n\
-    \        end\n    end\n    return inc or dec\nend", "  local inc = true\n  local\
-    \ dec = true\n  for i = 2, #l do\n    if l[i] < l[i-1] then\n      inc = false\n\
-    \    elseif l[i] > l[i-1] then\n      dec = false\n    end\n  end\n  return inc\
-    \ or dec\nend", "\tlocal inc = true\n\tlocal dec = true\n\tfor i = 2, #l do\n\t\
-    \tif l[i] < l[i - 1] then\n\t\t\tinc = false\n\t\tend\n\t\tif l[i] > l[i - 1]\
-    \ then\n\t\t\tdec = false\n\t\tend\n\tend\n\treturn inc or dec\nend", "    local\
-    \ inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i\
-    \ - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n  \
-    \          dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local n = #l\n    if n < 2 then\n        return true\n    end\n    local incr\
-    \ = l[2] > l[1]\n    for i = 3, n do\n        if l[i] > l[i - 1] ~= incr then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ direction = nil\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n \
-    \       if direction == nil then\n            direction = d\n        elseif direction\
-    \ * d < 0 then\n            return false\n        end\n    end\n    return true\n\
-    end", "    local inc = true\n    local dec = true\n    for i = 2, #l do\n    \
-    \    if l[i] < l[i - 1] then\n            inc = false\n        elseif l[i] > l[i\
-    \ - 1] then\n            dec = false\n        end\n    end\n    return inc or\
-    \ dec\nend", "    local direction = 0\n    for i = 2, #l do\n        local d =\
-    \ l[i] - l[i - 1]\n        if d == 0 then\n            -- ignore\n        elseif\
-    \ direction == 0 then\n            direction = d\n        elseif direction * d\
-    \ < 0 then\n            return false\n        end\n    end\n    return true\n\
-    end", "    local direction = 0\n    for i = 2, #l do\n        local d = l[i] -\
-    \ l[i - 1]\n        if d == 0 then\n            -- ignore\n        elseif direction\
-    \ == 0 then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ last = l[1]\n    local increasing = true\n    for i = 2, #l do\n        if l[i]\
-    \ < last then\n            increasing = false\n            break\n        end\n\
-    \        last = l[i]\n    end\n    if increasing then\n        return true\n \
-    \   end\n    last = l[1]\n    for i = 2, #l do\n        if l[i] > last then\n\
-    \            return false\n        end\n        last = l[i]\n    end\n    return\
-    \ true\nend", "    local inc = true\n    local dec = true\n    for i = 2, #l do\n\
-    \        if l[i] < l[i - 1] then\n            inc = false\n        elseif l[i]\
-    \ > l[i - 1] then\n            dec = false\n        end\n    end\n    return inc\
-    \ or dec\nend", "    local increasing = true\n    local decreasing = true\n  \
-    \  for i = 2, #l do\n        if l[i] < l[i - 1] then\n            increasing =\
-    \ false\n        elseif l[i] > l[i - 1] then\n            decreasing = false\n\
-    \        end\n    end\n    return increasing or decreasing\nend", "    local d\
-    \ = l[2] - l[1]\n    for i = 2, #l - 1 do\n        if d * (l[i + 1] - l[i]) <\
-    \ 0 then\n            return false\n        end\n    end\n    return true\nend",
-  "    local direction = nil\n    for i = 2, #l do\n        local diff = l[i] - l[i\
-    \ - 1]\n        if diff == 0 then\n            return false\n        elseif direction\
-    \ == nil then\n            direction = diff\n        elseif direction * diff <\
-    \ 0 then\n            return false\n        end\n    end\n    return true\nend",
-  "  local inc, dec = true, true\n  for i = 2, #l do\n    if l[i] < l[i-1] then\n\
-    \      inc = false\n    elseif l[i] > l[i-1] then\n      dec = false\n    end\n\
-    \  end\n  return inc or dec\nend", "  local inc = true\n  local dec = true\n \
-    \ for i = 2, #l do\n    if l[i] < l[i-1] then\n      inc = false\n    elseif l[i]\
-    \ > l[i-1] then\n      dec = false\n    end\n  end\n  return inc or dec\nend",
-  "  local inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i-1]\
-    \ then\n      inc = false\n    elseif l[i] > l[i-1] then\n      dec = false\n\
-    \    end\n  end\n  return inc or dec\nend", "  local last = l[1]\n  local inc\
-    \ = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < last then\n  \
-    \    inc = false\n    elseif l[i] > last then\n      dec = false\n    end\n  \
-    \  last = l[i]\n  end\n  return inc or dec\nend", "    local inc, dec = true,\
-    \ true\n    for i = 2, #l do\n        if l[i] < l[i-1] then\n            inc =\
-    \ false\n        elseif l[i] > l[i-1] then\n            dec = false\n        end\n\
-    \    end\n    return inc or dec\nend", "    local inc = l[1] < l[2]\n    for i\
-    \ = 2, #l - 1 do\n        if inc and l[i] > l[i + 1] then\n            return\
-    \ false\n        elseif not inc and l[i] < l[i + 1] then\n            return false\n\
-    \        end\n    end\n    return true\nend", "    local inc = l[1] < l[2]\n \
-    \   for i = 2, #l - 1 do\n        if inc and l[i] > l[i + 1] then\n          \
-    \  return false\n        elseif not inc and l[i] < l[i + 1] then\n           \
-    \ return false\n        end\n    end\n    return true\nend", "  local incr = l[1]\
-    \ < l[2]\n  for i = 2, #l - 1 do\n    if incr and l[i] > l[i + 1] then return\
-    \ false end\n    if not incr and l[i] < l[i + 1] then return false end\n  end\n\
-    \  return true\nend", "    local direction = nil\n    for i = 2, #l do\n     \
-    \   local d = l[i] - l[i - 1]\n        if direction == nil then\n            direction\
-    \ = d\n        elseif direction * d < 0 then\n            return false\n     \
-    \   end\n    end\n    return true\nend", "    local inc = true\n    local dec\
-    \ = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n            inc\
-    \ = false\n        elseif l[i] > l[i - 1] then\n            dec = false\n    \
-    \    end\n    end\n    return inc or dec\nend", "    local direction = 0\n   \
-    \ for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction ==\
-    \ 0 then\n            direction = d\n        elseif direction * d < 0 then\n \
-    \           return false\n        end\n    end\n    return true\nend", "  local\
-    \ inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i-1] then\n\
-    \      inc = false\n    elseif l[i] > l[i-1] then\n      dec = false\n    end\n\
-    \  end\n  return inc or dec\nend", "    local n = #l\n    if n < 2 then\n    \
-    \    return true\n    end\n    local inc = l[2] > l[1]\n    for i = 3, n do\n\
-    \        if l[i] == l[i - 1] then\n            return false\n        end\n   \
-    \     if inc ~= (l[i] > l[i - 1]) then\n            return false\n        end\n\
-    \    end\n    return true\nend", "    local increasing = true\n    local decreasing\
-    \ = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n            increasing\
-    \ = false\n        elseif l[i] > l[i - 1] then\n            decreasing = false\n\
-    \        end\n    end\n    return increasing or decreasing\nend", "    local inc\
-    \ = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i -\
-    \ 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n    \
-    \        dec = false\n        end\n    end\n    return inc or dec\nend", "   \
-    \ local inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i]\
-    \ < l[i - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n\
-    \            dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local last = l[1]\n    local increasing = true\n    for _, v in ipairs(l)\
-    \ do\n        if v < last then\n            increasing = false\n            break\n\
-    \        end\n        last = v\n    end\n    if increasing then\n        return\
-    \ true\n    end\n    local last = l[1]\n    local decreasing = true\n    for _,\
-    \ v in ipairs(l) do\n        if v > last then\n            decreasing = false\n\
-    \            break\n        end\n        last = v\n    end\n    return decreasing\n\
-    end", "    local prev = l[1]\n    local increasing = true\n    for i = 2, #l do\n\
-    \        if l[i] < prev then\n            increasing = false\n            break\n\
-    \        end\n        prev = l[i]\n    end\n    if increasing then\n        return\
-    \ true\n    end\n    local prev = l[1]\n    local decreasing = true\n    for i\
-    \ = 2, #l do\n        if l[i] > prev then\n            decreasing = false\n  \
-    \          break\n        end\n        prev = l[i]\n    end\n    return decreasing\n\
-    end", "    local inc = true\n    local dec = true\n    for i = 2, #l do\n    \
-    \    if l[i] < l[i - 1] then\n            inc = false\n        elseif l[i] > l[i\
-    \ - 1] then\n            dec = false\n        end\n    end\n    return inc or\
-    \ dec\nend", "    local m = l[1]\n    local d = l[2] - l[1]\n    for i = 2, #l\
-    \ do\n        if (l[i] - m) * d < 0 then\n            return false\n        end\n\
-    \        m = l[i]\n    end\n    return true\nend", "    local n = #l\n    if n\
-    \ < 2 then\n        return true\n    end\n    local inc = l[2] > l[1]\n    for\
-    \ i = 3, n do\n        if inc and l[i] < l[i - 1] then\n            return false\n\
-    \        elseif not inc and l[i] > l[i - 1] then\n            return false\n \
-    \       end\n    end\n    return true\nend", "    local n = #l\n    if n < 2 then\n\
-    \        return true\n    end\n    local inc = l[2] > l[1]\n    for i = 3, n do\n\
-    \        if inc and l[i] < l[i - 1] then\n            return false\n        elseif\
-    \ not inc and l[i] > l[i - 1] then\n            return false\n        end\n  \
-    \  end\n    return true\nend", "    local direction = 0\n    for i = 2, #l do\n\
-    \        local d = l[i] - l[i - 1]\n        if d == 0 then\n            return\
-    \ false\n        elseif direction == 0 then\n            direction = d\n     \
-    \   elseif direction * d < 0 then\n            return false\n        end\n   \
-    \ end\n    return true\nend", "    local n = #l\n    if n < 2 then\n        return\
-    \ true\n    end\n    local inc = l[2] > l[1]\n    for i = 3, n do\n        if\
-    \ inc ~= (l[i] > l[i - 1]) then\n            return false\n        end\n    end\n\
-    \    return true\nend", "  local direction = 0\n  for i = 2, #l do\n    local\
-    \ d = l[i] - l[i - 1]\n    if direction == 0 then\n      direction = d\n    elseif\
-    \ direction * d < 0 then\n      return false\n    end\n  end\n  return true\n\
-    end", "  local inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i]\
-    \ < l[i-1] then\n      inc = false\n    elseif l[i] > l[i-1] then\n      dec =\
-    \ false\n    end\n  end\n  return inc or dec\nend", "    local inc = true\n  \
-    \  local dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n \
-    \           inc = false\n        elseif l[i] > l[i - 1] then\n            dec\
-    \ = false\n        end\n    end\n    return inc or dec\nend", "    local inc =\
-    \ true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1]\
-    \ then\n            inc = false\n        elseif l[i] > l[i - 1] then\n       \
-    \     dec = false\n        end\n    end\n    return inc or dec\nend", "  local\
-    \ n = #l\n  if n < 2 then return true end\n  local inc = l[2] > l[1]\n  for i\
-    \ = 3, n do\n    if inc and l[i] < l[i-1] then return false end\n    if not inc\
-    \ and l[i] > l[i-1] then return false end\n  end\n  return true\nend", "    local\
-    \ n = #l\n    if n < 2 then\n        return true\n    end\n    local inc = l[2]\
-    \ > l[1]\n    for i = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n    \
-    \        return false\n        end\n    end\n    return true\nend", "  local is_increasing\
-    \ = l[1] < l[2]\n  for i = 2, #l - 1 do\n    if is_increasing then\n      if l[i]\
-    \ > l[i + 1] then\n        return false\n      end\n    else\n      if l[i] <\
-    \ l[i + 1] then\n        return false\n      end\n    end\n  end\n  return true\n\
-    end", "    local direction = nil\n    for i = 2, #l do\n        local d = l[i]\
-    \ - l[i - 1]\n        if direction == nil then\n            direction = d\n  \
-    \      elseif direction * d < 0 then\n            return false\n        end\n\
-    \    end\n    return true\nend", "  local n = #l\n  if n == 0 then return true\
-    \ end\n  local inc = l[1] <= l[2]\n  for i = 2, n-1 do\n    if inc and l[i] >\
-    \ l[i+1] then return false end\n    if not inc and l[i] < l[i+1] then return false\
-    \ end\n  end\n  return true\nend", "    local direction = nil\n    for i = 2,\
-    \ #l do\n        local diff = l[i] - l[i - 1]\n        if direction == nil then\n\
-    \            direction = diff\n        elseif direction * diff < 0 then\n    \
-    \        return false\n        end\n    end\n    return true\nend", "  local inc\
-    \ = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i-1] then\n\
-    \      inc = false\n    elseif l[i] > l[i-1] then\n      dec = false\n    end\n\
-    \  end\n  return inc or dec\nend", "  local prev = l[1]\n  local incr = true\n\
-    \  local decr = true\n  for i = 2, #l do\n    local curr = l[i]\n    if curr <\
-    \ prev then\n      incr = false\n    elseif curr > prev then\n      decr = false\n\
-    \    end\n    prev = curr\n  end\n  return incr or decr\nend", "    local last\
-    \ = l[1]\n    local increasing = true\n    for i = 2, #l do\n        if l[i] <\
-    \ last then\n            increasing = false\n            break\n        end\n\
-    \        last = l[i]\n    end\n    if increasing then\n        return true\n \
-    \   end\n    last = l[1]\n    for i = 2, #l do\n        if l[i] > last then\n\
-    \            return false\n        end\n        last = l[i]\n    end\n    return\
-    \ true\nend", "    local direction = nil\n    for i = 2, #l do\n        local\
-    \ d = l[i] - l[i - 1]\n        if direction == nil then\n            direction\
-    \ = d\n        elseif direction * d < 0 then\n            return false\n     \
-    \   end\n    end\n    return true\nend", "    local direction = nil\n    for i\
-    \ = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction == nil then\n\
-    \            direction = d\n        elseif direction * d < 0 then\n          \
-    \  return false\n        end\n    end\n    return true\nend", "    local direction\
-    \ = 0\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction\
-    \ == 0 then\n            direction = d\n        elseif d * direction < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "  local\
-    \ n = #l\n  if n < 2 then return true end\n  local inc = l[2] > l[1]\n  for i\
-    \ = 3, n do\n    if inc ~= (l[i] > l[i-1]) then return false end\n  end\n  return\
-    \ true\nend", "    local increasing = true\n    local decreasing = true\n    for\
-    \ i = 2, #l do\n        if l[i] < l[i - 1] then\n            increasing = false\n\
-    \        elseif l[i] > l[i - 1] then\n            decreasing = false\n       \
-    \ end\n    end\n    return increasing or decreasing\nend", "    local inc = true\n\
-    \    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n\
-    \            inc = false\n        elseif l[i] > l[i - 1] then\n            dec\
-    \ = false\n        end\n    end\n    return inc or dec\nend", "  local inc = true\n\
-    \  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i - 1] then\n      inc\
-    \ = false\n    elseif l[i] > l[i - 1] then\n      dec = false\n    end\n  end\n\
-    \  return inc or dec\nend", "    local inc = true\n    local dec = true\n    for\
-    \ i = 2, #l do\n        if l[i] < l[i - 1] then\n            inc = false\n   \
-    \     elseif l[i] > l[i - 1] then\n            dec = false\n        end\n    end\n\
-    \    return inc or dec\nend", "  local inc = true\n  local dec = true\n  for i\
-    \ = 2, #l do\n    if l[i] < l[i - 1] then\n      inc = false\n    elseif l[i]\
-    \ > l[i - 1] then\n      dec = false\n    end\n  end\n  return inc or dec\nend",
-  "    local inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i]\
-    \ < l[i - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n\
-    \            dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local n = #l\n    if n < 2 then\n        return true\n    end\n    local incr\
-    \ = l[2] > l[1]\n    for i = 3, n do\n        if incr and l[i] < l[i - 1] then\n\
-    \            return false\n        elseif not incr and l[i] > l[i - 1] then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ n = #l\n    if n < 2 then\n        return true\n    end\n    local inc = l[2]\
-    \ > l[1]\n    for i = 3, n do\n        if inc and l[i] < l[i - 1] then\n     \
-    \       return false\n        elseif not inc and l[i] > l[i - 1] then\n      \
-    \      return false\n        end\n    end\n    return true\nend", "  local last\
-    \ = l[1]\n  local increasing = true\n  for _, v in ipairs(l) do\n    if increasing\
-    \ then\n      if v < last then\n        increasing = false\n      end\n    else\n\
-    \      if v > last then\n        return false\n      end\n    end\n    last =\
-    \ v\n  end\n  return true\nend", "  local inc = true\n  local dec = true\n  for\
-    \ i = 2, #l do\n    if l[i] < l[i - 1] then\n      inc = false\n    elseif l[i]\
-    \ > l[i - 1] then\n      dec = false\n    end\n  end\n  return inc or dec\nend",
-  "    local n = #l\n    if n < 2 then\n        return true\n    end\n    local inc\
-    \ = l[2] > l[1]\n    for i = 3, n do\n        if l[i] == l[i - 1] then\n     \
-    \       return false\n        end\n        if inc and l[i] < l[i - 1] then\n \
-    \           return false\n        end\n        if not inc and l[i] > l[i - 1]\
-    \ then\n            return false\n        end\n    end\n    return true\nend",
-  "  local direction = 0\n  for i = 2, #l do\n    local d = l[i] - l[i - 1]\n    if\
-    \ direction == 0 then\n      direction = d\n    elseif direction * d < 0 then\n\
-    \      return false\n    end\n  end\n  return true\nend", "    local direction\
-    \ = 0\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if d ==\
-    \ 0 then\n            -- ignore\n        elseif direction == 0 then\n        \
-    \    direction = d\n        elseif direction * d < 0 then\n            return\
-    \ false\n        end\n    end\n    return true\nend", "    local n = #l\n    if\
-    \ n < 2 then\n        return true\n    end\n    local inc = l[2] > l[1]\n    for\
-    \ i = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n            return false\n\
-    \        end\n    end\n    return true\nend", "    local direction = nil\n   \
-    \ for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction ==\
-    \ nil then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "  local\
-    \ inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i - 1] then\n\
-    \      inc = false\n    elseif l[i] > l[i - 1] then\n      dec = false\n    end\n\
-    \  end\n  return inc or dec\nend", "    local inc = true\n    local dec = true\n\
-    \    for i = 2, #l do\n        if l[i] < l[i - 1] then\n            inc = false\n\
-    \        elseif l[i] > l[i - 1] then\n            dec = false\n        end\n \
-    \   end\n    return inc or dec\nend", "  local n = #l\n  if n < 2 then return\
-    \ true end\n  local inc = l[2] > l[1]\n  for i = 3, n do\n    if inc ~= (l[i]\
-    \ > l[i-1]) then return false end\n  end\n  return true\nend", "  local direction\
-    \ = l[2] - l[1]\n  for i = 2, #l - 1 do\n    if direction * (l[i + 1] - l[i])\
-    \ < 0 then\n      return false\n    end\n  end\n  return true\nend", "  local\
-    \ d = l[2] - l[1]\n  for i = 3, #l do\n    if d * (l[i] - l[i - 1]) < 0 then\n\
-    \      return false\n    end\n  end\n  return true\nend", "    local inc = true\n\
-    \    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n\
-    \            inc = false\n        elseif l[i] > l[i - 1] then\n            dec\
-    \ = false\n        end\n    end\n    return inc or dec\nend", "    local inc =\
-    \ true\n    local dec = true\n    for i = 2, #l do\n        inc = inc and l[i]\
-    \ >= l[i - 1]\n        dec = dec and l[i] <= l[i - 1]\n    end\n    return inc\
-    \ or dec\nend", "    local inc = true\n    local dec = true\n    for i = 2, #l\
-    \ do\n        if l[i] < l[i - 1] then\n            inc = false\n        elseif\
-    \ l[i] > l[i - 1] then\n            dec = false\n        end\n    end\n    return\
-    \ inc or dec\nend", "  local direction = l[2] - l[1]\n  for i = 3, #l do\n   \
-    \ if direction * (l[i] - l[i - 1]) < 0 then\n      return false\n    end\n  end\n\
-    \  return true\nend", "    local last = l[1]\n    local direction = 0\n    for\
-    \ i = 2, #l do\n        local d = l[i] - last\n        if direction == 0 then\n\
-    \            direction = d\n        elseif d * direction < 0 then\n          \
-    \  return false\n        end\n        last = l[i]\n    end\n    return true\n\
-    end", "    local increasing = true\n    local decreasing = true\n    for i = 2,\
-    \ #l do\n        if l[i] < l[i - 1] then\n            increasing = false\n   \
-    \     elseif l[i] > l[i - 1] then\n            decreasing = false\n        end\n\
-    \    end\n    return increasing or decreasing\nend", "    local inc = true\n \
-    \   local dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n\
-    \            inc = false\n        elseif l[i] > l[i - 1] then\n            dec\
-    \ = false\n        end\n    end\n    return inc or dec\nend", "  local n = #l\n\
-    \  if n < 2 then return true end\n  local inc = l[2] > l[1]\n  for i = 3, n do\n\
-    \    if inc ~= (l[i] > l[i-1]) then return false end\n  end\n  return true\nend",
-  "  local n = #l\n  if n < 2 then return true end\n  local inc = l[2] > l[1]\n  for\
-    \ i = 3, n do\n    if inc ~= (l[i] > l[i-1]) then return false end\n  end\n  return\
-    \ true\nend", "    local last = l[1]\n    local increasing = true\n    for i =\
-    \ 2, #l do\n        if l[i] < last then\n            increasing = false\n    \
-    \        break\n        end\n        last = l[i]\n    end\n    if increasing then\n\
-    \        return true\n    end\n    local last = l[1]\n    local decreasing = true\n\
-    \    for i = 2, #l do\n        if l[i] > last then\n            decreasing = false\n\
-    \            break\n        end\n        last = l[i]\n    end\n    return decreasing\n\
-    end", "    local last = l[1]\n    local increasing = true\n    for i = 2, #l do\n\
-    \        if l[i] < last then\n            increasing = false\n            break\n\
-    \        end\n        last = l[i]\n    end\n    if increasing then\n        return\
-    \ true\n    end\n    local last = l[1]\n    local decreasing = true\n    for i\
-    \ = 2, #l do\n        if l[i] > last then\n            decreasing = false\n  \
-    \          break\n        end\n        last = l[i]\n    end\n    return decreasing\n\
-    end", "    local inc = l[1] < l[2]\n    for i = 2, #l - 1 do\n        if inc and\
-    \ l[i] > l[i + 1] then\n            return false\n        elseif not inc and l[i]\
-    \ < l[i + 1] then\n            return false\n        end\n    end\n    return\
-    \ true\nend", "    local inc = true\n    local dec = true\n    for i = 2, #l do\n\
-    \        if l[i] < l[i - 1] then\n            inc = false\n        elseif l[i]\
-    \ > l[i - 1] then\n            dec = false\n        end\n    end\n    return inc\
-    \ or dec\nend", "    local prev = l[1]\n    local increasing = true\n    for i\
-    \ = 2, #l do\n        if l[i] < prev then\n            increasing = false\n  \
-    \          break\n        end\n        prev = l[i]\n    end\n    if increasing\
-    \ then\n        return true\n    end\n    local prev = l[1]\n    local decreasing\
-    \ = true\n    for i = 2, #l do\n        if l[i] > prev then\n            decreasing\
-    \ = false\n            break\n        end\n        prev = l[i]\n    end\n    return\
-    \ decreasing\nend", "  local n = #l\n  if n < 2 then return true end\n  local\
-    \ inc = l[2] > l[1]\n  for i = 3, n do\n    if inc ~= (l[i] > l[i-1]) then return\
-    \ false end\n  end\n  return true\nend", "  local inc = true\n  local dec = true\n\
-    \  for i = 2, #l do\n    if l[i] < l[i-1] then\n      inc = false\n    elseif\
-    \ l[i] > l[i-1] then\n      dec = false\n    end\n  end\n  return inc or dec\n\
-    end", "  local inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i]\
-    \ < l[i-1] then\n      inc = false\n    elseif l[i] > l[i-1] then\n      dec =\
-    \ false\n    end\n  end\n  return inc or dec\nend", "\tlocal inc, dec = true,\
-    \ true\n\tfor i = 2, #l do\n\t\tif l[i] < l[i-1] then\n\t\t\tinc = false\n\t\t\
-    elseif l[i] > l[i-1] then\n\t\t\tdec = false\n\t\tend\n\tend\n\treturn inc or\
-    \ dec\nend", "    local last = l[1]\n    local increasing = true\n    for i =\
-    \ 2, #l do\n        if l[i] < last then\n            increasing = false\n    \
-    \        break\n        end\n        last = l[i]\n    end\n    if increasing then\n\
-    \        return true\n    end\n    last = l[1]\n    for i = 2, #l do\n       \
-    \ if l[i] > last then\n            return false\n        end\n        last = l[i]\n\
-    \    end\n    return true\nend", "  local direction = 0\n  for i = 2, #l do\n\
-    \    local d = l[i] - l[i - 1]\n    if d == 0 then\n      -- do nothing\n    elseif\
-    \ direction == 0 then\n      direction = d\n    elseif direction * d < 0 then\n\
-    \      return false\n    end\n  end\n  return true\nend", "  local inc = true\n\
-    \  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i-1] then\n      inc\
-    \ = false\n    elseif l[i] > l[i-1] then\n      dec = false\n    end\n  end\n\
-    \  return inc or dec\nend", "    local direction = nil\n    for i = 2, #l do\n\
-    \        local d = l[i] - l[i - 1]\n        if direction == nil then\n       \
-    \     direction = d\n        elseif d * direction < 0 then\n            return\
-    \ false\n        end\n    end\n    return true\nend", "    local direction = 0\n\
-    \    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if d == 0 then\n\
-    \            -- ignore\n        elseif direction == 0 then\n            direction\
-    \ = d\n        elseif direction * d < 0 then\n            return false\n     \
-    \   end\n    end\n    return true\nend", "    local prev = l[1]\n    local direction\
-    \ = nil\n    for i = 2, #l do\n        local cur = l[i]\n        if direction\
-    \ == nil then\n            if cur > prev then\n                direction = 1\n\
-    \            elseif cur < prev then\n                direction = -1\n        \
-    \    end\n        elseif cur - prev ~= direction then\n            return false\n\
-    \        end\n        prev = cur\n    end\n    return true\nend", "    local n\
-    \ = #l\n    if n < 2 then\n        return true\n    end\n    local inc = l[2]\
-    \ > l[1]\n    for i = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n    \
-    \        return false\n        end\n    end\n    return true\nend", "    local\
-    \ inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i\
-    \ - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n  \
-    \          dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \ local n = #l\n  if n < 2 then return true end\n  local inc = l[2] > l[1]\n \
-    \ for i = 3, n do\n    if inc ~= (l[i] > l[i-1]) then return false end\n  end\n\
-    \  return true\nend", "  local increasing = true\n  local decreasing = true\n\
-    \  for i = 2, #l do\n    if l[i] < l[i - 1] then\n      increasing = false\n \
-    \   elseif l[i] > l[i - 1] then\n      decreasing = false\n    end\n  end\n  return\
-    \ increasing or decreasing\nend", "  local direction = 0\n  for i = 2, #l do\n\
-    \    local d = l[i] - l[i - 1]\n    if direction == 0 then\n      direction =\
-    \ d\n    elseif direction * d < 0 then\n      return false\n    end\n  end\n \
-    \ return true\nend", "    local last = l[1]\n    local increasing = true\n   \
-    \ for i = 2, #l do\n        if l[i] < last then\n            increasing = false\n\
-    \            break\n        end\n        last = l[i]\n    end\n    if increasing\
-    \ then\n        return true\n    end\n    last = l[1]\n    for i = 2, #l do\n\
-    \        if l[i] > last then\n            return false\n        end\n        last\
-    \ = l[i]\n    end\n    return true\nend", "  local direction = l[2] - l[1]\n \
-    \ for i = 3, #l do\n    if direction * (l[i] - l[i - 1]) < 0 then\n      return\
-    \ false\n    end\n  end\n  return true\nend", "    local direction = 0\n    for\
-    \ i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction == 0 then\n\
-    \            direction = d\n        elseif d * direction < 0 then\n          \
-    \  return false\n        end\n    end\n    return true\nend", "  local inc = true\n\
-    \  local dec = true\n  for i = 2, #l do\n    inc = inc and l[i] >= l[i - 1]\n\
-    \    dec = dec and l[i] <= l[i - 1]\n  end\n  return inc or dec\nend", "    local\
-    \ direction = nil\n    for i = 2, #l do\n        local diff = l[i] - l[i - 1]\n\
-    \        if direction == nil then\n            direction = diff\n        elseif\
-    \ direction * diff < 0 then\n            return false\n        end\n    end\n\
-    \    return true\nend", "    local m = l[1]\n    local n = l[2]\n    local inc\
-    \ = n > m\n    for i = 3, #l do\n        if inc then\n            if l[i] < n\
-    \ then\n                return false\n            end\n        else\n        \
-    \    if l[i] > n then\n                return false\n            end\n       \
-    \ end\n        n = l[i]\n    end\n    return true\nend", "    local direction\
-    \ = nil\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction\
-    \ == nil then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "  local\
-    \ direction = 0\n  for i = 2, #l do\n    local d = l[i] - l[i - 1]\n    if direction\
-    \ == 0 then\n      direction = d\n    elseif direction * d < 0 then\n      return\
-    \ false\n    end\n  end\n  return true\nend", "  local n = #l\n  if n < 2 then\
-    \ return true end\n  local inc = l[2] > l[1]\n  for i = 3, n do\n    if inc ~=\
-    \ (l[i] > l[i-1]) then return false end\n  end\n  return true\nend", "  local\
-    \ n = #l\n  if n < 2 then return true end\n  local inc = l[2] > l[1]\n  for i\
-    \ = 3, n do\n    if l[i] > l[i-1] ~= inc then return false end\n  end\n  return\
-    \ true\nend", "    local inc = true\n    local dec = true\n    for i = 2, #l do\n\
-    \        if l[i] < l[i - 1] then\n            inc = false\n        elseif l[i]\
-    \ > l[i - 1] then\n            dec = false\n        end\n    end\n    return inc\
-    \ or dec\nend", "    if #l < 2 then\n        return true\n    end\n    local inc\
-    \ = l[2] > l[1]\n    for i = 3, #l do\n        if l[i] > l[i - 1] ~= inc then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ direction = 0\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n   \
-    \     if direction == 0 then\n            direction = d\n        elseif direction\
-    \ * d < 0 then\n            return false\n        end\n    end\n    return true\n\
-    end", "  local direction = nil\n  for i = 2, #l do\n    local d = l[i] - l[i -\
-    \ 1]\n    if direction == nil then\n      direction = d\n    elseif direction\
-    \ * d < 0 then\n      return false\n    end\n  end\n  return true\nend", "   \
-    \ local n = #l\n    if n < 2 then\n        return true\n    end\n    local inc\
-    \ = l[2] > l[1]\n    for i = 3, n do\n        if inc and l[i] < l[i - 1] then\n\
-    \            return false\n        elseif not inc and l[i] > l[i - 1] then\n \
-    \           return false\n        end\n    end\n    return true\nend", "    local\
-    \ inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i\
-    \ - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n  \
-    \          dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local direction = 0\n    for i = 2, #l do\n        local d = l[i] - l[i -\
-    \ 1]\n        if direction == 0 then\n            direction = d\n        elseif\
-    \ direction * d < 0 then\n            return false\n        end\n    end\n   \
-    \ return true\nend", "  local increasing = l[1] < l[2]\n  for i = 2, #l - 1 do\n\
-    \    if increasing and l[i] > l[i + 1] then\n      return false\n    elseif not\
-    \ increasing and l[i] < l[i + 1] then\n      return false\n    end\n  end\n  return\
-    \ true\nend", "  local inc = l[1] < l[2]\n  for i = 2, #l - 1 do\n    if l[i]\
-    \ < l[i + 1] ~= inc then\n      return false\n    end\n  end\n  return true\n\
-    end", "  local direction = 0\n  for i = 2, #l do\n    local d = l[i] - l[i - 1]\n\
-    \    if d == 0 then\n      -- do nothing\n    elseif direction == 0 then\n   \
-    \   direction = d\n    elseif direction * d < 0 then\n      return false\n   \
-    \ end\n  end\n  return true\nend", "  local direction = nil\n  for i = 2, #l do\n\
-    \    local d = l[i] - l[i - 1]\n    if direction == nil then\n      direction\
-    \ = d\n    elseif direction * d < 0 then\n      return false\n    end\n  end\n\
-    \  return true\nend", "  local prev = l[1]\n  local inc = nil\n  for i = 2, #l\
-    \ do\n    if l[i] ~= prev then\n      if inc == nil then\n        inc = l[i] >\
-    \ prev\n      elseif inc ~= (l[i] > prev) then\n        return false\n      end\n\
-    \    end\n    prev = l[i]\n  end\n  return true\nend", "    local inc = l[1] <\
-    \ l[2]\n    for i = 2, #l - 1 do\n        if inc and l[i] > l[i + 1] then\n  \
-    \          return false\n        elseif not inc and l[i] < l[i + 1] then\n   \
-    \         return false\n        end\n    end\n    return true\nend", "  local\
-    \ inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i - 1] then\n\
-    \      inc = false\n    elseif l[i] > l[i - 1] then\n      dec = false\n    end\n\
-    \  end\n  return inc or dec\nend", "    local direction = 0\n    for i = 2, #l\
-    \ do\n        local d = l[i] - l[i - 1]\n        if d == 0 then\n            --\
-    \ ignore\n        elseif direction == 0 then\n            direction = d\n    \
-    \    elseif d * direction < 0 then\n            return false\n        end\n  \
-    \  end\n    return true\nend", "    local direction = 0\n    for i = 2, #l do\n\
-    \        local d = l[i] - l[i - 1]\n        if d == 0 then\n            -- ignore\n\
-    \        elseif direction == 0 then\n            direction = d\n        elseif\
-    \ direction * d < 0 then\n            return false\n        end\n    end\n   \
-    \ return true\nend", "    local direction = 0\n    for i = 2, #l do\n        local\
-    \ delta = l[i] - l[i - 1]\n        if delta == 0 then\n            -- do nothing\n\
-    \        elseif direction == 0 then\n            direction = delta\n        elseif\
-    \ direction * delta < 0 then\n            return false\n        end\n    end\n\
-    \    return true\nend", "  local inc = l[1] < l[2]\n  for i = 2, #l - 1 do\n \
-    \   if inc and l[i] > l[i + 1] then return false end\n    if not inc and l[i]\
-    \ < l[i + 1] then return false end\n  end\n  return true\nend", "    local direction\
-    \ = 0\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if d ==\
-    \ 0 then\n            -- do nothing\n        elseif direction == 0 then\n    \
-    \        direction = d\n        elseif d * direction < 0 then\n            return\
-    \ false\n        end\n    end\n    return true\nend", "    local direction = nil\n\
-    \    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction\
-    \ == nil then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i\
-    \ - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n  \
-    \          dec = false\n        end\n    end\n    return inc or dec\nend", "\t\
-    local direction = 0\n\tfor i = 2, #l do\n\t\tlocal d = l[i] - l[i - 1]\n\t\tif\
-    \ direction == 0 then\n\t\t\tdirection = d\n\t\telseif direction * d < 0 then\n\
-    \t\t\treturn false\n\t\tend\n\tend\n\treturn true\nend", "    local inc = true\n\
-    \    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n\
-    \            inc = false\n        elseif l[i] > l[i - 1] then\n            dec\
-    \ = false\n        end\n    end\n    return inc or dec\nend", "    local prev\
-    \ = l[1]\n    local increasing = true\n    local decreasing = true\n    for i\
-    \ = 2, #l do\n        if l[i] > prev then\n            decreasing = false\n  \
-    \      elseif l[i] < prev then\n            increasing = false\n        end\n\
-    \        prev = l[i]\n    end\n    return increasing or decreasing\nend", "  \
-    \  local direction = nil\n    for i = 2, #l do\n        local diff = l[i] - l[i\
-    \ - 1]\n        if direction == nil then\n            direction = diff\n     \
-    \   elseif direction * diff < 0 then\n            return false\n        end\n\
-    \    end\n    return true\nend", "    local direction = 0\n    for i = 2, #l do\n\
-    \        local d = l[i] - l[i - 1]\n        if d == 0 then\n            -- do\
-    \ nothing\n        elseif direction == 0 then\n            direction = d\n   \
-    \     elseif direction * d < 0 then\n            return false\n        end\n \
-    \   end\n    return true\nend", "    local n = #l\n    if n < 2 then\n       \
-    \ return true\n    end\n    local inc = l[2] > l[1]\n    for i = 3, n do\n   \
-    \     if inc ~= (l[i] > l[i - 1]) then\n            return false\n        end\n\
-    \    end\n    return true\nend", "  local increasing = true\n  local decreasing\
-    \ = true\n  for i = 2, #l do\n    if l[i] < l[i - 1] then\n      increasing =\
-    \ false\n    elseif l[i] > l[i - 1] then\n      decreasing = false\n    end\n\
-    \  end\n  return increasing or decreasing\nend", "    local n = #l\n    if n <\
-    \ 2 then\n        return true\n    end\n    local inc = l[2] > l[1]\n    for i\
-    \ = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n            return false\n\
-    \        end\n    end\n    return true\nend", "    local prev = l[1]\n    local\
-    \ direction = nil\n    for i = 2, #l do\n        local cur = l[i]\n        if\
-    \ direction == nil then\n            if cur > prev then\n                direction\
-    \ = 1\n            elseif cur < prev then\n                direction = -1\n  \
-    \          end\n        elseif direction == 1 and cur < prev then\n          \
-    \  return false\n        elseif direction == -1 and cur > prev then\n        \
-    \    return false\n        end\n        prev = cur\n    end\n    return true\n\
-    end", "    local last = l[1]\n    local increasing = true\n    for i = 2, #l do\n\
-    \        if l[i] < last then\n            increasing = false\n            break\n\
-    \        end\n        last = l[i]\n    end\n    if increasing then\n        return\
-    \ true\n    end\n    last = l[1]\n    for i = 2, #l do\n        if l[i] > last\
-    \ then\n            return false\n        end\n        last = l[i]\n    end\n\
-    \    return true\nend", "  local direction = 0\n  for i = 2, #l do\n    local\
-    \ d = l[i] - l[i - 1]\n    if direction == 0 then\n      direction = d\n    elseif\
-    \ d * direction < 0 then\n      return false\n    end\n  end\n  return true\n\
-    end", "    local last = l[1]\n    local inc = true\n    local dec = true\n   \
-    \ for i = 2, #l do\n        if l[i] < last then\n            inc = false\n   \
-    \     elseif l[i] > last then\n            dec = false\n        end\n        last\
-    \ = l[i]\n    end\n    return inc or dec\nend", "    local inc = l[1] < l[2]\n\
-    \    for i = 2, #l - 1 do\n        if l[i] < l[i + 1] ~= inc then\n          \
-    \  return false\n        end\n    end\n    return true\nend", "    local n = #l\n\
-    \    if n < 2 then\n        return true\n    end\n    local inc = l[2] > l[1]\n\
-    \    for i = 3, n do\n        if inc and l[i] < l[i - 1] then\n            return\
-    \ false\n        elseif not inc and l[i] > l[i - 1] then\n            return false\n\
-    \        end\n    end\n    return true\nend", "    local inc = true\n    local\
-    \ dec = true\n    for i = 2, #l do\n        if l[i] < l[i - 1] then\n        \
-    \    inc = false\n        elseif l[i] > l[i - 1] then\n            dec = false\n\
-    \        end\n    end\n    return inc or dec\nend", "    local direction = 0\n\
-    \    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if d ~= 0 then\n\
-    \            if direction == 0 then\n                direction = d\n         \
-    \   elseif direction * d < 0 then\n                return false\n            end\n\
-    \        end\n    end\n    return true\nend", "  local n = #l\n  if n < 2 then\
-    \ return true end\n  local inc = l[2] > l[1]\n  for i = 3, n do\n    if inc ~=\
-    \ (l[i] > l[i-1]) then return false end\n  end\n  return true\nend", "    local\
-    \ direction = 0\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n   \
-    \     if d == 0 then\n            -- ignore\n        elseif direction == 0 then\n\
-    \            direction = d\n        elseif d * direction < 0 then\n          \
-    \  return false\n        end\n    end\n    return true\nend", "  local n = #l\n\
-    \  if n < 2 then return true end\n  local inc = l[2] > l[1]\n  for i = 3, n do\n\
-    \    if inc ~= (l[i] > l[i-1]) then return false end\n  end\n  return true\nend",
-  "  local inc = l[1] < l[2]\n  for i = 2, #l - 1 do\n    if l[i] < l[i + 1] ~= inc\
-    \ then\n      return false\n    end\n  end\n  return true\nend", "    local direction\
-    \ = 0\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if d ==\
-    \ 0 then\n            return false\n        elseif direction == 0 then\n     \
-    \       direction = d\n        elseif direction * d < 0 then\n            return\
-    \ false\n        end\n    end\n    return true\nend", "  local last = l[1]\n \
-    \ local increasing = true\n  for i = 2, #l do\n    if l[i] < last then\n     \
-    \ increasing = false\n      break\n    end\n    last = l[i]\n  end\n  if increasing\
-    \ then return true end\n  last = l[1]\n  for i = 2, #l do\n    if l[i] > last\
-    \ then\n      return false\n    end\n    last = l[i]\n  end\n  return true\nend",
-  "  local direction = nil\n  for i = 2, #l do\n    local d = l[i] - l[i - 1]\n  \
-    \  if direction == nil then\n      direction = d\n    elseif direction * d < 0\
-    \ then\n      return false\n    end\n  end\n  return true\nend", "    local inc\
-    \ = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i -\
-    \ 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n    \
-    \        dec = false\n        end\n    end\n    return inc or dec\nend", "   \
-    \ local inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i]\
-    \ < l[i - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n\
-    \            dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i]\
-    \ > l[i - 1] then\n            dec = false\n        elseif l[i] < l[i - 1] then\n\
-    \            inc = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i]\
-    \ < l[i - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n\
-    \            dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local increasing = true\n    local decreasing = true\n    for i = 2, #l do\n\
-    \        if l[i] < l[i - 1] then\n            increasing = false\n        elseif\
-    \ l[i] > l[i - 1] then\n            decreasing = false\n        end\n    end\n\
-    \    return increasing or decreasing\nend", "    local n = #l\n    if n < 2 then\n\
-    \        return true\n    end\n    local inc = l[2] > l[1]\n    for i = 3, n do\n\
-    \        if l[i] > l[i - 1] ~= inc then\n            return false\n        end\n\
-    \    end\n    return true\nend", "  local inc = true\n  local dec = true\n  for\
-    \ i = 2, #l do\n    if l[i] < l[i-1] then\n      inc = false\n    elseif l[i]\
-    \ > l[i-1] then\n      dec = false\n    end\n  end\n  return inc or dec\nend",
-  "  local inc = true\n  local dec = true\n  for i = 2, #l do\n    if l[i] < l[i -\
-    \ 1] then\n      inc = false\n    elseif l[i] > l[i - 1] then\n      dec = false\n\
-    \    end\n  end\n  return inc or dec\nend", "    local direction = 0\n    for\
-    \ i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if d == 0 then\n  \
-    \          return false\n        elseif direction == 0 then\n            direction\
-    \ = d\n        elseif d * direction < 0 then\n            return false\n     \
-    \   end\n    end\n    return true\nend", "  local inc = true\n  local dec = true\n\
-    \  for i = 2, #l do\n    if l[i] < l[i - 1] then\n      inc = false\n    elseif\
-    \ l[i] > l[i - 1] then\n      dec = false\n    end\n  end\n  return inc or dec\n\
-    end", "    local direction = 0\n    for i = 2, #l do\n        local d = l[i] -\
-    \ l[i - 1]\n        if d == 0 then\n            -- ignore\n        elseif direction\
-    \ == 0 then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "  local\
-    \ last = l[1]\n  local increasing = true\n  for i = 2, #l do\n    if l[i] < last\
-    \ then\n      increasing = false\n      break\n    end\n    last = l[i]\n  end\n\
-    \  if increasing then return true end\n  last = l[1]\n  for i = 2, #l do\n   \
-    \ if l[i] > last then\n      return false\n    end\n    last = l[i]\n  end\n \
-    \ return true\nend", "    local inc = true\n    local dec = true\n    for i =\
-    \ 2, #l do\n        inc = inc and l[i] >= l[i - 1]\n        dec = dec and l[i]\
-    \ <= l[i - 1]\n    end\n    return inc or dec\nend", "  local n = #l\n  local\
-    \ inc = l[1] < l[2]\n  for i = 2, n-1 do\n    if inc and l[i] > l[i+1] then return\
-    \ false end\n    if not inc and l[i] < l[i+1] then return false end\n  end\n \
-    \ return true\nend", "    local direction = 0\n    for i = 2, #l do\n        local\
-    \ d = l[i] - l[i - 1]\n        if d == 0 then\n            return false\n    \
-    \    elseif direction == 0 then\n            direction = d\n        elseif direction\
-    \ * d < 0 then\n            return false\n        end\n    end\n    return true\n\
-    end", "    local direction = 0\n    for i = 2, #l do\n        local d = l[i] -\
-    \ l[i - 1]\n        if direction == 0 then\n            direction = d\n      \
-    \  elseif direction * d < 0 then\n            return false\n        end\n    end\n\
-    \    return true\nend", "  local inc = true\n  local dec = true\n  for i = 2,\
-    \ #l do\n    if l[i] < l[i - 1] then\n      inc = false\n    elseif l[i] > l[i\
-    \ - 1] then\n      dec = false\n    end\n  end\n  return inc or dec\nend", " \
-    \ local last = l[1]\n  local increasing = true\n  for i = 2, #l do\n    if l[i]\
-    \ < last then\n      increasing = false\n      break\n    end\n    last = l[i]\n\
-    \  end\n  if increasing then return true end\n  last = l[1]\n  for i = 2, #l do\n\
-    \    if l[i] > last then\n      return false\n    end\n    last = l[i]\n  end\n\
-    \  return true\nend", "  local direction = 0\n  for i = 2, #l do\n    local d\
-    \ = l[i] - l[i - 1]\n    if d == 0 then\n      -- no change\n    elseif direction\
-    \ == 0 then\n      direction = d\n    elseif direction * d < 0 then\n      return\
-    \ false\n    end\n  end\n  return true\nend", "    local inc, dec = true, true\n\
-    \    for i = 2, #l do\n        if l[i] < l[i-1] then\n            inc = false\n\
-    \        elseif l[i] > l[i-1] then\n            dec = false\n        end\n   \
-    \ end\n    return inc or dec\nend", "  local direction = 0\n  for i = 2, #l do\n\
-    \    local d = l[i] - l[i - 1]\n    if direction == 0 then\n      direction =\
-    \ d\n    elseif direction * d < 0 then\n      return false\n    end\n  end\n \
-    \ return true\nend", "    local prev = l[1]\n    local inc = true\n    local dec\
-    \ = true\n    for i = 2, #l do\n        if l[i] > prev then\n            dec =\
-    \ false\n        elseif l[i] < prev then\n            inc = false\n        end\n\
-    \        if not inc and not dec then\n            return false\n        end\n\
-    \        prev = l[i]\n    end\n    return true\nend", "  local inc = l[1] < l[2]\n\
-    \  for i = 2, #l - 1 do\n    if l[i] < l[i + 1] ~= inc then\n      return false\n\
-    \    end\n  end\n  return true\nend", "    local inc = true\n    local dec = true\n\
-    \    for i = 2, #l do\n        if l[i] < l[i - 1] then\n            inc = false\n\
-    \        elseif l[i] > l[i - 1] then\n            dec = false\n        end\n \
-    \   end\n    return inc or dec\nend", "  local inc = true\n  local dec = true\n\
-    \  for i = 2, #l do\n    if l[i] < l[i-1] then\n      inc = false\n    elseif\
-    \ l[i] > l[i-1] then\n      dec = false\n    end\n  end\n  return inc or dec\n\
-    end", "    local inc = nil\n    for i = 2, #l do\n        if l[i] ~= l[i-1] then\n\
-    \            if inc == nil then\n                inc = l[i] > l[i-1]\n       \
-    \     elseif inc ~= (l[i] > l[i-1]) then\n                return false\n     \
-    \       end\n        end\n    end\n    return true\nend", "    local direction\
-    \ = nil\n    for i = 2, #l do\n        local d = l[i] - l[i - 1]\n        if direction\
-    \ == nil then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i\
-    \ - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n  \
-    \          dec = false\n        end\n    end\n    return inc or dec\nend", " \
-    \   local direction = 0\n    for i = 2, #l do\n        local d = l[i] - l[i -\
-    \ 1]\n        if d == 0 then\n            return false\n        elseif direction\
-    \ == 0 then\n            direction = d\n        elseif direction * d < 0 then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ direction = l[2] - l[1]\n    for i = 2, #l - 1 do\n        if direction * (l[i\
-    \ + 1] - l[i]) < 0 then\n            return false\n        end\n    end\n    return\
-    \ true\nend", "    local inc = true\n    local dec = true\n    for i = 2, #l do\n\
-    \        if l[i] < l[i - 1] then\n            inc = false\n        elseif l[i]\
-    \ > l[i - 1] then\n            dec = false\n        end\n    end\n    return inc\
-    \ or dec\nend", "  local direction = nil\n  for i = 2, #l do\n    local d = l[i]\
-    \ - l[i - 1]\n    if direction == nil then\n      direction = d\n    elseif d\
-    \ * direction < 0 then\n      return false\n    end\n  end\n  return true\nend",
-  "    local n = #l\n    if n < 2 then\n        return true\n    end\n    local inc\
-    \ = l[2] > l[1]\n    for i = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n\
-    \            return false\n        end\n    end\n    return true\nend", "    local\
-    \ n = #l\n    if n < 2 then\n        return true\n    end\n    local inc = l[2]\
-    \ > l[1]\n    for i = 3, n do\n        if inc ~= (l[i] > l[i - 1]) then\n    \
-    \        return false\n        end\n    end\n    return true\nend", "    local\
-    \ inc = true\n    local dec = true\n    for i = 2, #l do\n        if l[i] < l[i\
-    \ - 1] then\n            inc = false\n        elseif l[i] > l[i - 1] then\n  \
-    \          dec = false\n        end\n    end\n    return inc or dec\nend"]
+prompt: |
+  -- Return true is table elements are monotonically increasing or decreasing.
+  -- >>> monotonic({1, 2, 4, 20})
+  -- true
+  -- >>> monotonic({1, 20, 4, 10})
+  -- false
+  -- >>> monotonic({4, 1, 0, -10})
+  -- true
+  local function monotonic(l)
+tests: |-
+  lu = require('luaunit')
+
+  function test_humaneval()
+  local candidate = monotonic
+      lu.assertEquals(candidate({1, 2, 4, 10}), true)
+      lu.assertEquals(candidate({1, 2, 4, 20}), true)
+      lu.assertEquals(candidate({1, 20, 4, 10}), false)
+      lu.assertEquals(candidate({4, 1, 0, -10}), true)
+      lu.assertEquals(candidate({4, 1, 1, 0}), true)
+      lu.assertEquals(candidate({1, 2, 3, 2, 5, 60}), false)
+      lu.assertEquals(candidate({1, 2, 3, 4, 5, 60}), true)
+      lu.assertEquals(candidate({9, 9, 9, 9}), true)
+  end
+
+  os.exit(lu.LuaUnit.run())
+completions:
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local increasing = true
+    local decreasing = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        increasing = false
+      elseif l[i] > l[i - 1] then
+        decreasing = false
+      end
+    end
+    return increasing or decreasing
+  end
+- |2-
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              increasing = false
+          elseif l[i] > l[i - 1] then
+              decreasing = false
+          end
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local diff = l[i] - l[i - 1]
+      if diff == 0 then
+        -- Do nothing
+      elseif diff > 0 then
+        if direction == -1 then
+          return false
+        else
+          direction = 1
+        end
+      elseif diff < 0 then
+        if direction == 1 then
+          return false
+        else
+          direction = -1
+        end
+      end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local diff = l[i] - l[i - 1]
+          if diff == 0 then
+              -- do nothing
+          elseif diff > 0 then
+              if direction == 0 then
+                  direction = 1
+              elseif direction == -1 then
+                  return false
+              end
+          elseif diff < 0 then
+              if direction == 0 then
+                  direction = -1
+              elseif direction == 1 then
+                  return false
+              end
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- "\tlocal inc = true\n\tlocal dec = true\n\tfor i = 2, #l do\n\t\tif l[i] < l[i -
+  1] then\n\t\t\tinc = false\n\t\tend\n\t\tif l[i] > l[i - 1] then\n\t\t\tdec = false\n\t\tend\n\tend\n\treturn
+  inc or dec\nend"
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local incr = l[2] > l[1]
+      for i = 3, n do
+          if l[i] > l[i - 1] ~= incr then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      last = l[1]
+      for i = 2, #l do
+          if l[i] > last then
+              return false
+          end
+          last = l[i]
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              increasing = false
+          elseif l[i] > l[i - 1] then
+              decreasing = false
+          end
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local d = l[2] - l[1]
+      for i = 2, #l - 1 do
+          if d * (l[i + 1] - l[i]) < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local diff = l[i] - l[i - 1]
+          if diff == 0 then
+              return false
+          elseif direction == nil then
+              direction = diff
+          elseif direction * diff < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc, dec = true, true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local last = l[1]
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < last then
+        inc = false
+      elseif l[i] > last then
+        dec = false
+      end
+      last = l[i]
+    end
+    return inc or dec
+  end
+- |2-
+      local inc, dec = true, true
+      for i = 2, #l do
+          if l[i] < l[i-1] then
+              inc = false
+          elseif l[i] > l[i-1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = l[1] < l[2]
+      for i = 2, #l - 1 do
+          if inc and l[i] > l[i + 1] then
+              return false
+          elseif not inc and l[i] < l[i + 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = l[1] < l[2]
+      for i = 2, #l - 1 do
+          if inc and l[i] > l[i + 1] then
+              return false
+          elseif not inc and l[i] < l[i + 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local incr = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if incr and l[i] > l[i + 1] then return false end
+      if not incr and l[i] < l[i + 1] then return false end
+    end
+    return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if l[i] == l[i - 1] then
+              return false
+          end
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              increasing = false
+          elseif l[i] > l[i - 1] then
+              decreasing = false
+          end
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for _, v in ipairs(l) do
+          if v < last then
+              increasing = false
+              break
+          end
+          last = v
+      end
+      if increasing then
+          return true
+      end
+      local last = l[1]
+      local decreasing = true
+      for _, v in ipairs(l) do
+          if v > last then
+              decreasing = false
+              break
+          end
+          last = v
+      end
+      return decreasing
+  end
+- |2-
+      local prev = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < prev then
+              increasing = false
+              break
+          end
+          prev = l[i]
+      end
+      if increasing then
+          return true
+      end
+      local prev = l[1]
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] > prev then
+              decreasing = false
+              break
+          end
+          prev = l[i]
+      end
+      return decreasing
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local m = l[1]
+      local d = l[2] - l[1]
+      for i = 2, #l do
+          if (l[i] - m) * d < 0 then
+              return false
+          end
+          m = l[i]
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc and l[i] < l[i - 1] then
+              return false
+          elseif not inc and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc and l[i] < l[i - 1] then
+              return false
+          elseif not inc and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              return false
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc and l[i] < l[i-1] then return false end
+      if not inc and l[i] > l[i-1] then return false end
+    end
+    return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local is_increasing = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if is_increasing then
+        if l[i] > l[i + 1] then
+          return false
+        end
+      else
+        if l[i] < l[i + 1] then
+          return false
+        end
+      end
+    end
+    return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local n = #l
+    if n == 0 then return true end
+    local inc = l[1] <= l[2]
+    for i = 2, n-1 do
+      if inc and l[i] > l[i+1] then return false end
+      if not inc and l[i] < l[i+1] then return false end
+    end
+    return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local diff = l[i] - l[i - 1]
+          if direction == nil then
+              direction = diff
+          elseif direction * diff < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local prev = l[1]
+    local incr = true
+    local decr = true
+    for i = 2, #l do
+      local curr = l[i]
+      if curr < prev then
+        incr = false
+      elseif curr > prev then
+        decr = false
+      end
+      prev = curr
+    end
+    return incr or decr
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      last = l[1]
+      for i = 2, #l do
+          if l[i] > last then
+              return false
+          end
+          last = l[i]
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              increasing = false
+          elseif l[i] > l[i - 1] then
+              decreasing = false
+          end
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local incr = l[2] > l[1]
+      for i = 3, n do
+          if incr and l[i] < l[i - 1] then
+              return false
+          elseif not incr and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc and l[i] < l[i - 1] then
+              return false
+          elseif not inc and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local last = l[1]
+    local increasing = true
+    for _, v in ipairs(l) do
+      if increasing then
+        if v < last then
+          increasing = false
+        end
+      else
+        if v > last then
+          return false
+        end
+      end
+      last = v
+    end
+    return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if l[i] == l[i - 1] then
+              return false
+          end
+          if inc and l[i] < l[i - 1] then
+              return false
+          end
+          if not inc and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+    local direction = l[2] - l[1]
+    for i = 2, #l - 1 do
+      if direction * (l[i + 1] - l[i]) < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local d = l[2] - l[1]
+    for i = 3, #l do
+      if d * (l[i] - l[i - 1]) < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          inc = inc and l[i] >= l[i - 1]
+          dec = dec and l[i] <= l[i - 1]
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local direction = l[2] - l[1]
+    for i = 3, #l do
+      if direction * (l[i] - l[i - 1]) < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local last = l[1]
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - last
+          if direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+          last = l[i]
+      end
+      return true
+  end
+- |2-
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              increasing = false
+          elseif l[i] > l[i - 1] then
+              decreasing = false
+          end
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      local last = l[1]
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] > last then
+              decreasing = false
+              break
+          end
+          last = l[i]
+      end
+      return decreasing
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      local last = l[1]
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] > last then
+              decreasing = false
+              break
+          end
+          last = l[i]
+      end
+      return decreasing
+  end
+- |2-
+      local inc = l[1] < l[2]
+      for i = 2, #l - 1 do
+          if inc and l[i] > l[i + 1] then
+              return false
+          elseif not inc and l[i] < l[i + 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local prev = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < prev then
+              increasing = false
+              break
+          end
+          prev = l[i]
+      end
+      if increasing then
+          return true
+      end
+      local prev = l[1]
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] > prev then
+              decreasing = false
+              break
+          end
+          prev = l[i]
+      end
+      return decreasing
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- "\tlocal inc, dec = true, true\n\tfor i = 2, #l do\n\t\tif l[i] < l[i-1] then\n\t\t\tinc
+  = false\n\t\telseif l[i] > l[i-1] then\n\t\t\tdec = false\n\t\tend\n\tend\n\treturn
+  inc or dec\nend"
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      last = l[1]
+      for i = 2, #l do
+          if l[i] > last then
+              return false
+          end
+          last = l[i]
+      end
+      return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if d == 0 then
+        -- do nothing
+      elseif direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local prev = l[1]
+      local direction = nil
+      for i = 2, #l do
+          local cur = l[i]
+          if direction == nil then
+              if cur > prev then
+                  direction = 1
+              elseif cur < prev then
+                  direction = -1
+              end
+          elseif cur - prev ~= direction then
+              return false
+          end
+          prev = cur
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+    local increasing = true
+    local decreasing = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        increasing = false
+      elseif l[i] > l[i - 1] then
+        decreasing = false
+      end
+    end
+    return increasing or decreasing
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      last = l[1]
+      for i = 2, #l do
+          if l[i] > last then
+              return false
+          end
+          last = l[i]
+      end
+      return true
+  end
+- |2-
+    local direction = l[2] - l[1]
+    for i = 3, #l do
+      if direction * (l[i] - l[i - 1]) < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      inc = inc and l[i] >= l[i - 1]
+      dec = dec and l[i] <= l[i - 1]
+    end
+    return inc or dec
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local diff = l[i] - l[i - 1]
+          if direction == nil then
+              direction = diff
+          elseif direction * diff < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local m = l[1]
+      local n = l[2]
+      local inc = n > m
+      for i = 3, #l do
+          if inc then
+              if l[i] < n then
+                  return false
+              end
+          else
+              if l[i] > n then
+                  return false
+              end
+          end
+          n = l[i]
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if l[i] > l[i-1] ~= inc then return false end
+    end
+    return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      if #l < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, #l do
+          if l[i] > l[i - 1] ~= inc then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local direction = nil
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == nil then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc and l[i] < l[i - 1] then
+              return false
+          elseif not inc and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local increasing = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if increasing and l[i] > l[i + 1] then
+        return false
+      elseif not increasing and l[i] < l[i + 1] then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local inc = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if l[i] < l[i + 1] ~= inc then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if d == 0 then
+        -- do nothing
+      elseif direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local direction = nil
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == nil then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+    local prev = l[1]
+    local inc = nil
+    for i = 2, #l do
+      if l[i] ~= prev then
+        if inc == nil then
+          inc = l[i] > prev
+        elseif inc ~= (l[i] > prev) then
+          return false
+        end
+      end
+      prev = l[i]
+    end
+    return true
+  end
+- |2-
+      local inc = l[1] < l[2]
+      for i = 2, #l - 1 do
+          if inc and l[i] > l[i + 1] then
+              return false
+          elseif not inc and l[i] < l[i + 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local delta = l[i] - l[i - 1]
+          if delta == 0 then
+              -- do nothing
+          elseif direction == 0 then
+              direction = delta
+          elseif direction * delta < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if inc and l[i] > l[i + 1] then return false end
+      if not inc and l[i] < l[i + 1] then return false end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- do nothing
+          elseif direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- "\tlocal direction = 0\n\tfor i = 2, #l do\n\t\tlocal d = l[i] - l[i - 1]\n\t\tif
+  direction == 0 then\n\t\t\tdirection = d\n\t\telseif direction * d < 0 then\n\t\t\treturn
+  false\n\t\tend\n\tend\n\treturn true\nend"
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local prev = l[1]
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] > prev then
+              decreasing = false
+          elseif l[i] < prev then
+              increasing = false
+          end
+          prev = l[i]
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local diff = l[i] - l[i - 1]
+          if direction == nil then
+              direction = diff
+          elseif direction * diff < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- do nothing
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local increasing = true
+    local decreasing = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        increasing = false
+      elseif l[i] > l[i - 1] then
+        decreasing = false
+      end
+    end
+    return increasing or decreasing
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local prev = l[1]
+      local direction = nil
+      for i = 2, #l do
+          local cur = l[i]
+          if direction == nil then
+              if cur > prev then
+                  direction = 1
+              elseif cur < prev then
+                  direction = -1
+              end
+          elseif direction == 1 and cur < prev then
+              return false
+          elseif direction == -1 and cur > prev then
+              return false
+          end
+          prev = cur
+      end
+      return true
+  end
+- |2-
+      local last = l[1]
+      local increasing = true
+      for i = 2, #l do
+          if l[i] < last then
+              increasing = false
+              break
+          end
+          last = l[i]
+      end
+      if increasing then
+          return true
+      end
+      last = l[1]
+      for i = 2, #l do
+          if l[i] > last then
+              return false
+          end
+          last = l[i]
+      end
+      return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == 0 then
+        direction = d
+      elseif d * direction < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local last = l[1]
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < last then
+              inc = false
+          elseif l[i] > last then
+              dec = false
+          end
+          last = l[i]
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = l[1] < l[2]
+      for i = 2, #l - 1 do
+          if l[i] < l[i + 1] ~= inc then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc and l[i] < l[i - 1] then
+              return false
+          elseif not inc and l[i] > l[i - 1] then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d ~= 0 then
+              if direction == 0 then
+                  direction = d
+              elseif direction * d < 0 then
+                  return false
+              end
+          end
+      end
+      return true
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local n = #l
+    if n < 2 then return true end
+    local inc = l[2] > l[1]
+    for i = 3, n do
+      if inc ~= (l[i] > l[i-1]) then return false end
+    end
+    return true
+  end
+- |2-
+    local inc = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if l[i] < l[i + 1] ~= inc then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              return false
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local last = l[1]
+    local increasing = true
+    for i = 2, #l do
+      if l[i] < last then
+        increasing = false
+        break
+      end
+      last = l[i]
+    end
+    if increasing then return true end
+    last = l[1]
+    for i = 2, #l do
+      if l[i] > last then
+        return false
+      end
+      last = l[i]
+    end
+    return true
+  end
+- |2-
+    local direction = nil
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == nil then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] > l[i - 1] then
+              dec = false
+          elseif l[i] < l[i - 1] then
+              inc = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local increasing = true
+      local decreasing = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              increasing = false
+          elseif l[i] > l[i - 1] then
+              decreasing = false
+          end
+      end
+      return increasing or decreasing
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if l[i] > l[i - 1] ~= inc then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              return false
+          elseif direction == 0 then
+              direction = d
+          elseif d * direction < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              -- ignore
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local last = l[1]
+    local increasing = true
+    for i = 2, #l do
+      if l[i] < last then
+        increasing = false
+        break
+      end
+      last = l[i]
+    end
+    if increasing then return true end
+    last = l[1]
+    for i = 2, #l do
+      if l[i] > last then
+        return false
+      end
+      last = l[i]
+    end
+    return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          inc = inc and l[i] >= l[i - 1]
+          dec = dec and l[i] <= l[i - 1]
+      end
+      return inc or dec
+  end
+- |2-
+    local n = #l
+    local inc = l[1] < l[2]
+    for i = 2, n-1 do
+      if inc and l[i] > l[i+1] then return false end
+      if not inc and l[i] < l[i+1] then return false end
+    end
+    return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              return false
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i - 1] then
+        inc = false
+      elseif l[i] > l[i - 1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+    local last = l[1]
+    local increasing = true
+    for i = 2, #l do
+      if l[i] < last then
+        increasing = false
+        break
+      end
+      last = l[i]
+    end
+    if increasing then return true end
+    last = l[1]
+    for i = 2, #l do
+      if l[i] > last then
+        return false
+      end
+      last = l[i]
+    end
+    return true
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if d == 0 then
+        -- no change
+      elseif direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local inc, dec = true, true
+      for i = 2, #l do
+          if l[i] < l[i-1] then
+              inc = false
+          elseif l[i] > l[i-1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local direction = 0
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == 0 then
+        direction = d
+      elseif direction * d < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local prev = l[1]
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] > prev then
+              dec = false
+          elseif l[i] < prev then
+              inc = false
+          end
+          if not inc and not dec then
+              return false
+          end
+          prev = l[i]
+      end
+      return true
+  end
+- |2-
+    local inc = l[1] < l[2]
+    for i = 2, #l - 1 do
+      if l[i] < l[i + 1] ~= inc then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local inc = true
+    local dec = true
+    for i = 2, #l do
+      if l[i] < l[i-1] then
+        inc = false
+      elseif l[i] > l[i-1] then
+        dec = false
+      end
+    end
+    return inc or dec
+  end
+- |2-
+      local inc = nil
+      for i = 2, #l do
+          if l[i] ~= l[i-1] then
+              if inc == nil then
+                  inc = l[i] > l[i-1]
+              elseif inc ~= (l[i] > l[i-1]) then
+                  return false
+              end
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = nil
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if direction == nil then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+      local direction = 0
+      for i = 2, #l do
+          local d = l[i] - l[i - 1]
+          if d == 0 then
+              return false
+          elseif direction == 0 then
+              direction = d
+          elseif direction * d < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local direction = l[2] - l[1]
+      for i = 2, #l - 1 do
+          if direction * (l[i + 1] - l[i]) < 0 then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
+- |2-
+    local direction = nil
+    for i = 2, #l do
+      local d = l[i] - l[i - 1]
+      if direction == nil then
+        direction = d
+      elseif d * direction < 0 then
+        return false
+      end
+    end
+    return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local n = #l
+      if n < 2 then
+          return true
+      end
+      local inc = l[2] > l[1]
+      for i = 3, n do
+          if inc ~= (l[i] > l[i - 1]) then
+              return false
+          end
+      end
+      return true
+  end
+- |2-
+      local inc = true
+      local dec = true
+      for i = 2, #l do
+          if l[i] < l[i - 1] then
+              inc = false
+          elseif l[i] > l[i - 1] then
+              dec = false
+          end
+      end
+      return inc or dec
+  end
 stop_tokens:
-- "\nlocal"
-- "\nfunction"
-- "\n--"
+- |2-
+
+  local
+- |2-
+
+  function
+- |2-
+
+  --
 - "\n\n"
