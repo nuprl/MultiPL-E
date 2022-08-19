@@ -14,6 +14,7 @@ class Result(Object):
     stderr = Attribute(type=str)
     exit_code = Attribute(type=int)
     status = Attribute(type=str)
+    timestamp = Attribute(type=int, default=0)
 
 class ResultList(Sequence):
     item_type = Result
