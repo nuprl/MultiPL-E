@@ -171,7 +171,7 @@ benchmark problems across many languages. The 18 languages capture a broad
 spectrum of language features, application areas, and popularity, allowing us to
 explore the impact of these factors on model performance.
 
-Here are some examples of translated problems in a selection of languages:
+Here are some examples of translated problems and Codex-generated solutions in a selection of languages:
 
 <div class="carousel">
   <ul class="slides">
