@@ -1,7 +1,8 @@
 import ast
+import sys
 from pathlib import Path
 from shutil import get_unpack_formats
-from typing import Union
+from typing import Any, Union
 
 from itertools import groupby
 
@@ -77,7 +78,29 @@ def extract_types_check_fn(check_fn: ast.AST):
         case _other:
             raise Exception(f"Not a definition for function check(): {check_fn}")
 
-def annotate_files(path: Path):
+def get_component(entity: Any) -> ast.AST:
+    """
+    Get the corresponding entity in Python AST representation.
+    """
+    parsed_module = ast.parse(str(entity))
+
+    match parsed_module:
+        case ast.Module([ast.Expr(value)], _):
+            return value
+        case _other:
+            raise Exception(f"unexpected entity: {parsed_module}")
+
+
+def type_annotation_to_func(func_def: ast.AST, args_type, return_type) -> ast.AST:
+    match func_def:
+        case ast.FunctionDef(name, ast.arguments(posonlyargs, args, kwonlyargs, kw_defaults, defaults), body, decorator_list):
+            returns = get_component(return_type)
+            annotated_args = [ast.arg(arg=arg.arg, annotation=get_component(ann)) for arg, ann in zip(args, args_type)]
+            return ast.FunctionDef(name, ast.arguments(posonlyargs=posonlyargs, args=annotated_args, vararg=None, kwonlyargs=kwonlyargs, kw_defaults=kw_defaults, kwarg=None, defaults=defaults), body, decorator_list, returns)
+        case _other:
+            raise Exception(f"Not a function definition: {func_def}")
+
+def annotate_files(path: Path, write_handler = sys.stdout):
     with open(path) as f:
         module_ast = ast.parse(f.read())
         print(ast.dump(module_ast, indent=4))
@@ -96,18 +119,27 @@ def annotate_files(path: Path):
             print(args_type)
             print(return_type)
 
+            annotated_prompt_fn = type_annotation_to_func(prompt_function, args_type, return_type)
 
+            write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)))
+            write_handler.write("\n")
+            write_handler.write(ast.unparse(ast.fix_missing_locations(check_function)))
+            write_handler.write("\n")
+            write_handler.write(ast.unparse(ast.fix_missing_locations(test_check_function)))
+            write_handler.write("\n")
 
         case _other:
             raise Exception(f"Not a module: {module_ast}")
 
 
 def main():
-    fp = Path(Path(__file__).parent, "..", "datasets", "mbpp")
+    fp = Path(Path(__file__).parent, "..", "datasets")
+    op = Path(Path(__file__).parent, "..", "output")
     count = 0
     for file in fp.glob("*.py"):
-        print(file)
-        annotate_files(file)
+        print(file.name)
+        with open(op / file.name, "w") as of: 
+            annotate_files(file, of)
         if count < 10:
             count += 1
         else:
