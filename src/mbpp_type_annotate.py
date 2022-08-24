@@ -1,5 +1,6 @@
 import ast
 import sys
+import re
 from pathlib import Path
 from shutil import get_unpack_formats
 from typing import Any, Union
@@ -82,7 +83,15 @@ def get_component(entity: Any) -> ast.AST:
     """
     Get the corresponding entity in Python AST representation.
     """
-    parsed_module = ast.parse(str(entity))
+    # basic types and custom classes (we don't have them in mbpp I think) need special treatment... 
+    # This is essentially a hack. How to do this better?
+    string_rep = str(entity)
+    class_match = re.match(r"<class '(.*)'>", string_rep)
+
+    if class_match:
+        string_rep = class_match[1]
+
+    parsed_module = ast.parse(string_rep)
 
     match parsed_module:
         case ast.Module([ast.Expr(value)], _):
@@ -96,7 +105,9 @@ def type_annotation_to_func(func_def: ast.AST, args_type, return_type) -> ast.AS
         case ast.FunctionDef(name, ast.arguments(posonlyargs, args, kwonlyargs, kw_defaults, defaults), body, decorator_list):
             returns = get_component(return_type)
             annotated_args = [ast.arg(arg=arg.arg, annotation=get_component(ann)) for arg, ann in zip(args, args_type)]
-            return ast.FunctionDef(name, ast.arguments(posonlyargs=posonlyargs, args=annotated_args, vararg=None, kwonlyargs=kwonlyargs, kw_defaults=kw_defaults, kwarg=None, defaults=defaults), body, decorator_list, returns)
+            arguments = ast.arguments(posonlyargs=posonlyargs, args=annotated_args, vararg=None, kwonlyargs=kwonlyargs,\
+                 kw_defaults=kw_defaults, kwarg=None, defaults=defaults)
+            return ast.FunctionDef(name, arguments, body, decorator_list, returns)
         case _other:
             raise Exception(f"Not a function definition: {func_def}")
 
@@ -122,11 +133,11 @@ def annotate_files(path: Path, write_handler = sys.stdout):
             annotated_prompt_fn = type_annotation_to_func(prompt_function, args_type, return_type)
 
             write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)))
-            write_handler.write("\n")
+            write_handler.write("\n\n")
             write_handler.write(ast.unparse(ast.fix_missing_locations(check_function)))
-            write_handler.write("\n")
+            write_handler.write("\n\n")
             write_handler.write(ast.unparse(ast.fix_missing_locations(test_check_function)))
-            write_handler.write("\n")
+            write_handler.write("\n\n")
 
         case _other:
             raise Exception(f"Not a module: {module_ast}")
