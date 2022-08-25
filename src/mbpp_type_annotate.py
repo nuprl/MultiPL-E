@@ -43,6 +43,9 @@ def value_to_type(ast_value: ast.AST):
                 return [get_underlying_values(e) for e in elts]
             case ast.Tuple(elts, _ctx):
                 return tuple([get_underlying_values(e) for e in elts])
+            case ast.Dict(keys, values):
+                return dict(zip([get_underlying_values(k) for k in keys],  
+                                [get_underlying_values(v) for v in values]))
             case _other:
                 raise Exception(f"Unsupported AST value, or not an AST value: {ast_value}")
 
@@ -51,6 +54,9 @@ def value_to_type(ast_value: ast.AST):
             return list[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, tuple):
             return tuple[get_union_type([get_type(e) for e in value])]
+        elif isinstance(value, dict):
+            return dict[get_union_type([get_type(k) for k in value]), 
+                        get_union_type([get_type(value[k]) for k in value])]
         else:
             return type(value)
 
