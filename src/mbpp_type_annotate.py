@@ -4,7 +4,8 @@ import re
 import argparse
 from pathlib import Path
 from shutil import get_unpack_formats
-from typing import Any, Union
+from types import GenericAlias, NoneType
+from typing import Any, Optional, Union
 
 from itertools import groupby
 
@@ -33,6 +34,9 @@ def value_to_type(ast_value: ast.AST):
 
     def get_underlying_values(ast_value):
         match ast_value:
+            # This is for negative numbers
+            case ast.UnaryOp(ast.USub(), ast.Constant(value)):
+                return value
             case ast.Constant(value):
                 return value
             case ast.List(elts, _ctx):
@@ -52,6 +56,36 @@ def value_to_type(ast_value: ast.AST):
 
     value = get_underlying_values(ast_value)
     return get_type(value)
+
+def unify_types(types):
+    
+    def unify_types2(t1, t2):
+        if t1 == t2:
+            return t1
+        elif t1 == NoneType or t1 == Optional[t2]:
+            return Optional[t2]
+        elif t2 == NoneType or t2 == Optional[t1]:
+            return Optional[t1]
+        # If not generic type, just return any
+        elif not isinstance(t1, GenericAlias) or not isinstance(t2, GenericAlias):
+            return Any
+        elif t1.__origin__ != t2.__origin__:
+            return Any
+        else:
+            t1_args = list(t1.__args__)
+            t2_args = list(t2.__args__)
+            if len(t1_args) != len(t2_args):
+                return Any
+            result = [unify_types2(t1arg, t2arg) for t1arg, t2arg in zip(t1_args, t2_args)]
+            return GenericAlias(t1.__origin__, tuple(result))
+
+    if len(types) <= 1:
+        return types[0]
+    
+    acc = types[0]
+    [acc := unify_types2(acc, t) for t in types[1:]]
+
+    return acc
     
 def extract_types_assert(assert_stmt: ast.AST):
     match assert_stmt:
@@ -74,10 +108,17 @@ def extract_types_check_fn(check_fn: ast.AST):
         case ast.FunctionDef('check', _args, body):
             type_from_asserts = [extract_types_assert(stmt) for stmt in body]
             if not all_equal(type_from_asserts):
+                # Unify the corresponding positions
+                # [([arg1, arg2, ... , argn], return_type)_1, ([arg1, arg2, ... , argn], return_type)_2, ... ] 
+                # => [([unified_arg1s, unified_arg2s, ... unified_argns], unified_return_types)]
+                args_types = [argst for argst, _ in type_from_asserts]
+                return_types = [returnt for _, returnt in type_from_asserts]
+                final_args_types = [ unify_types([args[i] for args in args_types]) for i in range(len(args_types[0])) ]
+                final_return_type = unify_types(return_types)
                 
-                # TODO: Unify types from examples
-                raise Exception(f"type from asserts differ:{type_from_asserts}")
-            return type_from_asserts[0]
+                return (final_args_types, final_return_type)
+            else:
+                return type_from_asserts[0]
         case _other:
             raise Exception(f"Not a definition for function check(): {check_fn}")
 
