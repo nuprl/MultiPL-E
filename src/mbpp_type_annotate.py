@@ -2,6 +2,7 @@ import ast
 import sys
 import re
 import argparse
+import traceback
 from pathlib import Path
 from shutil import get_unpack_formats
 from types import GenericAlias, NoneType
@@ -43,17 +44,23 @@ def value_to_type(ast_value: ast.AST):
                 return [get_underlying_values(e) for e in elts]
             case ast.Tuple(elts, _ctx):
                 return tuple([get_underlying_values(e) for e in elts])
+            case ast.Set(elts):
+                return {get_underlying_values(e) for e in elts}
             case ast.Dict(keys, values):
                 return dict(zip([get_underlying_values(k) for k in keys],  
                                 [get_underlying_values(v) for v in values]))
             case _other:
-                raise Exception(f"Unsupported AST value, or not an AST value: {ast_value}")
+                # Fingers crossed :)
+                return eval(ast.unparse(ast_value))
+                # raise Exception(f"Unsupported AST value, or not an AST value: {ast_value}")
 
     def get_type(value):
         if isinstance(value, list):
             return list[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, tuple):
             return tuple[get_union_type([get_type(e) for e in value])]
+        elif isinstance(value, set):
+            return set[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, dict):
             return dict[get_union_type([get_type(k) for k in value]), 
                         get_union_type([get_type(value[k]) for k in value])]
@@ -105,6 +112,13 @@ def extract_types_assert(assert_stmt: ast.AST):
                     return_type = value_to_type(comparators[0]) 
 
                     return args_type, return_type
+
+                case ast.Call(ast.Name(id, _ctx), args) | ast.UnaryOp(ast.Not(), ast.Call(ast.Name(id, _ctx), args)):
+                    assert id == "candidate" 
+
+                    args_type = [value_to_type(arg) for arg in args]
+
+                    return args_type, bool
 
         case _other:
             raise Exception(f"Not an assert statement: {assert_stmt}")
@@ -221,6 +235,7 @@ def main():
                 translated_count += 1
             except Exception as e:
                 print(f"unable to translate {file}: {str(e)}")
+                print(traceback.format_exc())
 
     print(f"translated: {translated_count}, total: {len(files)}")
 
