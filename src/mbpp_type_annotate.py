@@ -1,6 +1,7 @@
 import ast
 import sys
 import re
+import argparse
 from pathlib import Path
 from shutil import get_unpack_formats
 from typing import Any, Union
@@ -142,22 +143,39 @@ def annotate_files(path: Path, write_handler = sys.stdout):
 
 
 def main():
-    fp = Path(Path(__file__).parent, "..", "datasets")
-    op = Path(Path(__file__).parent, "..", "output")
+    args = argparse.ArgumentParser()
+    args.add_argument(
+        "--datasets",
+        type=Path,
+        default=Path(Path(__file__).parent, "..", "datasets"),
+        help="specify the datasets to use")
+
+    args.add_argument(
+        "--output",
+        type=Path,
+        default=Path(Path(__file__).parent, "..", "output"),
+        help="specify the output directory")
+
+    args.add_argument(
+        "--regex",
+        type=str,
+        default=".*",
+        help="filter the file to be translated by regular expression")
+
+    args = args.parse_args()
+
     translated_count = 0
-    file_count = 0
-    for file in fp.glob("*.py"):
+    files = [file for file in args.datasets.glob("*.py") if re.search(args.regex, file.name)]
+    for file in files:
         print(file)
-        with open(op / file.name, "w") as of: 
+        with open(args.output / file.name, "w") as of: 
             try:
                 annotate_files(file, of)
                 translated_count += 1
             except Exception as e:
                 print(f"unable to translate {file}: {str(e)}")
 
-        file_count += 1
-
-    print(f"translated: {translated_count}, total: {file_count}")
+    print(f"translated: {translated_count}, total: {len(files)}")
 
 
 if __name__ == "__main__":
