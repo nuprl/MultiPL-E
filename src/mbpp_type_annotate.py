@@ -73,6 +73,7 @@ def extract_types_check_fn(check_fn: ast.AST):
         case ast.FunctionDef('check', _args, body):
             type_from_asserts = [extract_types_assert(stmt) for stmt in body]
             if not all_equal(type_from_asserts):
+                
                 # TODO: Unify types from examples
                 raise Exception(f"type from asserts differ:{type_from_asserts}")
             return type_from_asserts[0]
@@ -107,6 +108,7 @@ def type_annotation_to_func(func_def: ast.AST, args_type, return_type) -> ast.AS
             annotated_args = [ast.arg(arg=arg.arg, annotation=get_component(ann)) for arg, ann in zip(args, args_type)]
             arguments = ast.arguments(posonlyargs=posonlyargs, args=annotated_args, vararg=None, kwonlyargs=kwonlyargs,\
                  kw_defaults=kw_defaults, kwarg=None, defaults=defaults)
+
             return ast.FunctionDef(name, arguments, body, decorator_list, returns)
         case _other:
             raise Exception(f"Not a function definition: {func_def}")
@@ -114,7 +116,7 @@ def type_annotation_to_func(func_def: ast.AST, args_type, return_type) -> ast.AS
 def annotate_files(path: Path, write_handler = sys.stdout):
     with open(path) as f:
         module_ast = ast.parse(f.read())
-        print(ast.dump(module_ast, indent=4))
+        # print(ast.dump(module_ast, indent=4))
 
     match module_ast:
         case ast.Module(body, _type_ignores):
@@ -125,10 +127,6 @@ def annotate_files(path: Path, write_handler = sys.stdout):
 
             arglist = extract_arg_names(prompt_function)
             args_type, return_type = extract_types_check_fn(check_function)
-
-            print(arglist)
-            print(args_type)
-            print(return_type)
 
             annotated_prompt_fn = type_annotation_to_func(prompt_function, args_type, return_type)
 
@@ -146,15 +144,20 @@ def annotate_files(path: Path, write_handler = sys.stdout):
 def main():
     fp = Path(Path(__file__).parent, "..", "datasets")
     op = Path(Path(__file__).parent, "..", "output")
-    count = 0
+    translated_count = 0
+    file_count = 0
     for file in fp.glob("*.py"):
-        print(file.name)
+        print(file)
         with open(op / file.name, "w") as of: 
-            annotate_files(file, of)
-        if count < 10:
-            count += 1
-        else:
-            break
+            try:
+                annotate_files(file, of)
+                translated_count += 1
+            except Exception as e:
+                print(f"unable to translate {file}: {str(e)}")
+
+        file_count += 1
+
+    print(f"translated: {translated_count}, total: {file_count}")
 
 
 if __name__ == "__main__":
