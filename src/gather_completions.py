@@ -30,27 +30,6 @@ import sys
 from pathlib import Path
 import logging
 
-
-async def codex_completion(
-    model: str,
-    prompt: str,
-    stop_tokens,
-    max_to_generate: int,
-    temperature: float,
-    n: int,
-):
-    response = await completions.completion(
-        model=model,
-        prompt=prompt,
-        max_tokens=max_to_generate,
-        temperature=temperature,
-        n=n,
-        top_p=0.95,
-        stop=[s for s in stop_tokens],
-    )
-    return response
-
-
 async def process_problem_yaml(problem_yaml_path, args, max_to_generate):
     with problem_yaml_path.open() as f:
         problem = Problem.load(f)
@@ -63,13 +42,15 @@ async def process_problem_yaml(problem_yaml_path, args, max_to_generate):
     while num_completions_required > 0:
         num_samples = min(num_completions_required, args.max_samples)
 
-        completions = await codex_completion(
+        completions = await completions.completion(
             model=args.model,
             prompt=problem.prompt,
-            stop_tokens=problem.stop_tokens,
-            max_to_generate=max_to_generate,
+            max_tokens=max_to_generate,
             temperature=args.temperature,
             n=num_samples,
+            top_p=0.95,
+            # NOTE(arjun): the list builder addresses yamlize garbage
+            stop=[s for s in problem.stop_tokens],
         )
         problem.completions.extend(completions)
         with problem_yaml_path.open("w") as f:
