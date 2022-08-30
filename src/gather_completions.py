@@ -30,7 +30,9 @@ import sys
 from pathlib import Path
 import logging
 
-async def process_problem_yaml(problem_yaml_path, args, max_to_generate):
+MAX_TO_GENERATE=512
+
+async def process_problem_yaml(completion, problem_yaml_path, args, max_to_generate):
     with problem_yaml_path.open() as f:
         problem = Problem.load(f)
 
@@ -42,7 +44,7 @@ async def process_problem_yaml(problem_yaml_path, args, max_to_generate):
     while num_completions_required > 0:
         num_samples = min(num_completions_required, args.max_samples)
 
-        completions = await completions.completion(
+        completions = await completion(
             model=args.model,
             prompt=problem.prompt,
             max_tokens=max_to_generate,
@@ -69,8 +71,6 @@ def configure_logging(args):
 
 
 async def main():
-    global completions
-
     args = argparse.ArgumentParser()
     args.add_argument(
         "--dir", type=str, required=True, help="Directory with problem YAMLs"
@@ -81,6 +81,8 @@ async def main():
     args.add_argument("--limit-completions", type=int, default=200)
     args.add_argument("--log-file", type=str, default=None)
     args.add_argument("--log-level", type=str, default="INFO")
+    args.add_argument("--local-model", action='store_true',
+        help="If set, --model is the name of a model file to load")
     args = args.parse_args()
 
     dir = Path(args.dir)
@@ -93,31 +95,34 @@ async def main():
 
     configure_logging(args)
 
-    # Load the model keys from the CSV file.
-    with open("model_keys.csv") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
-    model_keys = [row["Key"] for row in rows if not row["Key"].startswith("http://")]
-    other_models = [
-        (row["Model"], row["Key"]) for row in rows if row["Key"].startswith("http://")
-    ]
+    problems = list(
+        filter(
+            lambda f: not f.name.endswith(".results.yaml"),
+            sorted(dir.glob("*.yaml")),
+        )
+    )
 
-    async with openai_multimodel_multikey.MultiModelMultiKeyCompletion(
-        model_keys, other_models
-    ) as completions:
-        problems = list(
-            filter(
-                lambda f: not f.name.endswith(".results.yaml"),
-                sorted(dir.glob("*.yaml")),
+    if args.local_model:
+        completions = __import__(args.model).completion
+        for problem_yaml_path in problems:
+            await process_problem_yaml(completions, problem_yaml_path, args, max_to_generate=MAX_TO_GENERATE)
+    else:
+        # Load the model keys from the CSV file.
+        with open("model_keys.csv") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+        model_keys = [row["Key"] for row in rows if not row["Key"].startswith("http://")]
+        other_models = [
+            (row["Model"], row["Key"]) for row in rows if row["Key"].startswith("http://")
+        ]
+        async with openai_multimodel_multikey.MultiModelMultiKeyCompletion(
+            model_keys, other_models
+        ) as completions:
+            problem_completions = (
+                process_problem_yaml(completions.completion, problem_yaml_path, args, max_to_generate=MAX_TO_GENERATE)
+                for problem_yaml_path in problems
             )
-        )
-
-        problem_completions = (
-            process_problem_yaml(problem_yaml_path, args, max_to_generate=512)
-            for problem_yaml_path in problems
-        )
-        await asyncio.gather(*problem_completions)
-
+            await asyncio.gather(*problem_completions)
 
 if __name__ == "__main__":
     asyncio.run(main())
