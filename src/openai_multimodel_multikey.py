@@ -5,7 +5,7 @@ several keys to query Codex, or dispatch requests to other model servers
 that follow the OpenAI HTTP API.
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Union
 import time
 import aiohttp
 import asyncio
@@ -90,7 +90,7 @@ class MultiModelMultiKeyCompletion:
 
     async def get_least_used_key(
         self, model_name, estimated_usage: int
-    ) -> OpenAIAPIKeyWithRates | str:
+    ) -> Union[OpenAIAPIKeyWithRates, str]:
         # Easy case: we are contacting a self-hosted model server.
         if model_name in self.other_model_names:
             # Acquire the semaphore for model_name. Will block if no URLs are available.
