@@ -1,0 +1,73 @@
+name: HumanEval_1_separate_paren_groups
+language: ts
+prompt: "//Input to this function is a string containing multiple groups of nested\
+  \ parentheses. Your goal is to\n// separate those group into separate strings and\
+  \ return the array of those.\n// Separate groups are balanced (each open brace is\
+  \ properly closed) and not nested within each other\n// Ignore any spaces in the\
+  \ input string.\n// >>> separate_paren_groups(\"( ) (( )) (( )( ))\")\n// [\"()\"\
+  , \"(())\", \"(()())\"]\nfunction separate_paren_groups(paren_string: string): string[]\
+  \ {\n"
+tests: "declare var require: any;\nconst assert = require('node:assert');\n\n\nfunction\
+  \ test() {\n  let candidate = separate_paren_groups;\n  assert.deepEqual(candidate(\"\
+  (()()) ((())) () ((())()())\"),[\"(()())\", \"((()))\", \"()\", \"((())()())\"]);\n\
+  \  assert.deepEqual(candidate(\"() (()) ((())) (((())))\"),[\"()\", \"(())\", \"\
+  ((()))\", \"(((())))\"]);\n  assert.deepEqual(candidate(\"(()(())((())))\"),[\"\
+  (()(())((())))\"]);\n  assert.deepEqual(candidate(\"( ) (( )) (( )( ))\"),[\"()\"\
+  , \"(())\", \"(()())\"]);\n}\n\ntest();"
+completions: ["    let result = [];\n    let stack = [];\n    let current = \"\";\n\
+    \    for (let i = 0; i < paren_string.length; i++) {\n        let c = paren_string[i];\n\
+    \        if (c === \"(\") {\n            stack.push(c);\n        } else if (c\
+    \ === \")\") {\n            if (stack.length === 0) {\n                throw new\
+    \ Error(\"Unbalanced parens\");\n            }\n            let last = stack.pop();\n\
+    \            if (last !== \"(\") {\n                throw new Error(\"Unbalanced\
+    \ parens\");\n            }\n            current += c;\n        } else {\n   \
+    \         current += c;\n        }\n        if (stack.length > 0) {\n        \
+    \    result.push(current);\n            current = \"\";\n        }\n    }\n  \
+    \  if (stack.length > 0) {\n        throw new Error(\"Unbalanced parens\");\n\
+    \    }\n    return result;\n}\n", "    let stack = [];\n    let result = [];\n\
+    \    let current_string = \"\";\n    for (let i = 0; i < paren_string.length;\
+    \ i++) {\n        let c = paren_string[i];\n        if (c === \"(\") {\n     \
+    \       stack.push(c);\n        } else if (c === \")\") {\n            if (stack.length\
+    \ === 0) {\n                throw new Error(\"Unbalanced parens\");\n        \
+    \    }\n            current_string += stack.pop();\n        } else {\n       \
+    \     current_string += c;\n        }\n    }\n    if (stack.length > 0) {\n  \
+    \      throw new Error(\"Unbalanced parens\");\n    }\n    result.push(current_string);\n\
+    \    return result;\n}\n", "    let paren_stack = [];\n    let result = [];\n\
+    \    let current_string = \"\";\n    let current_paren_count = 0;\n    for (let\
+    \ i = 0; i < paren_string.length; i++) {\n        let c = paren_string[i];\n \
+    \       if (c === \"(\") {\n            current_paren_count++;\n            if\
+    \ (current_string.length > 0) {\n                result.push(current_string);\n\
+    \                current_string = \"\";\n            }\n        } else if (c ===\
+    \ \")\") {\n            current_paren_count--;\n        } else if (c === \" \"\
+    ) {\n            if (current_paren_count === 0) {\n                result.push(current_string);\n\
+    \                current_string = \"\";\n            }\n        } else {\n   \
+    \         current_string += c;\n        }\n    }\n    if (current_string.length\
+    \ > 0) {\n        result.push(current_string);\n    }\n    return result;\n}\n",
+  "    let result = [];\n    let stack = [];\n    let open_parens = 0;\n    for (let\
+    \ i = 0; i < paren_string.length; i++) {\n        let c = paren_string[i];\n \
+    \       if (c === '(') {\n            open_parens++;\n        } else if (c ===\
+    \ ')') {\n            open_parens--;\n        } else if (c === ' ') {\n      \
+    \      continue;\n        }\n        if (open_parens === 0) {\n            result.push(paren_string.substring(stack.length,\
+    \ i));\n            stack = [];\n        } else {\n            stack.push(c);\n\
+    \        }\n    }\n    return result;\n}\n", "    let result = [];\n    let stack\
+    \ = [];\n    let paren_count = 0;\n    let paren_open = 0;\n    let paren_close\
+    \ = 0;\n    let paren_string = \"\";\n    for (let i = 0; i < paren_string.length;\
+    \ i++) {\n        if (paren_string[i] === \"(\" || paren_string[i] === \"{\")\
+    \ {\n            stack.push(paren_string[i]);\n            paren_count++;\n  \
+    \      } else if (paren_string[i] === \")\" || paren_string[i] === \"}\") {\n\
+    \            if (stack.length === 0) {\n                throw new Error(\"Unexpected\
+    \ closing brace\");\n            }\n            if (paren_string[i] === \")\"\
+    ) {\n                paren_count--;\n            }\n            if (stack.pop()\
+    \ !== \"(\" && stack.pop() !== \"{\") {\n                throw new Error(\"Unexpected\
+    \ closing brace\");\n            }\n        } else if (paren_string[i] === \"\
+    \ \") {\n            continue;\n        } else {\n            throw new Error(\"\
+    Unexpected character\");\n        }\n        if (paren_count === 0) {\n      \
+    \      result.push(paren_string.substring(paren_open, i));\n            paren_open\
+    \ = i + 1;\n        }\n    }\n    if (stack.length > 0) {\n        throw new Error(\"\
+    Unexpected closing brace\");\n    }\n    result.push(paren_string.substring(paren_open,\
+    \ paren_string.length));\n    return result;\n}"]
+stop_tokens:
+- "\nfunction "
+- "\n/*"
+- "\n//"
+- "\nclass"
