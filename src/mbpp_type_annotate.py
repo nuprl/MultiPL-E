@@ -7,6 +7,7 @@ from pathlib import Path
 from shutil import get_unpack_formats
 from types import GenericAlias, NoneType
 from typing import Any, Optional, Union
+import typing
 
 from itertools import groupby
 
@@ -34,24 +35,24 @@ def value_to_type(ast_value: ast.AST):
     """given a AST value, give its type"""
 
     def get_underlying_values(ast_value):
-        match ast_value:
-            # This is for negative numbers
-            case ast.UnaryOp(ast.USub(), ast.Constant(value)):
-                return value
-            case ast.Constant(value):
-                return value
-            case ast.List(elts, _ctx):
-                return [get_underlying_values(e) for e in elts]
-            case ast.Tuple(elts, _ctx):
-                return tuple([get_underlying_values(e) for e in elts])
-            case ast.Set(elts):
-                return {get_underlying_values(e) for e in elts}
-            case ast.Dict(keys, values):
-                return dict(zip([get_underlying_values(k) for k in keys],  
-                                [get_underlying_values(v) for v in values]))
-            case _other:
-                # Fingers crossed :)
-                return eval(ast.unparse(ast_value))
+        return eval(ast.unparse(ast_value))
+        # match ast_value:
+        #     # This is for negative numbers
+        #     case ast.UnaryOp(ast.USub(), ast.Constant(value)):
+        #         return value
+        #     case ast.Constant(value):
+        #         return value
+        #     case ast.List(elts, _ctx):
+        #         return [get_underlying_values(e) for e in elts]
+        #     case ast.Tuple(elts, _ctx):
+        #         return tuple([get_underlying_values(e) for e in elts])
+        #     case ast.Set(elts):
+        #         return {get_underlying_values(e) for e in elts}
+        #     case ast.Dict(keys, values):
+        #         return dict(zip([get_underlying_values(k) for k in keys],  
+        #                         [get_underlying_values(v) for v in values]))
+        #     case _other:
+        #         return eval(ast.unparse(ast_value))
                 # raise Exception(f"Unsupported AST value, or not an AST value: {ast_value}")
 
     def get_type(value):
@@ -71,6 +72,9 @@ def value_to_type(ast_value: ast.AST):
     return get_type(value)
 
 def unify_types(types):
+
+    def pred_pair(t1, t2, f, g):
+        return (f(t1) and g(t2)) or (g(t1) and f(t2))
     
     def unify_types2(t1, t2):
         if t1 == t2:
@@ -79,15 +83,23 @@ def unify_types(types):
             return Optional[t2]
         elif t2 == NoneType or t2 == Optional[t1]:
             return Optional[t1]
-        # If not generic type, just return any
+        elif pred_pair(t1, t2, lambda t: t == int, lambda t: t == float):
+            return float
+        elif isinstance(t1, typing._UnionGenericAlias) or isinstance(t2, typing._UnionGenericAlias):
+            return Union[t1, t2]
         elif not isinstance(t1, GenericAlias) or not isinstance(t2, GenericAlias):
+            print(f"is instance test: {t1}, {t2}")
             return Any
         elif t1.__origin__ != t2.__origin__:
+            if pred_pair(t1, t2, lambda t: t == dict[None, None], lambda t: t.__origin__ == set):
+                return t1 if t1.__origin__ == set else t2
+            print(f"origin test: {t1}, {t2}")
             return Any
         else:
             t1_args = list(t1.__args__)
             t2_args = list(t2.__args__)
             if len(t1_args) != len(t2_args):
+                print(f"arglength: {t1}, {t2}")
                 return Any
             result = [unify_types2(t1arg, t2arg) for t1arg, t2arg in zip(t1_args, t2_args)]
             return GenericAlias(t1.__origin__, tuple(result))
