@@ -76,7 +76,7 @@ creates the directory `../tutorial` and places within it several YAML files,
 one for each benchmark.
 
 ```
-python3 prepare_prompts_yaml.py --lang humaneval_to_cpp.py --originals-from ../datasets/miniset --target-dir ../tutorial
+python3 prepare_prompts_yaml.py --lang humaneval_to_cpp.py --originals ../datasets/miniset --target-dir ../tutorial
 ```
 
 If you examine one of these files, you'll see that each file  has a prompt
