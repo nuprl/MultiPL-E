@@ -105,11 +105,11 @@ fn per_problem_pass_k_with_dir(lang: &str, model: &str, temp: &str, variation: &
         .into_iter()
         .filter_map(|e| e.ok())
     {
-        if !entry.path().file_name()?.to_str()?.ends_with(".results.yaml") {
+        if !entry.path().file_name()?.to_str()?.ends_with(".results.json") {
             continue;
         }
         let results_file = std::fs::read_to_string(entry.path()).ok()?;
-        let results = serde_yaml::from_str::<ResultsFile>(&results_file).unwrap();
+        let results = serde_json::from_str::<ResultsFile>(&results_file).unwrap();
         let n = results.results.len();
         let c = results.results.iter().filter(|r| r.status == "OK").count();
         // filename without extension
@@ -186,11 +186,11 @@ fn estimate_pass_k_for_config(config: (&'static str, &'static str, &'static str,
         .into_iter()
         .filter_map(|e| e.ok())
     {
-        if !entry.path().file_name()?.to_str()?.ends_with(".results.yaml") {
+        if !entry.path().file_name()?.to_str()?.ends_with(".results.json") {
             continue;
         }
         let results_file = std::fs::read_to_string(entry.path()).ok()?;
-        let results = serde_yaml::from_str::<ResultsFile>(&results_file).unwrap();
+        let results = serde_json::from_str::<ResultsFile>(&results_file).unwrap();
         let n = results.results.len();
         let c = results.results.iter().filter(|r| r.status == "OK").count();
         aggregate_pass_k1 += estimate_pass_k(n as i32, c as i32, 1);
@@ -221,14 +221,14 @@ fn pass_k_aggregates() {
 }
 
 
-fn is_completions_yaml(p: &DirEntry) -> bool {
+fn is_completions_json(p: &DirEntry) -> bool {
     let s = p.file_name().to_str().unwrap();
-    return s.ends_with(".yaml") && !s.ends_with(".results.yaml");
+    return s.ends_with(".json") && !s.ends_with(".results.json");
 }
 
 fn does_result_file_exist(entry: &DirEntry) -> bool {
     let path = entry.path().to_str().unwrap();
-    let results_path = path.replace(".yaml", ".results.yaml");
+    let results_path = path.replace(".json", ".results.json");
 
     Path::new(&results_path).exists()
 }
@@ -250,7 +250,7 @@ fn build_job_for_problem_and_lang(problem: &str, lang: &str) -> Option<(usize, V
     for m in MODELS {
         for t in TEMPS {
             for v in VARIATIONS {
-                let problem_path_str = format!("../experiments/{}-{}-{}-{}/{}.yaml", lang, m, t, v, problem);
+                let problem_path_str = format!("../experiments/{}-{}-{}-{}/{}.json", lang, m, t, v, problem);
                 let problem_path = Path::new(&problem_path_str);
                 
                 if !problem_path.exists() {
@@ -259,12 +259,12 @@ fn build_job_for_problem_and_lang(problem: &str, lang: &str) -> Option<(usize, V
 
                 let problem_file = std::fs::read_to_string(problem_path).ok()?;
                 
-                match serde_yaml::from_str::<ProblemFile>(&problem_file) {
+                match serde_json::from_str::<ProblemFile>(&problem_file) {
                     Err(_) => {
                     }
                     Ok(problem_file) => {
-                        // Same as problem_path_str, but with .results.yaml
-                        let results_path_str = problem_path_str.replace(".yaml", ".results.yaml");
+                        // Same as problem_path_str, but with .results.json
+                        let results_path_str = problem_path_str.replace(".json", ".results.json");
                         let results_path = Path::new(&results_path_str);
                         if !results_path.exists() {
                             count += problem_file.completions.len();
@@ -273,7 +273,7 @@ fn build_job_for_problem_and_lang(problem: &str, lang: &str) -> Option<(usize, V
                         }
 
                         let results_file = std::fs::read_to_string(results_path).ok()?;
-                        match serde_yaml::from_str::<ResultsFile>(&results_file) {
+                        match serde_json::from_str::<ResultsFile>(&results_file) {
                             Err(_) => {
                             }
                             Ok(results_file) => {
@@ -345,10 +345,10 @@ fn count_duplicate_programs() {
     for entry in walker
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(is_completions_yaml)
+        .filter(is_completions_json)
     {
         let contents = std::fs::read_to_string(entry.path()).unwrap();
-        let problem_file: ProblemFile = serde_yaml::from_str(&contents).unwrap();
+        let problem_file: ProblemFile = serde_json::from_str(&contents).unwrap();
         problems += problem_file.completions.len();
         unique_problems += std::collections::HashSet::<&String>::from_iter(problem_file.completions.iter()).len();
 
@@ -362,7 +362,7 @@ fn check_result_completeness() {
         for entry in walker
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(is_completions_yaml)
+        .filter(is_completions_json)
     {
 
         let contents = std::fs::read_to_string(entry.path()).unwrap();
@@ -370,10 +370,10 @@ fn check_result_completeness() {
             println!("{}", entry.path().display());
             continue;
         }
-        let problem_file: ProblemFile = serde_yaml::from_str(&contents).unwrap();
+        let problem_file: ProblemFile = serde_json::from_str(&contents).unwrap();
 
-        let contents = std::fs::read_to_string(entry.path().to_str().unwrap().replace(".yaml", ".results.yaml")).unwrap();
-        let results_file: ResultsFile = serde_yaml::from_str(&contents).unwrap();
+        let contents = std::fs::read_to_string(entry.path().to_str().unwrap().replace(".json", ".results.json")).unwrap();
+        let results_file: ResultsFile = serde_json::from_str(&contents).unwrap();
 
         if results_file.results.len() < problem_file.completions.len() {
             println!("{}", entry.path().display());
@@ -388,10 +388,10 @@ fn check_prompt_completeness(num_prompts_per_problem: usize) {
     for entry in walker
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(is_completions_yaml)
+        .filter(is_completions_json)
     {
         let contents = std::fs::read_to_string(entry.path()).unwrap();
-        let problem_file: ProblemFile = serde_yaml::from_str(&contents).unwrap();
+        let problem_file: ProblemFile = serde_json::from_str(&contents).unwrap();
         if problem_file.completions.len() < num_prompts_per_problem {
             println!("{}", entry.path().display());
         }
@@ -415,11 +415,11 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
                     Ok(entries) => {
                         let mut num_incomplete = 0;
                         for entry in entries.into_iter().filter_map(|entry| entry.ok()) {
-                            if entry.file_name().to_str().unwrap().ends_with(".results.yaml") {
+                            if entry.file_name().to_str().unwrap().ends_with(".results.json") {
                                 continue;
                             }
                             let contents = std::fs::read_to_string(entry.path()).unwrap();
-                            let problem_file: ProblemFile = serde_yaml::from_str(&contents).expect(format!("{}", entry.path().display()).as_str());
+                            let problem_file: ProblemFile = serde_json::from_str(&contents).expect(format!("{}", entry.path().display()).as_str());
                             if  problem_file.completions.len() > min_prompts_per_problem {
                                 continue;
                             }
@@ -446,16 +446,16 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
 
 fn process_file_for_summary(path: &std::path::Path) -> Result<(usize, usize, usize, usize), Box<dyn std::error::Error>> {
     let contents = std::fs::read_to_string(path)?;
-    let problem_file: ProblemFile = serde_yaml::from_str(&contents)?;
+    let problem_file: ProblemFile = serde_json::from_str(&contents)?;
     let num_completions = problem_file.completions.len();
     let completions_for_20 = num_completions.min(20);
     let completions_for_200 = num_completions.min(200); // would be an oopsie
-    let results_file_path = path.with_extension("results.yaml");
+    let results_file_path = path.with_extension("results.json");
     if results_file_path.is_file() == false {
         return Ok((completions_for_20, completions_for_200, 0, 0));
     }
     let results_contents = std::fs::read_to_string(results_file_path)?;
-    let results_file: ResultsFile = serde_yaml::from_str(&results_contents)?;
+    let results_file: ResultsFile = serde_json::from_str(&results_contents)?;
     let num_results = results_file.results.len();
     return Ok((completions_for_20, completions_for_200, num_results.min(20), num_results.min(200)));
 
@@ -469,22 +469,22 @@ fn summarize_one(lang: &'static str, model: &'static str, temp: &'static str, va
         }
         Ok(entries) => {
 
-            // Count the number of .yaml files (not .results.yaml files). This is
+            // Count the number of .json files (not .results.json files). This is
             // the number of "Prepared Files".
-            // Count the total number of completions in each .yaml file.
+            // Count the total number of completions in each .json file.
             // - For each file, bound to 20 and divide by 20. The mean value is
             //   "Completions Done (20)".
             // - For each file, divide by 200. The mean value is
             //   "Completions Done (200)".
-            // Count the total number of results in each .results.yaml file.
+            // Count the total number of results in each .results.json file.
             // - For each file, bound to 20 and divide by 20. The mean value is
             //   "Results Done (20)".
             // - For each file, divide by 200. The mean value is
             //   "Results Done (200)".
-            // However, note that .results.yaml may be missing. If so, we still
+            // However, note that .results.json may be missing. If so, we still
             // count it as a result file for each of the Results Done counts.
             
-            // Counts the number of .yaml files (not .results.yaml files)
+            // Counts the number of .json files (not .results.json files)
             let mut num_prepared_files = 0;
 
             let mut completions_for_20 = 0;
@@ -493,7 +493,7 @@ fn summarize_one(lang: &'static str, model: &'static str, temp: &'static str, va
             let mut results_for_200 = 0;
 
             for entry in entries.into_iter().filter_map(|entry| entry.ok()) {
-                if entry.file_name().to_str().unwrap().ends_with(".results.yaml") {
+                if entry.file_name().to_str().unwrap().ends_with(".results.json") {
                     continue;
                 }
                 num_prepared_files += 1;
