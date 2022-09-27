@@ -31,7 +31,7 @@ import argparse
 import sys
 from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
 from pathlib import Path
-from problem_yaml import Problem
+import json
 
 def main():
     args = argparse.ArgumentParser()
@@ -39,13 +39,21 @@ def main():
         "--lang", type=str, required=True, help="Language to translate to"
     )
     args.add_argument(
-        "--target-dir", type=str, required=True, help="Directory to write YAML files to"
+        "--output", type=str, required=True, help="Target JSON file"
     )
+
     args.add_argument(
         "--doctests",
         type=str,
         default="keep",
         help="What to do with doctests: keep, remove, or transform",
+    )
+
+    args.add_argument(
+        "--prompt-terminology",
+        type=str,
+        default="verbatim",
+        help="How to translate terminology in prompts: verbatim or reworded"
     )
 
     args.add_argument("--originals", type=str, default="../datasets/originals")
@@ -54,41 +62,38 @@ def main():
 
     translator = __import__(args.lang[:-3]).Translator()
 
+    if args.prompt_terminology not in ["verbatim", "reworded"]:
+        print(f"Invalid prompt-terminology option: {args.prompt_terminology}")
+        sys.exit(1)
+
     if args.doctests not in ["keep", "remove", "transform"]:
         print(f"Unknown doctests option: {args.doctests}")
         sys.exit(1)
 
-    target_dir = Path(args.target_dir)
-    if not target_dir.exists():
-        target_dir.mkdir()
-
-    
-
+    results = [ ]
     for original in list_originals(args.originals).values():
-        # original.name with .yaml extension
         original_name = original.name.split(".")[0]
-        target_yaml_path = target_dir / (original_name + ".yaml")
-        if target_yaml_path.exists():
-            # print(f"Skipping {target_yaml_path}")
-            continue
 
         result = translate_prompt_and_tests(
-            original, translator, args.doctests
+            original, translator, args.doctests, args.prompt_terminology
         )
         if result is None:
             continue
 
         (prompt, tests) = result
-        problem_file = Problem()
-        problem_file.name = original_name
-        problem_file.language = translator.file_ext()
-        problem_file.prompt = prompt
-        problem_file.tests = tests
-        problem_file.stop_tokens = get_stop_from_translator(translator)
-        problem_file.completions = []
-        output_text = Problem.dump(problem_file)
-        with target_yaml_path.open("w") as f:
-            f.write(output_text) # Avoid calling functions that may crash here
+        problem = {
+            "name": original_name,
+            "language": translator.file_ext(),
+            "prompt": prompt,
+            "doctests": args.doctests,
+            "original": str(original.absolute()),
+            "prompt_terminology": args.prompt_terminology,
+            "tests": tests,
+            "stop_tokens": get_stop_from_translator(translator),
+        }
+        results.append(problem)
+    with open(args.output, "w") as f:
+        json.dump(results, f, indent=2)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,6 @@
 import re
 import ast
 from typing import List
-from generic_translator import main
 from base_language_translator import LanguageTranslator
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
@@ -154,8 +153,3 @@ class Translator:
             self.is_candidate_result = True
             args = [coerce(arg, self.type[0][i]) for i, arg in enumerate(args)]
         return f"{func}(" + ", ".join(args) + ")"
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

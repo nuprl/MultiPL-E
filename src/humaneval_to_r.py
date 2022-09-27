@@ -2,7 +2,6 @@
 import ast
 import re
 from typing import List
-from generic_translator import main
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
@@ -153,7 +152,3 @@ class Translator:
         '''
         args = [coerce(a,self.type[0][i]) for i,a in enumerate(args)]
         return func + "(" + ", ".join(args) + ")"
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

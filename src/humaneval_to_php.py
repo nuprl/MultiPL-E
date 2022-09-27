@@ -11,7 +11,6 @@
 import re
 import ast
 from typing import List
-from generic_translator import main
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
@@ -104,8 +103,3 @@ class Translator:
         A function call f(x, y, z) translates to f(x, y, z)
         """
         return func + "(" + ", ".join(args) + ")"
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

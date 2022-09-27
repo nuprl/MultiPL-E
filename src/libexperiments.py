@@ -36,7 +36,7 @@ LANGS = [
     "swift",
     "rkt",
 ]
-MODELS = ["davinci", "incoder"]
+MODELS = ["davinci", "incoder", "codegen"]
 
 def all_experiments() -> Iterator[Experiment]:
     """

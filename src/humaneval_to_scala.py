@@ -2,7 +2,6 @@
 import re
 import ast
 from typing import List,  Tuple
-from generic_translator import main
 from humaneval_to_cpp import DOCSTRING_LINESTART_RE
 import humaneval_to_cpp
 
@@ -255,7 +254,3 @@ class Translator(humaneval_to_cpp.Translator):
         if func_name.lower() == "candidate":
             func_name = self.entry_point
         return func_name + "(" + ", ".join([self.update_type(args[i], self.args_type[i]) for i in range(len(args))]) + ")", None
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

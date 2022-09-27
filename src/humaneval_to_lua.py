@@ -2,7 +2,6 @@
 import re
 import ast
 from typing import List
-from generic_translator import main
 from base_language_translator import LanguageTranslator
 
 # We turn multi-line docstrings into single-line comments. This captures the
@@ -85,8 +84,3 @@ class Translator(LanguageTranslator[TargetExp]):
         A function call f(x, y, z) translates to f(x, y, z)
         """
         return func + "(" + ", ".join(args) + ")"
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

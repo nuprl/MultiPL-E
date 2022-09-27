@@ -2,7 +2,6 @@
 import re
 import ast
 from typing import List
-from generic_translator import main
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
@@ -87,8 +86,3 @@ class Translator:
         if func == "candidate":
             func = f"${func}->"
         return f'{func}(' + ", ".join(args) + ")"
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

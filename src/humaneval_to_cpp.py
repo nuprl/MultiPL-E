@@ -2,7 +2,6 @@
 import re
 import ast
 from typing import List, Dict, Tuple
-from generic_translator import main
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
@@ -398,8 +397,3 @@ class Translator:
                 return self.update_type(expr, self.translated_return_type)
             case _other:
                 raise Exception("bad finalize context")
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

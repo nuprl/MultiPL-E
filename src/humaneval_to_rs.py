@@ -40,7 +40,6 @@
 import re
 import ast
 from typing import List, Optional
-from generic_translator import main
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
@@ -250,8 +249,3 @@ class Translator:
                 return coerce(result, self.type[1])
             case _other:
                 raise Exception("bad context to finalize")
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

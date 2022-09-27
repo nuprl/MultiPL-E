@@ -4,6 +4,7 @@ import ast
 import traceback
 from glob import glob
 import re
+import csv
 from pathlib import Path
 import argparse
 from base_language_translator import LanguageTranslator
@@ -216,7 +217,65 @@ def target_path(args, translator, file):
     ).resolve()
     return filename
 
-def translate_prompt_and_tests(original_file, translator, doctests):
+
+lang_dict = {}
+with open('terms.csv','r') as of:
+    term_list = csv.DictReader(of)
+    for row in term_list:
+        lang_dict[row['py']] = row
+    fields = [k.strip() for k in row.keys()]
+
+def consonant(s):
+    return s.lower() not in 'aeiou'
+
+def vowel(s):
+    return s.lower() in 'aeiou'
+
+def translate_terms(language,fields,prompt):
+    """
+    Takes a programming language name, a list of vocabulary words to translate, and a portion of docstring text.
+    Returns the docstring text with Python-specific vocab translated to the target language.
+    """
+    if language == "go_test.go":
+        language = "go"
+    target_dict = lang_dict[language]
+    for f in fields:
+        if f in prompt and target_dict[f] != 'Q':
+            if 'an '+f in prompt and consonant(target_dict[f][0]):
+                prompt = prompt.replace('an '+f,'a '+target_dict[f])
+            elif 'a '+f in prompt and vowel(target_dict[f][0]):
+                prompt = prompt.replace('a '+f,'an '+target_dict[f])
+            prompt = prompt.replace(f,target_dict[f])    #can't be an else: need to catch 2nd occurences of term that don't have article
+    return prompt
+
+
+def edit_prompt_terminology(language, example):
+    """
+    Takes a programming language name and the text of a python file.
+    Translates Python-specific terms in natural language portions of the docstring to the target language.
+    Returns the full text of the python file with translated natural language docstring.
+    """
+    before,prompt,after = example.replace("'''",'"""').split('"""')
+    doctestRegex = re.compile(r'>>>.*\n.*\n')
+    doctests = []
+    for m in re.finditer(doctestRegex,prompt):
+        doctests.append((m.start(),m.end()))
+    if len(doctests) == 0:
+        tar_prompt = translate_terms(language,fields,prompt)
+    else:
+        tar_prompt = ''
+        last = 0
+        for i in doctests:
+            more_prompt = translate_terms(language,fields,prompt[last:i[0]])
+            more_doctest = prompt[i[0]:i[1]]
+            last = i[1]
+            tar_prompt += more_prompt+more_doctest
+        tar_prompt += translate_terms(language,fields,prompt[last:])
+
+    return before+'"""'+tar_prompt+'"""'+after
+
+
+def translate_prompt_and_tests(original_file, translator, doctests, prompt_terminology):
     entry_point = re.search("(HumanEval_\d+)_(.+).py", original_file.name).group(2)
     reading_prompt = True
     reading_tests = False
@@ -238,6 +297,8 @@ def translate_prompt_and_tests(original_file, translator, doctests):
                 tests_buffer.append(line)
 
     prompt = "".join(prompt_buffer)
+    if prompt_terminology == "reworded":
+        prompt = edit_prompt_terminology(translator.file_ext(), prompt)
     translated_prompt = translate_prompt(translator, doctests, prompt, original_file.name)
     # When doctests == "remove" and there are no doctests in prompt, we get None.
     # If not, we could create a translated prompt that is identical to the
@@ -255,79 +316,11 @@ def translate_prompt_and_tests(original_file, translator, doctests):
 
     return translated_prompt, translated_tests
 
-def translate_file(args, translator, file):
-    file = Path(file).resolve()
-    cleaned_task_id = re.search("HumanEval_\d+", file.name).group(0)
-    entry_point = re.search("(HumanEval_\d+)_(.+).py", file.name).group(2)
-
-    reading_prompt = True
-    reading_tests = False
-    prompt_buffer = []
-    tests_buffer = []
-    with open(file) as f:
-        for line in f:
-            if "### Canonical solution below ###" in line:
-                reading_prompt = False
-            if "### Unit tests below ###" in line:
-                reading_tests = True
-                continue
-            if "def test_check():" in line:
-                break
-
-            if reading_prompt:
-                prompt_buffer.append(line)
-            if reading_tests:
-                tests_buffer.append(line)
-
-    prompt = "".join(prompt_buffer)
-    translated_prompt = translate_prompt(translator, args.doctests, prompt, f"{cleaned_task_id}.py")
-
-    tests = "".join(tests_buffer)
-    translated_tests = translate_tests(
-        translator, tests, entry_point, f"{cleaned_task_id}.py"
-    )
-
-    if translated_prompt is None:
-        print(f"Failed to translate prompt for {file}")
-        return
-    if translated_tests is None:
-        print(f"Failed to translate tests for {file}")
-        return
-
-    if not args.no_completion:
-        response = MODELS[args.model](args, translated_prompt, get_stop_from_translator(translator), 1)[0]
-    else:
-        response = get_stub_from_translator(translator)
-
-    filename = target_path(args, translator, file)
-
-    filename.parent.mkdir(parents=True, exist_ok=True)
-
-    with open(filename, "w") as f:
-        f.write(translated_prompt)
-        f.write(response)
-        f.write("\n\n")
-        f.write(translated_tests)
-        print(f'Wrote {filename}')
-
-
-def get_stub_from_translator(translator) -> str:
-    if hasattr(translator, 'no_completion_prompt_stub'):
-        return translator.no_completion_prompt_stub()
-    else:
-        return ""
-
 def get_stop_from_translator(translator) -> List[str]:
     if isinstance(translator, LanguageTranslator):
         return translator.stop()
     else:
         return translator.stop
-
-def get_file_ext_from_translator(translator):
-    if type(translator.file_ext) == type(""):
-        return translator.file_ext
-    else:
-        return translator.file_ext()
 
 def list_originals(root):
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
@@ -338,57 +331,3 @@ def list_originals(root):
     files_by_number = {key_func(file): file for file in files_unsorted}
     
     return files_by_number
-
-def main(translator):
-    stop = get_stop_from_translator(translator)
-    if len(stop) <= 0 or len(stop) > 4:
-        raise Exception("Translator must have 0 < n <= 4 stop words!")
-
-    # Commandline arguments: --port 
-    args = argparse.ArgumentParser()
-    args.add_argument("--port", type=int, default=9000, help="Port to use for OpenAI Caching Proxy")
-
-    # argument --doctests with options "keep", "remove", and "transform"
-    args.add_argument(
-        "--doctests",
-        type=str,
-        default="keep",
-        help="What to do with doctests: keep, remove, or transform",
-    )
-
-    args.add_argument(
-        "--model",
-        type=str,
-        default="code_davinci_001_temp_0.2",
-        help="Code generation model to use")
-
-    args.add_argument(
-        "--files",
-        type=int,
-        nargs="*",
-        default=[],
-        help="Specify the files to translate by their number, e.g. --files 0 1 2"
-    )
-
-    args.add_argument('--no-completion', action='store_true')
-
-    args.add_argument("--originals", type=str, required=True)
-
-    args = args.parse_args()
-
-    if args.doctests not in [ "keep", "remove", "transform" ]:
-        raise Exception("Invalid value for --doctests")
-
-
-    files_by_number = list_originals(args.originals)
-    files_index = []
-    if len(args.files) > 0:
-        files_index = args.files
-    else:
-        files_index = sorted(files_by_number.keys())
-    for i in files_index:
-        if i not in files_by_number:
-            print(f"File {i} does not exist!")
-            continue
-        filepath = files_by_number[i]
-        translate_file(args, translator, filepath)

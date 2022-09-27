@@ -30,7 +30,7 @@ import re
 import ast
 from typing import Any, List, Optional, OrderedDict, Set
 from base_language_translator import LanguageTranslator
-from generic_translator import main, translate_expr
+from generic_translator import translate_expr
 from abc import ABC, abstractmethod
 from typing import Tuple, List, TypeVar, Generic
 import ast
@@ -701,8 +701,3 @@ func ==(left: [(Int, Int)], right: [(Int, Int)]) -> Bool {
                 return translate_expr_at_type_toplevel(py_expr, self.return_type)
             case _other:
                 raise Exception("bad finalize context")
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

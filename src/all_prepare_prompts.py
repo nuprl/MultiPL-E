@@ -3,7 +3,18 @@ Run this script to call prepare_prompts_yaml.py for every experiment combination
 in libexamples.
 """
 import subprocess
-import libexperiments
+from libexperiments import LANGS, VARIATIONS
+
+def prompt_terminology(variation):
+    match variation:
+        case "keep":
+            return "verbatim"
+        case "remove":
+            return "verbatim"
+        case "transform":
+            return "verbatim"
+        case "reworded":
+            return "reworded"
 
 def doctests(variation):
     match variation:
@@ -16,7 +27,7 @@ def doctests(variation):
         case "reworded":
             return "transform"
 
-def originals(lang, variation):
+def originals(variation):
     match variation:
         case "keep":
             return "../datasets/originals"
@@ -25,17 +36,23 @@ def originals(lang, variation):
         case "transform":
             return "../datasets/originals-with-cleaned-doctests"
         case "reworded":
-            return f"../datasets/originals-with-cleaned-vocab-{lang}"
+            return f"../datasets/originals-with-cleaned-doctests"
     
-def prepare(experiment: libexperiments.Experiment):
-    d = doctests(experiment.variation)
-    o = originals(experiment.lang, experiment.variation)
-    cmd = f"python3 prepare_prompts_yaml.py --lang humaneval_to_{experiment.lang}.py --doctests {d} --originals {o} --target-dir {experiment.path()}"
+def prepare(lang: str, variation: str):
+    d = doctests(variation)
+    o = originals(variation)
+    p = prompt_terminology(variation)
+    target_dir = "../prompts"
+    output = f"{target_dir}/{lang}-{variation}.json"
     
-    result = subprocess.run(cmd, shell=True,  encoding="utf-8")
+    cmd = f"python3 prepare_prompts_json.py --lang humaneval_to_{lang}.py" + \
+         f" --prompt-terminology {p} --doctests {d} --originals {o} --output {output}"
+    
+    result = subprocess.run(cmd, shell=True, encoding="utf-8")
     if  result.returncode != 0:
         exit(1)
 
 if __name__ == "__main__":
-    for experiment in libexperiments.all_experiments():
-        prepare(experiment)
+    for lang in LANGS:
+        for variation in VARIATIONS:
+            prepare(lang, variation)

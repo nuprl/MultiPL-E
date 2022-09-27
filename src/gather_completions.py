@@ -24,19 +24,27 @@ a naive implementation.
 import csv
 import openai_multimodel_multikey
 import asyncio
-from problem_yaml import Problem
 import argparse
+import json
 import sys
 from pathlib import Path
 import logging
 
 MAX_TO_GENERATE=512
 
-async def process_problem_yaml(completion, problem_yaml_path, args, max_to_generate):
-    with problem_yaml_path.open() as f:
-        problem = Problem.load(f)
+# problem is a dict. Relevant keys are "name" and "prompt".
+async def process_problem_json(completion, problem, args, max_to_generate):
+    completions_path = args.target_dir / (problem["name"] + ".json")
+    if completions_path.exists():
+        with completions_path.open() as f:
+            completion_results = json.load(f)
+    else:
+        # Copy problem to completion_results
+        completion_results = problem.copy()
+        completion_results["completions"] = []
 
-    num_completions_required = args.limit_completions - len(problem.completions)
+    # completion_results has the same keys as problem, and one extra key "completions".
+    num_completions_required = args.limit_completions - len(completion_results["completions"])
 
     if num_completions_required < 1:
         return
@@ -54,9 +62,9 @@ async def process_problem_yaml(completion, problem_yaml_path, args, max_to_gener
             # NOTE(arjun): the list builder addresses yamlize garbage
             stop=[s for s in problem.stop_tokens],
         )
-        problem.completions.extend(completions)
-        with problem_yaml_path.open("w") as f:
-            f.write(Problem.dump(problem))
+        completion_results["completions"].extend(completions)
+        with completions_path.open("w") as f:
+            f.write(json.dumps(completion_results, indent=2))
         num_completions_required -= num_samples
 
 
@@ -73,8 +81,11 @@ def configure_logging(args):
 async def main():
     args = argparse.ArgumentParser()
     args.add_argument(
-        "--dir", type=str, required=True, help="Directory with problem YAMLs"
+        "--prompts-file", type=str, required=True, help="File of prompts"
     )
+    args.add_argument(
+        "--target-dir", type=str, required=True,
+        help="Directory to write completions to")
     args.add_argument("--temperature", type=float, required=True)
     args.add_argument("--max-samples", type=int, required=True)
     args.add_argument("--model", type=str, required=True)
@@ -85,9 +96,9 @@ async def main():
         help="If set, --model is the name of a model file to load")
     args = args.parse_args()
 
-    dir = Path(args.dir)
-    if not dir.exists():
-        print("Directory does not exist: {}".format(dir))
+    prompts_file = Path(args.prompts_file)
+    if not prompts_file.exists():
+        print("File does not exist: {}".format(prompts_file))
         sys.exit(1)
 
     if args.model == "davinci":
@@ -95,17 +106,13 @@ async def main():
 
     configure_logging(args)
 
-    problems = list(
-        filter(
-            lambda f: not f.name.endswith(".results.yaml"),
-            sorted(dir.glob("*.yaml")),
-        )
-    )
+    with prompts_file.open() as f:
+        problems = json.load(f)
 
     if args.local_model:
         completions = __import__(args.model).completion
-        for problem_yaml_path in problems:
-            await process_problem_yaml(completions, problem_yaml_path, args, max_to_generate=MAX_TO_GENERATE)
+        for problem in problems:
+            await process_problem_json(completions, problem, args, max_to_generate=MAX_TO_GENERATE)
     else:
         # Load the model keys from the CSV file.
         with open("model_keys.csv") as f:
@@ -119,8 +126,8 @@ async def main():
             model_keys, other_models
         ) as completions:
             problem_completions = (
-                process_problem_yaml(completions.completion, problem_yaml_path, args, max_to_generate=MAX_TO_GENERATE)
-                for problem_yaml_path in problems
+                process_problem_json(completions.completion, problem, args, max_to_generate=MAX_TO_GENERATE)
+                for problem in problems
             )
             await asyncio.gather(*problem_completions)
 

@@ -1,13 +1,9 @@
 """
-This is the entrypoint for the containerized evaluator.
-
-The program expects as input the path to a PROBLEM_NAME.yaml file and
-produces PROBLEM_NAME.results.yaml alongside it.
+NOTE: Nothing containerized about this any more. This is just a helper
+for problem_evaluator.py.
 """
 
-import argparse
 from pathlib import Path
-from problem_yaml import Problem, Result, ResultList, TestResults
 import eval_ruby
 import eval_lua
 import eval_python
@@ -17,7 +13,6 @@ import eval_java
 import eval_lua
 import eval_racket
 import eval_javascript
-import eval_go
 import eval_swift
 import eval_cpp
 import eval_php
@@ -25,7 +20,7 @@ import eval_dlang
 import eval_julia
 import eval_r
 import tempfile
-import json
+
 
 EVALUATORS = {
     "rb": (eval_ruby.eval_script, ".rb"),
@@ -51,10 +46,6 @@ EVALUATORS = {
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
     "jl": (eval_julia.eval_script, ".jl")
 }
-
-def eval_script(problem, index):
-    program = problem.prompt + problem.completions[index] + '\n' + problem.tests
-    eval_string_script(problem.language, program)
 
 def eval_string_script(language, program):
     if language in EVALUATORS:
@@ -88,18 +79,3 @@ def eval_string_script(language, program):
             "status": result['status']
         }
 
-def eval_in_thread(problem_yaml_path, index):
-    with open(problem_yaml_path) as f:
-        problem = Problem.load(f)
-    return eval_script(problem, index)
-
-def main():
-    parser = argparse.ArgumentParser(description="Evaluate a problem")
-    parser.add_argument("--problem_yaml_path", help="Path to the problem YAML file")
-    parser.add_argument("--index", help="Index of the problem to evaluate", type=int)
-    args = parser.parse_args()
-    result_json = eval_in_thread(Path(args.problem_yaml_path), args.index)
-    print(json.dumps(result_json))
-
-if __name__ == "__main__":
-    main()

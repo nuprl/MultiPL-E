@@ -20,7 +20,6 @@
 import re
 import ast
 from typing import List, Optional
-from generic_translator import main
 from pydoc import locate
 
 
@@ -318,8 +317,3 @@ import (
                 return self.patch_empty(expr, self.type[1])
             case _other:
                 raise Exception("bad context in finalize")
-
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)

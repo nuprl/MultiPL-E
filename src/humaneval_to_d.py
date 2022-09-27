@@ -5,7 +5,6 @@
 import re
 import ast
 from typing import List
-from generic_translator import main
 
 RET_TYPE_LOC = -1
 NULL_DICT = "___null_dict___"
@@ -186,8 +185,3 @@ class Translator:
     throw new Exception("unimplemented!");
 }
         """
-    
-
-if __name__ == "__main__":
-    translator = Translator()
-    main(translator)
