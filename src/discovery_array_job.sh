@@ -7,12 +7,17 @@
 #SBATCH --partition=express
 #SBATCH --exclusive
 source ~/.bashrc
+source ~a.guha/bin/activate_conda
 set -e
 module load R gcc/9.2.0
 conda activate polyglot
 PATH=/home/a.guha/scala/bin:/work/arjunguha-research-group/software/bin:$PATH
 eval `/home/a.guha/repos/spack/bin/spack load --sh dmd`
 LIST_FILES=files.txt
+# Go seems to happily cache everything it ever builds in here, and not
+# in object files in the same directory. How clean! But we will run out
+# of quota without this.
+GOCACHE=/tmp/arjunguha_research_group_go_cache 
 
 if [ $# -eq 1 ]; then
   LIST_FILES=$1

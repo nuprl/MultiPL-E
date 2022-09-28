@@ -34,7 +34,7 @@ def eval_script(path: Path):
             result = run(["java", "-ea", "-cp", f"{outdir}", "Problem"], env = sys_env)
             if result.timeout:
                 status = "Timeout"
-            elif result.returncode == 0:
+            elif result.exit_code == 0:
                 status = "OK"
             else:
                 status = "Exception"

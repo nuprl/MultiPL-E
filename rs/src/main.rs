@@ -12,7 +12,7 @@ static TEMPS: &'static [&str; 2] = &[ "0.2", "0.8" ];
 static VARIATIONS: &'static [&str; 4] = &[ "reworded", "keep", "transform", "remove" ];
 static LANGS: &'static [&str; 19]  = &[ "py", "js", "ts", "java", "d", "cpp", "r", "rs", "jl", "sh", "cs", 
           "go", "lua", "pl", "php", "rb",  "scala", "swift", "rkt" ];
-static MODELS: &'static [&str; 2] = &[ "davinci", "incoder" ];
+static MODELS: &'static [&str; 3] = &[ "davinci", "incoder", "codegen" ];
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct TestResult { 
@@ -265,6 +265,9 @@ fn build_job_for_problem_and_lang(problem: &str, lang: &str) -> Option<(usize, V
                     Ok(problem_file) => {
                         // Same as problem_path_str, but with .results.json
                         let results_path_str = problem_path_str.replace(".json", ".results.json");
+			if problem_file.completions.len() == 0 {
+			    continue;
+			}
                         let results_path = Path::new(&results_path_str);
                         if !results_path.exists() {
                             count += problem_file.completions.len();

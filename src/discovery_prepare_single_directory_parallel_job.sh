@@ -13,7 +13,7 @@ if [ -f $OUTPUT_FILE_NAME ]; then
   exit 1
 fi
 
-for F in `find $EXPERIMENT_DIR -name '*.yaml' -not -name '*.results.yaml'`; do
+for F in `find $EXPERIMENT_DIR -name '*.json' -not -name '*.results.json'`; do
   echo "dummy dummy $F" >> $OUTPUT_FILE_NAME
 done
 

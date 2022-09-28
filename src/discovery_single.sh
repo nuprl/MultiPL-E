@@ -31,7 +31,8 @@ set -e
 # Your .bashrc should only setup conda and basic modules like discovery.
 # *Do not* change your shell to anything other than bash. Research Computing
 # recommends not loading anything 
-source ~/.bashrc 
+source ~/.bashrc
+source ~/bin/activate_conda
 module load R gcc/9.2.0
 conda activate /home/a.guha/.conda/envs/polyglot
 PATH=/home/a.guha/scala/bin:/work/arjunguha-research-group/software/bin:$PATH
