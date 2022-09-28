@@ -65,7 +65,7 @@ def evaluate_problem(problem_json_path: Path, max_workers: int):
         test_results["results"] = []
     else:
         with test_results_path.open() as f:
-            test_results = json.load(test_results_path)
+            test_results = json.load(f)
 
     num_problems = len(problem["completions"])
 
