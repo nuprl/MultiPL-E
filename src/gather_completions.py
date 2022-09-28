@@ -34,7 +34,7 @@ MAX_TO_GENERATE=512
 
 # problem is a dict. Relevant keys are "name" and "prompt".
 async def process_problem_json(completion, problem, args, max_to_generate):
-    completions_path = args.target_dir / (problem["name"] + ".json")
+    completions_path = Path(args.target_dir) / (problem["name"] + ".json")
     if completions_path.exists():
         with completions_path.open() as f:
             completion_results = json.load(f)
@@ -54,13 +54,13 @@ async def process_problem_json(completion, problem, args, max_to_generate):
 
         completions = await completion(
             model=args.model,
-            prompt=problem.prompt,
+            prompt=problem["prompt"],
             max_tokens=max_to_generate,
             temperature=args.temperature,
             n=num_samples,
             top_p=0.95,
             # NOTE(arjun): the list builder addresses yamlize garbage
-            stop=[s for s in problem.stop_tokens],
+            stop=[s for s in problem["stop_tokens"]],
         )
         completion_results["completions"].extend(completions)
         with completions_path.open("w") as f:
