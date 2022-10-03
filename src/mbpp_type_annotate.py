@@ -206,6 +206,7 @@ def annotate_files(path: Path, write_handler = sys.stdout):
 
             write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)))
             write_handler.write("\n\n")
+            write_handler.write("### Unit tests below ###\n")
             write_handler.write(ast.unparse(ast.fix_missing_locations(check_function)))
             write_handler.write("\n\n")
             write_handler.write(ast.unparse(ast.fix_missing_locations(test_check_function)))
