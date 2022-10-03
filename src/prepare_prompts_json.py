@@ -78,6 +78,7 @@ def main():
             original, translator, args.doctests, args.prompt_terminology
         )
         if result is None:
+            print(f"Skipping {original_name}")
             continue
 
         (prompt, tests) = result

@@ -6,7 +6,7 @@ import traceback
 from pathlib import Path
 from shutil import get_unpack_formats
 from types import GenericAlias, NoneType
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, List, Dict, Tuple
 import typing
 
 from itertools import groupby
@@ -57,13 +57,13 @@ def value_to_type(ast_value: ast.AST):
 
     def get_type(value):
         if isinstance(value, list):
-            return list[get_union_type([get_type(e) for e in value])]
+            return List[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, tuple):
-            return tuple[get_union_type([get_type(e) for e in value])]
+            return Tuple[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, set):
-            return set[get_union_type([get_type(e) for e in value])]
+            raise Exception("Set type is not supported")
         elif isinstance(value, dict):
-            return dict[get_union_type([get_type(k) for k in value]), 
+            return Dict[get_union_type([get_type(k) for k in value]), 
                         get_union_type([get_type(value[k]) for k in value])]
         else:
             return type(value)
@@ -71,6 +71,8 @@ def value_to_type(ast_value: ast.AST):
     value = get_underlying_values(ast_value)
     return get_type(value)
 
+def fixname(name):
+    return name
 def unify_types(types):
 
     def pred_pair(t1, t2, f, g):
@@ -88,7 +90,6 @@ def unify_types(types):
         elif isinstance(t1, typing._UnionGenericAlias) or isinstance(t2, typing._UnionGenericAlias):
             return Union[t1, t2]
         elif not isinstance(t1, GenericAlias) or not isinstance(t2, GenericAlias):
-            print(f"is instance test: {t1}, {t2}")
             return Any
         elif t1.__origin__ != t2.__origin__:
             if pred_pair(t1, t2, lambda t: t == dict[None, None], lambda t: t.__origin__ == set):
@@ -102,7 +103,7 @@ def unify_types(types):
                 print(f"arglength: {t1}, {t2}")
                 return Any
             result = [unify_types2(t1arg, t2arg) for t1arg, t2arg in zip(t1_args, t2_args)]
-            return GenericAlias(t1.__origin__, tuple(result))
+            return GenericAlias(fixname(t1.__origin__), tuple(result))
 
     if len(types) <= 1:
         return types[0]
@@ -204,7 +205,7 @@ def annotate_files(path: Path, write_handler = sys.stdout):
 
             annotated_prompt_fn = type_annotation_to_func(prompt_function, args_type, return_type)
 
-            write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)))
+            write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)).replace("pass", "### Canonical solution below ###\n    pass").replace("typing.", ""))
             write_handler.write("\n\n")
             write_handler.write("### Unit tests below ###\n")
             write_handler.write(ast.unparse(ast.fix_missing_locations(check_function)))
@@ -241,12 +242,15 @@ def main():
     translated_count = 0
     files = [file for file in args.datasets.glob("*.py") if re.search(args.regex, file.name)]
     for file in files:
-        print(file)
-        with open(args.output / file.name, "w") as of: 
+        output_path = args.output / file.name
+        print(output_path)
+        with open(output_path, "w") as of: 
             try:
+                of.write("from typing import List, Dict, Tuple\n\n")
                 annotate_files(file, of)
                 translated_count += 1
             except Exception as e:
+                output_path.unlink()
                 print(f"unable to translate {file}: {str(e)}")
                 print(traceback.format_exc())
 

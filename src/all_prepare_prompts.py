@@ -27,7 +27,10 @@ def doctests(variation):
         case "reworded":
             return "transform"
 
-def originals(variation):
+def originals(variation, dataset):
+    if dataset == "mbpp":
+        return "../datasets/mbpp-typed"
+
     match variation:
         case "keep":
             return "../datasets/originals"
@@ -38,12 +41,16 @@ def originals(variation):
         case "reworded":
             return f"../datasets/originals-with-cleaned-doctests"
     
-def prepare(lang: str, variation: str):
+def prepare(lang: str, variation: str, dataset: str):
+    if dataset == "mbpp":
+        if variation == "remove" or variation == "transform":
+            return
+
     d = doctests(variation)
-    o = originals(variation)
+    o = originals(variation, dataset)
     p = prompt_terminology(variation)
     target_dir = "../prompts"
-    output = f"{target_dir}/{lang}-{variation}.json"
+    output = f"{target_dir}/{dataset}-{lang}-{variation}.json"
     
     cmd = f"python3 prepare_prompts_json.py --lang humaneval_to_{lang}.py" + \
          f" --prompt-terminology {p} --doctests {d} --originals {o} --output {output}"
@@ -55,4 +62,5 @@ def prepare(lang: str, variation: str):
 if __name__ == "__main__":
     for lang in LANGS:
         for variation in VARIATIONS:
-            prepare(lang, variation)
+            for dataset in [ "mbpp", "humaneval" ]:
+                prepare(lang, variation, dataset)

@@ -276,7 +276,7 @@ def edit_prompt_terminology(language, example):
 
 
 def translate_prompt_and_tests(original_file, translator, doctests, prompt_terminology):
-    entry_point = re.search("(HumanEval_\d+)_(.+).py", original_file.name).group(2)
+    entry_point = re.search("([^0-9]+_\d+)_(.+).py", original_file.name).group(2)
     reading_prompt = True
     reading_tests = False
     prompt_buffer = []
