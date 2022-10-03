@@ -5,12 +5,12 @@ def is_perfect_square(n) :
 	pass
 
 def check(candidate):
-	assert not candidate(10)
-	assert candidate(36)
-	assert not candidate(14)
-	assert candidate(14*14)
-	assert not candidate(125)
-	assert candidate(125*125)
+	assert candidate(10) == False
+	assert candidate(36) == True
+	assert candidate(14) == False
+	assert candidate(196) == True
+	assert candidate(125) == False
+	assert candidate(15625) == True
 
 def test_check():
 	check(is_perfect_square)

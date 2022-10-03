@@ -5,9 +5,9 @@ def is_product_even(arr):
 	pass
 
 def check(candidate):
-	assert candidate([1,2,3])
-	assert candidate([1,2,1,4])
-	assert not candidate([1,1])
+	assert candidate([1,2,3]) == True
+	assert candidate([1,2,1,4]) == True
+	assert candidate([1,1]) == False
 
 def test_check():
 	check(is_product_even)

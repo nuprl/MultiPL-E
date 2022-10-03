@@ -5,9 +5,9 @@ def text_starta_endb(text):
 	pass
 
 def check(candidate):
-	assert candidate("aabbbb")
-	assert not candidate("aabAbbbc")
-	assert not candidate("accddbbjjj")
+	assert candidate("aabbbb") == True
+	assert candidate("aabAbbbc") == False
+	assert candidate("accddbbjjj") == False
 
 def test_check():
 	check(text_starta_endb)

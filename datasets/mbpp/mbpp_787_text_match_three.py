@@ -5,10 +5,10 @@ def text_match_three(text):
 	pass
 
 def check(candidate):
-	assert not candidate("ac")
-	assert not candidate("dc")
-	assert candidate("abbbba")
-	assert candidate("caacabbbba")
+	assert candidate("ac") == False
+	assert candidate("dc") == False 
+	assert candidate("abbbba") == True
+	assert candidate("caacabbbba") == True
 
 def test_check():
 	check(text_match_three)

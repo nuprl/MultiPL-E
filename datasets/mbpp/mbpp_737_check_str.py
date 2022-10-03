@@ -5,9 +5,9 @@ def check_str(string):
 	pass
 
 def check(candidate):
-	assert candidate("annie")
-	assert not candidate("dawood")
-	assert candidate("Else")
+	assert candidate("annie") == True
+	assert candidate("dawood") == False
+	assert candidate("Else") == True
 
 def test_check():
 	check(check_str)

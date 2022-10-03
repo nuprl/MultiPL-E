@@ -5,9 +5,9 @@ def count_divisors(n) :
 	pass
 
 def check(candidate):
-	assert candidate(10)
-	assert not candidate(100)
-	assert candidate(125)
+	assert candidate(10) == True
+	assert candidate(100) == False
+	assert candidate(125) == True
 
 def test_check():
 	check(count_divisors)
