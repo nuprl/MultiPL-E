@@ -37,7 +37,7 @@ def eval_script(path: str):
             returncode = output.returncode
             output.stderr = str(output.stderr, "utf-8")
             #mono return 0 even when failing
-            fail = "System.Diagnostics.DefaultTraceListener.Fail" in output.stderr
+            fail = "System.Diagnostics.DefaultTraceListener.Fail" in output.stderr or "Unhandled Exception" in output.stderr
             output.returncode = 1 if fail else 0
             if output.returncode == 0:
                 status = "OK"
