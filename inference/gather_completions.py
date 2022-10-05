@@ -34,7 +34,11 @@ MAX_TO_GENERATE=512
 
 # problem is a dict. Relevant keys are "name" and "prompt".
 async def process_problem_json(completion, problem, args, max_to_generate):
-    completions_path = Path(args.target_dir) / (problem["name"] + ".json")
+    target_dir_path = Path(args.target_dir)
+    completions_path = target_dir_path / (problem["name"] + ".json")
+
+    target_dir_path.mkdir(exist_ok=True)
+
     if completions_path.exists():
         with completions_path.open() as f:
             completion_results = json.load(f)

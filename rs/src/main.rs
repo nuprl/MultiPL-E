@@ -1,3 +1,4 @@
+use serde::de::VariantAccess;
 use serde::{Deserialize, Serialize};
 use walkdir::{DirEntry, WalkDir};
 use std::path::Path;
@@ -161,7 +162,7 @@ fn single_per_problem_pass_k(args: SinglePerProblemPassK) {
 // (Lang, Problem, Model, Variation)
 fn per_problem_pass_k(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<(String, String, String, String, usize, f64, usize)>> {
     let (lang, model, temp, variation) = config;
-    let p = format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation);
+    let p = format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation);
     let dir = Path::new(&p);
     return per_problem_pass_k_with_dir(lang, model, temp, variation, dir);
 }
@@ -176,7 +177,7 @@ fn all_per_problem_pass_k() {
 fn estimate_pass_k_for_config(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<String>> {
     let (lang, model, temp, variation) = config;
     
-    let walker = WalkDir::new(format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation));
+    let walker = WalkDir::new(format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation));
 
     let mut num_files = 0;
     let mut aggregate_pass_k1 = 0.0;
@@ -406,17 +407,29 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
     for temp in TEMPS {
         for variation in VARIATIONS {
             for lang in LANGS {
-                if *temp == "0.8" && *variation != "reworded" {
+                if !(*temp == "0.2" && (*variation == "keep" || *variation == "reworded")) {
                     continue;
                 }
 
-                let experiment_dir = format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation);
+                let experiment_dir = format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation);
+                let prompts_file = format!("../prompts/mbpp-{}-{}.json", lang, variation);
+
+                match std::fs::create_dir_all(&experiment_dir) {
+                    Err(_) => {
+                        panic!("create directory failed: {}", experiment_dir);
+                    } _ => {
+
+                    }
+                }
+
                 match std::fs::read_dir(&experiment_dir) {
                     Err(_) => {
                         // We haven't even prepared for this!
+                        panic!("No such directory: {}", experiment_dir);
                     }
                     Ok(entries) => {
-                        let mut num_incomplete = 0;
+                        println!("Generating prompts for {}", experiment_dir);
+                        let mut num_incomplete = min_prompts_per_problem;
                         for entry in entries.into_iter().filter_map(|entry| entry.ok()) {
                             if entry.file_name().to_str().unwrap().ends_with(".results.json") {
                                 continue;
@@ -431,10 +444,10 @@ fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: us
                         if num_incomplete == 0 {
                             continue;
                         }
-                        match cmd!("python3", "gather_completions.py", "--dir", &experiment_dir, "--temperature", temp, "--model", model, "--max-samples", &max_samples.to_string(), "--limit-completions", min_prompts_per_problem.to_string())
+                        match cmd!("python3", "gather_completions.py", "--prompts-file", &prompts_file, "--target-dir", &experiment_dir, "--temperature", temp, "--model", model, "--max-samples", &max_samples.to_string(), "--limit-completions", min_prompts_per_problem.to_string())
                         .dir("../src").run() {
                             Ok(_) => {
-                                println!("Generated {} prompts for {}", num_incomplete, experiment_dir);
+                                println!("Done: Generated {} prompts for {}", num_incomplete, experiment_dir);
                             }
                             Err(_) => {
                                 println!("Error on {}", experiment_dir);
@@ -465,7 +478,7 @@ fn process_file_for_summary(path: &std::path::Path) -> Result<(usize, usize, usi
 }
 
 fn summarize_one(lang: &'static str, model: &'static str, temp: &'static str, variation: &'static str) {
-    let experiment_dir = format!("../experiments/{}-{}-{}-{}", lang, model, temp, variation);
+    let experiment_dir = format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation);
     match std::fs::read_dir(&experiment_dir) {
         Err(_) => {
             println!("{},{},{},{},0,0%,0%,0%", temp, variation, model, lang);
