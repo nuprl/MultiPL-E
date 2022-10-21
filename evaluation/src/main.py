@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-import subprocess
+from multiprocessing import cpu_count
 import json
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
@@ -46,10 +46,10 @@ def cached_eval_script(problem, index) -> dict:
         return result_yaml
 
 
-def get_test_results_json_path(problem_json_path: Path) -> Path:
-    return problem_json_path.parent / (problem_json_path.stem + ".results.json")
+def get_test_results_json_path(output_dir: Path, problem_json_path: Path) -> Path:
+    return output_dir / (problem_json_path.stem + ".results.json")
 
-def evaluate_problem(problem_json_path: Path, max_workers: int):
+def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int):
     with open(problem_json_path) as f:
         problem = json.load(f)
 
@@ -57,7 +57,7 @@ def evaluate_problem(problem_json_path: Path, max_workers: int):
     if len(problem["completions"]) == 0:
         return
 
-    test_results_path = get_test_results_json_path(problem_json_path)
+    test_results_path = get_test_results_json_path(output_dir, problem_json_path)
 
     if not test_results_path.exists():
         test_results = problem.copy()
@@ -90,8 +90,11 @@ def evaluate_problem(problem_json_path: Path, max_workers: int):
 
 def main():
     args = argparse.ArgumentParser()
+
+    args.add_argument("--output-dir", type=Path, required=True,
+        help="Directory to store results in")
     args.add_argument(
-        "--max-workers", type=int, required=True, help="Maximum number of workers to use",
+        "--max-workers", type=int, help="Maximum number of workers to use",
     )
     args.add_argument(
         "--job-file", type=str, help="Where the files come from",
@@ -104,12 +107,15 @@ def main():
 
     args = args.parse_args()
 
+    if not args.max_workers:
+        args.max_workers = cpu_count() - 1 if cpu_count() > 1 else 1
+
     if args.file:
-        evaluate_problem(Path(args.file), args.max_workers)
+        evaluate_problem(args.output_dir, Path(args.file), args.max_workers)
     elif args.dir:
         files = [ p for p in Path(args.dir).glob("*.json") if not p.name.endswith(".results.json") ]
         for file in tqdm(files):
-            evaluate_problem(file, args.max_workers)
+            evaluate_problem(args.output_dir, file, args.max_workers)
     elif args.job_file and args.job_file_line is not None:
         with open(args.job_file) as f:
             # Skip the first two space, separated columns, which identify the language
@@ -117,7 +123,7 @@ def main():
             files = f.readlines()[args.job_file_line].rstrip().split(" ")[2:]
         for f in files:
             print(f"Processing {f}")
-            evaluate_problem(Path(f), args.max_workers)    
+            evaluate_problem(args.output_dir, Path(f), args.max_workers)    
     else:
         print("Specify either --file, --dir, or both --job-file and --job-file-line")
         exit(1)
