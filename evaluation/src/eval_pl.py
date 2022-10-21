@@ -18,6 +18,3 @@ def eval_script(path: Path):
         "stdout": r.stdout,
         "stderr": r.stderr,
     }
-
-if __name__ == "__main__":
-    libeval.testing_mail(eval_script, "Perl", ".pl")
