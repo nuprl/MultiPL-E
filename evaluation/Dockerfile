@@ -15,6 +15,11 @@ RUN apt-get install -yqq \
     scala \
     node-typescript
 RUN apt-get install -yqq curl
+RUN apt-get install -yqq wget 
+RUN wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
+RUN apt-get update --allow-insecure-repositories
+RUN apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
+RUN apt-get update && apt-get install -yqq dmd-compiler dub
 RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz | tar xz
 ENV PATH="/julia-1.8.2/bin:${PATH}"
 # .NET 6 includes the C# compiler
