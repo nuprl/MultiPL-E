@@ -9,6 +9,7 @@ use rayon::prelude::*;
 
 // Do not change these constants! If you want to filter out files, do it the
 // "right way". Making a change here affects all functions.
+static DATASETS: &'static [&str; 2] = &[ "humaneval", "mbpp" ];
 static TEMPS: &'static [&str; 2] = &[ "0.2", "0.8" ];
 static VARIATIONS: &'static [&str; 4] = &[ "reworded", "keep", "transform", "remove" ];
 static LANGS: &'static [&str; 19]  = &[ "py", "js", "ts", "java", "d", "cpp", "r", "rs", "jl", "sh", "cs", 
@@ -45,6 +46,8 @@ struct CheckPromptCompleteness {
 #[derive(clap::Args)]
 struct SinglePerProblemPassK {
     #[clap(short, long)]
+    dataset: String,
+    #[clap(short, long)]
     language: String,
     #[clap(short, long)]
     model: String,
@@ -69,16 +72,33 @@ enum Command {
     PerProblemPassK,
 }
 
-fn all_configurations() -> Vec<(&'static str, &'static str, &'static str, &'static str)> {
+struct Config {
+    dataset: &'static str,
+    lang: &'static str,
+    model: &'static str,
+    temp: &'static str,
+    variation: &'static str,
+}
+
+fn all_configurations() -> Vec<Config> {
     let mut result = Vec::new();
-    for temp in TEMPS {
-        for variation in VARIATIONS {
-            for lang in LANGS {
-                for model in MODELS {
-                    if *temp == "0.8" && *variation != "reworded" {
-                        continue;
+    for dataset in DATASETS {
+        for temp in TEMPS {
+            for variation in VARIATIONS {
+                for lang in LANGS {
+                    for model in MODELS {
+                        if *temp == "0.8" && *variation != "reworded" {
+                            continue;
+                        }
+                        result.push(
+                            Config{
+                                dataset: *dataset,
+                                lang: *lang,
+                                model: *model,
+                                temp: *temp, 
+                                variation: *variation}
+                        );
                     }
-                    result.push((*lang, *model, *temp, *variation));
                 }
             }
         }
@@ -95,12 +115,12 @@ fn estimate_pass_k(n: i32, c: i32, k: i32) -> f64 {
     return 1.0 - result;
 }
 
-fn per_problem_pass_k_with_dir(lang: &str, model: &str, temp: &str, variation: &str, path: &Path) -> Option<Vec<(String, String, String, String, usize, f64, usize)>> {
+fn per_problem_pass_k_with_dir(config: &Config, path: &Path) -> Option<Vec<(String, String, String, String, String, usize, f64, usize)>> {
     let walker = WalkDir::new(path);
 
     let mut result = vec![];
 
-    let temp_02 = temp == "0.2";
+    let temp_02 = config.temp == "0.2";
 
     for entry in walker
         .into_iter()
@@ -118,27 +138,51 @@ fn per_problem_pass_k_with_dir(lang: &str, model: &str, temp: &str, variation: &
         let stem_len = file_stem.len(); 
         let problem = file_stem[..stem_len - 8].to_string();
         if temp_02 {
-            result.push((lang.to_string(), problem.to_string(), model.to_string(), variation.to_string(), 1, estimate_pass_k(n as i32, c as i32, 1), n));
+            result.push(
+                (config.dataset.to_string(),
+                config.lang.to_string(),
+                problem.to_string(),
+                config.model.to_string(),
+                config.variation.to_string(),
+                1,
+                estimate_pass_k(n as i32, c as i32, 1),
+                n));
         }
         else {
-            result.push((lang.to_string(), problem.to_string(), model.to_string(), variation.to_string(), 10, estimate_pass_k(n as i32, c as i32, 10), n));
+            result.push(
+                (config.dataset.to_string(),
+                config.lang.to_string(),
+                problem.to_string(),
+                config.model.to_string(),
+                config.variation.to_string(),
+                10,
+                estimate_pass_k(n as i32, c as i32, 10),
+                n));
             // Same for 100
-            result.push((lang.to_string(), problem, model.to_string(), variation.to_string(), 100, estimate_pass_k(n as i32, c as i32, 100), n));
+            result.push(
+                (config.dataset.to_string(),
+                config.lang.to_string(),
+                problem.to_string(),
+                config.model.to_string(),
+                config.variation.to_string(),
+                100,
+                estimate_pass_k(n as i32, c as i32, 100),
+                n));
         }
     }
 
     return Some(result);
 }
 
-fn aggregate_per_problem_pass_k_results(results: Vec<Vec<(String, String, String, String, usize, f64, usize)>>) {
+fn aggregate_per_problem_pass_k_results(results: Vec<Vec<(String, String, String, String, String, usize, f64, usize)>>) {
     let mut aggregates = HashMap::new();    
     for result in results.into_iter() {
-        for (lang, problem, model, variation, k, pass_k, n) in result.into_iter() {
-            aggregates.entry((lang, problem, model, variation)).or_insert(vec![]).push((k, pass_k, n));
+        for (dataset , lang, problem, model, variation, k, pass_k, n) in result.into_iter() {
+            aggregates.entry((dataset, lang, problem, model, variation)).or_insert(vec![]).push((k, pass_k, n));
         }
     }
     println!("lang,problem,model,variation,pass@1,n(t=0.2),pass@10,n(t=0.8),pass@100");
-    for ((lang, problem, model, variation), mut values) in aggregates.into_iter() {
+    for ((dataset, lang, problem, model, variation), mut values) in aggregates.into_iter() {
         values.sort_by_key(|&(k, _, _)| k);
         let temp = if values.len() == 1 { "0.2" } else { "0.8" };
         let pass_k_str = if values.len() == 1 {
@@ -147,24 +191,24 @@ fn aggregate_per_problem_pass_k_results(results: Vec<Vec<(String, String, String
         else {
             format!("{:.2},{},{:.2},{},{:.2}", values[0].1, values[0].2, values[1].1, values[1].2, values[2].1)
         };
-        println!("{},{},{},{},{}", lang, problem, model, variation, pass_k_str);
+        println!("{}, {},{},{},{},{}", dataset, lang, problem, model, variation, pass_k_str);
     }
 }    
 
 fn single_per_problem_pass_k(args: SinglePerProblemPassK) {
     let path = Path::new(&args.directory);
-    let results = vec![per_problem_pass_k_with_dir(&args.language, &args.model, &args.temperature, &args.variation, path).unwrap()];
+    let config = Config {dataset: &args.dataset, lang: &args.language, model: &args.model, temp: &args.temperature, variation: &args.variation};
+    let results = vec![per_problem_pass_k_with_dir(&config, path).unwrap()];
     aggregate_per_problem_pass_k_results(results);
 }
 
 
-// print("lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
-// (Lang, Problem, Model, Variation)
-fn per_problem_pass_k(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<(String, String, String, String, usize, f64, usize)>> {
-    let (lang, model, temp, variation) = config;
-    let p = format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation);
+// print("dataset,lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
+// (Dataset, Lang, Problem, Model, Variation)
+fn per_problem_pass_k(config: &Config) -> Option<Vec<(String, String, String, String, String, usize, f64, usize)>> {
+    let p = format!("../experiments/{}-{}-{}-{}-{}", config.dataset, config.lang, config.model, config.temp, config.variation);
     let dir = Path::new(&p);
-    return per_problem_pass_k_with_dir(lang, model, temp, variation, dir);
+    return per_problem_pass_k_with_dir(config, dir);
 }
 
 
@@ -174,8 +218,8 @@ fn all_per_problem_pass_k() {
 }
 
 
-fn estimate_pass_k_for_config(config: (&'static str, &'static str, &'static str, &'static str)) -> Option<Vec<String>> {
-    let (lang, model, temp, variation) = config;
+fn estimate_pass_k_for_config(config: &Config) -> Option<Vec<String>> {
+    let (dataset, lang, model, temp, variation) = (config.dataset, config.lang, config.model, config.temp, config.variation);
     
     let walker = WalkDir::new(format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation));
 
@@ -201,11 +245,11 @@ fn estimate_pass_k_for_config(config: (&'static str, &'static str, &'static str,
     }
 
     if temp == "0.2" {
-        return Some(vec![format!("{},{},{},{},1,{:2}", lang, model, temp, variation, aggregate_pass_k1 / (num_files as f64))]);
+        return Some(vec![format!("{},{},{},{},{},1,{:2}", dataset, lang, model, temp, variation, aggregate_pass_k1 / (num_files as f64))]);
     }
     else if temp == "0.8" {
-        return Some(vec![format!("{},{},{},{},10,{:2}", lang, model, temp, variation, aggregate_pass_k10 / (num_files as f64)),
-                         format!("{},{},{},{},100,{:2}", lang, model, temp, variation, aggregate_pass_k100 / (num_files as f64))]);
+        return Some(vec![format!("{},{},{},{},{},10,{:2}", dataset, lang, model, temp, variation, aggregate_pass_k10 / (num_files as f64)),
+                         format!("{},{},{},{},{},100,{:2}", dataset, lang, model, temp, variation, aggregate_pass_k100 / (num_files as f64))]);
     }
     else {
         panic!("Unknown temp: {}", temp);
@@ -404,53 +448,54 @@ fn check_prompt_completeness(num_prompts_per_problem: usize) {
 
 
 fn generate_prompts(model: &str, min_prompts_per_problem: usize, max_samples: usize) {
-    for temp in TEMPS {
-        for variation in VARIATIONS {
-            for lang in LANGS {
-                if !(*temp == "0.2" && (*variation == "keep" || *variation == "reworded")) {
-                    continue;
-                }
-
-                let experiment_dir = format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation);
-                let prompts_file = format!("../prompts/mbpp-{}-{}.json", lang, variation);
-
-                match std::fs::create_dir_all(&experiment_dir) {
-                    Err(_) => {
-                        panic!("create directory failed: {}", experiment_dir);
-                    } _ => {
-
+    for dataset in DATASETS{
+        for temp in TEMPS {
+            for variation in VARIATIONS {
+                for lang in LANGS {
+                    if !(*temp == "0.2" && (*variation == "keep" || *variation == "reworded")) {
+                        continue;
                     }
-                }
 
-                match std::fs::read_dir(&experiment_dir) {
-                    Err(_) => {
-                        // We haven't even prepared for this!
-                        panic!("No such directory: {}", experiment_dir);
+                    let experiment_dir = format!("../experiments/{}-{}-{}-{}-{}", dataset, lang, model, temp, variation);
+                    let prompts_file = format!("../prompts/{}-{}-{}.json", dataset, lang, variation);
+
+                    match std::fs::create_dir_all(&experiment_dir) {
+                        Err(_) => {
+                            panic!("create directory failed: {}", experiment_dir);
+                        } _ => {
+
+                        }
                     }
-                    Ok(entries) => {
-                        println!("Generating prompts for {}", experiment_dir);
-                        let mut num_incomplete = min_prompts_per_problem;
-                        for entry in entries.into_iter().filter_map(|entry| entry.ok()) {
-                            if entry.file_name().to_str().unwrap().ends_with(".results.json") {
+
+                    match std::fs::read_dir(&experiment_dir) {
+                        Err(_) => {
+                            // We haven't even prepared for this!
+                            panic!("No such directory: {}", experiment_dir);
+                        }
+                        Ok(entries) => {
+                            let mut num_incomplete = min_prompts_per_problem;
+                            for entry in entries.into_iter().filter_map(|entry| entry.ok()) {
+                                if entry.file_name().to_str().unwrap().ends_with(".results.json") {
+                                    continue;
+                                }
+                                let contents = std::fs::read_to_string(entry.path()).unwrap();
+                                let problem_file: ProblemFile = serde_json::from_str(&contents).expect(format!("{}", entry.path().display()).as_str());
+                                if  problem_file.completions.len() > min_prompts_per_problem {
+                                    continue;
+                                }
+                                num_incomplete += (min_prompts_per_problem - problem_file.completions.len()).min(min_prompts_per_problem);
+                            }
+                            if num_incomplete == 0 {
                                 continue;
                             }
-                            let contents = std::fs::read_to_string(entry.path()).unwrap();
-                            let problem_file: ProblemFile = serde_json::from_str(&contents).expect(format!("{}", entry.path().display()).as_str());
-                            if  problem_file.completions.len() > min_prompts_per_problem {
-                                continue;
-                            }
-                            num_incomplete += (problem_file.completions.len()  - min_prompts_per_problem).min(min_prompts_per_problem);
-                        }
-                        if num_incomplete == 0 {
-                            continue;
-                        }
-                        match cmd!("python3", "gather_completions.py", "--prompts-file", &prompts_file, "--target-dir", &experiment_dir, "--temperature", temp, "--model", model, "--max-samples", &max_samples.to_string(), "--limit-completions", min_prompts_per_problem.to_string())
-                        .dir("../src").run() {
-                            Ok(_) => {
-                                println!("Done: Generated {} prompts for {}", num_incomplete, experiment_dir);
-                            }
-                            Err(_) => {
-                                println!("Error on {}", experiment_dir);
+                            match cmd!("python3", "gather_completions.py", "--prompts-file", &prompts_file, "--target-dir", &experiment_dir, "--temperature", temp, "--model", model, "--max-samples", &max_samples.to_string(), "--limit-completions", min_prompts_per_problem.to_string())
+                            .dir("../src").run() {
+                                Ok(_) => {
+                                    println!("Done: Generated {} prompts for {}", num_incomplete, experiment_dir);
+                                }
+                                Err(_) => {
+                                    println!("Error on {}", experiment_dir);
+                                }
                             }
                         }
                     }
@@ -477,11 +522,11 @@ fn process_file_for_summary(path: &std::path::Path) -> Result<(usize, usize, usi
 
 }
 
-fn summarize_one(lang: &'static str, model: &'static str, temp: &'static str, variation: &'static str) {
-    let experiment_dir = format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation);
+fn summarize_one(config: &Config) {
+    let experiment_dir = format!("../experiments/{}-{}-{}-{}-{}", config.dataset, config.lang, config.model, config.temp, config.variation);
     match std::fs::read_dir(&experiment_dir) {
         Err(_) => {
-            println!("{},{},{},{},0,0%,0%,0%", temp, variation, model, lang);
+            println!("{},{},{},{},{},0,0%,0%,0%", config.dataset, config.temp, config.variation, config.model, config.lang);
         }
         Ok(entries) => {
 
@@ -526,7 +571,7 @@ fn summarize_one(lang: &'static str, model: &'static str, temp: &'static str, va
             let completions_done_200 = completions_for_200 as f64 / (num_prepared_files as f64 * 200.0);
             let results_done_20 = results_for_20 as f64 / (num_prepared_files as f64 * 20.0);
             let results_done_200 = results_for_200 as f64 / (num_prepared_files as f64 * 200.0);
-            println!("{},{},{},{},{},{:.2},{:.2},{:.2},{:.2}", temp, variation, model, lang, num_prepared_files, completions_done_20, completions_done_200, results_done_20, results_done_200);
+            println!("{},{},{},{},{},{},{:.2},{:.2},{:.2},{:.2}", config.dataset, config.temp, config.variation, config.model, config.lang, num_prepared_files, completions_done_20, completions_done_200, results_done_20, results_done_200);
         }
     }
 }
@@ -536,7 +581,7 @@ fn summarize_completeness() {
     let configs = all_configurations();
     println!("{}", configs.len());
 
-    configs.into_par_iter().for_each(|(lang, model, temp, variation)| summarize_one(lang, model, temp, variation))
+    configs.into_par_iter().for_each(|config| summarize_one(&config))
 
 }
 
