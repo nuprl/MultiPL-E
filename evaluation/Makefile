@@ -1,8 +1,10 @@
+DOCKER_EXEC := podman
+
 all:
-	podman build -t multipl-e-evaluation .
+	${DOCKER_EXEC} build -t multipl-e-evaluation .
 
 test:
-	podman run --rm \
+	${DOCKER_EXEC} run --rm \
 		--network none \
 		--volume $(PWD)/test_inputs:/inputs:ro \
 		--volume $(PWD)/test_outputs:/outputs:rw \
