@@ -59,6 +59,28 @@ struct SinglePerProblemPassK {
     directory: String
 }
 
+fn find_static(s: &String, arr: &'static [&str]) -> &'static str {
+    for s_arr in arr {
+        if s == *s_arr {
+            return *s_arr
+        }
+    }
+
+    panic!("Can't find the static string");
+}
+
+impl SinglePerProblemPassK {
+    fn to_config(&self) -> Config {
+        let dataset = find_static(&self.dataset, DATASETS);
+        let lang = find_static(&self.language, LANGS);
+        let model = find_static(&self.model, MODELS);
+        let temp = find_static(&self.temperature, TEMPS);
+        let variation = find_static(&self.variation, VARIATIONS);
+
+        Config {dataset, lang, model, temp, variation}
+    }
+}
+
 #[derive(clap::Parser)]
 enum Command {
     RunCompletion(RunCompletion),
@@ -115,7 +137,7 @@ fn estimate_pass_k(n: i32, c: i32, k: i32) -> f64 {
     return 1.0 - result;
 }
 
-fn per_problem_pass_k_with_dir(config: &Config, path: &Path) -> Option<Vec<(String, String, String, String, String, usize, f64, usize)>> {
+fn per_problem_pass_k_with_dir(config: Config, path: &Path) -> Option<Vec<(String, String, String, String, String, usize, f64, usize)>> {
     let walker = WalkDir::new(path);
 
     let mut result = vec![];
@@ -193,19 +215,19 @@ fn aggregate_per_problem_pass_k_results(results: Vec<Vec<(String, String, String
         };
         println!("{}, {},{},{},{},{}", dataset, lang, problem, model, variation, pass_k_str);
     }
-}    
+}
 
 fn single_per_problem_pass_k(args: SinglePerProblemPassK) {
     let path = Path::new(&args.directory);
-    let config = Config {dataset: &args.dataset, lang: &args.language, model: &args.model, temp: &args.temperature, variation: &args.variation};
-    let results = vec![per_problem_pass_k_with_dir(&config, path).unwrap()];
+    let config = args.to_config();
+    let results = vec![per_problem_pass_k_with_dir(config, path).unwrap()];
     aggregate_per_problem_pass_k_results(results);
 }
 
 
 // print("dataset,lang,problem,model,temp,variation,pass@1,pass@10,pass@100")
 // (Dataset, Lang, Problem, Model, Variation)
-fn per_problem_pass_k(config: &Config) -> Option<Vec<(String, String, String, String, String, usize, f64, usize)>> {
+fn per_problem_pass_k(config: Config) -> Option<Vec<(String, String, String, String, String, usize, f64, usize)>> {
     let p = format!("../experiments/{}-{}-{}-{}-{}", config.dataset, config.lang, config.model, config.temp, config.variation);
     let dir = Path::new(&p);
     return per_problem_pass_k_with_dir(config, dir);
@@ -218,10 +240,10 @@ fn all_per_problem_pass_k() {
 }
 
 
-fn estimate_pass_k_for_config(config: &Config) -> Option<Vec<String>> {
+fn estimate_pass_k_for_config(config: Config) -> Option<Vec<String>> {
     let (dataset, lang, model, temp, variation) = (config.dataset, config.lang, config.model, config.temp, config.variation);
     
-    let walker = WalkDir::new(format!("../experiments/mbpp-{}-{}-{}-{}", lang, model, temp, variation));
+    let walker = WalkDir::new(format!("../experiments/{}-{}-{}-{}-{}", dataset, lang, model, temp, variation));
 
     let mut num_files = 0;
     let mut aggregate_pass_k1 = 0.0;
@@ -577,7 +599,7 @@ fn summarize_one(config: &Config) {
 }
 
 fn summarize_completeness() {
-    println!("Temperature,Variation,Model,Language,Prepared Files,Completions Done (20),Completions Done (200),Results Done (20),Results Done (200)");
+    println!("Dataset,Temperature,Variation,Model,Language,Prepared Files,Completions Done (20),Completions Done (200),Results Done (20),Results Done (200)");
     let configs = all_configurations();
     println!("{}", configs.len());
 
