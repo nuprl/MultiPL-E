@@ -1,4 +1,4 @@
-DOCKER_EXEC := podman
+DOCKER_EXEC=podman
 
 all:
 	${DOCKER_EXEC} build -t multipl-e-evaluation .
