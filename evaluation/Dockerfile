@@ -16,10 +16,18 @@ RUN apt-get install -yqq \
     node-typescript
 RUN apt-get install -yqq curl
 RUN apt-get install -yqq wget 
+# Dlang
 RUN wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
 RUN apt-get update --allow-insecure-repositories
 RUN apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
 RUN apt-get update && apt-get install -yqq dmd-compiler dub
+# C#
+RUN apt install gnupg ca-certificates
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+RUN echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list
+RUN apt update
+RUN apt install -yqq mono-devel
+
 RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz | tar xz
 ENV PATH="/julia-1.8.2/bin:${PATH}"
 # .NET 6 includes the C# compiler
