@@ -19,7 +19,7 @@ to adapt these instructors for other clusters.
 2. Ctrl+C when the machine is allocated, `ssh` into it, and start `tmux`
    or an equivalent program. You will almost certainly disconnect.
 
-3. Checkout this branch (`only_code`) to a directory in /work
+3. Checkout this branch (`main`) to a directory in /work
 
 4. Checkout the experiments branch to a directory within your clone of this
    branch. i.e., experiments should be in the same directory as this README file.
