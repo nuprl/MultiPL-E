@@ -15,7 +15,7 @@ LANG_EXT = ".java"
 def eval_script(path: Path):
 
     sys_env = os.environ.copy()
-    javatuples_path = Path(__file__).parent.parent/"javatuples-1.2.jar"
+    javatuples_path = Path("/usr/multiple/javatuples-1.2.jar")
 
     sys_env["CLASSPATH"] =  f"{javatuples_path}"
 
