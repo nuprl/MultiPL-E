@@ -104,7 +104,7 @@ def main():
 
     args.add_argument("--file", type=str, help="The file to evaluate")
     args.add_argument("--dir", type=str, help="The directory to evaluate")
-    args.add_argument("--testing", action="store_true", help="Testing mode: expecting first completion to OK and second one to have some error. Note: cleans the output directory!")
+    args.add_argument("--testing", action="store_true", help="Testing mode: expecting first completion to OK and second one to have some error. Note: clears the output directory!")
 
     args = args.parse_args()
 
