@@ -104,8 +104,13 @@ def main():
 
     args.add_argument("--file", type=str, help="The file to evaluate")
     args.add_argument("--dir", type=str, help="The directory to evaluate")
+    args.add_argument("--testing", action="store_true", help="Testing mode: expecting first completion to OK and second one to have some error. Note: cleans the output directory!")
 
     args = args.parse_args()
+
+    if args.testing:
+        for p in args.output_dir.iterdir():
+            p.unlink()
 
     if not args.max_workers:
         args.max_workers = cpu_count() - 1 if cpu_count() > 1 else 1
@@ -123,10 +128,27 @@ def main():
             files = f.readlines()[args.job_file_line].rstrip().split(" ")[2:]
         for f in files:
             print(f"Processing {f}")
-            evaluate_problem(args.output_dir, Path(f), args.max_workers)    
+            evaluate_problem(args.output_dir, Path(f), args.max_workers)  
     else:
         print("Specify either --file, --dir, or both --job-file and --job-file-line")
-        exit(1)
+        exit(2)
+
+    if (args.testing):
+        failure_exists = False
+        for output_file in Path(args.output_dir).glob("*.results.json"):
+            with open(output_file) as f:
+                output = json.load(f)
+            if len(output["results"]) != 2:
+                print(f"WARNING: Expected 2 results in {output_file}, got {len(output['results'])}")
+            if output["results"][0]["status"] != "OK":
+                print(f"TEST FAILED: {output_file}: Expects first result to be ok, got {output['results'][0]['status']}")
+                failure_exists = True
+            if not ("Error" in output["results"][1]["status"] or "Timeout" == output["results"][1]["status"] or "Exception" == output["results"][1]["status"]):
+                print(f"TEST FAILED: {output_file}: Expects second result to be error, got {output['results'][1]['status']}")
+                failure_exists = True
+
+        if failure_exists:
+            exit(1)
 
 
 if __name__ == "__main__":
