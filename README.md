@@ -57,6 +57,10 @@ to adapt these instructors for other clusters.
    ```
    sbatch --array 1-$N discovery_array_job.sh
    ```
+   
+   You should check a few easy problems for each language to make sure 
+   that the execution environment is been set up correctly.
+   Here is a suggestion for both datasets: `HumanEval_53_add` and `mbpp_96_divisor`.
 
 9. If you just want aggregate pass-k rates:
 
