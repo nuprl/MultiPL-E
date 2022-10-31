@@ -1,6 +1,14 @@
 # Evaluation Container
 
-The evaluation container runs completions on all 18 languages supported by MutiPL-E.
+This directory contains code to evaluate all languages supported by MultiPL-E.
+
+- We use a container to sandbox evaluation (use `--network none` as directed below);
+- The container packages the build and run dependencies of all supported languages;
+- The evaluation script enforces timeouts on code that runs forever;
+- The evaluation script uses multicore to go faster;
+- The evaluation script avoids re-running identical completions;
+- The evaluation script avoids re-running completions with results that are already
+  generated.
 
 ## Usage
 
@@ -17,10 +25,14 @@ Use the `--volume` option to create directory mappings.
 	docker run --rm --network none 
 		--volume $(PWD)/inputs:/inputs:ro \
 		--volume $(PWD)/outputs:/outputs:rw \
-		multipl-e-evaluation --dir /inputs --output-dir /outputs --testing
+		multipl-e-evaluation \
+                --dir $INPUT_DIR \
+                --output-dir $OUTPUT_DIR
 ```
 
-Read `src/main.py` for options passed into the application itself.
+The `$INPUT_DIR` argument should be a directory with completions. See the `test_inputs` for an example.
+The `$OUTPUT_DIR` argument is the directory where results are generated.
+
 
 ## Specifying alternate docker instance
 
@@ -30,7 +42,7 @@ The docker (or podman) instance can be specified:
 make DOCKER_EXEC="docker" test
 ```
 
-The default instance is the `podman` command.
+(We use Podman by default.)
 
 ## Testing mode
 
