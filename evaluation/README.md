@@ -23,8 +23,8 @@ Use the `--volume` option to create directory mappings.
 
 ```bash
 	docker run --rm --network none 
-		--volume $(PWD)/inputs:/inputs:ro \
-		--volume $(PWD)/outputs:/outputs:rw \
+		--volume ${PWD}/inputs:/inputs:ro \
+		--volume ${PWD}/outputs:/outputs:rw \
 		multipl-e-evaluation \
                 --dir $INPUT_DIR \
                 --output-dir $OUTPUT_DIR
