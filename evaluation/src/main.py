@@ -46,10 +46,12 @@ def cached_eval_script(problem, index) -> dict:
         return result_yaml
 
 
-def get_test_results_json_path(output_dir: Path, problem_json_path: Path) -> Path:
+def get_test_results_json_path(output_dir: Path, problem_json_path: Path, input_dir: Path = None) -> Path:
+    if input_dir:
+        return output_dir / (problem_json_path.relative_to(input_dir).parent / (problem_json_path.stem + ".results.json"))
     return output_dir / (problem_json_path.stem + ".results.json")
 
-def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int):
+def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int, input_dir: Path = None):
     with open(problem_json_path) as f:
         problem = json.load(f)
 
@@ -57,7 +59,9 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
     if len(problem["completions"]) == 0:
         return
 
-    test_results_path = get_test_results_json_path(output_dir, problem_json_path)
+    test_results_path = get_test_results_json_path(output_dir, problem_json_path, input_dir)
+
+    test_results_path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     if not test_results_path.exists():
         test_results = problem.copy()
@@ -104,6 +108,7 @@ def main():
 
     args.add_argument("--file", type=str, help="The file to evaluate")
     args.add_argument("--dir", type=str, help="The directory to evaluate")
+    args.add_argument("--recursive", action="store_true", help="Read all files under each directory, recursively. Only works with --dir.")
     args.add_argument("--testing", action="store_true", help="Testing mode: expecting first completion to OK and second one to have some error. Note: clears the output directory!")
 
     args = args.parse_args()
@@ -115,12 +120,14 @@ def main():
     if not args.max_workers:
         args.max_workers = cpu_count() - 1 if cpu_count() > 1 else 1
 
+    start_t = time.time()
+
     if args.file:
         evaluate_problem(args.output_dir, Path(args.file), args.max_workers)
     elif args.dir:
-        files = [ p for p in Path(args.dir).glob("*.json") if not p.name.endswith(".results.json") ]
+        files = [ p for p in Path(args.dir).glob("**/*.json" if args.recursive else "*.json") if not p.name.endswith(".results.json") ]
         for file in tqdm(files):
-            evaluate_problem(args.output_dir, file, args.max_workers)
+            evaluate_problem(args.output_dir, file, args.max_workers, args.dir)
     elif args.job_file and args.job_file_line is not None:
         with open(args.job_file) as f:
             # Skip the first two space, separated columns, which identify the language
@@ -132,6 +139,9 @@ def main():
     else:
         print("Specify either --file, --dir, or both --job-file and --job-file-line")
         exit(2)
+    
+    end_t = time.time()
+    print(f"Exectution took {end_t - start_t} seconds")
 
     if (args.testing):
         failure_exists = False
