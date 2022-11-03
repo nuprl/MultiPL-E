@@ -45,6 +45,8 @@ for lang in LANGS:
             generated_ids = model.generate(
                 input_ids, max_length=512, pad_token_id=tokenizer.eos_token_id + 2,
                 num_return_sequences=20,
+                top_p=0.95,
+                do_sample=True,
                 temperature=0.2,
             )
             completions = [ stop_at_stop_token(tokenizer.decode(s), problem) for s in generated_ids ]
