@@ -2,61 +2,73 @@ import datasets
 import argparse
 import json
 from pathlib import Path
-from transformers import AutoTokenizer, AutoModelForCausalLM
-
-LANGS = [ "py", "js", "ts", "java", "d", "cpp", "r", "rs", "jl", "sh", "cs", 
-          "go", "lua", "pl", "php", "rb",  "scala", "swift", "rkt" ]
-ROOT_DATASET = [ "humaneval", "mbpp" ]
-
-MODEL_NAME = "Salesforce/codegen-350M-multi"
-MODEL_DIR_NAME = "codegen350multi"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-model = AutoModelForCausalLM.from_pretrained(MODEL_NAME).half().cuda()
-
-def stop_at_stop_token(decoded_string, problem):
-    """
-    Truncates the output at stop tokens, taking care to skip the prompt
-    which may have stop tokens.
-    """
-    min_stop_index = len(decoded_string)
-    for stop_token in problem["stop_tokens"]:
-        stop_index = decoded_string.find(stop_token)
-        if stop_index != -1 and stop_index > len(problem["prompt"]) and stop_index < min_stop_index:
-            min_stop_index = stop_index
-    return decoded_string[:min_stop_index]
+from tqdm import tqdm
 
 args = argparse.ArgumentParser()
-args.add_argument("--output-dir", type=str, required=True)
+
+args.add_argument(
+    "--output-dir",
+    type=str,
+    help="Directory in which to place JSON files with completions. The default is root_dataset-lang-model_name-temperature-reworded",
+)
+args.add_argument(
+    "--lang", type=str, required=True, help="Target language for completions"
+)
+args.add_argument(
+    "--root-dataset", type=str, required=True, help="either mbpp or humaneval"
+)
+args.add_argument(
+    "--model-name",
+    type=str,
+    required=True,
+    help="either incoder or codegen. To add a new model, copy and modify codegen.py",
+)
+args.add_argument("--temperature", type=float, required=True)
+args.add_argument("--input-start-index", type=int, help="Index into the dataset. If omitted, starts from the beginning")
+args.add_argument("--input-limit", type=int, help="Number of items to process from the dataset")
+args.add_argument("--completion-limit", type=int, default=200)
 args = args.parse_args()
 
-for lang in LANGS:
-    for root_dataset in ROOT_DATASET:
-        exp_dir = Path(args.output_dir) / f"{root_dataset}-{lang}-{MODEL_DIR_NAME}-0.2-reworded"
-        exp_dir.mkdir(parents=True, exist_ok=True)
-        problems = datasets.load_dataset("nuprl/MultiPL-E", f"{root_dataset}-{lang}")
-        for problem in problems["test"]:
-            problem_filename = exp_dir / f"{problem['name']}.json"
-            if problem_filename.exists():
-                continue                
-            input_ids = tokenizer(
-                problem["prompt"],
-                return_tensors="pt",
-            ).input_ids.cuda()
-            generated_ids = model.generate(
-                input_ids, max_length=512, pad_token_id=tokenizer.eos_token_id + 2,
-                num_return_sequences=20,
-                top_p=0.95,
-                do_sample=True,
-                temperature=0.2,
-            )
-            completions = [ stop_at_stop_token(tokenizer.decode(s), problem) for s in generated_ids ]
-            result_json = {
-                "name": problem["name"],
-                "language": problem["language"],
-                "prompt": problem["prompt"],
-                "tests": problem["tests"],
-                "completions": completions,
-                "stop_tokens": problem["stop_tokens"],
-            }
-            with open(problem_filename, "w") as f:
-                json.dump(result_json, f)
+if args.output_dir is None:
+    args.output_dir = f"{args.root_dataset}-{args.lang}-{args.model_name}-{args.temperature}-reworded"
+
+model = __import__(args.model_name)
+
+exp_dir = Path(args.output_dir)
+if not exp_dir.exists():
+    exp_dir.mkdir()
+
+problems = datasets.load_dataset("nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}")
+problems = problems["test"]
+start_index = args.input_start_index if args.input_start_index is not None else 0
+stop_index = min(len(problems), start_index + args.input_limit if args.input_limit is not None else len(problems))
+problems = problems.select(range(start_index,stop_index))
+for problem in tqdm(problems, unit = "problems"):
+    # NOTE(arjun): This is a litte hack to delay loading the model, so that we fail faster.
+    problem_filename = exp_dir / f"{problem['name']}.json"
+    if problem_filename.exists():
+        existing = json.loads(problem_filename.read_text())
+        completions = existing["completions"]
+    else:
+        completions = []
+    step = 4
+    for _ in tqdm(range(0, args.completion_limit, step), unit="completions"):
+        new_completions = model.completions(
+            prompt=problem["prompt"],
+            max_tokens=512,
+            temperature=args.temperature,
+            n=step,
+            top_p=0.95,
+            stop=problem["stop_tokens"],
+        )
+        completions.extend(new_completions)
+    result_json = {
+        "name": problem["name"],
+        "language": problem["language"],
+        "prompt": problem["prompt"],
+        "tests": problem["tests"],
+        "completions": completions,
+        "stop_tokens": problem["stop_tokens"],
+    }
+    with open(problem_filename, "w") as f:
+        json.dump(result_json, f)
