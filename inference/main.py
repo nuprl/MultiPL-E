@@ -27,6 +27,7 @@ args.add_argument("--temperature", type=float, required=True)
 args.add_argument("--input-start-index", type=int, help="Index into the dataset. If omitted, starts from the beginning")
 args.add_argument("--input-limit", type=int, help="Number of items to process from the dataset")
 args.add_argument("--completion-limit", type=int, default=200)
+args.add_argument("--batch-size", type=int, default=16, help="Number of completions to batch")
 args = args.parse_args()
 
 if args.output_dir is None:
@@ -51,13 +52,17 @@ for problem in tqdm(problems, unit = "problems"):
         completions = existing["completions"]
     else:
         completions = []
-    step = 4
-    for _ in tqdm(range(0, args.completion_limit, step), unit="completions"):
+
+    if len(completions) > args.completion_limit:
+        # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
+        continue
+
+    for _ in tqdm(range(len(completions), args.completion_limit, args.batch_size), unit="completions"):
         new_completions = model.completions(
             prompt=problem["prompt"],
             max_tokens=512,
             temperature=args.temperature,
-            n=step,
+            n=args.batch_size,
             top_p=0.95,
             stop=problem["stop_tokens"],
         )
