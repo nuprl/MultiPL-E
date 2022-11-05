@@ -30,10 +30,10 @@ args.add_argument("--completion-limit", type=int, default=200)
 args.add_argument("--batch-size", type=int, default=16, help="Number of completions to batch")
 args = args.parse_args()
 
-if args.output_dir is None:
-    args.output_dir = f"{args.root_dataset}-{args.lang}-{args.model_name}-{args.temperature}-reworded"
-
 model = __import__(args.model_name)
+
+if args.output_dir is None:
+    args.output_dir = f"{args.root_dataset}-{args.lang}-{args.model.name}-{args.temperature}-reworded"
 
 exp_dir = Path(args.output_dir)
 if not exp_dir.exists():
