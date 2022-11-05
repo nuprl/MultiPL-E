@@ -66,6 +66,6 @@ class LocalHuggingfaceModel:
     def completions(self, prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop):
         output_tensors = self._completion_tensors(prompt, max_tokens, temperature, n, top_p)
         return [
-            prompt + _stop_at_stop_token(self._decode_single_output(output_tensor, prompt), stop)
+            stop_at_stop_token(self._decode_single_output(output_tensor, prompt), stop)
             for output_tensor in output_tensors
         ]
