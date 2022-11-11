@@ -30,7 +30,7 @@ import sys
 from pathlib import Path
 import logging
 
-MAX_TO_GENERATE=512
+MAX_TO_GENERATE = 512
 
 # problem is a dict. Relevant keys are "name" and "prompt".
 async def process_problem_json(completion, problem, args, max_to_generate):
@@ -48,7 +48,9 @@ async def process_problem_json(completion, problem, args, max_to_generate):
         completion_results["completions"] = []
 
     # completion_results has the same keys as problem, and one extra key "completions".
-    num_completions_required = args.limit_completions - len(completion_results["completions"])
+    num_completions_required = args.limit_completions - len(
+        completion_results["completions"]
+    )
 
     if num_completions_required < 1:
         return
@@ -84,20 +86,24 @@ def configure_logging(args):
 
 async def main():
     args = argparse.ArgumentParser()
+    args.add_argument("--prompts-file", type=str, required=True, help="File of prompts")
     args.add_argument(
-        "--prompts-file", type=str, required=True, help="File of prompts"
+        "--target-dir",
+        type=str,
+        required=True,
+        help="Directory to write completions to",
     )
-    args.add_argument(
-        "--target-dir", type=str, required=True,
-        help="Directory to write completions to")
     args.add_argument("--temperature", type=float, required=True)
     args.add_argument("--max-samples", type=int, required=True)
     args.add_argument("--model", type=str, required=True)
     args.add_argument("--limit-completions", type=int, default=200)
     args.add_argument("--log-file", type=str, default=None)
     args.add_argument("--log-level", type=str, default="INFO")
-    args.add_argument("--local-model", action='store_true',
-        help="If set, --model is the name of a model file to load")
+    args.add_argument(
+        "--local-model",
+        action="store_true",
+        help="If set, --model is the name of a model file to load",
+    )
     args = args.parse_args()
 
     prompts_file = Path(args.prompts_file)
@@ -116,24 +122,36 @@ async def main():
     if args.local_model:
         completions = __import__(args.model).completion
         for problem in problems:
-            await process_problem_json(completions, problem, args, max_to_generate=MAX_TO_GENERATE)
+            await process_problem_json(
+                completions, problem, args, max_to_generate=MAX_TO_GENERATE
+            )
     else:
         # Load the model keys from the CSV file.
         with open("model_keys.csv") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
-        model_keys = [row["Key"] for row in rows if not row["Key"].startswith("http://")]
+        model_keys = [
+            row["Key"] for row in rows if not row["Key"].startswith("http://")
+        ]
         other_models = [
-            (row["Model"], row["Key"]) for row in rows if row["Key"].startswith("http://")
+            (row["Model"], row["Key"])
+            for row in rows
+            if row["Key"].startswith("http://")
         ]
         async with openai_multimodel_multikey.MultiModelMultiKeyCompletion(
             model_keys, other_models
         ) as completions:
             problem_completions = (
-                process_problem_json(completions.completion, problem, args, max_to_generate=MAX_TO_GENERATE)
+                process_problem_json(
+                    completions.completion,
+                    problem,
+                    args,
+                    max_to_generate=MAX_TO_GENERATE,
+                )
                 for problem in problems
             )
             await asyncio.gather(*problem_completions)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
