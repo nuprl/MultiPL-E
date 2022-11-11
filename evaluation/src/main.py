@@ -46,7 +46,7 @@ def cached_eval_script(problem, index) -> dict:
         return result_yaml
 
 
-def get_test_results_json_path(output_dir: Path, problem_json_path: Path, input_dir: Path = None) -> Path:
+def get_test_results_json_path(output_dir: Path, problem_json_path: Path, input_dir: Path) -> Path:
     if input_dir:
         return output_dir / (problem_json_path.relative_to(input_dir).parent / (problem_json_path.stem + ".results.json"))
     return output_dir / (problem_json_path.stem + ".results.json")
@@ -123,6 +123,9 @@ def main():
     start_t = time.time()
 
     if args.file:
+        if args.recursive:
+            print("--file and --recursive can't work together")
+            exit(2)
         evaluate_problem(args.output_dir, Path(args.file), args.max_workers)
     elif args.dir:
         files = [ p for p in Path(args.dir).glob("**/*.json" if args.recursive else "*.json") if not p.name.endswith(".results.json") ]
@@ -141,7 +144,7 @@ def main():
         exit(2)
     
     end_t = time.time()
-    print(f"Exectution took {end_t - start_t} seconds")
+    print(f"Execution took {end_t - start_t} seconds")
 
     if (args.testing):
         failure_exists = False
