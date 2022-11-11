@@ -1,5 +1,6 @@
 import datasets
 import argparse
+import gzip
 import json
 from pathlib import Path
 from tqdm import tqdm
@@ -46,9 +47,10 @@ stop_index = min(len(problems), start_index + args.input_limit if args.input_lim
 problems = problems.select(range(start_index,stop_index))
 for problem in tqdm(problems, unit = "problems"):
     # NOTE(arjun): This is a litte hack to delay loading the model, so that we fail faster.
-    problem_filename = exp_dir / f"{problem['name']}.json"
+    problem_filename = exp_dir / f"{problem['name']}.json.gz"
     if problem_filename.exists():
-        existing = json.loads(problem_filename.read_text())
+        with gzip.open(problem_filename, "rt") as f:
+            existing = json.loads(f.read())
         completions = existing["completions"]
     else:
         completions = []
@@ -75,5 +77,5 @@ for problem in tqdm(problems, unit = "problems"):
         "completions": completions,
         "stop_tokens": problem["stop_tokens"],
     }
-    with open(problem_filename, "w") as f:
+    with gzip.open(problem_filename, "wt") as f:
         json.dump(result_json, f)
