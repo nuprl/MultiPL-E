@@ -20,11 +20,13 @@ def for_file(path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("dir", type=str,  help="directory with results")
+    parser.add_argument("dirs", type=str,  help="directories with results", nargs="+")
     args = parser.parse_args()
-    print("NOTE: Use pass@1 for temperature 0.2 and pass@10 or pass@100 for temperature 0.8")
-    print("[pass@1 pass@10 pass@100]")
-    return np.array([ for_file(p) for p in Path(args.dir).glob("*.results.json") ]).mean(axis=0)
+    for d in args.dirs:
+        print(d)
+        print("NOTE: Use pass@1 for temperature 0.2 and pass@10 or pass@100 for temperature 0.8")
+        print("[pass@1 pass@10 pass@100]")
+        print(np.array([ for_file(p) for p in Path(d).glob("*.results.json") ]).mean(axis=0))
 
 if __name__ == "__main__":
-    print(main())
+    main()
