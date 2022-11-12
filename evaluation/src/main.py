@@ -8,6 +8,8 @@ from containerized_eval import eval_string_script
 from threading import Lock
 import time
 from typing import Optional
+import itertools
+import gzip
 
 # Get working directory
 WORKING_DIR = Path(__file__).parent.parent
@@ -47,12 +49,16 @@ def cached_eval_script(problem, index) -> dict:
 
 
 def get_test_results_json_path(output_dir: Path, problem_json_path: Path, input_dir: Path) -> Path:
+    suffixes = ".results.json.gz" if problem_json_path.suffix == ".gz" else ".results.json"
     if input_dir:
-        return output_dir / (problem_json_path.relative_to(input_dir).parent / (problem_json_path.stem + ".results.json"))
-    return output_dir / (problem_json_path.stem + ".results.json")
+        return output_dir / (problem_json_path.relative_to(input_dir).parent / (problem_json_path.stem + suffixes))
+    return output_dir / (problem_json_path.stem + suffixes)
+
+def open_json(fpath: Path, mode: str):
+    return  gzip.open(fpath, mode + "t") if fpath.suffix == ".gz" else open(fpath, mode) 
 
 def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int, input_dir: Path = None):
-    with open(problem_json_path) as f:
+    with open_json(problem_json_path, "r") as f:
         problem = json.load(f)
 
     # Do not create a blank .results.yaml file if there are no completions ready.
@@ -68,7 +74,7 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
         del test_results["completions"]
         test_results["results"] = []
     else:
-        with test_results_path.open() as f:
+        with open_json(test_results_path, "r") as f:
             test_results = json.load(f)
 
     num_problems = len(problem["completions"])
@@ -88,7 +94,7 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         for j in executor.map(lambda index: cached_eval_script(problem, index), range(min_problem, num_problems)):
             test_results["results"].append(j)
-            with test_results_path.open("w") as f:
+            with open_json(test_results_path, "w") as f:
                 f.write(json.dumps(test_results, indent=2))
 
 
@@ -128,7 +134,9 @@ def main():
             exit(2)
         evaluate_problem(args.output_dir, Path(args.file), args.max_workers)
     elif args.dir:
-        files = [ p for p in Path(args.dir).glob("**/*.json" if args.recursive else "*.json") if not p.name.endswith(".results.json") ]
+        files = [ p for p in itertools.chain(Path(args.dir).glob("**/*.json" if args.recursive else "*.json"), \
+                                             Path(args.dir).glob("**/*.json.gz" if args.recursive else "*.json.gz")) \
+                    if not p.name.endswith(".results.json") or p.name.endswith(".results.json.gz")  ] 
         for file in tqdm(files):
             evaluate_problem(args.output_dir, file, args.max_workers, args.dir)
     elif args.job_file and args.job_file_line is not None:
@@ -148,8 +156,8 @@ def main():
 
     if (args.testing):
         failure_exists = False
-        for output_file in Path(args.output_dir).glob("*.results.json"):
-            with open(output_file) as f:
+        for output_file in itertools.chain(Path(args.output_dir).glob("*.results.json"),Path(args.output_dir).glob("*.results.json.gz")):
+            with open_json(output_file, "r") as f:
                 output = json.load(f)
             if len(output["results"]) != 2:
                 print(f"WARNING: Expected 2 results in {output_file}, got {len(output['results'])}")
