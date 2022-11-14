@@ -50,9 +50,10 @@ def cached_eval_script(problem, index) -> dict:
 
 def get_test_results_json_path(output_dir: Path, problem_json_path: Path, input_dir: Path) -> Path:
     suffixes = ".results.json.gz" if problem_json_path.suffix == ".gz" else ".results.json"
+    problem_name = problem_json_path.name[:-(len(".json.gz") if problem_json_path.suffix == ".gz" else len(".json"))]
     if input_dir:
-        return output_dir / (problem_json_path.relative_to(input_dir).parent / (problem_json_path.stem + suffixes))
-    return output_dir / (problem_json_path.stem + suffixes)
+        return output_dir / (problem_json_path.relative_to(input_dir).parent / (problem_name + suffixes))
+    return output_dir / (problem_name + suffixes)
 
 def open_json(fpath: Path, mode: str):
     return  gzip.open(fpath, mode + "t") if fpath.suffix == ".gz" else open(fpath, mode) 
