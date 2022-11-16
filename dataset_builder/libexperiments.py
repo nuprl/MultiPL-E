@@ -4,15 +4,17 @@ from typing import Iterator
 
 @dataclasses.dataclass
 class Experiment:
+    dataset: str
     lang: str
     model: str
     temp: str
     variation: str
 
     def path(self) -> Path:
-        return Path(f"../experiments/{self.lang}-{self.model}-{self.temp}-{self.variation}")
+        return Path(f"./experiments/{self.dataset}-{self.lang}-{self.model}-{self.temp}-{self.variation}")
 
 # Loop over experiments in this order.
+DATASETS = [ "humaneval", "mbpp" ]
 TEMPS = ["0.2", "0.8"]
 VARIATIONS = ["reworded", "keep", "transform", "remove"]
 LANGS = [
@@ -45,10 +47,17 @@ def all_experiments() -> Iterator[Experiment]:
     has results from configurations that were explored and determined 
     uninteresting for a full result. (We are not deleting results.)
     """
-    for temp in TEMPS:
-        for lang in LANGS:
-            for model in MODELS:
-                for variation in VARIATIONS:
-                    if temp == "0.8" and variation != "reworded":
-                        continue
-                    yield Experiment(lang, model, temp, variation)
+    for dataset in DATASETS:
+        for temp in TEMPS:
+            for lang in LANGS:
+                for model in MODELS:
+                    for variation in VARIATIONS:
+                        if variation == "reworded":
+                            yield Experiment(dataset, lang, model, temp, "reworded")
+                        elif (model == "davinci" and dataset == "humaneval" and temp == "0.2"):
+                            # For non-reworded, we just do an ablation with HumanEval on Codex at
+                            # 0.2 temperature.
+                            yield Experiment(dataset, lang, model, temp, variation)
+                        else:
+                            pass
+
