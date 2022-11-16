@@ -102,8 +102,8 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
 def main():
     args = argparse.ArgumentParser()
 
-    args.add_argument("--output-dir", type=Path, required=True,
-        help="Directory to store results in")
+    args.add_argument("--output-dir", type=Path,
+        help="Directory to store results in. Ignored when using a --job-file")
     args.add_argument(
         "--max-workers", type=int, help="Maximum number of workers to use",
     )
@@ -133,21 +133,35 @@ def main():
         if args.recursive:
             print("--file and --recursive can't work together")
             exit(2)
+        if args.output_dir is None:
+            print("--file requires --output-dir")
+            exit(2)
+        if args.job_file is not None or args.job_file_line is not None:
+            print("--file and --job-file can't work together")
+            exit(2)
         evaluate_problem(args.output_dir, Path(args.file), args.max_workers)
     elif args.dir:
+        if args.output_dir is None:
+            print("--dir requires --output-dir")
+            exit(2)
+        if args.job_file is not None or args.job_file_line is not None:
+            print("--dir and --job-file can't work together")
+            exit(2)
         files = [ p for p in itertools.chain(Path(args.dir).glob("**/*.json" if args.recursive else "*.json"), \
                                              Path(args.dir).glob("**/*.json.gz" if args.recursive else "*.json.gz")) \
                     if not p.name.endswith(".results.json") or p.name.endswith(".results.json.gz")  ] 
         for file in tqdm(files):
             evaluate_problem(args.output_dir, file, args.max_workers, args.dir)
     elif args.job_file and args.job_file_line is not None:
+        if args.output_dir is not None:
+            print("--job-file and --output-dir can't work together")
+            exit(2)
         with open(args.job_file) as f:
-            # Skip the first two space, separated columns, which identify the language
-            # and the number of jobs.
-            files = f.readlines()[args.job_file_line].rstrip().split(" ")[2:]
+            files = f.readlines()[args.job_file_line].rstrip().split(" ")
         for f in files:
             print(f"Processing {f}")
-            evaluate_problem(args.output_dir, Path(f), args.max_workers)  
+            p = Path(f)
+            evaluate_problem(p.parent, p, args.max_workers)  
     else:
         print("Specify either --file, --dir, or both --job-file and --job-file-line")
         exit(2)

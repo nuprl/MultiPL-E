@@ -56,5 +56,39 @@ To build the container and run the tests, run
 make test
 ```
 
+## Usage with Singularity
 
+The Northeastern Discovery cluster uses Singularity containers. To use it on
+Discovery, first pull the OCI container from a public registry. E.g., we have
+uploaded it to the GitHub container registry:
 
+```
+singularity pull docker://ghcr.io/nuprl/multipl-e-evaluation
+```
+
+This creates a file called `multipl-e-evaluation_latest.sif`, which is the
+container image.
+
+You can now run the container as follows:
+
+```
+mkdir /scratch/a.guha/singularity_home
+mkdir test_outputs
+singularity exec \
+    --home /scratch/a.guha/singularity_home:/home/a.guha \
+    --network none \
+    --bind test_inputs:/inputs:ro,test_outputs:/outputs:rw \
+    /home/a.guha/multipl-e-evaluation_latest.sif \
+    python3 src/main.py --dir /inputs --output-dir /outputs --testing
+```
+
+Some differences from Docker/Podman:
+
+- The user in the container is *not* root, but your user
+- By default, Singularity mounts your own home directory in the container. We
+  could disable this with `--no-home`, but Swift requires a home directory for
+  build artifacts. Therefore, we mount a scratch directory.
+- Notice that we have to specify the command to run. Seems like Singularity does
+  not have entrypoints like Docker.
+- The current directory in which `singularity` runs is mounted in the container
+  as read/writable. Maybe this can be disabled?
