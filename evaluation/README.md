@@ -79,7 +79,7 @@ singularity exec \
     --network none \
     --bind test_inputs:/inputs:ro,test_outputs:/outputs:rw \
     /home/a.guha/multipl-e-evaluation_latest.sif \
-    python3 /code/main.py --dir /inputs --output-dir /outputs --testing
+    python3 src/main.py --dir /inputs --output-dir /outputs --testing
 ```
 
 Some differences from Docker/Podman:
@@ -90,5 +90,5 @@ Some differences from Docker/Podman:
   build artifacts. Therefore, we mount a scratch directory.
 - Notice that we have to specify the command to run. Seems like Singularity does
   not have entrypoints like Docker.
-
-
+- The current directory in which `singularity` runs is mounted in the container
+  as read/writable. Maybe this can be disabled?
