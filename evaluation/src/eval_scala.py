@@ -6,7 +6,7 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
-from generic_eval import main
+from safe_subprocess import run
 
 LANG_NAME = "Scala"
 LANG_EXT = ".scala"
@@ -28,28 +28,26 @@ def eval_script(path: Path):
             returncode = build.returncode
             output = build
         else:
-            try:
-                output = subprocess.run(["scala", "-cp", f"{outdir}", exec_name], capture_output=True, timeout=5, encoding="utf-8")
-                returncode = output.returncode
-                if output.returncode == 0 and output.stderr == "":
-                    status = "OK"
-                else:
-                    # Well, it's a panic
-                    status = "Exception"
-            except subprocess.TimeoutExpired as exc:
+            r = run(["scala", "-cp", f"{outdir}", exec_name])
+            returncode = r.exit_code
+            if r.timeout:
                 status = "Timeout"
-                output = exc
+            elif returncode == 0 and r.stderr == "":
+                status = "OK"
+            else:
+                # Well, it's a panic
+                status = "Exception"
 
         if output.stdout is None:
             output.stdout = "None"
         if output.stderr is None:
             output.stderr = "None"
-        return {
-            "status": status,
-            "exit_code": returncode,
-            "stdout": output.stdout,
-            "stderr": output.stderr,
-        }
+    return {
+        "status": status,
+        "exit_code": returncode,
+        "stdout": output.stdout,
+        "stderr": output.stderr,
+    }
 
 if __name__ == "__main__":
     main(eval_script, LANG_NAME, LANG_EXT)
