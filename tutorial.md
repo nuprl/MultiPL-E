@@ -9,20 +9,14 @@ nav_order: 1
 In this tutorial, we will run a small experiment to evaluate the performance of
 OpenAI Codex on C++ with a small subset of the HumanEval benchmarks. So that you
 can run it quickly it quickly on a single machine, we will only fetch 20
-completions per problem. We suggest C++ because you probably already have a C++
-compiler on your machine. But, you can substitute it with any language that we
-support. You can also run on the full suite of benchmarks or substitute your own
+completions per problem.  
+You can also run on the full suite of benchmarks or substitute your own
 benchmark programs. Later, we'll show you how to add support for other languages
 and evaluate other models.
 
-## Prerequisites and Code
+## Prerequisites
 
-1. You will need the toolchain for the programming language that you want to
-   evaluate. To get started, we recommend C++, since you are likely to already
-   have it installed. On Linux, our scripts expect `g++` to work. On MacOS,
-   `g++` is an alias Clang which should work as well.
-
-2. You will need Python 3.10 or higher. If your system Python is not Python 3.10,
+1. You will need Python 3.10 or higher. If your system Python is not Python 3.10,
     we recommend installing it in a [Conda] virtual environment:
 
     ```bash
@@ -30,11 +24,82 @@ and evaluate other models.
     $ conda activate MultiPL-E
     ```
 
-3. You will need to install some Python packages:
+2. You will need to install some Python packages:
 
     ```bash
-    $ pip3 install aiohttp numpy pyyaml tqdm yamlize pytest
+    $ pip3 install aiohttp numpy tqdm pytest
     ```
+
+3. Check out the repository:    
+
+   ```bash
+   $ git clone -c feature.manyFiles=true --depth=1 https://github.com/nuprl/MultiPL-E
+   ```
+
+## Generating Completions
+
+The next step is to generate the completions.
+
+4. `cd` into the `inference` directory:
+   ```bash
+   cd MultiPL-E/inference 
+   ```
+
+5. We are going to use [Incoder] to generate 20 Rust completions for each prompts in `mbpp` dataset:
+
+   ```bash
+   python main.py --model-name incoder --root-dataset mbpp --lang rs --temperature 0.2 --batchsize 16 --completion-limit 20
+   ```
+
+   This will produce completions for Incoder-6B and should work on a GPU with 48GB VRAM; lower the `--batchsize` if you have less VRAM. The command stores 20 completions in the directory called `mbpp-rs-incoder-0.2-reworded`.
+
+Read [inference/README.md](https://github.com/nuprl/MultiPL-E/tree/main/inference) for more details to generating completions.
+
+## Evaluating Completions
+
+Now, we need to evaluate our completions.
+
+6. First, `cd` into the `evaluation` directory:
+
+   ```bash
+   cd ../evaluation
+   ```
+
+7. Build the evaluation container. You need [Podman], [Docker] or some other compatible tools:
+
+   ```bash
+   # podman
+   make build
+   # For docker, use 
+   make DOCKER_EXEC="docker" testmake 
+   ```
+
+9. Create a directory for results of evaluation:
+
+   ```bash
+   mkdir outputs
+
+8. Execute the following command:
+
+   ```bash
+   # For Docker, replace `podman` with `docker`
+   podman run --rm \
+      --network none \
+      --volume ../inference/mbpp-rs-incoder-0.2-reworded:/inputs:ro \
+      --volume ./outputs:/outputs:rw \
+      multipl-e-evaluation --dir /inputs --output-dir /outputs
+   ```
+
+At this time, the generated completions should be in the `outputs` directory.
+More documentations about the 
+
+## OLD: Prerequisites and Code
+
+1. You will need the toolchain for the programming language that you want to
+   evaluate. To get started, we recommend C++, since you are likely to already
+   have it installed. On Linux, our scripts expect `g++` to work. On MacOS,
+   `g++` is an alias Clang which should work as well.
+
 
 4. Check out the repository:
 
@@ -137,3 +202,5 @@ There are several things you may want to do next.
 [Conda]: https://conda.io/
 [Codex beta]: https://openai.com/blog/openai-codex/
 [Incoder]: https://github.com/arjunguha/research_model_server
+[Podman]: https://podman.io/
+[Podman]: https://www.docker.com/
