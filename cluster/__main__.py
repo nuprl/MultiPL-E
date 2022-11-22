@@ -98,11 +98,11 @@ def single_problem_pass_k_for_experiment(exp: Experiment) -> List[str]:
         c = sum((1 for r in results_json["results"] if r["status"] == "OK" and r["exit_code"] == 0))
         if exp.temp == "0.2":
             pass1 = estimate_passk(n, c, 1)
-            results.append(f"{dataset},{lang},{model},{variation},{problem},{pass1},{n},NA,NA,NA")
+            results.append(f"{dataset},{lang},{problem},{model},{variation},{pass1},{n},NA,NA,NA")
         elif exp.temp == "0.8":
             pass10 = estimate_passk(n, c, 10)
             pass100 = estimate_passk(n, c, 100)
-            results.append(f"{dataset},{lang},{model},{variation},{problem},NA,NA,{pass10},{n},{pass100}")
+            results.append(f"{dataset},{lang},{problem},{model},{variation},NA,NA,{pass10},{n},{pass100}")
         else:
             raise ValueError(f"Unknown temperature {exp.temp}")
     return results
