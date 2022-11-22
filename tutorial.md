@@ -7,9 +7,9 @@ nav_order: 1
 # Tutorial
 
 In this tutorial, we will run a small experiment to evaluate the performance of
-OpenAI Codex on C++ with a small subset of the HumanEval benchmarks. So that you
-can run it quickly it quickly on a single machine, we will only fetch 20
-completions per problem.  
+[InCoder] on Rust with a small subset of the MBPP benchmarks. 
+We will only fetch 20 completions per problem, so that you
+can run it quickly it quickly on a single machine.  
 You can also run on the full suite of benchmarks or substitute your own
 benchmark programs. Later, we'll show you how to add support for other languages
 and evaluate other models.
