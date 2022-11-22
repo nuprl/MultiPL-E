@@ -63,25 +63,19 @@ Read [inference/README.md](https://github.com/nuprl/MultiPL-E/tree/main/inferenc
 
 Now, we need to evaluate our completions.
 
-6. First, `cd` into the `evaluation` directory:
+6. Pull the [evaluation container](https://github.com/nuprl/MultiPL-E/pkgs/container/multipl-e-evaluation) from the packages list, and tag the container: 
 
    ```bash
-   cd ../evaluation
+   podman pull ghcr.io/nuprl/multipl-e-evaluation
+   podman tag ghcr.io/nuprl/multipl-e-evaluation multipl-e-eval
    ```
 
-7. Build the evaluation container: 
+   Replace `podman` to `docker` if you are using docker.
+
+7. Create a directory for results of evaluation:
 
    ```bash
-   # podman
-   make build
-   # For docker, use 
-   make DOCKER_EXEC="docker" testmake 
-   ```
-
-9. Create a directory for results of evaluation:
-
-   ```bash
-   mkdir outputs
+   mkdir results 
    ```
 
 8. Execute the following command:
@@ -90,9 +84,9 @@ Now, we need to evaluate our completions.
    # For Docker, replace `podman` with `docker`
    podman run --rm \
       --network none \
-      --volume ../inference/mbpp-rs-incoder-0.2-reworded:/inputs:ro \
-      --volume ./outputs:/outputs:rw \
-      multipl-e-evaluation --dir /inputs --output-dir /outputs
+      --volume ./mbpp-rs-incoder-0.2-reworded:/inputs:ro \
+      --volume ./results:/outputs:rw \
+      multipl-e-eval --dir /inputs --output-dir /outputs
    ```
 
 At this time, the generated completions should be in the `outputs` directory.
@@ -115,8 +109,6 @@ experiment.
 # What's Next?
 
 There are several things you may want to do next.
-
-
 
 [Conda]: https://conda.io/
 [Codex beta]: https://openai.com/blog/openai-codex/
