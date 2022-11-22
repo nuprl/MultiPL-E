@@ -98,7 +98,7 @@ For more details about generating the results, see the [documentation and code f
 Finally, you can calculate the pass rates:
 
 ```
-python3 ../src/single_experiment_pass_k.py ./outputs
+python3 ../src/single_experiment_pass_k.py ./results
 ```
 
 The experiment prints pass rates for k=1, k=10, and k=100. *Ignore the k=10 and
