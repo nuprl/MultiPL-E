@@ -82,29 +82,35 @@ def estimate_passk(n: int, c: int, k: int) -> float:
     return 1.0 - np.prod(1.0 - k / np.arange(n - c + 1, n + 1))
 
 
-def single_problem_pass_k_for_experiment(exp: Experiment) -> List[str]:
+def single_problem_pass_k_for_experiment(exp_lo: Experiment) -> List[str]:
     results = [ ]
-    dataset = exp.dataset
-    lang = exp.lang
-    model = exp.model
-    variation = exp.variation
-    for result_path in exp.path().glob("*.results.json.gz"):
+    dataset = exp_lo.dataset
+    lang = exp_lo.lang
+    model = exp_lo.model
+    variation = exp_lo.variation
+    exp_hi = Experiment(dataset, lang, model, "0.8", variation)
+
+    for result_path in exp_lo.path().glob("*.results.json.gz"):
         results_json = gunzip_json(result_path)
         if results_json is None:
             eprint(f"Ignoring {result_path}")
             continue
         problem = result_path.name[:-len(".results.json.gz")]
-        n = len(results_json["results"])
-        c = sum((1 for r in results_json["results"] if r["status"] == "OK" and r["exit_code"] == 0))
-        if exp.temp == "0.2":
-            pass1 = estimate_passk(n, c, 1)
-            results.append(f"{dataset},{lang},{problem},{model},{variation},{pass1},{n},NA,NA,NA")
-        elif exp.temp == "0.8":
-            pass10 = estimate_passk(n, c, 10)
-            pass100 = estimate_passk(n, c, 100)
-            results.append(f"{dataset},{lang},{problem},{model},{variation},NA,NA,{pass10},{n},{pass100}")
+        n_lo = len(results_json["results"])
+        c_lo = sum((1 for r in results_json["results"] if r["status"] == "OK" and r["exit_code"] == 0))
+        pass1 = estimate_passk(n_lo, c_lo, 1)
+        results_json_hi = gunzip_json(exp_hi.path() / result_path.name)
+        
+        if results_json_hi is None:
+            pass10 = "NA"
+            pass100 = "NA"
+            n_hi = "NA"
         else:
-            raise ValueError(f"Unknown temperature {exp.temp}")
+            n_hi = len(results_json_hi["results"])
+            c_hi = sum((1 for r in results_json_hi["results"] if r["status"] == "OK" and r["exit_code"] == 0))
+            pass10 = estimate_passk(n_hi, c_hi, 10)
+            pass100 = estimate_passk(n_hi, c_hi, 100)
+        results.append(f"{dataset},{lang},{problem},{model},{variation},{pass1},{n_lo},{pass10},{n_hi},{pass100}")
     return results
 
 
@@ -112,7 +118,7 @@ def single_problem_pass_k(args):
     output: Path = args.output
     with output.open("wt") as f:
         f.write("dataset,lang,problem,model,variation,pass@1,n(t=0.2),pass@10,n(t=0.8),pass@100\n")
-        exps = list(all_experiments())
+        exps = list((exp for exp in all_experiments() if exp.temp == "0.2"))
         with ProcessPoolExecutor() as executor:
             for results in tqdm.tqdm(executor.map(single_problem_pass_k_for_experiment, exps), total=len(exps)):
                 for line in results:
