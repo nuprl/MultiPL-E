@@ -131,14 +131,18 @@ all_pass <- per_problem_new %>% group_by(DATASET,PL,MODEL,EXPT) %>% summarize(K1
                                                                       FREQ = unique(FREQ),
                                                                       TYPES = unique(TYPES),
                                                                       PERPLEXITY = unique(PERPLEXITY))
+```
 
+```{r}
 all.mean <- all_pass %>% pivot_longer(K1:K100)
 colnames(all.mean) <- c("DATASET","PL","MODEL","EXPT","FREQ","TYPES","PERPLEXITY","K","RES")
 
 all.mean$K <- factor(all.mean$K,levels = c("K1","K10","K100"))
 all.mean <- all.mean %>% mutate(MODEL_K = paste0(MODEL,'_',K))
+all.mean <- all.mean %>% mutate(MODEL_DS = paste0(MODEL,'_',DATASET))
 
 all.mean$MODEL_K <- factor(all.mean$MODEL_K,levels = c("incoder_K1","incoder_K10","incoder_K100","codegen_K1","codegen_K10","codegen_K100","davinci_K1","davinci_K10","davinci_K100"))
+all.mean$MODEL_DS <- factor(all.mean$MODEL_DS,levels = c("incoder_humaneval","incoder_mbpp","codegen_humaneval","codegen_mbpp","davinci_humaneval","davinci_mbpp"))
 all.mean$MODEL <- factor(all.mean$MODEL,levels = c("incoder","codegen","davinci"))
 ```
 
@@ -156,6 +160,8 @@ expt_labs <- c(`keep` = "Original Prompt",`transform` = "Test-Only Translation",
 m_labs <- c("davinci"="Codex","incoder"="InCoder","codegen"="CodeGen")
 all.mean$EXPT <- factor(all.mean$EXPT,levels = c("keep","transform","reworded","remove"))
 
+test <- subset(all.mean,K=="K1"&DATASET=="humaneval")
+
 ggplot(subset(all.mean,K=="K1"&DATASET=="humaneval"), aes(x=PL,y=RES,fill=EXPT)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~MODEL, nrow = 3,labeller=as_labeller(m_labs)) + scale_fill_manual(name = "Experiment", values=c("#DC267F", "#FFB000","#0072B2","#56B4E9"), labels=expt_labs) + ylab("Average pass@1 rate")+ theme(text=element_text(size=20),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=3,byrow=TRUE))
 ggsave("all_expts_pass1.pdf",height=16,width=8)
 ```
@@ -165,15 +171,15 @@ ggsave("all_expts_pass1.pdf",height=16,width=8)
 expt_labs <- c(`keep` = "Original Prompt",`transform` = "Test-Only Translation", `reworded` = "Full Translation",`remove` = "No Doctests")
 all.mean$EXPT <- factor(all.mean$EXPT,levels = c("keep","transform","reworded","remove"))
 
-ggplot(subset(subset(all.mean,K=="K1"),MODEL=="davinci"&DATASET=="humaneval"), aes(x=PL,y=RES,fill=EXPT)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~MODEL, nrow = 2,labeller=as_labeller(m_labs)) + scale_fill_manual(name = "Experiment", values=c("#DC267F", "#FFB000","#0072B2","#56B4E9"), labels=expt_labs) + ylab("Average pass@1 rate")+ theme(text=element_text(size=20),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE))
-ggsave("all_expts_codex_pass1.pdf",height=12,width=14)
+ggplot(subset(subset(all.mean,K=="K1"),MODEL=="davinci"&DATASET=="humaneval"), aes(x=PL,y=RES,fill=EXPT)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~MODEL, nrow = 2,labeller=as_labeller(m_labs)) + scale_fill_manual(name = "Experiment", values=c( "#FFB000","#DC267F","#56B4E9","#785EF0"), labels=expt_labs) + ylab("Average pass@1 rate")+ theme(text=element_text(size=20),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=2,byrow=TRUE)) +ylim(0,0.6)
+ggsave("all_expts_codex_pass1.pdf",height=8,width=12)
 ```
 
 Plot all HumanEval passes, by model and language for TRANSFORM TRANSFORM
 
 ```{r}
-ggplot(subset(all.mean,EXPT="reworded"&DATASET=="humaneval"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#f768a1","#DC267F","#980043","#FFB000","#fd8d3c","#fc4e2a","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','CodeGen k=1','CodeGen k=10','CodeGen k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")  + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=3,byrow=TRUE)) + facet_wrap(~MODEL, nrow = 3,labeller=as_labeller(m_labs))
-ggsave("all_models_temps_reworded.pdf",height=12,width=14)
+ggplot(subset(all.mean,EXPT=="reworded"&DATASET=="humaneval"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#f768a1","#DC267F","#980043","#FFB000","#fd8d3c","#fc4e2a","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','CodeGen k=1','CodeGen k=10','CodeGen k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")  + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=3,byrow=TRUE)) + facet_wrap(~MODEL, nrow = 3,labeller=as_labeller(m_labs))
+ggsave("he_all_models_temps_reworded.pdf",height=12,width=14)
 ```
 
 Plot all MBPP passes, by model and language
@@ -182,6 +188,28 @@ Plot all MBPP passes, by model and language
 ggplot(subset(all.mean,DATASET=="mbpp"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#f768a1","#DC267F","#980043","#FFB000","#fd8d3c","#fc4e2a","#56B4E9","#0072B2","#000000"),labels=c('InCoder k=1', 'InCoder k=10','InCoder k=100','CodeGen k=1','CodeGen k=10','CodeGen k=100','Codex k=1', 'Codex k=10','Codex k=100')) + ylab("Average pass rate")  + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=3,byrow=TRUE)) + facet_wrap(~MODEL, nrow = 3,labeller=as_labeller(m_labs))
 ggsave("mbpp_all_models_temps.pdf",height=12,width=14)
 ```
+
+Plot HumanEval pass at 1, by model and language
+
+```{r}
+ggplot(subset(all.mean,EXPT=="reworded"&DATASET=="humaneval"&K=="K1"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs) +ylim(0,0.8) + scale_fill_manual(name = "Model", values=c("#f768a1","#FFB000","#56B4E9"),labels=c('InCoder k=1', 'CodeGen k=1','Codex k=1')) + ylab("Average pass rate")  + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom")
+ggsave("he_all_models_k1.pdf",height=6,width=12)
+```
+
+Plot MBPP pass at 1, by model and language
+
+```{r}
+ggplot(subset(all.mean,DATASET=="mbpp"&K=="K1"), aes(x=PL,y=RES,fill=MODEL_K)) + geom_col(position="dodge") +ylim(0,0.8)+ scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Model", values=c("#DC267F","#fd8d3c","#0072B2"),labels=c('InCoder k=1', 'CodeGen k=1','Codex k=1')) + ylab("Average pass rate")  + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom")
+ggsave("mbpp_all_models_k1.pdf",height=6,width=12)
+```
+
+Plot MBPP and HumanEval pass at 1, by model and language
+
+```{r}
+ggplot(subset(all.mean,K=="K1"), aes(x=PL,y=RES,fill=MODEL_DS)) + geom_col(position="dodge") +ylim(0,0.8)+ scale_x_discrete(name ="Language", labels=pl_labs) + scale_fill_manual(name = "Expt.", values=c("#f768a1","#DC267F","#FFB000","#fd8d3c","#56B4E9","#0072B2"),labels=c('InCoder HE','InCoder MBPP', 'CodeGen HE','CodeGen MBPP','Codex HE','Codex MBPP')) + ylab("Average pass rate")  + theme(text=element_text(size=18),axis.text.x = element_text(angle = 90, hjust=1),legend.position="bottom") +guides(fill=guide_legend(nrow=3,byrow=TRUE))
+ggsave("all_models_k1.pdf",height=8,width=12)
+```
+
 
 Plot HumanEval pass at 1 by model, expt=reworded, languages by frequency
  
@@ -192,8 +220,8 @@ all.mean$PL <- factor(all.mean$PL,levels = pl_order)
 all.mean$FREQ <- factor(all.mean$FREQ,levels = c("High","Medium","Low","Niche"))
 
 freq <- subset(all.mean,EXPT=='reworded'&K=="K1"&DATASET=="humaneval")
-ggplot(freq,aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 2,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=26),legend.position="bottom",axis.text.x = element_text(angle = 90, hjust=1)) + scale_fill_manual(name = "Model", values=c("#f768a1","#fd8d3c","#56B4E9"),labels=c('InCoder','CodeGen','Codex'))  +guides(fill=guide_legend(nrow=1,byrow=TRUE)) + geom_vline(data=filter(freq,FREQ=="Niche"),size=2,aes(xintercept=3.5),linetype="dotted") + geom_vline(data=filter(freq,FREQ!="Niche"),size=2,aes(xintercept=2.5),linetype="dotted")
-ggsave("lang_freq_pass1_reworded.pdf",height=10,width=12)
+ggplot(freq,aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 1,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=18),legend.position="bottom",axis.text.x = element_text(angle = 90, hjust=1)) + scale_fill_manual(name = "Model", values=c("#f768a1","#FFB000","#56B4E9"),labels=c('InCoder','CodeGen','Codex'))  +guides(fill=guide_legend(nrow=1,byrow=TRUE)) + geom_vline(data=filter(freq,FREQ=="Niche"),size=1,aes(xintercept=3.5),linetype="dotted") + geom_vline(data=filter(freq,FREQ!="Niche"),size=1,aes(xintercept=2.5),linetype="dotted") +ylim(0,0.8)
+ggsave("lang_freq_pass1_reworded.pdf",height=6,width=12)
 ```
 
 Plot MBPP pass at 1 by model, languages by frequency
@@ -203,8 +231,8 @@ all.mean$PL <- factor(all.mean$PL,levels = pl_order)
 all.mean$FREQ <- factor(all.mean$FREQ,levels = c("High","Medium","Low","Niche"))
 
 freq <- subset(all.mean,K=="K1"&DATASET=="mbpp")
-ggplot(freq,aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 2,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=26),legend.position="bottom",axis.text.x = element_text(angle = 90, hjust=1)) + scale_fill_manual(name = "Model", values=c("#56B4E9"),labels=c('Codex'))  +guides(fill=guide_legend(nrow=1,byrow=TRUE)) + geom_vline(data=filter(freq,FREQ=="Niche"),size=2,aes(xintercept=3.5),linetype="dotted") + geom_vline(data=filter(freq,FREQ!="Niche"),size=2,aes(xintercept=2.5),linetype="dotted")
-ggsave("mbpp_lang_freq_pass1.pdf",height=10,width=12)
+ggplot(freq,aes(x=PL,y=RES,fill=MODEL)) + geom_col(position="dodge") + scale_x_discrete(name ="Language", labels=pl_labs)+ facet_wrap(~FREQ, nrow = 1,scales = "free_x") + ylab("Pass@1 rates") + theme(text=element_text(size=18),legend.position="bottom",axis.text.x = element_text(angle = 90, hjust=1)) + scale_fill_manual(name = "Model", values=c("#DC267F","#fd8d3c","#0072B2"),labels=c('InCoder','CodeGen','Codex'))  +guides(fill=guide_legend(nrow=1,byrow=TRUE)) + geom_vline(data=filter(freq,FREQ=="Niche"),size=1,aes(xintercept=3.5),linetype="dotted") + geom_vline(data=filter(freq,FREQ!="Niche"),size=1,aes(xintercept=2.5),linetype="dotted") +ylim(0,0.8)
+ggsave("mbpp_lang_freq_pass1.pdf",height=6,width=12)
 ```
 
 Boxplots using per-problem k=1
@@ -235,6 +263,7 @@ cor(perp$perplexity,perp$avg_pass1)
 ggsave("perplexity.pdf",height=10,width=12)
 ```
 
+
 ## By language feature analysis
 
 ```{r}
@@ -258,8 +287,9 @@ by.feature <- by.feature.long %>% filter(value==1) %>%
 feature_order <- c("Bool", "Dictionary", "List", "Tuple","None")
 by.feature$name <- factor(by.feature$name,levels = feature_order)
 ```
+
 ```{r}
-ggplot(data=by.feature, aes(x=PL,y=means,color=PL=="py",fill=name)) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~name, nrow = 6,labeller=as_labeller(class_labs)) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) +  geom_vline(xintercept=c(0,1.5),linetype="dotted")
+ggplot(data=by.feature, aes(x=PL,y=means,color=PL=="py",fill=name)) + geom_col(position="dodge", show.legend = FALSE) + facet_wrap(~name, nrow = 6,labeller=as_labeller(class_labs)) + scale_x_discrete(name ="Language", labels=pl_labs)+ ylab("Average pass@1 rate")  + theme(text=element_text(size=16),axis.text.x = element_text(angle = 90, hjust=1)) +  scale_color_manual(name = "Python", values=c("white","black")) + scale_fill_manual(name="",values=c("#648FFF","#DC267F","#785EF0","#FE6100","#FFB000"))
 ggsave("reworded_davinci_lang_features_pass1.pdf",height=8,width=12)
 ```
 
