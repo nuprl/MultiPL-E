@@ -2,27 +2,17 @@ import argparse
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor
 import sys
-import json
-import gzip
 import tqdm
 import math
 from dataset_builder.libexperiments import all_experiments, Experiment
-from typing import Optional, List
+from typing import List
 import numpy as np
+from util import gunzip_json
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-def gunzip_json(path: Path) -> Optional[dict]:
-    """
-    Reads a .json.gz file, and produces None if any error occured.
-    """
-    try:
-        with gzip.open(path, "rt") as f:
-            return json.load(f)
-    except Exception as e:
-        return None
 
 def should_include_file(path: Path) -> bool:
     return path.name.endswith(".json.gz")
