@@ -19,5 +19,5 @@ trap "rm -rf /tmp/multipl-e" EXIT
 singularity exec \
     --home /tmp/multipl-e:/home/$USER \
     --network none \
-    multipl-e-evaluation_latest.sif \
+    /work/arjunguha-research-group/arjun/containers/multipl-e-evaluation_latest.sif \
     python3 evaluation/src/main.py --job-file $1 --job-file-line $SLURM_ARRAY_TASK_ID
