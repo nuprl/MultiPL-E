@@ -86,18 +86,20 @@ def single_problem_pass_k_for_experiment(exp_lo: Experiment) -> List[str]:
             eprint(f"Ignoring {result_path}")
             continue
         problem = result_path.name[:-len(".results.json.gz")]
-        n_lo = len(results_json["results"])
-        c_lo = sum((1 for r in results_json["results"] if r["status"] == "OK" and r["exit_code"] == 0))
+        results_lo = results_json["results"][:200]
+        n_lo = len(results_lo)
+        c_lo = sum((1 for r in results_lo if r["status"] == "OK" and r["exit_code"] == 0))
         pass1 = estimate_passk(n_lo, c_lo, 1)
+
         results_json_hi = gunzip_json(exp_hi.path() / result_path.name)
-        
         if results_json_hi is None:
             pass10 = "NA"
             pass100 = "NA"
             n_hi = "NA"
         else:
-            n_hi = len(results_json_hi["results"])
-            c_hi = sum((1 for r in results_json_hi["results"] if r["status"] == "OK" and r["exit_code"] == 0))
+            results_hi = results_json_hi["results"][:200]
+            n_hi = len(results_hi)
+            c_hi = sum((1 for r in results_hi if r["status"] == "OK" and r["exit_code"] == 0))
             pass10 = estimate_passk(n_hi, c_hi, 10)
             pass100 = estimate_passk(n_hi, c_hi, 100)
         results.append(f"{dataset},{lang},{problem},{model},{variation},{pass1},{n_lo},{pass10},{n_hi},{pass100}")
