@@ -64,7 +64,8 @@ def value_to_type(ast_value: ast.AST):
         if isinstance(value, list):
             return list[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, tuple):
-            return tuple[get_union_type([get_type(e) for e in value])]
+            types = [get_type(e) for e in value]
+            return GenericAlias(tuple, tuple(types))
         elif isinstance(value, set):
             return set[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, dict):
@@ -100,6 +101,12 @@ def unify_types(types):
                 return t1 if t1.__origin__ == set else t2
             print(f"origin test: {t1}, {t2}")
             return Any
+        elif t1.__origin__ == tuple:
+            if t1.__args__ == t2.__args__:
+                print(f"tuple params must match exactly: {t1}, {t2}")
+                return Any
+            else:
+                return t1
         else:
             t1_args = list(t1.__args__)
             t2_args = list(t2.__args__)
@@ -204,7 +211,6 @@ def annotate_files(path: Path, write_handler = sys.stdout):
             check_function = body[1]
             test_check_function = body[2]
 
-            arglist = extract_arg_names(prompt_function)
             args_type, return_type = extract_types_check_fn(check_function)
 
             annotated_prompt_fn = type_annotation_to_func(prompt_function, args_type, return_type)
@@ -241,19 +247,41 @@ def main():
         default=".*",
         help="filter the file to be translated by regular expression")
 
+    args.add_argument(
+        "--post-process",
+        help="Is post-processing for legacy Python type annotation needed?",
+        action="store_true",
+        default=True)
+
     args = args.parse_args()
+
+    args.output.mkdir(mode=0o755, exist_ok=True, parents=True)
 
     translated_count = 0
     files = [file for file in args.datasets.glob("*.py") if re.search(args.regex, file.name)]
+    output_files = []
     for file in files:
         print(file)
-        with open(args.output / file.name, "w") as of: 
+        output_file = args.output / file.name
+        with open(output_file, "w") as of: 
             try:
                 annotate_files(file, of)
                 translated_count += 1
             except Exception as e:
                 print(f"unable to translate {file}: {str(e)}")
                 print(traceback.format_exc())
+        
+        output_files.append(output_file)
+
+    if args.post_process:
+        POST_PROCESS_DICT = {"list[": "List[", "tuple[": "Tuple[", "dict[": "Dict[", "set[": "Set[", "typing.": ""}
+        for file in output_files:
+            with open(file) as f:
+                content = f.read()
+                for k, v in POST_PROCESS_DICT.items():
+                    content = content.replace(k, v)
+            with open(file, "w") as f:
+                f.write(content)
 
     print(f"translated: {translated_count}, total: {len(files)}")
 
