@@ -17,36 +17,29 @@ def eval_script(path: Path):
         #Hence, scalac will same JAVA_CLASS_NAME.class file for each problem
         #Write class for each problem to a different temp dir
         build = subprocess.run(["scalac", "-d", outdir, path], capture_output=True, encoding="utf-8")
-        status = None
-        returncode = -1
-        output = None
         exec_name = "Problem" #JAVA_CLASS_NAME
         if build.returncode != 0:
             # Well, it's a compile error. May be a type error or
             # something. But, why break the set convention
-            status = "SyntaxError"
-            returncode = build.returncode
-            output = build
+            return {
+                "status": "SyntaxError",
+                "exit_code": build.returncode,
+                "stdout": build.stdout,
+                "stderr": build.stderr,
+            }
+        r = run(["scala", "-cp", f"{outdir}", exec_name])
+        if r.timeout:
+            status = "Timeout"
+        elif r.exit_code == 0 and r.stderr == "":
+            status = "OK"
         else:
-            r = run(["scala", "-cp", f"{outdir}", exec_name])
-            returncode = r.exit_code
-            if r.timeout:
-                status = "Timeout"
-            elif returncode == 0 and r.stderr == "":
-                status = "OK"
-            else:
-                # Well, it's a panic
-                status = "Exception"
-
-        if output.stdout is None:
-            output.stdout = "None"
-        if output.stderr is None:
-            output.stderr = "None"
+            # Well, it's a panic
+            status = "Exception"
     return {
         "status": status,
-        "exit_code": returncode,
-        "stdout": output.stdout,
-        "stderr": output.stderr,
+        "exit_code": r.exit_code,
+        "stdout": r.stdout,
+        "stderr": r.stderr,
     }
 
 if __name__ == "__main__":
