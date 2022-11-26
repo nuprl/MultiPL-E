@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def find_tuples(test_list: List[Tuple[int]], K: int) -> List[Tuple[int]]:
+def find_tuples(test_list: List[Tuple[int, int, int]], K: int) -> List[Tuple[int, int, int]]:
     """
 	Write a function to find tuples which have all elements divisible by k from the given list of tuples.
 	"""

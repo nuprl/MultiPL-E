@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def rear_extract(test_list: List[Tuple[Union[str, int]]]) -> List[int]:
+def rear_extract(test_list: List[Tuple[int, str, int]]) -> List[int]:
     """
 	Write a function that takes in a list of tuples and returns a list containing the rear element of each tuple.
 	"""

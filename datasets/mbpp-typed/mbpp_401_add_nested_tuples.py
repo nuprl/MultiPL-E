@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def add_nested_tuples(test_tup1: Tuple[Tuple[int]], test_tup2: Tuple[Tuple[int]]) -> Tuple[Tuple[int]]:
+def add_nested_tuples(test_tup1: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]], test_tup2: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]]) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
     """
 	Write a function to perform index wise addition of tuple elements in the given two nested tuples.
 	"""

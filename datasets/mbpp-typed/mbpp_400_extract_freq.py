@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def extract_freq(test_list: List[Tuple[int]]) -> int:
+def extract_freq(test_list: List[Tuple[int, int]]) -> int:
     """
 	Write a function to extract the number of unique tuples in the given list.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def colon_tuplex(tuplex: Tuple[Union[str, int, List[NoneType], bool]], m: int, n: int) -> Tuple[Union[str, int, List[int], bool]]:
+def colon_tuplex(tuplex: Tuple[str, int, List[None], bool], m: int, n: int) -> Tuple[str, int, List[int], bool]:
     """
 	Write a function to get a colon of a tuple.
 	"""

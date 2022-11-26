@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def cummulative_sum(test_list: List[Tuple[int]]) -> int:
+def cummulative_sum(test_list: List[Union[Tuple[int, int], Tuple[int, int, int]]]) -> int:
     """
 	Write a function to find the cumulative sum of all the values that are present in the given tuple list.
 	"""

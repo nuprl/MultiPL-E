@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def concatenate_tuple(test_tup: Tuple[Union[str, int]]) -> str:
+def concatenate_tuple(test_tup: Tuple[str, str, int, str]) -> str:
     """
 	Write a function to concatenate each element of tuple by the delimiter.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def count_element_in_list(list1: Any, x: Any) -> int:
+def count_element_in_list(list1: List[List[Any]], x: Any) -> int:
     """
 	Write a function to count the number of sublists containing a particular element.
 	"""

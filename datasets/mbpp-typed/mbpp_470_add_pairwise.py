@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def add_pairwise(test_tup: Tuple[int]) -> Tuple[int]:
+def add_pairwise(test_tup: Tuple[int, int, int, int, int]) -> Tuple[int, int, int, int]:
     """
 	Write a function to find the pairwise addition of the neighboring elements of the given tuple.
 	"""

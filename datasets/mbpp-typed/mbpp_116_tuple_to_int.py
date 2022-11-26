@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def tuple_to_int(nums: Tuple[int]) -> int:
+def tuple_to_int(nums: Tuple[int, int, int]) -> int:
     """
 	Write a function to convert a given tuple of positive integers into a single integer.
 	"""

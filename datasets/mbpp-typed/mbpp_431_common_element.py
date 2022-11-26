@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def common_element(list1: Any, list2: Any) -> Optional[bool]:
+def common_element(list1: List[Any], list2: List[Any]) -> Optional[bool]:
     """
 	Write a function that takes two lists and returns true if they have at least one common element.
 	"""

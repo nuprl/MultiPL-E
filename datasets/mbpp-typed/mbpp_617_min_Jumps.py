@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def min_Jumps(steps: Tuple[int], d: int) -> float:
+def min_Jumps(steps: Tuple[int, int], d: int) -> float:
     """
 	Write a function to check for the number of jumps required of given length to reach a point of form (d, 0) from origin in a 2d plane.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def max_length_list(input_list: List[List[int]]) -> Tuple[Union[int, List[int]]]:
+def max_length_list(input_list: List[List[int]]) -> Tuple[int, List[int]]:
     """
 	Write a function to find the list with maximum length.
 	"""

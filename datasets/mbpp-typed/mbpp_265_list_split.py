@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def list_split(S: Any, step: int) -> Any:
+def list_split(S: List[Any], step: int) -> List[List[Any]]:
     """
 	Write a function that takes in a list and an integer n and splits a list for every nth element, returning a list of the resulting lists.
 	"""

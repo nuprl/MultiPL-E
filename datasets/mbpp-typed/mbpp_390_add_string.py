@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def add_string(list_: Any, string: str) -> List[str]:
+def add_string(list_: List[Any], string: str) -> List[str]:
     """
 	Write a function to apply a given format string to all of the elements in a list.
 	"""

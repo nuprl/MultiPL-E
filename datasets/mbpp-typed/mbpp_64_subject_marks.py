@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def subject_marks(subjectmarks: List[Tuple[Union[str, int]]]) -> List[Tuple[Union[str, int]]]:
+def subject_marks(subjectmarks: List[Tuple[str, int]]) -> List[Tuple[str, int]]:
     """
 	Write a function to sort a list of tuples using the second value of each tuple.
 	"""

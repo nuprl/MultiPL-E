@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def and_tuples(test_tup1: Tuple[int], test_tup2: Tuple[int]) -> Tuple[int]:
+def and_tuples(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
     """
 	Write a function to extract the elementwise and tuples from the given two tuples.
 	"""

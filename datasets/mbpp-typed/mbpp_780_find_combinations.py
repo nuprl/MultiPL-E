@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def find_combinations(test_list: List[Tuple[int]]) -> List[Tuple[int]]:
+def find_combinations(test_list: List[Tuple[int, int]]) -> List[Tuple[int, int]]:
     """
 	Write a function to find the combinations of sums with tuples in the given tuple list. https://www.geeksforgeeks.org/python-combinations-of-sum-with-tuples-in-tuple-list/
 	"""

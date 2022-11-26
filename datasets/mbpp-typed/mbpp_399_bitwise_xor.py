@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def bitwise_xor(test_tup1: Tuple[int], test_tup2: Tuple[int]) -> Tuple[int]:
+def bitwise_xor(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
     """
 	Write a function to perform the mathematical bitwise xor operation across the given tuples.
 	"""

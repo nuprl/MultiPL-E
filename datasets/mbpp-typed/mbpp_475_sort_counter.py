@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def sort_counter(dict1: Dict[str, int]) -> List[Tuple[Union[str, int]]]:
+def sort_counter(dict1: Dict[str, int]) -> List[Tuple[str, int]]:
     """
 	Write a function to sort a dictionary by value.
 	"""

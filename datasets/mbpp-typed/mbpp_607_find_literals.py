@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def find_literals(text: str, pattern: str) -> Tuple[Union[str, int]]:
+def find_literals(text: str, pattern: str) -> Tuple[str, int, int]:
     """
 	Write a function to search a string for a regex pattern. The function should return the matching subtring, a start index and an end index.
 	"""

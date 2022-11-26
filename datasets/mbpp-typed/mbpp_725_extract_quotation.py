@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def extract_quotation(text1: str) -> Any:
+def extract_quotation(text1: str) -> List[Any]:
     """
 	Write a function to extract values between quotation marks " " of the given string.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def extract_rear(test_tuple: Tuple[str]) -> List[str]:
+def extract_rear(test_tuple: Tuple[str, str, str]) -> List[str]:
     """
 	Write a function to extract only the rear index element of each string in the given tuple.
 	"""

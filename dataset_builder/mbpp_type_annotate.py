@@ -1,3 +1,8 @@
+# An attempt at adding type annotations to a MBPP program
+# Which is a Python program with a single function definition
+# and a set of assert statements written in specific syntax
+# check the MBPP test cases for examples
+
 import ast
 import sys
 import re
@@ -6,7 +11,7 @@ import traceback
 from pathlib import Path
 from shutil import get_unpack_formats
 from types import GenericAlias, NoneType
-from typing import Any, Optional, Union, List, Dict, Tuple
+from typing import Any, Optional, Union
 import typing
 
 from itertools import groupby
@@ -57,13 +62,14 @@ def value_to_type(ast_value: ast.AST):
 
     def get_type(value):
         if isinstance(value, list):
-            return List[get_union_type([get_type(e) for e in value])]
+            return list[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, tuple):
-            return Tuple[get_union_type([get_type(e) for e in value])]
+            types = [get_type(e) for e in value]
+            return GenericAlias(tuple, tuple(types))
         elif isinstance(value, set):
-            raise Exception("Set type is not supported")
+            return set[get_union_type([get_type(e) for e in value])]
         elif isinstance(value, dict):
-            return Dict[get_union_type([get_type(k) for k in value]), 
+            return dict[get_union_type([get_type(k) for k in value]), 
                         get_union_type([get_type(value[k]) for k in value])]
         else:
             return type(value)
@@ -71,8 +77,6 @@ def value_to_type(ast_value: ast.AST):
     value = get_underlying_values(ast_value)
     return get_type(value)
 
-def fixname(name):
-    return name
 def unify_types(types):
 
     def pred_pair(t1, t2, f, g):
@@ -90,12 +94,19 @@ def unify_types(types):
         elif isinstance(t1, typing._UnionGenericAlias) or isinstance(t2, typing._UnionGenericAlias):
             return Union[t1, t2]
         elif not isinstance(t1, GenericAlias) or not isinstance(t2, GenericAlias):
+            print(f"is instance test: {t1}, {t2}")
             return Any
         elif t1.__origin__ != t2.__origin__:
             if pred_pair(t1, t2, lambda t: t == dict[None, None], lambda t: t.__origin__ == set):
                 return t1 if t1.__origin__ == set else t2
             print(f"origin test: {t1}, {t2}")
             return Any
+        elif t1.__origin__ == tuple:
+            if t1.__args__ != t2.__args__:
+                print(f"tuple params must match exactly: {t1}, {t2}")
+                return Any
+            else:
+                return t1
         else:
             t1_args = list(t1.__args__)
             t2_args = list(t2.__args__)
@@ -103,14 +114,13 @@ def unify_types(types):
                 print(f"arglength: {t1}, {t2}")
                 return Any
             result = [unify_types2(t1arg, t2arg) for t1arg, t2arg in zip(t1_args, t2_args)]
-            return GenericAlias(fixname(t1.__origin__), tuple(result))
+            return GenericAlias(t1.__origin__, tuple(result))
 
     if len(types) <= 1:
         return types[0]
     
     acc = types[0]
     [acc := unify_types2(acc, t) for t in types[1:]]
-
     return acc
     
 def extract_types_assert(assert_stmt: ast.AST):
@@ -200,12 +210,11 @@ def annotate_files(path: Path, write_handler = sys.stdout):
             check_function = body[1]
             test_check_function = body[2]
 
-            arglist = extract_arg_names(prompt_function)
             args_type, return_type = extract_types_check_fn(check_function)
 
             annotated_prompt_fn = type_annotation_to_func(prompt_function, args_type, return_type)
 
-            write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)).replace("pass", "### Canonical solution below ###\n    pass").replace("typing.", ""))
+            write_handler.write(ast.unparse(ast.fix_missing_locations(annotated_prompt_fn)))
             write_handler.write("\n\n")
             write_handler.write("### Unit tests below ###\n")
             write_handler.write(ast.unparse(ast.fix_missing_locations(check_function)))
@@ -237,22 +246,43 @@ def main():
         default=".*",
         help="filter the file to be translated by regular expression")
 
+    args.add_argument(
+        "--post-process",
+        help="Is post-processing for legacy Python type annotation needed?",
+        action="store_true",
+        default=True)
+
     args = args.parse_args()
+
+    args.output.mkdir(mode=0o755, exist_ok=True, parents=True)
 
     translated_count = 0
     files = [file for file in args.datasets.glob("*.py") if re.search(args.regex, file.name)]
+    output_files = []
     for file in files:
-        output_path = args.output / file.name
-        print(output_path)
-        with open(output_path, "w") as of: 
+        print(file)
+        output_file = args.output / file.name
+        with open(output_file, "w") as of: 
             try:
-                of.write("from typing import List, Dict, Tuple\n\n")
                 annotate_files(file, of)
                 translated_count += 1
             except Exception as e:
-                output_path.unlink()
                 print(f"unable to translate {file}: {str(e)}")
                 print(traceback.format_exc())
+        
+        output_files.append(output_file)
+
+    if args.post_process:
+        POST_PROCESS_DICT = {"list[": "List[", "tuple[": "Tuple[", "dict[": "Dict[", "set[": "Set[", "typing.": "", \
+                "pass": "### Canonical solution below ###\n    pass"}
+        for file in output_files:
+            with open(file) as f:
+                content = f.read()
+                for k, v in POST_PROCESS_DICT.items():
+                    content = content.replace(k, v)
+            with open(file, "w") as f:
+                f.write("from typing import List, Dict, Tuple\n\n")
+                f.write(content)
 
     print(f"translated: {translated_count}, total: {len(files)}")
 

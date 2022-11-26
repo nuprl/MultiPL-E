@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def second_smallest(numbers: Any) -> Optional[float]:
+def second_smallest(numbers: List[Union[int, float]]) -> Optional[float]:
     """
 	Write a function to find the second smallest number in a list.
 	"""

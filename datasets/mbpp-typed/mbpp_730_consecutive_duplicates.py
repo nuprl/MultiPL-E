@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def consecutive_duplicates(nums: Any) -> Any:
+def consecutive_duplicates(nums: List[Any]) -> List[Any]:
     """
 	Write a function to remove consecutive duplicates of a given list.
 	"""

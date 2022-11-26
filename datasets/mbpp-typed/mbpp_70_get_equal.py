@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def get_equal(Input: List[Tuple[int]]) -> bool:
+def get_equal(Input: List[Union[Tuple[int, int, int], Tuple[int, int, int, int], Tuple[int, int]]]) -> bool:
     """
 	Write a function to find whether all the given tuples have equal length or not.
 	"""

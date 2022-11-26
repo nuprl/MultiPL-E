@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def dict_depth(d: Any) -> int:
+def dict_depth(d: Dict[Any, Union[int, Dict[str, Dict[str, Dict[None, None]]], Dict[str, str], str, Dict[int, Dict[int, str]]]]) -> int:
     """
 	Write a function to find the depth of a dictionary.
 	"""

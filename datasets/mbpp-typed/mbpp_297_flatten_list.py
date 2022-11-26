@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def flatten_list(list1: Any) -> List[int]:
+def flatten_list(list1: List[Union[int, List[int]]]) -> List[int]:
     """
 	Write a function to flatten a given nested list structure.
 	"""

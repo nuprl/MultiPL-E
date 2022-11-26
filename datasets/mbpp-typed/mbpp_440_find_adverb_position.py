@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def find_adverb_position(text: str) -> Tuple[Union[str, int]]:
+def find_adverb_position(text: str) -> Tuple[int, int, str]:
     """
 	Write a function to find the first adverb and their positions in a given sentence.
 	"""

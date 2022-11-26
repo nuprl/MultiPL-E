@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def add_lists(test_list: List[int], test_tup: Tuple[int]) -> Tuple[int]:
+def add_lists(test_list: List[int], test_tup: Tuple[int, int]) -> Tuple[int, int, int, int, int]:
     """
 	Write a function to append the given list to the given tuples.
 	"""

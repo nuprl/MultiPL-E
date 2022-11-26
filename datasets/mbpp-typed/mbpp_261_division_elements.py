@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def division_elements(test_tup1: Tuple[int], test_tup2: Tuple[int]) -> Tuple[int]:
+def division_elements(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
     """
 	Write a function that takes in two tuples and performs mathematical division operation element-wise across the given tuples.
 	"""
