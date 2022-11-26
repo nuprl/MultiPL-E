@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def check_element(list: Any, element: Any) -> bool:
+def check_element(list: List[Any], element: Any) -> bool:
     """
 	Write a function that takes in a list and element and checks whether all items in the list are equal to the given element.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def sum_of_digits(nums: Any) -> int:
+def sum_of_digits(nums: List[Any]) -> int:
     """
 	Write a function to compute the sum of digits of each number of a given list.
 	"""

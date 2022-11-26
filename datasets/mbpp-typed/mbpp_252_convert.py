@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def convert(numbers: int) -> Tuple[float]:
+def convert(numbers: int) -> Tuple[float, float]:
     """
 	Write a python function to convert complex numbers to polar coordinates.
 	"""

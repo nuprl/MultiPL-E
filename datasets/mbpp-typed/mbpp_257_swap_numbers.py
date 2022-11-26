@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def swap_numbers(a: int, b: int) -> Tuple[int]:
+def swap_numbers(a: int, b: int) -> Tuple[int, int]:
     """
 	Write a function that takes in two numbers and returns a tuple with the second number and then the first number.
 	"""

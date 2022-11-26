@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def remove_nested(test_tup: Tuple[Union[int, Tuple[int]]]) -> Tuple[int]:
+def remove_nested(test_tup: Any) -> Tuple[int, int, int, int]:
     """
 	Write a function to remove tuples from the given tuple.
 	"""

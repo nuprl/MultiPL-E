@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def Find_Max(lst: Any) -> Any:
+def Find_Max(lst: List[List[Any]]) -> List[Any]:
     """
 	Write a python function to find the element of a list having maximum length.
 	"""

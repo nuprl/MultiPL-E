@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def add_dict_to_tuple(test_tup: Tuple[int], test_dict: Dict[str, int]) -> Tuple[Union[int, Dict[str, int]]]:
+def add_dict_to_tuple(test_tup: Tuple[int, int, int], test_dict: Dict[str, int]) -> Tuple[int, int, int, Dict[str, int]]:
     """
 	Write a function to add a dictionary to the tuple. The output should be a tuple.
 	"""

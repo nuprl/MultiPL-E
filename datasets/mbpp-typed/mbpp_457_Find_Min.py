@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def Find_Min(lst: Any) -> Any:
+def Find_Min(lst: List[List[Any]]) -> List[Any]:
     """
 	Write a python function to find the sublist having minimum length.
 	"""

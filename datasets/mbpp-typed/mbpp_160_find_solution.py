@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def find_solution(a: int, b: int, n: int) -> Optional[Tuple[int]]:
+def find_solution(a: int, b: int, n: int) -> Optional[Tuple[int, int]]:
     """
 	Write a function that returns integers x and y that satisfy ax + by = n as a tuple, or return None if no solution exists.
 	"""

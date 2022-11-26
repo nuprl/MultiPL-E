@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def count_integer(list1: Any) -> int:
+def count_integer(list1: List[Union[int, str, float]]) -> int:
     """
 	Write a python function that returns the number of integer elements in a given list.
 	"""

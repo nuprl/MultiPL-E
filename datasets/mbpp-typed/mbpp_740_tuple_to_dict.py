@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def tuple_to_dict(test_tup: Tuple[int]) -> Dict[int, int]:
+def tuple_to_dict(test_tup: Tuple[int, int, int, int, int, int]) -> Dict[int, int]:
     """
 	Write a function to convert the given tuple to a key-value dictionary using adjacent elements. https://www.geeksforgeeks.org/python-convert-tuple-to-adjacent-pair-dictionary/
 	"""

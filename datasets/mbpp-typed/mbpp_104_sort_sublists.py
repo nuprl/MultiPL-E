@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def sort_sublists(input_list: Tuple[List[str]]) -> List[List[str]]:
+def sort_sublists(input_list: Tuple[List[str], List[str], List[str]]) -> List[List[str]]:
     """
 	Write a function to sort each sublist of strings in a given list of lists.
 	"""

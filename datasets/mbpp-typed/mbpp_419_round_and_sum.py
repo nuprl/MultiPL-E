@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def round_and_sum(list1: Any) -> int:
+def round_and_sum(list1: List[Union[float, int]]) -> int:
     """
 	Write a function to round every number of a given list of numbers and print the total sum multiplied by the length of the list.
 	"""

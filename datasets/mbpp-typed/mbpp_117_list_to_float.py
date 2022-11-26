@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def list_to_float(test_list: List[Tuple[str]]) -> List[Tuple[float]]:
+def list_to_float(test_list: List[Tuple[str, str]]) -> List[Tuple[float, float]]:
     """
 	Write a function to convert all possible convertible elements in a list of lists to floats.
 	"""

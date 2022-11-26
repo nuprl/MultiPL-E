@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def start_withp(words: List[str]) -> Tuple[str]:
+def start_withp(words: List[str]) -> Tuple[str, str]:
     """
 	Write a function to return two words from a list of words starting with letter 'p'.
 	"""

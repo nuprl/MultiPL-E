@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def tuple_modulo(test_tup1: Tuple[int], test_tup2: Tuple[int]) -> Tuple[int]:
+def tuple_modulo(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
     """
 	Write a function which takes two tuples of the same length and performs the element wise modulo.
 	"""

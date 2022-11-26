@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def extract_even(test_tuple: Tuple[Union[int, Tuple[Union[int, Tuple[int]]]]]) -> Tuple[Union[int, Tuple[Union[int, Tuple[int]]]]]:
+def extract_even(test_tuple: Tuple[int, int, Tuple[int, int, Tuple[int, int]], int, int]) -> Any:
     """
 	Write a function to remove uneven elements in the nested mixed tuple.
 	"""

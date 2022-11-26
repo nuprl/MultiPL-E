@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def combinations_list(list1: List[str]) -> List[Union[List[NoneType], List[str]]]:
+def combinations_list(list1: List[str]) -> List[Union[List[None], List[str]]]:
     """
 	Write a function to find all possible combinations of the elements of a given list.
 	"""

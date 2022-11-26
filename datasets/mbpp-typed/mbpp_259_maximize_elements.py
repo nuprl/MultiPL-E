@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def maximize_elements(test_tup1: Tuple[Tuple[int]], test_tup2: Tuple[Tuple[int]]) -> Tuple[Tuple[int]]:
+def maximize_elements(test_tup1: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]], test_tup2: Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]]) -> Tuple[Tuple[int, int], Tuple[int, int], Tuple[int, int], Tuple[int, int]]:
     """
 	Write a function to maximize the given two tuples.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def max_product_tuple(list1: List[Tuple[int]]) -> int:
+def max_product_tuple(list1: List[Tuple[int, int]]) -> int:
     """
 	Write a function to find the maximum absolute product between numbers in pairs of tuples within a given list.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def index_minimum(test_list: List[Tuple[Union[str, int]]]) -> str:
+def index_minimum(test_list: List[Tuple[str, int]]) -> str:
     """
 	Given a list of tuples, write a function that returns the first value of the tuple with the smallest second value.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def max_Product(arr: List[int]) -> Tuple[int]:
+def max_Product(arr: List[int]) -> Tuple[int, int]:
     """
 	Write a python function to find a pair with highest product from a given array of integers.
 	"""

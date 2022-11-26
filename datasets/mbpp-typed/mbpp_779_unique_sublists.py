@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def unique_sublists(list1: Any) -> Any:
+def unique_sublists(list1: List[List[Any]]) -> Dict[Union[Tuple[int, int], Tuple[int, int, int], Tuple[str, str], Tuple[str]], int]:
     """
 	Write a function to count the number of lists within a list. The function should return a dictionary, where every list is turned to a tuple, and the value of the tuple is the number of its occurrences.
 	"""

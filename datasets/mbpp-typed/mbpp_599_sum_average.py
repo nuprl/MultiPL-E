@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def sum_average(number: int) -> Tuple[Union[int, float]]:
+def sum_average(number: int) -> Tuple[int, float]:
     """
 	Write a function to find sum and average of first n natural numbers.
 	"""

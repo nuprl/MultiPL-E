@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def max_aggregate(stdata: List[Tuple[Union[str, int]]]) -> Tuple[Union[str, int]]:
+def max_aggregate(stdata: List[Tuple[str, int]]) -> Tuple[str, int]:
     """
 	Write a function to calculate the maximum aggregate from the list of tuples.
 	"""

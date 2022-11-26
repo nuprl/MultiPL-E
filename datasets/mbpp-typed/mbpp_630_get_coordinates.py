@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def get_coordinates(test_tup: Tuple[int]) -> List[List[int]]:
+def get_coordinates(test_tup: Tuple[int, int]) -> List[List[int]]:
     """
 	Write a function to extract all the adjacent coordinates of the given coordinate tuple.
 	"""

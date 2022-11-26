@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def count_X(tup: Tuple[int], x: int) -> int:
+def count_X(tup: Tuple[int, int, int, int, int, int, int, int, int, int, int, int], x: int) -> int:
     """
 	Write a python function that takes in a tuple and an element and counts the occcurences of the element in the tuple.
 	"""

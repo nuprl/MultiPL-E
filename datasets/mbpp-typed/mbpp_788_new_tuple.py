@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def new_tuple(test_list: List[str], test_str: str) -> Tuple[str]:
+def new_tuple(test_list: List[str], test_str: str) -> Tuple[str, str, str]:
     """
 	Write a function to create a new tuple from the given string and list.
 	"""

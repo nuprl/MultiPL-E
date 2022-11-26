@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def group_tuples(Input: List[Tuple[str]]) -> List[Tuple[str]]:
+def group_tuples(Input: List[Tuple[str, str]]) -> List[Union[Tuple[str, str, str], Tuple[str, str]]]:
     """
 	Write a function to find common first element in given list of tuple.
 	"""
