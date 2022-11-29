@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def occurance_substring(text: str, pattern: str) -> Optional[Tuple[Union[str, int]]]:
+def occurance_substring(text: str, pattern: str) -> Optional[Tuple[str, int, int]]:
     """
 	Write a function to find the occurrence and position of the substrings within a string. Return None if there is no match.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def min_k(test_list: List[Tuple[Union[str, int]]], K: int) -> List[Tuple[Union[str, int]]]:
+def min_k(test_list: List[Tuple[str, int]], K: int) -> List[Tuple[str, int]]:
     """
 	Write a function to find minimum k records from tuple list. https://www.geeksforgeeks.org/python-find-minimum-k-records-from-tuple-list/ - in this case a verbatim copy of test cases
 	"""

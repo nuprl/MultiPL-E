@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def min_product_tuple(list1: List[Tuple[int]]) -> int:
+def min_product_tuple(list1: List[Tuple[int, int]]) -> int:
     """
 	Write a function to find the minimum product from the pairs of tuples within a given list.
 	"""

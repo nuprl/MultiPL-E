@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def tuple_str_int(test_str: str) -> Tuple[int]:
+def tuple_str_int(test_str: str) -> Tuple[int, int, int]:
     """
 	Write a function to convert tuple string to integer tuple.
 	"""

@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def pack_consecutive_duplicates(list1: Any) -> Any:
+def pack_consecutive_duplicates(list1: List[Any]) -> List[List[Any]]:
     """
 	Write a function to pack consecutive duplicates of a given list elements into sublists.
 	"""

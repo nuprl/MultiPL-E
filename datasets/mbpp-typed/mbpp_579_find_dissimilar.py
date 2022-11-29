@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def find_dissimilar(test_tup1: Tuple[int], test_tup2: Tuple[int]) -> Tuple[int]:
+def find_dissimilar(test_tup1: Tuple[int, int, int, int], test_tup2: Tuple[int, int, int, int]) -> Tuple[int, int, int, int]:
     """
 	Write a function to find the dissimilar elements in the given two tuples.
 	"""

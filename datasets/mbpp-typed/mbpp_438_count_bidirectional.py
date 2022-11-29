@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def count_bidirectional(test_list: List[Tuple[int]]) -> int:
+def count_bidirectional(test_list: List[Tuple[int, int]]) -> int:
     """
 	Write a function to count bidirectional tuple pairs.
 	"""

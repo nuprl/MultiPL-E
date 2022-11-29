@@ -102,7 +102,7 @@ def unify_types(types):
             print(f"origin test: {t1}, {t2}")
             return Any
         elif t1.__origin__ == tuple:
-            if t1.__args__ == t2.__args__:
+            if t1.__args__ != t2.__args__:
                 print(f"tuple params must match exactly: {t1}, {t2}")
                 return Any
             else:
@@ -121,7 +121,6 @@ def unify_types(types):
     
     acc = types[0]
     [acc := unify_types2(acc, t) for t in types[1:]]
-
     return acc
     
 def extract_types_assert(assert_stmt: ast.AST):
@@ -274,13 +273,15 @@ def main():
         output_files.append(output_file)
 
     if args.post_process:
-        POST_PROCESS_DICT = {"list[": "List[", "tuple[": "Tuple[", "dict[": "Dict[", "set[": "Set[", "typing.": ""}
+        POST_PROCESS_DICT = {"list[": "List[", "tuple[": "Tuple[", "dict[": "Dict[", "set[": "Set[", "typing.": "", \
+                "pass": "### Canonical solution below ###\n    pass"}
         for file in output_files:
             with open(file) as f:
                 content = f.read()
                 for k, v in POST_PROCESS_DICT.items():
                     content = content.replace(k, v)
             with open(file, "w") as f:
+                f.write("from typing import List, Dict, Tuple\n\n")
                 f.write(content)
 
     print(f"translated: {translated_count}, total: {len(files)}")

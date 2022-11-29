@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def check_tuplex(tuplex: Tuple[Union[str, int]], tuple1: Any) -> bool:
+def check_tuplex(tuplex: Tuple[str, int, str, str, str, str, str, str, str, str], tuple1: Any) -> bool:
     """
 	Write a function to check whether an element exists within a tuple.
 	"""

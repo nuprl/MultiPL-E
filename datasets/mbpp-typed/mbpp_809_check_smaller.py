@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def check_smaller(test_tup1: Tuple[int], test_tup2: Tuple[int]) -> bool:
+def check_smaller(test_tup1: Tuple[int, int, int], test_tup2: Tuple[int, int, int]) -> bool:
     """
 	Write a function to check if each element of second tuple is smaller than its corresponding element in the first tuple.
 	"""

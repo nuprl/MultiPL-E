@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def empty_list(length: int) -> List[Dict[NoneType, NoneType]]:
+def empty_list(length: int) -> List[Dict[None, None]]:
     """
 	Write a function to create a list of N empty dictionaries.
 	"""

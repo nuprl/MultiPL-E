@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def replace_list(list1: Any, list2: Any) -> Any:
+def replace_list(list1: List[Any], list2: List[Any]) -> List[Any]:
     """
 	Write a function that takes in two lists and replaces the last element of the first list with the elements of the second list.
 	"""

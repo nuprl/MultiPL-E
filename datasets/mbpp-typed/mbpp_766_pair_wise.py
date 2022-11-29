@@ -1,6 +1,6 @@
 from typing import List, Dict, Tuple
 
-def pair_wise(l1: List[int]) -> List[Tuple[int]]:
+def pair_wise(l1: List[int]) -> List[Tuple[int, int]]:
     """
 	Write a function to return a list of all pairs of consecutive items in a given list.
 	"""
