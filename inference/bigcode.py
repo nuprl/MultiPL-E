@@ -1,6 +1,5 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import util
 from local_huggingface_model import _stop_at_stop_token
 
 
