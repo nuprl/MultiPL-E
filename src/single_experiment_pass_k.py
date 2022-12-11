@@ -28,11 +28,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("dirs", type=str,  help="directories with results", nargs="+")
     args = parser.parse_args()
+    print("Dataset,Pass@k,Estimate")
     for d in args.dirs:
-        print(d)
-        print("NOTE: Use pass@1 for temperature 0.2 and pass@10 or pass@100 for temperature 0.8")
-        print("[pass@1 pass@10 pass@100]")
-        print(np.array([ for_file(p) for p in itertools.chain(Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz")) ]).mean(axis=0))
+        result_array = np.array([ for_file(p) for p in itertools.chain(Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz")) ])
+        if len(result_array) == 0:
+            continue
+        result = result_array.mean(axis=0)
+        name = d.split("/")[-1]
+        if "0.2" in name:
+            print(f"{name},1,{result[0]:.2f}")
+        else:
+            print(f"{name},10,{result[1]:.2f}")
+            print(f"{name},100,{result[2]:.2f}")
 
 if __name__ == "__main__":
     main()
