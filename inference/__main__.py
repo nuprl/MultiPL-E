@@ -6,6 +6,7 @@ import importlib
 from pathlib import Path
 from tqdm import tqdm
 
+DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
 
 def main():
     args = argparse.ArgumentParser()
@@ -64,7 +65,8 @@ def main():
         exp_dir.mkdir()
 
     problems = datasets.load_dataset(
-        "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}"
+        "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", 
+        revision=DATASET_REVISION
     )
     problems = problems["test"]
     start_index = args.input_start_index if args.input_start_index is not None else 0
