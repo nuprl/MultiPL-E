@@ -73,6 +73,7 @@ def main():
     results = [ ]
     for original in list_originals(args.originals).values():
         original_name = original.name.split(".")[0]
+        print(f"Processing {original_name}...")
 
         result = translate_prompt_and_tests(
             original, translator, args.doctests, args.prompt_terminology
