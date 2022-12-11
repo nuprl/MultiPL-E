@@ -4,75 +4,65 @@ Please visit the [website](https://nuprl.github.io/MultiPL-E/) or read our [pape
 
 ## Evaluation on Discovery
 
-Running the full set of experiments in the original paper submission
-took a few hours (less than half a day) with ~2,000 processors on
-the Discovery cluster at Northeastern University. You may be able
-to adapt these instructors for other clusters.
+These instructions will run inference and evaluation on the Northeastern
+Discovery cluster. It should be possible to easily adapt the scripts for other
+Slurm clusters.
 
-1. Reserve a shell for a couple of hours
+### Prerequisites
 
-   ```
-   sbatch --time=6:00:00 ~a.guha/bin/shell
-   watch squeue -u $USER
-   ```
+On a compute node, run
 
-2. Ctrl+C when the machine is allocated, `ssh` into it, and start `tmux`
-   or an equivalent program. You will almost certainly disconnect.
+```
+singularity pull docker://ghcr.io/nuprl/multipl-e-evaluation
+```
 
-3. Checkout this branch (`main`) to a directory in /work
+This wll create the file `multipl-e-evaluation_latest.sif`, which is the
+container. The file cluster/discovery_evaluation.sh assumes that the file is 
+saved as 
+`/work/arjunguha-research-group/arjun/containers/multipl-e-evaluation_latest.sif`.
 
-4. Checkout the experiments branch to a directory within your clone of this
-   branch. i.e., experiments should be in the same directory as this README file.
+You also need an environment that has the MultiPL-E dependencies. On Discovery,
+you can use `source ~a.guha/bin/gpuenv`, which activates an appropriate
+Conda environment.
 
-5. Build the job list:
+### Running the Evaluation
 
-   ```
-   cd rs
-   cargo run --release build-job-list > ../src/files.txt
-   ```
+You can do this on the login node or a compute node with limited resources.
 
-   This can take a 1-2 minutes to run. If you want it to run instantly, run it
-   on a machine with a local NVMe SSD, such as the Wellesley server.
-
-   Look at files.txt. You should see jobs you want to run. :)
-
-6. Try to run *just one line* of the array job:
+1. Activate an appropriate environment:
 
    ```
-   cd ../src
-   sbatch --array 1-1 discovery_array_job.sh
+   source ~a.guha/bin/gpuenv
    ```
 
-7. Monitor job progress with `watch squeue -u $USER`. When complete,
-   examine the log file (`cat *.out`). If the job completes in less
-   than a minute, something almost certainly went wrong. Run
-   `git status ../experiments`. Look at some of the new results files.
-   Ensure they make sense. E.g., unless the model you're evaluating is
-   known to suck, you expect at some *some* `"status": "OK"` lines in
-   almost every file.
-
-8. Run the full array (you can omit the first one), where $N is the
-   number of lines in `files.txt`:
+2. Enter the root of the MultiPL-E repository:
 
    ```
-   sbatch --array 1-$N discovery_array_job.sh
-   ```
-   
-   You should check a few easy problems for each language to make sure 
-   that the execution environment is been set up correctly.
-   Here is a suggestion for both datasets: `HumanEval_53_add` and `mbpp_96_divisor`.
-
-9. If you just want aggregate pass-k rates:
-
-   ```
-   cd ../rs
-   cargo run --release pass-k-aggregates
+   cd /work/arjunguha-research-group/arjun/repos/MultiPL-E
    ```
 
-10. For the analysis scripts:
+3. Create a directory for experiment results:
 
-    ```
-    cd ../rs
-     cargo run --release single-experiment-pass-k
-    ```
+   ```
+   mkdir experiments
+   ```
 
+   You can re-use this directory to incrementally add new experiments.
+
+4. Create a file called `experiments/inference.sh`. Each line of the file
+   should run inference. For example:
+
+   ```
+   python -m inference --model-name inference.bigcode_mha --root-dataset humaneval --lang py --temperature 0.2 --batch-size 50
+   ```
+
+   We will *not* run this shell script directly. Instead, we will run each line
+   on a separate GPU node. Therefore, ensure that no command spans multiple
+   lines (i.e., do not use trailing `\`) and do not include the `#!` on the
+   first line.
+
+5. Run `./cluster/inference.sh experiments`
+
+   You will receive an email at your `@northeastern.edu` address when complete.
+
+   The script puts all logs files in `experiments/logs`.

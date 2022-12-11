@@ -31,6 +31,11 @@
 # Finally, if the single job worked, run all jobs:
 #
 #     sbatch --array 2-N ./discovery_v100_array.sbatch JOB_FILE
+#
+# Final note: you can pass extra arguments after the JOB_FILE to this script.
+# those are appended to the command line of each job.
 JOB_FILE=$1
+EXTRA_ARGS=${@:2}
 JOB=`sed -n ${SLURM_ARRAY_TASK_ID}p ${JOB_FILE}`
-$JOB
+echo $JOB $EXTRA_ARGS
+$JOB $EXTRA_ARGS
