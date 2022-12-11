@@ -1,0 +1,134 @@
+---
+title: "MEM models"
+output: pdf_document
+date: "2022-08-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(tidyverse)
+library(lme4)
+```
+
+## Basic Pass at K Calculation
+
+Goal of this R file is to read in the data from ``all-pass-at-l-eval-run.csv``
+and run mixed effects models.
+
+```{r load-pass-1}
+frequency_map <- read_csv("frequency-map.csv", col_names = c('PL','FREQ','TYPES',"PERPLEXITY"))
+problem_class <- read_csv("../analysis/type_classification.csv")
+```
+
+```{r}
+per_problem <- read_csv("../results/per_problem_all.csv",col_names = c("DATASET","PL","PROBLEM","MODEL","EXPT","rate1","n1","rate10","n10","rate100"))
+per_problem <- merge(per_problem,frequency_map)
+per_problem$rate1 <- as.numeric(per_problem$rate1)
+per_problem$rate10 <- as.numeric(per_problem$rate10)
+per_problem$rate100 <- as.numeric(per_problem$rate100)
+per_problem$n1 <- as.numeric(per_problem$n1)
+per_problem$n10 <- as.numeric(per_problem$n10)
+per_problem$PROB <- sub('([^_]*_[^_]*)_\\w+', '\\1', per_problem$PROBLEM)
+```
+
+```{r}
+per_problem_new <- merge(per_problem,problem_class, all=TRUE)
+mbpp_problems <- subset(per_problem_new,DATASET=="mbpp")
+```
+
+```{r}
+pl_labs <- c(`py` = "Python", `sh` = "Bash", `cpp` = "C++", `go` = "Go", `java` = "Java", `js` = "JavaScript", `pl` = "Perl", `r` = "R", `rs` = "Rust", `scala` = "Scala",`swift` = "Swift", `cs` = "C#", `php` = "PHP", `rb` = "Ruby",`d` = "D", `jl` = "Julia", `lua` = "Lua", `rkt` = "Racket", `ts` = "TypeScript")
+```
+
+## By language feature analysis
+
+```{r}
+pl_order <- c("py","sh","cpp", "cs","d", "go","java","jl", "js","lua",  "pl",   "php", "r", "rb", "rkt", "rs", "scala","swift","ts")
+
+mbpp_problems$PL <- factor(mbpp_problems$PL,levels = pl_order)
+```
+
+## Mixed effects modeling
+
+```{r}
+mm.data <- mbpp_problems
+mm.data$PROB <- factor(mm.data$PROB)
+```
+
+### Language effects - Codex
+
+```{r}
+pl_order <- c("py","sh","cpp", "cs","d", "go","java","jl", "js","lua",  "pl",   "php", "r", "rb", "rkt", "rs", "scala","swift","ts")
+davinci <- subset(mbpp_problems,MODEL=="davinci")
+davinci$PL <- factor(davinci$PL,levels = pl_order)
+```
+
+```{r}
+codex.lang.model <- glmer(rate1 ~ PL + (1+PL||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(codex.lang.model)
+```
+
+### Language effects - InCoder
+
+```{r}
+pl_order <- c("py","sh","cpp", "cs","d", "go","java","jl", "js","lua",  "pl",   "php", "r", "rb", "rkt", "rs", "scala","swift","ts")
+incoder <- subset(mbpp_problems,MODEL=="incoder")
+incoder$PL <- factor(incoder$PL,levels = pl_order)
+```
+
+```{r}
+incoder.lang.model <- glmer(rate1 ~ PL + (1+PL||PROB),weights=n1, data=incoder,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(incoder.lang.model)
+```
+
+### Language effects - CodeGen
+
+```{r}
+pl_order <- c("py","sh","cpp", "cs","d", "go","java","jl", "js","lua",  "pl",   "php", "r", "rb", "rkt", "rs", "scala","swift","ts")
+codegen <- subset(mbpp_problems,MODEL=="codegen")
+codegen$PL <- factor(codegen$PL,levels = pl_order)
+```
+
+```{r}
+codegen.lang.model <- glmer(rate1 ~ PL + (1+PL||PROB),weights=n1, data=codegen,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(codegen.lang.model)
+codegen.lang.sum <- summary(codegen.lang.model)
+write.csv(codegen.lang.sum$coefficients , file = "codegen_lang_sum.csv")
+```
+
+### Typing effects - Codex
+
+```{r}
+codex.types.model <- glmer(rate1 ~ TYPES + (1+TYPES||PL) + (1+TYPES||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE))
+```
+```{r}
+summary(codex.types.model)
+```
+
+### Frequency effects - Codex
+
+```{r}
+codex.freq.model <- glmer(rate1 ~ FREQ + (1+FREQ||PL) + (1+FREQ||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE))
+```
+```{r}
+cod.freq.sum <- summary(codex.freq.model)
+write.csv(cod.freq.sum, file = "cod.freq.sum.csv")
+```
+
+### Frequency and typing effects - Codex
+
+```{r}
+codex.freq.model <- glmer(rate1 ~ FREQ*TYPES + (1+FREQ*TYPES||PL) + (1+FREQ*TYPES||PROB),weights=n1, data=davinci,family="binomial",control=glmerControl(optimizer="bobyqa",calc.derivs = FALSE,optCtrl=list(maxfun=1e6)))
+```
+```{r}
+summary(codex.freq.model)
+```
+
+
