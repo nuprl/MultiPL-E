@@ -157,7 +157,7 @@ def main():
             print("--job-file and --output-dir can't work together")
             exit(2)
         with open(args.job_file) as f:
-            files = f.readlines()[args.job_file_line].rstrip().split(" ")
+            files = f.readlines()[args.job_file_line - 1].rstrip().split(" ")
         for f in files:
             print(f"Processing {f}")
             p = Path(f)
