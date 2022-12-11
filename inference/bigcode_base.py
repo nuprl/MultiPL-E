@@ -1,16 +1,15 @@
+"""
+Do not use this file directly.
+"""
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from local_huggingface_model import _stop_at_stop_token
+from .local_huggingface_model import _stop_at_stop_token
 
 
 class Model:
-    def __init__(self):
-        self.model = AutoModelForCausalLM.from_pretrained(
-            "bigcode/christmas-models", revision="56ddb9e", trust_remote_code=True
-        ).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            "bigcode/digit-bytelevel-bpe-jss-v1.1-49152"
-        )
+    def __init__(self, name, revision):
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True).half().cuda()
+        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
 
     def completion_tensors(
         self,
@@ -63,9 +62,3 @@ class Model:
             for output_tensor in output_tensors
         ]
 
-
-_model = Model()
-
-completions = _model.completions
-
-name = "bigcode_1B_nofim"
