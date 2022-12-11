@@ -2,6 +2,7 @@ import datasets
 import argparse
 import gzip
 import json
+import importlib
 from pathlib import Path
 from tqdm import tqdm
 
@@ -14,6 +15,13 @@ def main():
         type=str,
         help="Directory in which to place JSON files with completions. The default is root_dataset-lang-model_name-temperature-reworded",
     )
+
+    args.add_argument(
+        "--output-dir-prefix",
+        type=str,
+        help="Prefix for the output directory"
+    )
+    
     args.add_argument(
         "--lang", type=str, required=True, help="Target language for completions"
     )
@@ -41,12 +49,15 @@ def main():
     )
     args = args.parse_args()
 
-    model = __import__(args.model_name)
+    model = importlib.import_module(args.model_name)
 
     if args.output_dir is None:
         args.output_dir = (
             f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
         )
+
+    if args.output_dir_prefix is not None:
+        args.output_dir = f"{args.output_dir_prefix}/{args.output_dir}"
 
     exp_dir = Path(args.output_dir)
     if not exp_dir.exists():
