@@ -61,7 +61,7 @@ You can do this on the login node or a compute node with limited resources.
    lines (i.e., do not use trailing `\`) and do not include the `#!` on the
    first line.
 
-5. Run `./cluster/inference.sh experiments`
+5. Run `./cluster/pipeline.sh experiments`
 
    You will receive an email at your `@northeastern.edu` address when complete.
 

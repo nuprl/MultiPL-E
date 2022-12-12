@@ -20,11 +20,8 @@ fi
 # Each line in inference.sh is a job.
 NUM_INFERENCE_JOBS=`wc -l $TARGET_DIR/inference.sh | cut -d' ' -f1`
 
-# Add 1 to NUM_INFERENCE_JOBS to account for the first line of inference.sh
-LAST_JOB_INDEX=$(($NUM_INFERENCE_JOBS + 1))
-
 # Queue the inference job array.
-INFERENCE_JOB_ID=$(sbatch --array 1-$LAST_JOB_INDEX --output $TARGET_DIR/logs/$SLURM_JOB_ID-inference-%A-%a.out cluster/discovery_v100_array.sbatch $TARGET_DIR/inference.sh --output-dir-prefix $TARGET_DIR | cut -d' ' -f4)
+INFERENCE_JOB_ID=$(sbatch --array 1-$NUM_INFERENCE_JOBS --output $TARGET_DIR/logs/$SLURM_JOB_ID-inference-%A-%a.out cluster/discovery_v100_array.sbatch $TARGET_DIR/inference.sh --output-dir-prefix $TARGET_DIR | cut -d' ' -f4)
 
 # Gather the list of completions that are missing results. Note that this may
 # pickup completions that were previously placed in $TARGET_DIR.
