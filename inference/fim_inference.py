@@ -4,13 +4,7 @@ import json
 import importlib
 from pathlib import Path
 from tqdm import tqdm
-
-FIM_PREFIX = "<fim-prefix>"
-FIM_MIDDLE = "<fim-middle>"
-FIM_SUFFIX = "<fim-suffix>"
-FIM_PAD = "<fim-pad>"
-EOD = "<|endoftext|>"
-SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
+from .bigcode_base import FIM_MIDDLE, FIM_PREFIX, FIM_SUFFIX
 
 def read_json_gz(p: Path):
     """
@@ -118,8 +112,6 @@ def main():
     args = args.parse_args()
 
     model = importlib.import_module(args.model_name)
-
-    model.model.add_special_tokens(SPEC_TOKS)
 
     args.output_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
     for file in args.input_files:
