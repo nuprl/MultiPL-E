@@ -3,14 +3,22 @@ Do not use this file directly.
 """
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from .local_huggingface_model import _stop_at_stop_token
-
+from local_huggingface_model import _stop_at_stop_token
 
 class Model:
-    def __init__(self, name, revision):
+    def __init__(self, name, revision, special_tokens=[]):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True).half().cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
+        self.special_tokens = special_tokens
+        if len(special_tokens) != 0:
+            self.tokenizer.add_special_tokens({
+                'additional_special_tokens': special_tokens
+            })
 
+    def add_special_tokens(self, special_tokens):
+        self.special_tokens += special_tokens
+        self.tokenizer.add_special_tokens({'additional_special_tokens': special_tokens})
+        
     def completion_tensors(
         self,
         prompt: str,
@@ -58,7 +66,7 @@ class Model:
             top_p,
         )
         return [
-            _stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop)
+            _stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + self.special_tokens)
             for output_tensor in output_tensors
         ]
 

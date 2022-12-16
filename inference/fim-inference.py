@@ -1,0 +1,130 @@
+import argparse
+import gzip
+import json
+import importlib
+from pathlib import Path
+from tqdm import tqdm
+
+FIM_PREFIX = "<fim-prefix>"
+FIM_MIDDLE = "<fim-middle>"
+FIM_SUFFIX = "<fim-suffix>"
+FIM_PAD = "<fim-pad>"
+EOD = "<|endoftext|>"
+SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
+
+def read_json_gz(p: Path):
+    """
+    read a json.gz or json file and return a JSON object.
+    """
+    if p.suffix == ".gz":
+        with gzip.open(p, 'rt') as f:
+            return json.load(f)
+    else:
+        with open(p) as f:
+            return json.load(f)
+
+def get_result_file_name(p: Path) -> Path:
+    name = p.name.replace(".json", ".results.json")
+    return Path(name)
+
+def dump_json_gz(p: Path, obj):
+    """
+    dumps an object to json.
+    """
+    if p.suffix == ".gz":
+        with gzip.open(p, "wt") as f:
+            f.write(json.dumps(obj, indent=4))
+    else:
+        with open(p, "w") as f:
+            f.write(json.dumps(obj, indent=4))
+
+def generate_completions(prompt_file: Path, args, model):
+    prompts = read_json_gz(prompt_file)
+    processed_prompts = []
+    for prompt in tqdm(prompts, unit="files"):
+        results = []
+        body = prompt["body"]
+        header = prompt["prompt"]
+        for line_index in tqdm(range(len(body)), unit="lines"):
+            line = body[line_index]
+            prefix = header + "\n".join(body[:line_index])
+            suffix = "\n".join(body[line_index + 1:])
+            submitted_prompt = f"{FIM_PREFIX}{prefix}{FIM_SUFFIX}{suffix}{FIM_MIDDLE}"
+            new_completions = model.completions(
+                prompt=submitted_prompt,
+                max_tokens=args.max_tokens,
+                temperature=args.temperature,
+                n=args.batch_size,
+                top_p=args.top_p,
+                stop=["\n"],
+            )
+            results.append({ 
+                "line": line,
+                "results": [{"completion": completion, "correctness": completion.strip() == line.strip()} 
+                                for completion in new_completions]
+                }
+            )
+        
+        processed_prompts.append({
+            "language": prompt["language"],
+            "prompt": prompt["prompt"],
+            "body": prompt["body"],
+            "results": results
+        })
+
+    return processed_prompts
+
+def main():
+
+    args = argparse.ArgumentParser()
+
+    args.add_argument(
+        "--input-files",
+        type=Path,
+        nargs="*",
+        help="files used for input.",
+    )
+
+    args.add_argument(
+        "--output-dir",
+        type=Path,
+        help="Directory in which to place JSON files with completions. The default is fim-humaneval",
+        default="fim-humaneval"
+    )
+
+    args.add_argument(
+        "--max-tokens", type=int, default=100, help="Maximum number of tokens to generate"
+    )
+    
+    args.add_argument(
+        "--temperature", type=float, default=0.8, help="Temperature of completions"
+    )
+
+    args.add_argument(
+        "--batch-size", type=int, default=16, help="Number of completions to batch"
+    )
+
+    args.add_argument(
+        "--top-p", type=float, default=0.95, help="Number of completions to batch"
+    )
+
+    args.add_argument(
+        "--model-name",
+        type=str,
+        required=True,
+        help="The model name. To add a new model, copy and modify codegen.py",
+    )
+
+    args = args.parse_args()
+
+    model = importlib.import_module(args.model_name)
+
+    model.model.add_special_tokens(SPEC_TOKS)
+
+    args.output_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
+    for file in args.input_files:
+        results_file = generate_completions(file, args, model)
+        dump_json_gz(args.output_dir / get_result_file_name(file), results_file)
+
+if __name__ == "__main__":
+    main()
