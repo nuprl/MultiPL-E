@@ -17,8 +17,8 @@ def read_json_gz(p: Path):
         with open(p) as f:
             return json.load(f)
 
-def get_result_file_name(p: Path) -> Path:
-    name = p.name.replace(".json", ".results.json")
+def get_result_file_name(p: Path, model_name: str) -> Path:
+    name = p.name.replace(".json", f"-{model_name}.results.json")
     return Path(name)
 
 def dump_json_gz(p: Path, obj):
@@ -54,6 +54,7 @@ def generate_completions(prompt_file: Path, args, model):
             )
             results.append({ 
                 "line": line,
+                "submitted_prompt": submitted_prompt,
                 "results": [{"completion": completion, "correctness": completion.strip() == line.strip()} 
                                 for completion in new_completions]
                 }
@@ -61,6 +62,12 @@ def generate_completions(prompt_file: Path, args, model):
         
         processed_prompts.append({
             "language": prompt["language"],
+            "parameters": {
+                "max_tokens": args.max_tokens,
+                "temperature": args.temperature,
+                "top_p": args.top_p,
+                "stop": ["\n"]
+            },
             "prompt": prompt["prompt"],
             "body": prompt["body"],
             "results": results
@@ -91,11 +98,11 @@ def main():
     )
     
     args.add_argument(
-        "--temperature", type=float, default=0.8, help="Temperature of completions"
+        "--temperature", type=float, default=0.2, help="Temperature of completions"
     )
 
     args.add_argument(
-        "--batch-size", type=int, default=16, help="Number of completions to batch"
+        "--batch-size", type=int, default=20, help="Number of completions to batch"
     )
 
     args.add_argument(
@@ -116,7 +123,7 @@ def main():
     args.output_dir.mkdir(mode=0o755, parents=True, exist_ok=True)
     for file in args.input_files:
         results_file = generate_completions(file, args, model)
-        dump_json_gz(args.output_dir / get_result_file_name(file), results_file)
+        dump_json_gz(args.output_dir / get_result_file_name(file, args.model_name), results_file)
 
 if __name__ == "__main__":
     main()
