@@ -3,7 +3,7 @@ Do not use this file directly.
 """
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from local_huggingface_model import _stop_at_stop_token
+from .local_huggingface_model import _stop_at_stop_token
 
 class Model:
     def __init__(self, name, revision, special_tokens=[]):

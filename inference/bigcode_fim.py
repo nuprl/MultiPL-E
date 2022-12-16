@@ -1,4 +1,4 @@
-from bigcode_base import Model
+from .bigcode_base import Model
 
 
 revision = "60a5975"
