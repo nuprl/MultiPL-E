@@ -7,8 +7,11 @@ from .local_huggingface_model import _stop_at_stop_token
 
 
 class Model:
-    def __init__(self, name, revision):
-        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True).half().cuda()
+    def __init__(self, name, revision, full_precision=False):
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
+        if full_precision == False:
+            self.model = self.model.half()
+        self.model = self.model.cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
 
     def completion_tensors(
