@@ -13,8 +13,12 @@ EOD = "<|endoftext|>"
 SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
 
 class Model:
-    def __init__(self, name, revision, supports_fim=True):
-        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True).half().cuda()
+    def __init__(self, name, revision, supports_fim=True, full_precision=False):
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
+        if full_precision == False:
+            self.model = self.model.half()
+        self.model = self.model.cuda()
+
         self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
         if supports_fim:
             self.special_tokens = SPEC_TOKS

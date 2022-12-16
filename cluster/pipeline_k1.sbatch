@@ -13,9 +13,7 @@ set -e
 
 TARGET_DIR=$1
 
-# Count the number of evaluation jobs and +1 for the last.
 LAST_EVALUATION_JOB_INDEX=`wc -l $TARGET_DIR/evaluation_jobs.txt | cut -d' ' -f1`
-LAST_EVALUATION_JOB_INDEX=$(($LAST_EVALUATION_JOB_INDEX + 1))
 EVALUATION_JOB_ARRAY_ID=$(sbatch --array 1-$LAST_EVALUATION_JOB_INDEX --output=$TARGET_DIR/logs/$SLURM_JOB_ID-evaluation-%a-%a.out ./cluster/discovery_evaluation.sh $TARGET_DIR/evaluation_jobs.txt | cut -d' ' -f4)
 
 # All directories in $TARGET_DIR, excluding .git
