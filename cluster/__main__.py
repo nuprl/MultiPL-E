@@ -46,8 +46,9 @@ def process_experiment(experiment_path: Path) -> List[str]:
             pass
         elif len(results_json["results"]) >= len(completions_json["completions"]):
             continue
+        completions_path_for_container = "/dataset/" + completions_path.parent.name + "/" + completions_path.name
 
-        results.append(str(completions_path))
+        results.append(completions_path_for_container)
 
     return results
 
@@ -149,6 +150,34 @@ def single_problem_pass_k(args):
                     f.write(line)
                     f.write("\n")
 
+def sanity_check_single_configuration(path: Path):
+    results = [ ]
+    missing_reported = False
+    for completions_path in path.glob("*.json.gz"):
+        if completions_path.name.endswith(".results.json.gz"):
+            continue
+
+        completions_json = gunzip_json(completions_path)
+
+        if completions_json is None:
+            results.append(f"Corrupt completions,{completions_path}")
+            continue
+        if missing_reported == False and len(completions_json["completions"]) < 200:
+            results.append(f"Missing completions,{completions_path}")
+            missing_reported = True
+    return results
+
+def sanity_check_experiment_set(args):
+    paths = [ p for p in args.path.glob("*") if p.is_dir() and p.name != "logs" ]
+    with ProcessPoolExecutor() as executor:
+        results = []
+        for sub_results in tqdm.tqdm(
+            executor.map(sanity_check_single_configuration, paths),
+            total=len(paths),
+        ):
+            results.extend(sub_results)
+    for line in results:
+        print(line)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -191,6 +220,10 @@ def main():
     single_problem_pass_k_parser = subparsers.add_parser("single-problem-pass-k")
     single_problem_pass_k_parser.add_argument("--output", type=Path, required=True)
     single_problem_pass_k_parser.set_defaults(func=lambda: single_problem_pass_k(args))
+
+    sanity_check_parser = subparsers.add_parser("sanity-check")
+    sanity_check_parser.add_argument("--path", type=Path, required=True)
+    sanity_check_parser.set_defaults(func=lambda: sanity_check_experiment_set(args))
 
     args = parser.parse_args()
     if not hasattr(args, "func"):
