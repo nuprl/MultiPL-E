@@ -5,15 +5,27 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from .local_huggingface_model import _stop_at_stop_token
 
+FIM_PREFIX = "<fim-prefix>"
+FIM_MIDDLE = "<fim-middle>"
+FIM_SUFFIX = "<fim-suffix>"
+FIM_PAD = "<fim-pad>"
+EOD = "<|endoftext|>"
+SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
 
 class Model:
-    def __init__(self, name, revision, full_precision=False):
+    def __init__(self, name, revision, supports_fim=True, full_precision=False):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
         if full_precision == False:
             self.model = self.model.half()
         self.model = self.model.cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
 
+        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
+        if supports_fim:
+            self.special_tokens = SPEC_TOKS
+            self.tokenizer.add_special_tokens({
+                'additional_special_tokens': self.special_tokens
+            })
+        
     def completion_tensors(
         self,
         prompt: str,
@@ -61,7 +73,7 @@ class Model:
             top_p,
         )
         return [
-            _stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop)
+            _stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + self.special_tokens)
             for output_tensor in output_tensors
         ]
 
