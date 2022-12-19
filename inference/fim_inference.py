@@ -41,6 +41,8 @@ def generate_completions(prompt_file: Path, args, model):
         header = prompt["prompt"]
         for line_index in tqdm(range(len(body)), unit="lines"):
             line = body[line_index]
+            if args.filter_empty_lines and line.strip() == "":
+                continue
             prefix = header + "\n".join(body[:line_index])
             suffix = "\n".join(body[line_index + 1:])
             submitted_prompt = f"{FIM_PREFIX}{prefix}{FIM_SUFFIX}{suffix}{FIM_MIDDLE}"
@@ -50,7 +52,7 @@ def generate_completions(prompt_file: Path, args, model):
                 temperature=args.temperature,
                 n=args.batch_size,
                 top_p=args.top_p,
-                stop=["\n"],
+                stop=[],
             )
             results.append({ 
                 "line": line,
@@ -66,7 +68,7 @@ def generate_completions(prompt_file: Path, args, model):
                 "max_tokens": args.max_tokens,
                 "temperature": args.temperature,
                 "top_p": args.top_p,
-                "stop": ["\n"]
+                "stop": []
             },
             "prompt": prompt["prompt"],
             "body": prompt["body"],
@@ -114,6 +116,14 @@ def main():
         type=str,
         required=True,
         help="The model name. To add a new model, copy and modify codegen.py",
+    )
+
+    args.add_argument(
+        "--filter-empty-lines",
+        type=int,
+        choices=[0, 1],
+        default=0,
+        help="Should empty lines be removed? (0 = no filtering, 1 = only filter empty lines (including line with space/tabs). default: 0)"
     )
 
     args = args.parse_args()
