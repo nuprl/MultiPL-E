@@ -2,6 +2,7 @@
 Do not use this file directly.
 """
 import torch
+from typing import List, Tuple
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from .local_huggingface_model import _stop_at_stop_token
 
@@ -23,7 +24,8 @@ class Model:
         if supports_fim:
             self.special_tokens = SPEC_TOKS
             self.tokenizer.add_special_tokens({
-                'additional_special_tokens': self.special_tokens
+                'additional_special_tokens': self.special_tokens,
+                'pad_token': EOD,
             })
         
     def completion_tensors(
@@ -76,4 +78,24 @@ class Model:
             _stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + self.special_tokens)
             for output_tensor in output_tensors
         ]
+
+    def fill_in_the_middle(self, prefix_suffix_tuples: List[Tuple[str, str]], max_tokens: int, temperature: float) -> List[str]:
+        prompts = [f"{FIM_PREFIX}{prefix}{FIM_SUFFIX}{suffix}{FIM_MIDDLE}" for prefix, suffix in prefix_suffix_tuples]
+        result = self.tokenizer(prompts, return_tensors="pt", padding=True, return_attention_mask=True)
+        input_ids = result.input_ids.cuda()
+        attention_mask = result.attention_mask.cuda()
+        max_length = input_ids[0].size(0) + max_tokens
+        with torch.no_grad():
+            output = self.model.generate(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                do_sample=True,
+                top_p=0.95,
+                temperature=temperature,
+                max_length=max_length
+            )
+        return [
+            self.tokenizer.decode(tensor) for tensor in output
+        ]
+
 
