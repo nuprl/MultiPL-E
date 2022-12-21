@@ -13,6 +13,12 @@ FIM_PAD = "<fim-pad>"
 EOD = "<|endoftext|>"
 SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
 
+def extract_fim_part(s: str):
+    # Find the index of <fim-middle>
+    start = s.find(FIM_MIDDLE) + len(FIM_MIDDLE)
+    stop = s.find(EOD, start) or len(s)
+    return s[start:stop]
+
 class Model:
     def __init__(self, name, revision, supports_fim=True, full_precision=False):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
@@ -20,7 +26,7 @@ class Model:
             self.model = self.model.half()
         self.model = self.model.cuda()
 
-        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision)
+        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left")
         if supports_fim:
             self.special_tokens = SPEC_TOKS
             self.tokenizer.add_special_tokens({
@@ -52,7 +58,7 @@ class Model:
                 num_return_sequences=n,
                 max_length=max_length,
                 attention_mask=attention_mask,
-                pad_token_id=50256,  # TODO(arjun): Really? Must be a better way.
+                pad_token_id=self.tokenizer.pad_token_id
             )
         return output
 
@@ -89,13 +95,12 @@ class Model:
             output = self.model.generate(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
-                do_sample=True,
-                top_p=0.95,
-                temperature=temperature,
-                max_length=max_length
+                max_length=max_length,
+                pad_token_id=self.tokenizer.pad_token_id
             )
-        return [
-            self.tokenizer.decode(tensor) for tensor in output
+        # WARNING: cannot use skip_special_tokens, because it clobbers the fim special tokens
+        return [        
+            extract_fim_part(self.tokenizer.decode(tensor)) for tensor in output
         ]
 
 
