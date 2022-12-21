@@ -29,7 +29,11 @@ class LocalHuggingfaceModel:
         self._model_kwargs = model_kwargs
         self._generate_kwargs = dict()
         self._bos = "<|endoftext|>"
-        self._tokenizer = AutoTokenizer.from_pretrained(model_name)
+        if model_name == "facebook/incoder-6B":
+            tokenizer_kwargs = { "padding_side": "left" }
+        else:
+            tokenizer_kwargs = {}
+        self._tokenizer = AutoTokenizer.from_pretrained(model_name, **tokenizer_kwargs)
         self._model = (
             AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
             .half()
