@@ -9,7 +9,7 @@ _model = LocalHuggingfaceModel(
 )
 
 _model._tokenizer.add_special_tokens({
-    "pad_token": "<|endoftext|>"
+    "pad_token": "<pad>"
 })
 
 name = "incoder"
@@ -23,7 +23,7 @@ def strip_left_padding(output_tensor):
     the output will contain <|endoftext|> tokens on the left. This code strips those out.
     """
     start_index = 0
-    while output_tensor[start_index].item() == _model._tokenizer.pad_token_id:
+    while output_tensor[start_index].item() == _model._tokenizer.pad_token_id or output_tensor[start_index].item() == 2:
         start_index += 1
     return output_tensor[start_index:]
 
