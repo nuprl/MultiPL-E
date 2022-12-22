@@ -95,6 +95,9 @@ class Model:
             output = self.model.generate(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
+                do_sample=True,
+                temperature=temperature,
+                top_p=0.95,
                 max_length=max_length,
                 pad_token_id=self.tokenizer.pad_token_id
             )
