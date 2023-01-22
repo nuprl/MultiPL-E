@@ -149,7 +149,7 @@ def main():
             exit(2)
         files = [ p for p in itertools.chain(Path(args.dir).glob("**/*.json" if args.recursive else "*.json"), \
                                              Path(args.dir).glob("**/*.json.gz" if args.recursive else "*.json.gz")) \
-                    if not p.name.endswith(".results.json") or p.name.endswith(".results.json.gz")  ] 
+                    if not p.name.endswith(".results.json") and not p.name.endswith(".results.json.gz")  ] 
         for file in tqdm(files):
             evaluate_problem(args.output_dir, file, args.max_workers, args.dir)
     elif args.job_file and args.job_file_line is not None:
