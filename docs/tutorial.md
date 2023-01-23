@@ -78,10 +78,18 @@ Notes:
    proceeding, ensure that a few files have been generated:
 
    ```bash
-   ls tutorial/humaneval-rs-bigcode_1B_080e3b87d19ace8aa4f72c30e5458cab820644dc_dedupaltcomments-0.2-reworded/
+   ls tutorial/*/*.json.gz
    ```
 
-## Evaluation in a Container
+### Evaluation
+
+You can run MultiPL-E's evaluation with or without a container, but we strongly
+recommend using the container that we have provided. The container includes the toolchains
+for all languages that we support. Without it, you will neeed to painstakingly install them
+again. There is also a risk that the generated code may do something that breaks your system.
+The container mitigates that risk.
+
+#### Evaluation with a Container
 
 When you first run evaluation, you need to pull and tag the [evaluation container](https://github.com/nuprl/MultiPL-E/pkgs/container/multipl-e-evaluation):
 
@@ -109,12 +117,7 @@ ls tutorial/*/*.results.json.gz
 For more details about generating the results, see the [documentation and code for evaluation](https://github.com/nuprl/MultiPL-E/tree/main/evaluation).
 
 
-## Evaluation without a Container
-
-*Warning:* We recommend using a container. The container includes the toolchains
-for all languages, and without it, we need to painstakingly install them again.
-There is also a risk that a model may produce a program that breaks something
-on your machine.
+#### Evaluation without a Container
 
 Assuming you have setup the needed language toolchains, here is how you
 run evaluation without a container:
