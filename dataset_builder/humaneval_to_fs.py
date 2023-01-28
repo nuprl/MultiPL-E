@@ -96,16 +96,16 @@ class Translator:
             print(e)
             return None
         arg_list = " ".join(arg_strings)
-        return f"{js_description}let {name} {arg_list}: {return_type} "+"\n"
+        return f"{js_description}let {name} {arg_list}: {return_type} "+" = \n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
-        return [ "let test = ",f"  let candidate = {entry_point};" ]
+        return [ "let test = ",f"  let candidate = {entry_point}" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["", "test();"]
+        return ["", "test()"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
@@ -129,7 +129,7 @@ class Translator:
             c = c.replace('\n','\\n')
             return f'"{c}"'
         elif c is None:
-            return "undefined"
+            return "None"
         return repr(c)
 
     def gen_var(self, v: str) -> str:
