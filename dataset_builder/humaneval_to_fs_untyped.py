@@ -14,7 +14,7 @@ class Translator:
     stop = [ '\n(*', '\n//', '\ntype' ]
 
     def file_ext(self):
-        return "fsi"
+        return "fs"
 
     def translate_prompt(
         self, name: str, args: List[ast.arg], _returns, description: str
