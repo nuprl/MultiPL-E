@@ -77,7 +77,7 @@ class Translator:
         self.is_candidate_result = False
 
     def file_ext(self):
-        return "fsi"
+        return "fs"
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
         global needs_hashmap
