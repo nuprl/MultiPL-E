@@ -16,12 +16,7 @@ def translate_type(t):
                 case "List":
                     return translate_type(slice) + "[]"
                 case "Union":
-                    match slice: 
-                        case ast.Tuple(elts, _ctx): 
-                            tys = [translate_type(elem) for elem in elts]
-                            return  "| ".join(tys)
-                        case other: 
-                            raise Exception(f"Unexpected slice: {slice}")
+                    raise Exception("As far as I know, F# doesn't have unions")
                 case "Tuple":
                     match slice:
                         case ast.Tuple(elts, _ctx):
