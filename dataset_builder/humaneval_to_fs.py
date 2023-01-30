@@ -14,7 +14,7 @@ def translate_type(t):
         case ast.Subscript(ast.Name(id), slice, ctx):
             match id:
                 case "List":
-                    return translate_type(slice) + "[]"
+                    return f"list<{translate_type(slice)}>"
                 case "Union":
                     raise Exception("As far as I know, F# doesn't have unions")
                 case "Tuple":
@@ -29,7 +29,7 @@ def translate_type(t):
                         case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
                             key, value = translate_type(k), translate_type(v)
                             needs_hashmap = True
-                            return "Map ["+f"({key}, {value})" + "]"
+                            return f"Dictionary<{key}, {value}>"
                         case other:
                             raise Exception(f"Bad dict: {slice}")
                 case "Optional":
