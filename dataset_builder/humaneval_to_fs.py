@@ -41,7 +41,7 @@ def translate_type(t):
         case ast.Name("float"):
             return "float"
         case ast.Name("bool"):
-            return "boolean"
+            return "bool"
         case ast.Name("str") | "str":
             return "string"
         case None:
