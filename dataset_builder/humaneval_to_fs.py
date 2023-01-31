@@ -14,7 +14,7 @@ def translate_type(t):
         case ast.Subscript(ast.Name(id), slice, ctx):
             match id:
                 case "List":
-                    return f"list<{translate_type(slice)}>"
+                    return f"{translate_type(slice)}[]"
                 case "Union":
                     raise Exception("As far as I know, F# doesn't have unions")
                 case "Tuple":
