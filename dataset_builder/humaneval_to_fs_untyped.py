@@ -46,7 +46,7 @@ class Translator:
         Make sure you use the right equality operator for your language. For
         example, == is the wrong operator for Java and OCaml.
         """
-        return f"  assert {left} = {right}"
+        return f"  assert ({left} = {right})"
 
     def gen_literal(self, c: bool | str | int | float | None) -> str:
         if type(c) == bool:
