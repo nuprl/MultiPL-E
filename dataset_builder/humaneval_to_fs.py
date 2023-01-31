@@ -100,7 +100,7 @@ class Translator:
         return [ "let test = ",f"  let candidate = {entry_point}" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["", "test()"]
+        return ["  0", "", "test()"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
