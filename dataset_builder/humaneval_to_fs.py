@@ -112,7 +112,7 @@ class Translator:
         if self.is_candidate_result:
             right = coerce(right, self.type[1])
             self.is_candidate_result = False
-        return f"  assert {left} = {right}"
+        return f"  assert ({left} = {right})"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
