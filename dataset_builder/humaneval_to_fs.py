@@ -23,6 +23,8 @@ def translate_type(t):
                     match slice:
                         case ast.Tuple(elts, _ctx):
                             tys = [translate_type(elem) for elem in elts]
+                            # This may be wrong as this is oen of two ways tuples can be formed
+                            # The other way struct(type * type) is actually different called a struct tuple
                             return " " + " * ".join(tys)
                         case other:
                             raise Exception(f"Bad tuple: {slice}")
