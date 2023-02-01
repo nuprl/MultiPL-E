@@ -23,7 +23,7 @@ def translate_type(t):
                     match slice:
                         case ast.Tuple(elts, _ctx):
                             tys = [translate_type(elem) for elem in elts]
-                            return "(" + ", ".join(tys) + ")"
+                            return " " + " * ".join(tys)
                         case other:
                             raise Exception(f"Bad tuple: {slice}")
                 case "Dict":
