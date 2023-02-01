@@ -14,7 +14,7 @@ def translate_type(t):
         case ast.Subscript(ast.Name(id), slice, ctx):
             match id:
                 case "List":
-                    return f"{translate_type(slice)}[]"
+                    return f"{translate_type(slice)} list"
                 case "Union":
                     raise Exception("Unions in F# require specific capitalized names after them. \
                                     If a union was used, it would need to be declared a type for use \
