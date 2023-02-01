@@ -67,7 +67,7 @@ class Translator:
         return v
 
     def gen_list(self, l: List[str]) -> str:
-        return "[" + ", ".join(l) + "]"
+        return "[" + "; ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
         return "(" + ", ".join(t) + ")"
