@@ -31,7 +31,7 @@ class Translator:
         This code goes at the start of the test suite.
         """
         return [
-            "let test = ",
+            "let test() = ",
             f"  let candidate = {entry_point}",
         ]
 
@@ -76,4 +76,4 @@ class Translator:
         return "Map [" + "; ".join(f"({k}, {v})" for k, v in zip(keys, values)) + "]"
 
     def gen_call(self, func: str, args: List[str]) -> str:
-        return f"{func}(" + ", ".join(args) + ")"
+        return f"{func} " + " ".join(args)

@@ -97,7 +97,7 @@ class Translator:
         """
         This code goes at the start of the test suite.
         """
-        return [ "let test = ",f"  let candidate = {entry_point}" ]
+        return [ "let test() = ",f"  let candidate = {entry_point}" ]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["  0", "", "test()"]
@@ -147,4 +147,4 @@ class Translator:
         if func == "candidate":
             self.is_candidate_result = True
             args = [coerce(arg, self.type[0][i]) for i, arg in enumerate(args)]
-        return f"{func}(" + ", ".join(args) + ")"
+        return f"{func} " + " ".join(args)
