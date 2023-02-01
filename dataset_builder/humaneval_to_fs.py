@@ -33,7 +33,7 @@ def translate_type(t):
                         case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
                             key, value = translate_type(k), translate_type(v)
                             needs_hashmap = True
-                            return f"Dictionary<{key}, {value}>"
+                            return f"Map<{key}, {value}>"
                         case other:
                             raise Exception(f"Bad dict: {slice}")
                 case "Optional":
@@ -136,7 +136,7 @@ class Translator:
         return v
 
     def gen_list(self, l: List[str]) -> str:
-        return "[" + ", ".join(l) + "]"
+        return "[" + "; ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
         return "(" + ", ".join(t) + ")"
@@ -146,7 +146,7 @@ class Translator:
 
     def gen_call(self, func: str, args: List[str]) -> str:
         """Translate a function call `func(args)`
-        A function call f(x, y, z) translates to f(x, y, z)
+        A function call f(x, y, z) translates to f x y z
         """
         if func == "candidate":
             self.is_candidate_result = True
