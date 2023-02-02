@@ -20,7 +20,7 @@ def extract_fim_part(s: str):
     return s[start:stop]
 
 class Model:
-    def __init__(self, name, revision, full_precision=False):
+    def __init__(self, name, revision):
         self.model = AutoModelForCausalLM.from_pretrained(name, trust_remote_code=True)
         self.model = self.model.cuda()
 
