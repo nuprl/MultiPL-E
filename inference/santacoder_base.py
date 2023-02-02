@@ -21,11 +21,12 @@ def extract_fim_part(s: str):
 
 class Model:
     def __init__(self, name, revision):
-        self.model = AutoModelForCausalLM.from_pretrained(name, trust_remote_code=True)
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
         self.model = self.model.cuda()
 
         # In case the model creator did not upload a copy of the tokenizer.
-        self.tokenizer = AutoTokenizer.from_pretrained("bigcode/santacoder", padding_side="left", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained("bigcode/santacoder", revision="47ad9f0", padding_side="left", trust_remote_code=True)
+        self.tokenizer.pad_token = "<|endoftext|>"
         self.special_tokens = SPEC_TOKS
         
     def completion_tensors(
