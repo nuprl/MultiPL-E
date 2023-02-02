@@ -22,8 +22,6 @@ def extract_fim_part(s: str):
 class Model:
     def __init__(self, name, revision, full_precision=False):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
-        if full_precision == False:
-            self.model = self.model.half()
         self.model = self.model.cuda()
 
         self.tokenizer = AutoTokenizer.from_pretrained("bigcode/santacoder", padding_side="left", trust_remote_code=True)
