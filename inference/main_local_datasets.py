@@ -76,7 +76,7 @@ def main():
             "completions": completions,
             "stop_tokens": problem["stop_tokens"],
         }
-        with open(exp_dir.joinpath(problem["name"] + ".json"), "w+") as f:
+        with open(exp_dir.joinpath(problem["name"] + f"-{args.temperature}.json"), "w+") as f:
             json.dump(result_json, f)
 
 
