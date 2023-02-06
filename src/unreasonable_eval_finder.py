@@ -29,7 +29,7 @@ def main():
             results = json.load(f)["results"]
         for i in range(len(results)):
             # Find any files that have status ok but stuff in stderr
-            if results[i]["status"] == "OK" and (results[i]["exit_code"] != 0 or results[i]["stderr"] != ""):
+            if results[i]["status"] == "OK" and (results[i]["exit_code"] != 0 or "error" not in results[i]["stderr"].lower()):
                 strangely_passed.append(f"{os.path.basename(path)}-{i}")
         # Find any files that have all their exceptions being syntax errors
         if all(["syntax" in r["stderr"].lower() for r in results]):
