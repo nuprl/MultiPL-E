@@ -29,14 +29,15 @@ def main():
             results = json.load(f)["results"]
         for i in range(len(results)):
             # Find any files that have status ok but stuff in stderr
-            if results[i]["status"] == "OK" and (results[i]["exit_code"] != 0 or "error" in results[i]["stderr"].lower()):
+            if results[i]["status"] == "OK" and (results[i]["exit_code"] != 0 or "error" in results[i]["stderr"].lower()
+                                                 or "exception" in results[i]["stderr"].lower()):
                 strangely_passed.append(f"{os.path.basename(path)}-{i}")
         # Find any files that have all their exceptions being syntax errors
         if all(["syntax" in r["stderr"].lower() for r in results]):
             possible_translator_error.append(os.path.basename)
     
     # Report strange behavior
-    print("These files passed with a non-zero exit code or with output to stderr:")
+    print("These files passed with a non-zero exit code or with non-warning output to stderr:")
     [print(p) for p in strangely_passed]
     print("These files only had syntax errors pointing to a possible error with the prompt converter:")
     [print(p) for p in possible_translator_error]
