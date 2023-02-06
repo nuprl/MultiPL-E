@@ -41,5 +41,5 @@ def main():
     print("These files only had syntax errors pointing to a possible error with the prompt converter:")
     [print(p) for p in possible_translator_error]
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
