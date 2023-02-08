@@ -144,9 +144,11 @@ class Translator:
         if type(c) == bool:
             return str(c).lower()
         if type(c) == str:
-            if '"' in c:
-                raise Exception("smarter quote handling")
-            return '"' + c + '"'
+            escaped = c.translate(str.maketrans({
+                '"': r"\"",
+                "$": r"\$"
+            }))
+            return '"' + escaped + '"'
         if c is None: 
             return "nothing"
         return repr(c)
