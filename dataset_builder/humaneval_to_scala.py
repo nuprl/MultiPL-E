@@ -218,7 +218,7 @@ class Translator(humaneval_to_cpp.Translator):
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
-        Use == checks for primitive type and equals in for object type
+        Use == checks for primitive type and equals for object type
         """
         if self.is_primitive_type(self.translated_return_type):
             return f"    assert({left} == {right});"
