@@ -4,8 +4,8 @@ from safe_subprocess import run
 from pathlib import Path
 from generic_eval import main
 
-LANG_NAME = "Java"
-LANG_EXT = ".java"
+LANG_NAME = "Kotlin"
+LANG_EXT = ".kt"
 
 #Following files have problems:
 #137, 
@@ -14,25 +14,19 @@ LANG_EXT = ".java"
 
 def eval_script(path: Path):
 
-    # get the environment variable for tuples
-    sys_env = os.environ.copy()
-    javatuples_path = Path("/usr/multiple/javatuples-1.2.jar")
-
-    sys_env["CLASSPATH"] =  f"{javatuples_path}"
-
     with tempfile.TemporaryDirectory() as outdir:
         #Each Java file contains the class with same name `JAVA_CLASS_NAME`
         #Hence, javac will same JAVA_CLASS_NAME.class file for each problem
         #Write class for each problem to a different temp dir
-        #Use UTF8 encoding with javac
-        result = run(["javac", "-encoding", "UTF8", "-d", outdir, path], env=sys_env)
+        outpath = Path(outdir) / "out.jar"
+        result = run(["kotlinc", path, "-include-runtime", "-d", outpath])
          
         if result.exit_code != 0:
             # Well, it's a compile error. May be a type error or
             # something. But, why break the set convention
             status = "SyntaxError"
         else:
-            result = run(["java", "-ea", "-cp", f"{outdir}", "Problem"], env = sys_env)
+            result = run(["java", "-ea", "-jar", f"{outpath}"])
             if result.timeout:
                 status = "Timeout"
             elif result.exit_code == 0:

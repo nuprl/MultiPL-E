@@ -66,7 +66,7 @@ def translate_type(t):
         case ast.Name(x):
             raise Exception(f"unknown name {x}")
         case ast.Constant(Ellipsis):
-            raise Exception("no ellipsis!!")
+            raise Exception("No ellipses!")
         case _other:
             raise Exception(f"unknown annotation: {t}")
 
@@ -89,11 +89,12 @@ class Translator:
     def file_ext(self):
         return "kt"
 
+    # NOTE: this definition translates the prompt but not the examples in them, the examples provided are very much still in Python syntax
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
         global needs_hashmap
         # added this line to substitute candidate in for entry point later on
         self.entry_point = to_camel_case(name)
-        js_description = "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
+        js_description = "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip().replace(name, self.entry_point)) + "\n"
         # Store this for later coercions on tests
         needs_hashmap = False
         self.type = [[arg.annotation for arg in args], returns]
@@ -108,16 +109,16 @@ class Translator:
             print(e)
             return None
         arg_list = ", ".join(arg_strings)
-        return f"{js_description}fun {name}({arg_list}): {return_type} "+"{\n"
+        return f"{js_description}fun {to_camel_case(name)}({arg_list}): {return_type} "+"{\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
-        return ["import org.junit.Test\nimport org.junit.Assert\n", "class Test {", "  @Test" , "  fun test() {"]
+        return ["fun main() {"]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        return ["   }", "}"]
+        return ["}"]
 
     def deep_equality(self, left: str, right: str) -> str:
         """
@@ -132,7 +133,7 @@ class Translator:
             # replacing all calls to candicate in left to self.entry_point
             left = left.replace("candidate", self.entry_point)
             # flipped, since kotlin requires (expected, actual)
-        return f"  Assert.assertEquals({right},{left});"
+        return f"  assert({right} == {left});"
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
