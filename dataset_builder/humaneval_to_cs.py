@@ -208,7 +208,7 @@ class Translator(humaneval_to_cpp.Translator):
     def deep_equality(self, left: str, right: str) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
-        In C++ using == checks for structural equality
+        Use ==  for primitive types and Equals for objects
         """
         #Empty the union declarations
         self.union_decls = {}
