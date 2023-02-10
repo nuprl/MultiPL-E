@@ -2,7 +2,7 @@ from pathlib import Path
 from safe_subprocess import run
 
 def eval_script(path: Path):
-    r = run(["dotnet", "fsi", str(path)])
+    r = run(["dotnet", "fsi", "--debug", str(path)])
     if r.timeout:
         status = "Timeout"
     elif r.exit_code == 0:
