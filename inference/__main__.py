@@ -27,7 +27,7 @@ def generate_completions(model, args, completions, problem, problem_filename):
             stop=problem["stop_tokens"],
         )
         completions.extend(new_completions)
-        
+
     result_json = {
         "name": problem["name"],
         "language": problem["language"],
@@ -134,6 +134,8 @@ def main():
     if args.output_dir is None:
         args.output_dir = (
             f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
+        ) if args.use_local else (
+            f"{args.dataset}-{model.name}-{args.temperature}-reworded"
         )
 
     if args.output_dir_prefix is not None:
