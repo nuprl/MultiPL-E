@@ -134,7 +134,7 @@ def main():
     if args.output_dir is None:
         args.output_dir = (
             f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
-        ) if args.use_local else (
+        ) if not args.use_local else (
             f"{args.dataset}-{model.name}-{args.temperature}-reworded"
         )
 
