@@ -26,7 +26,8 @@ def for_file(path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--temperature", type=float, help="Temperature completions were made at", required=True)
+    parser.add_argument("--temperature", type=float, help="Temperature completions were made at. \
+                        If 0.2 runs pass@1 rather than pass@10 and pass@100", required=True)
     parser.add_argument("dirs", type=str,  help="Directories with results. ", nargs="+")
     args = parser.parse_args()
     print("Dataset,Pass@k,Estimate")
