@@ -2,11 +2,9 @@ import datasets
 import argparse
 import gzip
 import json
-import importlib
 from pathlib import Path
 from tqdm import tqdm
-
-DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
+import json
 
 def main():
     args = argparse.ArgumentParser()
@@ -14,20 +12,11 @@ def main():
     args.add_argument(
         "--output-dir",
         type=str,
-        help="Directory in which to place JSON files with completions. The default is root_dataset-lang-model_name-temperature-reworded",
-    )
-
-    args.add_argument(
-        "--output-dir-prefix",
-        type=str,
-        help="Prefix for the output directory"
-    )
-    
-    args.add_argument(
-        "--lang", type=str, required=True, help="Target language for completions"
+        required=True,
+        help="Directory in which to place JSON files with completions.",
     )
     args.add_argument(
-        "--root-dataset", type=str, required=True, help="either mbpp or humaneval"
+        "--dataset", type=str, required=True, help="The local dataset in JSON format to get from this computer."
     )
     args.add_argument(
         "--model-name",
@@ -50,43 +39,18 @@ def main():
     )
     args = args.parse_args()
 
-    model = importlib.import_module(args.model_name)
-
-    if args.output_dir is None:
-        args.output_dir = (
-            f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
-        )
-
-    if args.output_dir_prefix is not None:
-        args.output_dir = f"{args.output_dir_prefix}/{args.output_dir}"
+    model = __import__(args.model_name)
 
     exp_dir = Path(args.output_dir)
     if not exp_dir.exists():
         exp_dir.mkdir()
 
-    problems = datasets.load_dataset(
-        "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", 
-        revision=DATASET_REVISION
-    )
-    problems = problems["test"]
-    start_index = args.input_start_index if args.input_start_index is not None else 0
-    stop_index = min(
-        len(problems),
-        start_index + args.input_limit
-        if args.input_limit is not None
-        else len(problems),
-    )
-    problems = problems.select(range(start_index, stop_index))
-    for problem in tqdm(problems, unit="problems"):
-        # NOTE(arjun): This is a litte hack to delay loading the model, so that we fail faster.
-        problem_filename = exp_dir / f"{problem['name']}.json.gz"
-        if problem_filename.exists():
-            with gzip.open(problem_filename, "rt") as f:
-                existing = json.loads(f.read())
-            completions = existing["completions"]
-        else:
-            completions = []
-
+    with open(args.dataset, "r") as f:
+        problems = datasets.Dataset.from_list(
+            json.load(f)
+        )
+    for problem in iter(problems):
+        completions = []
         if len(completions) > args.completion_limit:
             # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
             continue
@@ -112,7 +76,7 @@ def main():
             "completions": completions,
             "stop_tokens": problem["stop_tokens"],
         }
-        with gzip.open(problem_filename, "wt") as f:
+        with open(exp_dir.joinpath(problem["name"] + ".json"), "w+") as f:
             json.dump(result_json, f)
 
 
