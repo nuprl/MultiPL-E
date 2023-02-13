@@ -135,7 +135,7 @@ def main():
         args.output_dir = (
             f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
         ) if not args.use_local else (
-            f"{args.dataset}-{model.name}-{args.temperature}-reworded"
+            f"{args.dataset.split('/')[-1]}-{model.name}-{args.temperature}-reworded"
         )
 
     if args.output_dir_prefix is not None:
