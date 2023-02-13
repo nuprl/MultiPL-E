@@ -38,13 +38,12 @@ class Translator(humaneval_to_cpp.Translator):
 
     #Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
-        '''Generate type for ArrayList<T>
+        '''Generate type for List<T>
         '''
         return self.list_type + "[%s]" % elem_type
 
     def gen_make_list(self, elem_type, list_contents):
-        '''Generate List literal using and array literal
-            `new ArrayList<BoxType(T)>(Arrays.asList(...))
+        '''Generate List literal
         '''
         if list_contents == "":
             list_contents = "()"
@@ -219,7 +218,7 @@ class Translator(humaneval_to_cpp.Translator):
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
         """
         All tests are assertions that compare deep equality between left and right.
-        In C++ using == checks for structural equality
+        Use == checks for primitive type and equals for object type
         """
         if self.is_primitive_type(self.translated_return_type):
             return f"    assert({left} == {right});"
@@ -228,9 +227,6 @@ class Translator(humaneval_to_cpp.Translator):
 
     def find_type_to_coerce(self, expr):
         '''Return a type to coerce into another type.
-            Optional.of is never coerced.
-            ArrayList needs special handling
-            Otherwise types are coerced similar to C++
         '''
         
         return re.findall(".+?\(", expr)
