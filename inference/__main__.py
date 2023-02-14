@@ -70,7 +70,7 @@ def generate_from_local_dataset(model, args, exp_dir):
         problems = datasets.Dataset.from_list(
             json.load(f)
         )
-    for problem in tqdm(iter(problems), unit="problems"):
+    for problem in tqdm(problems, unit="problems"):
         problem_filename = exp_dir / f"{problem['name']}.json.gz"
 
         completions = []
