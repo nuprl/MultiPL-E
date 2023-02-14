@@ -38,7 +38,6 @@ def from_local_dataset(args):
         problems = datasets.Dataset.from_list(problems_list[start_index:stop_index])
     return problems
 
-
 def main():
     args = argparse.ArgumentParser()
 
