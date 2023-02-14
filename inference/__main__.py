@@ -7,78 +7,23 @@ from pathlib import Path
 from tqdm import tqdm
 import sys
 
-DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
+DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"    
 
-def generate_completions(model, args, completions, problem, problem_filename):
-    if len(completions) > args.completion_limit:
-        # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
-        return
-
-    for _ in tqdm(
-        range(len(completions), args.completion_limit, args.batch_size),
-        unit="completions",
-    ):
-        new_completions = model.completions(
-            prompt=problem["prompt"],
-            max_tokens=512,
-            temperature=args.temperature,
-            n=args.batch_size,
-            top_p=0.95,
-            stop=problem["stop_tokens"],
-        )
-        completions.extend(new_completions)
-
-    result_json = {
-        "name": problem["name"],
-        "language": problem["language"],
-        "prompt": problem["prompt"],
-        "tests": problem["tests"],
-        "completions": completions,
-        "stop_tokens": problem["stop_tokens"],
-    }
-    with gzip.open(problem_filename, "wt") as f:
-        json.dump(result_json, f)
-
-def generate_from_remote_dataset(model, args, exp_dir):
+def from_remote_dataset(args, start_index, stop_index):
     problems = datasets.load_dataset(
         "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", 
         revision=DATASET_REVISION
     )
     problems = problems["test"]
-    start_index = args.input_start_index if args.input_start_index is not None else 0
-    stop_index = min(
-        len(problems),
-        start_index + args.input_limit
-        if args.input_limit is not None
-        else len(problems),
-    )
     problems = problems.select(range(start_index, stop_index))
-    for problem in tqdm(problems, unit="problems"):
-        # NOTE(arjun): This is a litte hack to delay loading the model, so that we fail faster.
-        problem_filename = exp_dir / f"{problem['name']}.json.gz"
-        if problem_filename.exists():
-            with gzip.open(problem_filename, "rt") as f:
-                existing = json.loads(f.read())
-            completions = existing["completions"]
-        else:
-            completions = []
+    return problems
 
-        generate_completions(model, args, completions, problem, problem_filename)
-
-def generate_from_local_dataset(model, args, exp_dir):
+def from_local_dataset(args, start_index, stop_index):
     with open(args.dataset, "r") as f:
         problems = datasets.Dataset.from_list(
-            json.load(f)
+            json.load(f)[start_index:stop_index]
         )
-    for problem in iter(problems):
-        problem_filename = exp_dir / f"{problem['name']}.json.gz"
-
-        completions = []
-        if len(completions) > args.completion_limit:
-            # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
-            continue
-
-        generate_completions(model, args, completions, problem, problem_filename)
+    return problems
 
 def main():
     args = argparse.ArgumentParser()
@@ -145,11 +90,57 @@ def main():
     if not exp_dir.exists():
         exp_dir.mkdir()
 
-    if args.use_local:
-        generate_from_local_dataset(model, args, exp_dir)
-    else:
-        generate_from_remote_dataset(model, args, exp_dir)
+    start_index = args.input_start_index if args.input_start_index is not None else 0
+    stop_index = min(
+        len(problems),
+        start_index + args.input_limit
+        if args.input_limit is not None
+        else len(problems),
+    )
 
+    if args.use_local:
+        problems = from_local_dataset(args, start_index, stop_index)
+    else:
+        problems = from_remote_dataset(args, start_index, stop_index)
+
+    for problem in tqdm(problems, unit="problems"):
+        # NOTE(arjun): This is a litte hack to delay loading the model, so that we fail faster.
+        problem_filename = exp_dir / f"{problem['name']}.json.gz"
+        if problem_filename.exists():
+            with gzip.open(problem_filename, "rt") as f:
+                existing = json.loads(f.read())
+            completions = existing["completions"]
+        else:
+            completions = []
+
+        if len(completions) > args.completion_limit:
+            # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
+            continue
+
+        for _ in tqdm(
+            range(len(completions), args.completion_limit, args.batch_size),
+            unit="completions",
+        ):
+            new_completions = model.completions(
+                prompt=problem["prompt"],
+                max_tokens=512,
+                temperature=args.temperature,
+                n=args.batch_size,
+                top_p=0.95,
+                stop=problem["stop_tokens"],
+            )
+            completions.extend(new_completions)
+
+        result_json = {
+            "name": problem["name"],
+            "language": problem["language"],
+            "prompt": problem["prompt"],
+            "tests": problem["tests"],
+            "completions": completions,
+            "stop_tokens": problem["stop_tokens"],
+        }
+        with gzip.open(problem_filename, "wt") as f:
+            json.dump(result_json, f)
 
 if __name__ == "__main__":
     main()
