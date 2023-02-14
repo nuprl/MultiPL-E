@@ -14,6 +14,13 @@ def from_remote_dataset(args):
         "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", 
         revision=DATASET_REVISION
     )
+    start_index = args.input_start_index if args.input_start_index is not None else 0
+    stop_index = min(
+        len(problems),
+        start_index + args.input_limit
+        if args.input_limit is not None
+        else len(problems),
+    )
     problems = problems["test"]
     start_index = args.input_start_index if args.input_start_index is not None else 0
     stop_index = min(
