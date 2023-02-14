@@ -9,20 +9,33 @@ import sys
 
 DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"    
 
-def from_remote_dataset(args, start_index, stop_index):
+def from_remote_dataset(args):
     problems = datasets.load_dataset(
         "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", 
         revision=DATASET_REVISION
+    )
+    start_index = args.input_start_index if args.input_start_index is not None else 0
+    stop_index = min(
+        len(problems),
+        start_index + args.input_limit
+        if args.input_limit is not None
+        else len(problems),
     )
     problems = problems["test"]
     problems = problems.select(range(start_index, stop_index))
     return problems
 
-def from_local_dataset(args, start_index, stop_index):
+def from_local_dataset(args):
     with open(args.dataset, "r") as f:
-        problems = datasets.Dataset.from_list(
-            json.load(f)[start_index:stop_index]
+        problems_list = json.load(f)
+        start_index = args.input_start_index if args.input_start_index is not None else 0
+        stop_index = min(
+            len(problems_list),
+            start_index + args.input_limit
+            if args.input_limit is not None
+            else len(problems_list),
         )
+        problems = datasets.Dataset.from_list(problems_list[start_index:stop_index])
     return problems
 
 def main():
@@ -90,18 +103,10 @@ def main():
     if not exp_dir.exists():
         exp_dir.mkdir()
 
-    start_index = args.input_start_index if args.input_start_index is not None else 0
-    stop_index = min(
-        len(problems),
-        start_index + args.input_limit
-        if args.input_limit is not None
-        else len(problems),
-    )
-
     if args.use_local:
-        problems = from_local_dataset(args, start_index, stop_index)
+        problems = from_local_dataset(args)
     else:
-        problems = from_remote_dataset(args, start_index, stop_index)
+        problems = from_remote_dataset(args)
 
     for problem in tqdm(problems, unit="problems"):
         # NOTE(arjun): This is a litte hack to delay loading the model, so that we fail faster.
