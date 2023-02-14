@@ -26,9 +26,9 @@ def for_file(path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("dirs", type=str,  help="Directories with results. \
-                        Make sure they are labeled with completion temperature. \
-                        If they have '0.2' in their name, pass@1 will be ran rather than pass@10 and pass@100.", nargs="+")
+    parser.add_argument("--temperature", type=float, help="Temperature completions were made at. \
+                        If 0.2 runs pass@1 rather than pass@10 and pass@100", required=True)
+    parser.add_argument("dirs", type=str,  help="Directories with results. ", nargs="+")
     args = parser.parse_args()
     print("Dataset,Pass@k,Estimate")
     for d in args.dirs:
@@ -37,7 +37,7 @@ def main():
             continue
         result = result_array.mean(axis=0)
         name = d.split("/")[-1] if d.split("/")[-1] != "" else d.split("/")[-2]
-        if "0.2" in name:
+        if args.temperature == 0.2:
             print(f"{name},1,{result[0]:.2f}")
         else:
             print(f"{name},10,{result[1]:.2f}")
