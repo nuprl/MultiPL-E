@@ -136,13 +136,16 @@ ls ../../tutorial/*/*.results.json.gz
 
 ### Analyzing Results
 
-Finally, you can calculate the pass rates:
+Finally, you can calculate the pass rates. You need to pass in the temperature that 
+the completions were created at so that the right pass@k will be run. 0.2 runs the pass@1
+which is good for the 20 results.
 
 ```
-python3 src/single_experiment_pass_k.py ./tutorial/*
+python3 src/single_experiment_pass_k.py --temperature 0.2 ./tutorial/*
 ```
 
-The experiment prints pass rates for k=1, k=10, and k=100. 
+The experiment prints pass rates for k=1 as we only made 20 results at a temperature of 0.2. 
+If you want to see pass@10 and pass@100 pass any temperature that is not 0.2.
 
 **Warning:** In generation, we used `--completion-limit 20` to only generate
 20 samples for each prompt. You can remove this flag to generate 200 samples,
