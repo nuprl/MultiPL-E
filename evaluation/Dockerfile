@@ -34,6 +34,9 @@ RUN echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" |
 RUN apt update
 RUN apt install -yqq mono-devel
 
+# F#
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version latest
+
 # Post-processing
 
 # Julia
