@@ -55,14 +55,7 @@ which is originally in Python, but translated to Rust with MultiPL-E:
 
 ```
 mkdir tutorial
-python3 -m inference \
-    --model-name inference.bigcode_dedupaltcomments \
-    --root-dataset humaneval \
-    --lang rs \
-    --temperature 0.2 \
-    --batch-size 20 \
-    --completion-limit 20 \
-    --output-dir-prefix tutorial
+python3 -m inference --model-name inference.santacoder --root-dataset humaneval --lang rs --temperature 0.2 --batch-size 20 --completion-limit 20 --output-dir-prefix tutorial
 ```
 
 Notes:
@@ -102,9 +95,7 @@ podman tag ghcr.io/nuprl/multipl-e-evaluation multipl-e-eval
 The following command will run evaluation:
 
 ```bash
-podman run --rm --network none \
-   -v ./tutorial:/tutorial:rw multipl-e-eval \
-   --dir /tutorial --output-dir /tutorial --recursive
+podman run --rm --network none -v ./tutorial:/tutorial:rw multipl-e-eval --dir /tutorial --output-dir /tutorial --recursive
 ```
 
 If evaluation is successful, you will see several `.results.json.gz` files
