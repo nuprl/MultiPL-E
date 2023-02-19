@@ -9,7 +9,7 @@ To run this script:
 
   where MODEL is either davinci or incoder.
 
-2. 
+2. python3 prepare_prompts_yaml.py --lang LANGUAGE --target-dir ../datasets/LANGUAGE-keep-MODEL --doctests keep
 
   This will create lots of YAML files in TARGET-DIR. You should commit these files to the repository.
 

@@ -14,7 +14,6 @@ LANG_EXT = ".java"
 
 def eval_script(path: Path):
 
-    # get the environment variable for tuples
     sys_env = os.environ.copy()
     javatuples_path = Path("/usr/multiple/javatuples-1.2.jar")
 
