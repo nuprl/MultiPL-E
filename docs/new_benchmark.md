@@ -6,6 +6,9 @@ nav_order: 3
 
 # Add a New Benchmark
 
+**These directions are a little stale. Email a.guha@northeastern.edu if you
+need some help. :) **
+
 This is the really easy part. All you need to do is write a Python
 program that looks like the following:
 

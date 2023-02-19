@@ -6,18 +6,14 @@ nav_order: 2
 
 # Evaluate a New Model
 
-If you're interested in evaluating a different model, we recommend adapting the
-code for our [Incoder model server], which supports a *tiny* portion of the
-OpenAI HTTP API. The code has a single [POST handler] for the completions
-endpoint.
+To evaluate a new model, you need to add a script for the model to the
+[inference](https://github.com/nuprl/MultiPL-E/tree/main/inference) directory.
+The file [codegen2b.py] is a concise example that should work for most
+CausalLM's on the Hugging Face hub.
 
-You can deploy multiple servers for the same model by adding multiple URLs to
-the `model_keys.csv` file. The `gather_completions.py` script is carefully
-designed to query each server serially, so you don't have to worry queing
-concurrent requests. See the [Tutorial] for more information on `model_keys.csv`
-and `gather_completions.py`.
+When you're done, you can your model using the same steps outlined
+in the [Tutorial].
 
 
-[Incoder model server]: https://github.com/arjunguha/research_model_server
-[POST handler]: https://github.com/arjunguha/research_model_server/blob/main/incoder_server.py#L80
+[codegen2b.py]: https://github.com/nuprl/MultiPL-E/blob/main/inference/codegen2b.py
 [Tutorial]: ./tutorial.html

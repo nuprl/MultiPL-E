@@ -6,14 +6,21 @@ nav_order: 3
 
 # Evaluate a New Programming Language
 
-One of the goals of this work is to ensure that the benchmark set is 
-extensible. In trying out the completions in [Evaluate a New Model](new_model.md), you may have noticed a number 
-of files with prefixes `humaneval_to_` and `eval_` in `src/`. These are the 
-only two files required for adding a new language to the benchmark. 
+One of the goals of this work is to ensure that the benchmark set is
+extensible. Most of the work (recursive substitution, actually generating the
+strings, etc.) takes place in the `generic_evaluator.py` script. This should
+work for any language that you throw at it, but some languages will require
+more work than others. In addition, you need to write:
 
-Most of the work (recursive substitution, actually generating the strings, 
-etc.) takes place in the `generic_evaluator.py` script. This should work for 
-any language that you throw at it, although your mileage may vary.
+1. An evaluator for your new language that goes in [evaluation/src](https://github.com/nuprl/MultiPL-E/tree/main/evaluation/src); and
+
+2. A translator for your new language that goes in [dataset_builder](https://github.com/nuprl/MultiPL-E/tree/main/dataset_builder).
+
+We strongly recommend adapting existing files. If you're
+trying to evaluate a new untyped language, we recommend starting with
+the JavaScript translator. If you're trying to evaluate a new typed
+language, we recommend starting with the TypeScript translator.
+
 
 ### Creating humaneval_to_L
 

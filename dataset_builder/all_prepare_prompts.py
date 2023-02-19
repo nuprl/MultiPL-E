@@ -1,5 +1,5 @@
 """
-Run this script to call prepare_prompts_yaml.py for every experiment combination
+Run this script to call prepare_prompts_json.py for every experiment combination
 in libexamples.
 """
 import subprocess
