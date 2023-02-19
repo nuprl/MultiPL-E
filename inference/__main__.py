@@ -9,6 +9,8 @@ import sys
 
 DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
 
+TOP_P = 0.95
+MAX_TOKENS = 512
 
 def from_remote_dataset(args):
     problems = datasets.load_dataset(
@@ -154,10 +156,10 @@ def main():
         ):
             new_completions = model.completions(
                 prompt=problem["prompt"],
-                max_tokens=512,
+                max_tokens=MAX_TOKENS,
                 temperature=args.temperature,
                 n=args.batch_size,
-                top_p=0.95,
+                top_p=TOP_P,
                 stop=problem["stop_tokens"],
             )
             completions.extend(new_completions)
@@ -165,6 +167,9 @@ def main():
         result_json = {
             "name": problem["name"],
             "language": problem["language"],
+            "temperature": args.temperature,
+            "top_p": TOP_P,
+            "max_tokens": MAX_TOKENS,
             "prompt": problem["prompt"],
             "tests": problem["tests"],
             "completions": completions,
