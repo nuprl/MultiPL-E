@@ -2,6 +2,12 @@
 
 Please visit the [website](https://nuprl.github.io/MultiPL-E/) or read our [paper](https://arxiv.org/abs/2208.08227) for more information.
 
+## Versions
+
+- Version 0.2.0
+
+  + This version was used to evaluate SantaCoder.
+
 ## Evaluation on Discovery
 
 These instructions will run inference and evaluation on the Northeastern

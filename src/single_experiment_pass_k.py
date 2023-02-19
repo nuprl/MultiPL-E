@@ -33,7 +33,7 @@ def main():
     print("Dataset,Pass@k,Estimate")
     for d in args.dirs:
         result_array = np.array([ for_file(p) for p in itertools.chain(Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz")) ])
-        if len(result_array) == 0:
+        if len(result_array) < k:
             continue
         result = result_array.mean(axis=0)
         name = d.split("/")[-1] if d.split("/")[-1] != "" else d.split("/")[-2]
