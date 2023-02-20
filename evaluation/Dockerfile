@@ -35,7 +35,7 @@ RUN apt update
 RUN apt install -yqq mono-devel
 
 # F#
-RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version latest
+RUN apt install -y dotnet6
 
 # Post-processing
 
