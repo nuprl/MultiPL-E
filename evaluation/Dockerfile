@@ -47,6 +47,10 @@ RUN mkdir /usr/multiple && wget https://repo.mavenlibs.com/maven/org/javatuples/
 # Luaunit
 RUN apt-get update -yqq && apt-get install -yqq lua-unit
 
+# Kotlin
+RUN curl -s "https://get.sdkman.io/" | bash
+RUN sdk install kotlin
+
 COPY src /code
 WORKDIR /code
 ENTRYPOINT ["python3", "main.py"]

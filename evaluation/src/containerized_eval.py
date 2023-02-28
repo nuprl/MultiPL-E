@@ -19,6 +19,7 @@ import eval_php
 import eval_dlang
 import eval_julia
 import eval_r
+import eval_kt
 import tempfile
 
 
@@ -44,7 +45,8 @@ EVALUATORS = {
     "d": (eval_dlang.eval_script, ".d"),
     "r": (eval_r.eval_script, ".r"),
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
-    "jl": (eval_julia.eval_script, ".jl")
+    "jl": (eval_julia.eval_script, ".jl"),
+    "kt": (eval_kt.eval_script, ".kt")
 }
 
 def eval_string_script(language, program):

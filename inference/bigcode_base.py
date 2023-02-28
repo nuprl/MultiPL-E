@@ -4,7 +4,7 @@ Do not use this file directly.
 import torch
 from typing import List, Tuple
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from .local_huggingface_model import _stop_at_stop_token
+from local_huggingface_model import _stop_at_stop_token
 
 FIM_PREFIX = "<fim-prefix>"
 FIM_MIDDLE = "<fim-middle>"
