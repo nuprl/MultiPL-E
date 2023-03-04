@@ -40,7 +40,7 @@ def main():
         temperatures = set(r["temperature"] for r in results)
         if len(temperatures) != 1:
             raise ValueError(f"Found multiple temperatures {temperatures} in {d}")
-        temperature = temperatures[0]
+        temperature = results[0]["temperature"]
         if temperature == 0.2:
             pass_1 = np.mean([r["pass@1"] for r in results])
             print(f"{name},1,{pass_1:.2f}")
