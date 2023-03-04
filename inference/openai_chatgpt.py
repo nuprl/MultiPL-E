@@ -25,7 +25,7 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         top_p=top_p,
         n=n,
         max_tokens=max_tokens
-    ), 25)
+    ), config["max_retries"])
     # Wait a few seconds between requests
     sleep(1)
     # Pull out just the message content
@@ -35,7 +35,8 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
 
 def complete_or_fail_after_n_tries(func, n):
     if n == 0:
-        raise Exception("Could not properly access chatgpt servers.")
+        # Ran out of tries, return nothign
+        return []
     try:
         return func()
     except Exception:
