@@ -2,6 +2,7 @@
 import json
 import argparse
 from pathlib import Path
+import gzip
 
 def main():
 
@@ -19,7 +20,7 @@ def main():
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
-    with open(args.input, "r") as f:
+    with gzip.open(args.input, "r") if args.input.endswith(".gz") else open(args.input, "r") as f:
         result_json = json.load(f) 
         results = result_json["results"]
 
