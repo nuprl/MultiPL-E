@@ -16,9 +16,9 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         model="gpt-3.5-turbo",
         messages=[
             # This tells the chatbot what role it is fulfilling.
-            {"role": "system", "content":  "Please write the code that \
-                finishes the body of the function prompt given by the user. Return only \
-                the code of the body of the function without any markdown formatting or explanation."},
+            {"role": "system", "content":  "Finish the function given the function signature and the \
+                                            comment explaining the function. Please provide only code \
+                                            without markdown or explanation."},
             {"role": "user", "content": prompt}
         ],
         temperature=temperature,
@@ -35,7 +35,7 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
 
 def complete_or_fail_after_n_tries(func, n):
     if n == 0:
-        # Ran out of tries, return nothign
+        # Ran out of tries, return nothing
         return []
     try:
         return func()
@@ -47,10 +47,11 @@ def complete_or_fail_after_n_tries(func, n):
 def get_code_body(completion_messages):
     cleaned_messages = []
     for m in completion_messages:
-        # Remove markdown
-        m = m.strip("```")
-        # Add four spaces at start of function and after every newline
-        m = "    " + m
-        m = m.replace("\n", "\n    ")
-        cleaned_messages.append(m)
+        code_body = ""
+        code_lines = m.split("\n")
+        # Add all lines with 4 tabs
+        for line in code_lines:
+            if line.startswith("    "):
+                code_body += line
+        cleaned_messages.append(code_body)
     return cleaned_messages
