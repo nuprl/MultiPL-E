@@ -52,6 +52,6 @@ def get_code_body(completion_messages):
         # Add all lines with 4 tabs
         for line in code_lines:
             if line.startswith("    "):
-                code_body += line
+                code_body += line + "\n"
         cleaned_messages.append(code_body)
     return cleaned_messages
