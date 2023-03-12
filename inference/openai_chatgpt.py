@@ -37,14 +37,16 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
 def complete_or_fail_after_n_tries(func, n):
     if n == 0:
         # Ran out of tries, return nothing
-        print("Failed to get response from chatgpt API, max retries reached, leaving completions blank.")
+        if config["debug"]:
+            print("Failed to get response from chatgpt API, max retries reached, leaving completions blank.")
         return []
     try:
         return func()
     except (RateLimitError, APIConnectionError):
         # If can't connect, keep retrying, giving longer pauses between each retry
         seconds = 2 ** (config["max_retries"] - n) + random.random()
-        print(f"Failed to get completions from chatgpt API, applying exponential backoff: {seconds}")
+        if config["debug"]:
+            print(f"Failed to get completions from chatgpt API, applying exponential backoff: {seconds}")
         sleep(seconds)
         return complete_or_fail_after_n_tries(func, n-1)
 
