@@ -1,4 +1,6 @@
 import openai
+from openai.error import RateLimitError, APIConnectionError
+import random
 import yaml
 from time import sleep
 
@@ -25,8 +27,6 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         n=n,
         max_tokens=max_tokens
     ), config["max_retries"])
-    # Wait a few seconds between requests
-    sleep(1)
     # Pull out just the message content
     completion_messages = [completions_response.choices[i].message.content for i in range(len(completions_response.choices))]
     # pull out the code body
@@ -35,12 +35,15 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
 def complete_or_fail_after_n_tries(func, n):
     if n == 0:
         # Ran out of tries, return nothing
+        print("Failed to get response from chatgpt API, max retries reached, leaving completions blank.")
         return []
     try:
         return func()
-    except Exception:
-        # Wait a few seconds between retries
-        sleep(1)
+    except (RateLimitError, APIConnectionError):
+        # If can't connect, keep retrying, giving longer pauses between each retry
+        seconds = 2 ** (config["max_retries"] - n) + random.random()
+        print(f"Failed to get completions from chatgpt API, applying exponential backoff: {seconds}")
+        sleep(seconds)
         return complete_or_fail_after_n_tries(func, n-1)
 
 def get_code_body(completion_messages):
