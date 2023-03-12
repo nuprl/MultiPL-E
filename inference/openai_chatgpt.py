@@ -52,9 +52,21 @@ def complete_or_fail_after_n_tries(func, n):
 def get_code_body(completion_messages):
     cleaned_messages = []
     for m in completion_messages:
+        # Get code section
+        if m.count("```") == 2:
+            # One code section
+            start, stop = m.index("```") + 3, m.rindex("```")
+        elif m.count("```") > 2:
+            # Multiple code sections (select first)
+            start = m.index("```") + 3
+            stop = m[start:].index("```")
+        else:
+            # No code sections or one incomplete code section
+            start, stop = 0, len(m)
+        m = m[start:stop]
+        # Add all lines with 4 tabs (should be function body)
         code_body = ""
         code_lines = m.split("\n")
-        # Add all lines with 4 tabs
         for line in code_lines:
             if line.startswith("    "):
                 code_body += line + "\n"
