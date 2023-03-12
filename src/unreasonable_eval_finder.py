@@ -34,7 +34,7 @@ def main():
                                                  or "exception" in results[i]["stderr"].lower()):
                 strangely_passed.append(f"{os.path.basename(path)}-{i}")
         # Find any files that have all their exceptions being syntax errors
-        if all(["syntax" in r["stderr"].lower() for r in results]):
+        if all(["syntax" in r["stderr"].lower() or "syntax" in r["status"].lower() for r in results]):
             possible_translator_error.append(os.path.basename(path))
         # Find any files that have no ok status
         if all([r["status"] != "OK" for r in results]):
