@@ -24,6 +24,7 @@ def main():
     
     strangely_passed = []
     possible_translator_error = []
+    only_failed = []
     for path in filepaths:
         with open_json(path, "r") as f:
             results = json.load(f)["results"]
@@ -34,13 +35,18 @@ def main():
                 strangely_passed.append(f"{os.path.basename(path)}-{i}")
         # Find any files that have all their exceptions being syntax errors
         if all(["syntax" in r["stderr"].lower() for r in results]):
-            possible_translator_error.append(os.path.basename)
+            possible_translator_error.append(os.path.basename(path))
+        # Find any files that have no ok status
+        if all([r["status"] != "OK" for r in results]):
+            only_failed.append(os.path.basename(path))
     
     # Report strange behavior
     print("These files passed with a non-zero exit code or with non-warning output to stderr:")
     [print(p) for p in strangely_passed]
     print("These files only had syntax errors pointing to a possible error with the prompt converter:")
     [print(p) for p in possible_translator_error]
+    print("These files never had a working solution:")
+    [print(p) for p in only_failed]
 
 if __name__ == "__main__":
     main()
