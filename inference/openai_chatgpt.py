@@ -1,5 +1,5 @@
 import openai
-from openai.error import RateLimitError, APIConnectionError
+from openai.error import RateLimitError, APIConnectionError, Timeout
 import random
 import yaml
 from time import sleep
@@ -42,7 +42,7 @@ def complete_or_fail_after_n_tries(func, n):
         return []
     try:
         return func()
-    except (RateLimitError, APIConnectionError):
+    except (RateLimitError, APIConnectionError, Timeout):
         # If can't connect, keep retrying, giving longer pauses between each retry
         seconds = 2 ** (config["max_retries"] - n) + random.random()
         if config["debug"]:
