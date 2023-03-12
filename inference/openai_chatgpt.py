@@ -18,9 +18,8 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         model="gpt-3.5-turbo",
         messages=[
             # This tells the chatbot what role it is fulfilling.
-            {"role": "system", "content":  "Your job is given a function prompt, to produce the full function, \
-                                            with its declaration, that fulfills the given prompt."},
-            {"role": "user", "content": prompt}
+            {"role": "system", "content":  "The user will give you a function prompt. Your job is to write the function and explain how it works."},
+            {"role": "user", "content": "Please write a function that could fulfill this prompt " + prompt}
         ],
         temperature=temperature,
         top_p=top_p,
