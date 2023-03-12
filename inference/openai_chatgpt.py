@@ -18,15 +18,14 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         model="gpt-3.5-turbo",
         messages=[
             # This tells the chatbot what role it is fulfilling.
-            # {"role": "system", "content":  "Your job is given a function prompt, to produce the full function, \
-            #                                 with its declaration, that fulfills the given prompt."},
+            {"role": "system", "content":  "Your job is given a function prompt, to produce the full function, \
+                                            with its declaration, that fulfills the given prompt."},
             {"role": "user", "content": prompt}
         ],
         temperature=temperature,
         top_p=top_p,
         n=n,
-        max_tokens=max_tokens,
-        stop=stop
+        max_tokens=max_tokens
     ), config["max_retries"])
     # Pull out just the message content
     completion_messages = [completions_response.choices[i].message.content for i in range(len(completions_response.choices))]
