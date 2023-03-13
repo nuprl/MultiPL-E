@@ -27,7 +27,7 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         max_tokens=max_tokens
     ), config["max_retries"])
     # Pull out just the message content
-    completion_messages = [completions_response.choices[i].message.content for i in range(len(completions_response.choices))]
+    completion_messages = [choice.message.content for choice in completions_response.choices]
     if config["debug"]:
         print(completion_messages)
     # pull out the code body
