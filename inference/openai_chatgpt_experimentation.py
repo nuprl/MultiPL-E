@@ -8,25 +8,10 @@ import json
 
 name = "chatgpt"
 
-system_role = 0
-prompt_lead = 0
-language = "py"
-
-expt_out = f"experiment-{system_role}-{prompt_lead}-{language}.json"
-
-system_roles = [
-    "You are a programmer whose job it is to finish the functions provided by the user.", 
-    "You're job is to write the functions asked of you by the user.",
-    "you are a large language model whose job it is to complete code prompts, \
-        determining the language to be written in based on the apparent language of the prompt.",
-    "You are a language model whose job it is to produce the full function that fulfills the prompt."
-]
-prompt_leads = [
-    "{}",
-    "Please finish this function: {}" ,
-    "Write the function for me that fulfills the prompt: {}",
-    "Please write the entire function that matches {}"
-]
+# Set up the configuration file
+with open("inference/chatgpt/experiments_config.yaml") as f:
+    experiment_config = yaml.safe_load(f)
+    expt_out = f'experiment-{experiment_config["system_role"]}-{experiment_config["prompt_lead"]}-{experiment_config["language"]}.json'
 
 # Set up the configuration file
 with open("inference/chatgpt/config.yaml") as f:
@@ -40,8 +25,8 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         model="gpt-3.5-turbo",
         messages=[
             # This tells the chatbot what role it is fulfilling.
-            {"role": "system", "content":  system_roles[system_role]},
-            {"role": "user", "content": prompt_leads[prompt_lead].format(prompt)}
+            {"role": "system", "content":  experiment_config["system_roles"][experiment_config["system_role"]]},
+            {"role": "user", "content": experiment_config["prompt_leads"][experiment_config["prompt_lead"]].format(prompt)}
         ],
         temperature=temperature,
         top_p=top_p,
@@ -56,8 +41,8 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
     processed_response = get_code_body(completion_messages)
     # Save experiment data
     raw_data = {
-        "system_prompt" : system_roles[system_role],
-        "user_prompt" : prompt_leads[prompt_lead].format(prompt),
+        "system_prompt" : experiment_config["system_roles"][experiment_config["system_role"]],
+        "user_prompt" : experiment_config["prompt_leads"][experiment_config["prompt_lead"]].format(prompt),
         "raw_response" : completion_messages,
         "processed_response" : processed_response
     }
