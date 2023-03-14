@@ -10,8 +10,9 @@ name = "chatgpt"
 
 system_role = 0
 prompt_lead = 0
+language = "py"
 
-expt_out = f"experiment-{system_role}-{prompt_lead}.json"
+expt_out = f"experiment-{system_role}-{prompt_lead}-{language}.json"
 
 system_roles = [
     "You are a programmer whose job it is to finish the functions provided by the user.", 
