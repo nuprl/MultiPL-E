@@ -61,12 +61,12 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         "processed_response" : processed_response
     }
     if os.path.exists(expt_out):
-        with open(expt_out, "w+") as f:
+        with open(expt_out, "r+") as f:
             so_far = json.load(f)
     else:
         so_far = []
     so_far.append(raw_data)
-    with open(expt_out, "w+") as f:
+    with open(expt_out, "wt") as f:
         json.dump(so_far, f)    
     return processed_response
 
