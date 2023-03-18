@@ -15,7 +15,7 @@ with open("inference/chatgpt/config.yaml") as f:
 # Stop tokens remain unused as chatgpt has a different style of tokens than normally seen in other models.
 def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop):
     completions_response = complete_or_fail_after_n_tries(lambda: openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=config["model"],
         messages=[
             # This tells the chatbot what role it is fulfilling.
             {"role": "system", "content":  "The user will give you a function prompt. Your job is to write the function and explain how it works."},
