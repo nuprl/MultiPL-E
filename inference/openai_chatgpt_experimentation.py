@@ -69,7 +69,7 @@ def complete_or_fail_after_n_tries(func, n):
         return func()
     except (RateLimitError, APIConnectionError, Timeout):
         # If can't connect, keep retrying, giving longer pauses between each retry
-        seconds = 2 ** (config["max_retries"] - n) + random.random()
+        seconds = 1.5 ** (config["max_retries"] - n) + random.random()
         if config["debug"]:
             print(f"Failed to get completions from chatgpt API, applying exponential backoff: {seconds}")
         sleep(seconds)
