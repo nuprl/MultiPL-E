@@ -11,7 +11,10 @@ name = "chatgpt"
 # Set up the configuration file
 with open("inference/chatgpt/experiments_config.yaml") as f:
     experiment_config = yaml.safe_load(f)
-    expt_out = f'experiment-{experiment_config["system_role"]}-{experiment_config["prompt_lead"]}-{experiment_config["language"]}.json'
+    expt_out = os.path.join(
+        experiment_config["output_dir"],
+        f'experiment-{experiment_config["language"]}-{experiment_config["system_role"]}-{experiment_config["prompt_num"]}.json'
+    )
 
 # Set up the configuration file
 with open("inference/chatgpt/config.yaml") as f:
@@ -26,7 +29,7 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         messages=[
             # This tells the chatbot what role it is fulfilling.
             {"role": "system", "content":  experiment_config["system_roles"][experiment_config["system_role"]]},
-            {"role": "user", "content": experiment_config["prompt_leads"][experiment_config["prompt_lead"]].format(prompt)}
+            {"role": "user", "content": experiment_config["prompts"][experiment_config["prompt_num"]].format(prompt)}
         ],
         temperature=temperature,
         top_p=top_p,
@@ -42,7 +45,7 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
     # Save experiment data
     raw_data = {
         "system_prompt" : experiment_config["system_roles"][experiment_config["system_role"]],
-        "user_prompt" : experiment_config["prompt_leads"][experiment_config["prompt_lead"]].format(prompt),
+        "user_prompt" : experiment_config["prompts"][experiment_config["prompt_num"]].format(prompt),
         "raw_response" : completion_messages,
         "processed_response" : processed_response
     }
@@ -53,7 +56,7 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
         so_far = []
     so_far.append(raw_data)
     with open(expt_out, "wt") as f:
-        json.dump(so_far, f)    
+        json.dump(so_far, f, indent="\t")    
     return processed_response
 
 def complete_or_fail_after_n_tries(func, n):
