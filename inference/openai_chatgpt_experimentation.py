@@ -1,10 +1,8 @@
 import openai
-from openai.error import RateLimitError, APIConnectionError, Timeout
-import random
 import yaml
-from time import sleep
 import os
 import json
+from .openai_chatgpt import complete_or_fail_after_n_tries, get_code_body
 
 name = "chatgpt"
 
@@ -58,43 +56,3 @@ def completions(prompt: str, max_tokens: int, temperature: float, n: int, top_p,
     with open(expt_out, "wt") as f:
         json.dump(so_far, f, indent="\t")    
     return processed_response
-
-def complete_or_fail_after_n_tries(func, n):
-    if n == 0:
-        # Ran out of tries, return nothing
-        if config["debug"]:
-            print("Failed to get response from chatgpt API, max retries reached, leaving completions blank.")
-        return []
-    try:
-        return func()
-    except (RateLimitError, APIConnectionError, Timeout):
-        # If can't connect, keep retrying, giving longer pauses between each retry
-        seconds = 1.5 ** (config["max_retries"] - n) + random.random()
-        if config["debug"]:
-            print(f"Failed to get completions from chatgpt API, applying exponential backoff: {seconds}")
-        sleep(seconds)
-        return complete_or_fail_after_n_tries(func, n-1)
-
-def get_code_body(completion_messages):
-    cleaned_messages = []
-    for m in completion_messages:
-        # Get code section
-        if m.count("```") == 2:
-            # One code section
-            start, stop = m.index("```") + 3, m.rindex("```")
-        elif m.count("```") > 2:
-            # Multiple code sections (select first)
-            start = m.index("```") + 3
-            stop = m[start:].index("```") + start
-        else:
-            # No code sections or one incomplete code section
-            start, stop = 0, len(m)
-        m = m[start:stop]
-        # Add all lines with 4 tabs (should be function body)
-        code_body = ""
-        code_lines = m.split("\n")
-        for line in code_lines:
-            if line.startswith("    "):
-                code_body += line + "\n"
-        cleaned_messages.append(code_body)
-    return cleaned_messages
