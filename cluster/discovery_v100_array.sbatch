@@ -37,5 +37,6 @@
 JOB_FILE=$1
 EXTRA_ARGS=${@:2}
 JOB=`sed -n ${SLURM_ARRAY_TASK_ID}p ${JOB_FILE}`
+hostname
 echo $JOB $EXTRA_ARGS
-$JOB $EXTRA_ARGS
+bash -c "$JOB $EXTRA_ARGS"

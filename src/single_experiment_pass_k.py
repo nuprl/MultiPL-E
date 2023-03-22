@@ -43,12 +43,12 @@ def main():
         temperature = temperatures[0]
         if temperature == 0.2:
             pass_1 = np.mean([r["pass@1"] for r in results])
-            print(f"{name},1,{pass_1:.2f}")
+            print(f"{name},1,{pass_1}")
         elif temperature == 0.8:
             pass_10 = np.mean([r["pass@10"] for r in results])
             pass_100 = np.mean([r["pass@100"] for r in results])
-            print(f"{name},10,{pass_10:.2f}")
-            print(f"{name},100,{pass_100:.2f}")
+            print(f"{name},10,{pass_10}")
+            print(f"{name},100,{pass_100}")
         else:
             raise ValueError(f"Unexpected temperature: {temperature}")
 

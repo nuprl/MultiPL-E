@@ -1,9 +1,12 @@
 """
-Do not use this file directly.
+
 """
+# NOTE(arjun): I've removed fill_in_the_middle for now. But, copy it over from santacoder_base.py.
+
 import torch
 from typing import List, Tuple
 from transformers import AutoTokenizer, AutoModelForCausalLM
+import os
 from .local_huggingface_model import _stop_at_stop_token
 
 FIM_PREFIX = "<fim-prefix>"
@@ -20,19 +23,13 @@ def extract_fim_part(s: str):
     return s[start:stop]
 
 class Model:
-    def __init__(self, name, revision, supports_fim=True, full_precision=False):
+    def __init__(self, name, revision):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
-        if full_precision == False:
-            self.model = self.model.half()
-        self.model = self.model.cuda()
+        self.model = self.model.half().cuda()
 
-        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left")
-        if supports_fim:
-            self.special_tokens = SPEC_TOKS
-            self.tokenizer.add_special_tokens({
-                'additional_special_tokens': self.special_tokens,
-                'pad_token': EOD,
-            })
+        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left", trust_remote_code=True)
+        self.tokenizer.pad_token = "<|endoftext|>"
+        self.special_tokens = SPEC_TOKS
         
     def completion_tensors(
         self,
@@ -48,10 +45,7 @@ class Model:
         input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
         input_ids = input_ids.cuda()
         max_length = max_length + input_ids.flatten().size(0)
-        # input_ids has no padding and is a single tokenized input. So, this
-        # all-ones attention mask is ok.
         attention_mask = torch.ones(input_ids.shape, dtype=torch.long, device="cuda")
-
         with torch.no_grad():
             output = self.model.generate(
                 input_ids=input_ids,
@@ -88,4 +82,13 @@ class Model:
             for output_tensor in output_tensors
         ]
 
-    # I've removed fill_in_the_middle for now. But, copy it over from santacoder_base.py.
+
+
+revision = os.environ.get("MODEL_REVISION")
+if revision is None:
+	print("MODEL_REVISION environment variable not set")
+	exit(1)
+model = Model("bigcode/scaling-laws-models", revision=revision)
+completions = model.completions
+name = f"bigcode_scalinglaws_{revision}"
+
