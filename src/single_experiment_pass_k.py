@@ -33,15 +33,19 @@ def main():
     print("Dataset,Pass@k,Estimate")
     for d in args.dirs:
         result_array = np.array([ for_file(p) for p in itertools.chain(Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz")) ])
-        if len(result_array) < k:
+        if len(result_array) < 0:
             continue
         result = result_array.mean(axis=0)
         name = d.split("/")[-1] if d.split("/")[-1] != "" else d.split("/")[-2]
         if args.temperature == 0.2:
             print(f"{name},1,{result[0]:.2f}")
         else:
-            print(f"{name},10,{result[1]:.2f}")
-            print(f"{name},100,{result[2]:.2f}")
+            if len(result_array) < 10:
+                print("Not enough results to give a reliable pass@k")
+            else:
+                print(f"{name},10,{result[1]:.2f}")
+            if len(result_array) >= 100:
+                print(f"{name},100,{result[2]:.2f}")
 
 if __name__ == "__main__":
     main()
