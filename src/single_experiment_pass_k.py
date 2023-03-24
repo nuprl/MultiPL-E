@@ -41,7 +41,7 @@ def main():
             print(f"{name},1,{result[0]:.2f}")
         else:
             if len(result_array) < 10:
-                print("Not enough results to give a reliable pass@k")
+                print("Not enough results to give a reliable pass@k. Make sure you have atleast 10 completions.")
             else:
                 print(f"{name},10,{result[1]:.2f}")
             if len(result_array) >= 100:
