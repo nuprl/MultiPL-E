@@ -209,8 +209,8 @@ class Translator(humaneval_to_cpp.Translator):
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
             return f"({expected_type}){right[0]}"
-        
-        if expected_type.find(self.optional_type) != -1:
+
+        if expected_type.find(self.optional_type) != -1 and right[0].find(self.none_type) == -1:
             return self.gen_optional('', right[0])
         
         return humaneval_to_cpp.Translator.update_type(self, right, expected_type) #TODO: Use super?
