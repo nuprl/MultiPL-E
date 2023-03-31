@@ -34,6 +34,9 @@ RUN echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" |
 RUN apt update
 RUN apt install -yqq mono-devel
 
+# F#
+RUN apt install -y dotnet6
+
 # Post-processing
 
 # Julia

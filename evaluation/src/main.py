@@ -62,7 +62,7 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
     with open_json(problem_json_path, "r") as f:
         problem = json.load(f)
 
-    # Do not create a blank .results.yaml file if there are no completions ready.
+    # Do not create a blank .results.json file if there are no completions ready.
     if len(problem["completions"]) == 0:
         return
 
@@ -71,6 +71,7 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
     test_results_path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
 
     if not test_results_path.exists():
+        # Copy over all metadata from the completions file.
         test_results = problem.copy()
         del test_results["completions"]
         test_results["results"] = []

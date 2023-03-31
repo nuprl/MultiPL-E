@@ -7,12 +7,21 @@ from pathlib import Path
 from tqdm import tqdm
 import sys
 
-DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"    
+DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
+
+TOP_P = 0.95
+MAX_TOKENS = 512
 
 def from_remote_dataset(args):
     problems = datasets.load_dataset(
-        "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", 
-        revision=DATASET_REVISION
+        "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION
+    )
+    start_index = args.input_start_index if args.input_start_index is not None else 0
+    stop_index = min(
+        len(problems),
+        start_index + args.input_limit
+        if args.input_limit is not None
+        else len(problems),
     )
     problems = problems["test"]
     start_index = args.input_start_index if args.input_start_index is not None else 0
@@ -25,10 +34,13 @@ def from_remote_dataset(args):
     problems = problems.select(range(start_index, stop_index))
     return problems
 
+
 def from_local_dataset(args):
     with open(args.dataset, "r") as f:
         problems_list = json.load(f)
-        start_index = args.input_start_index if args.input_start_index is not None else 0
+        start_index = (
+            args.input_start_index if args.input_start_index is not None else 0
+        )
         stop_index = min(
             len(problems_list),
             start_index + args.input_limit
@@ -37,6 +49,7 @@ def from_local_dataset(args):
         )
         problems = datasets.Dataset.from_list(problems_list[start_index:stop_index])
     return problems
+
 
 def main():
     args = argparse.ArgumentParser()
@@ -48,23 +61,34 @@ def main():
     )
 
     args.add_argument(
-        "--output-dir-prefix",
-        type=str,
-        help="Prefix for the output directory"
+        "--output-dir-prefix", type=str, help="Prefix for the output directory"
     )
 
-    args.add_argument('--use-local', action="store_true", help="Use this flag when running from local prompts.")
+    args.add_argument(
+        "--use-local",
+        action="store_true",
+        help="Use this flag when running from local prompts.",
+    )
 
     # Reuired when use local is passed
     args.add_argument(
-        "--dataset", type=str, required="--use-local" in sys.argv, help="The local dataset in JSON format to get from this computer."
+        "--dataset",
+        type=str,
+        required="--use-local" in sys.argv,
+        help="The local dataset in JSON format to get from this computer.",
     )
     # Only required when use local is not passed
     args.add_argument(
-        "--lang", type=str, required="--use-local" not in sys.argv, help="Target language for completions"
+        "--lang",
+        type=str,
+        required="--use-local" not in sys.argv,
+        help="Target language for completions",
     )
     args.add_argument(
-        "--root-dataset", type=str, required="--use-local" not in sys.argv, help="either mbpp or humaneval"
+        "--root-dataset",
+        type=str,
+        required="--use-local" not in sys.argv,
+        help="either mbpp or humaneval",
     )
     args.add_argument(
         "--model-name",
@@ -91,9 +115,13 @@ def main():
 
     if args.output_dir is None:
         args.output_dir = (
-            f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
-        ) if not args.use_local else (
-            f"{args.dataset.split('/')[-1].split('.')[0]}-{model.name}-{args.temperature}-reworded"
+            (
+                f"{args.root_dataset}-{args.lang}-{model.name}-{args.temperature}-reworded"
+            )
+            if not args.use_local
+            else (
+                f"{args.dataset.split('/')[-1].split('.')[0]}-{model.name}-{args.temperature}-reworded"
+            )
         )
 
     if args.output_dir_prefix is not None:
@@ -128,10 +156,10 @@ def main():
         ):
             new_completions = model.completions(
                 prompt=problem["prompt"],
-                max_tokens=512,
+                max_tokens=MAX_TOKENS,
                 temperature=args.temperature,
                 n=args.batch_size,
-                top_p=0.95,
+                top_p=TOP_P,
                 stop=problem["stop_tokens"],
             )
             completions.extend(new_completions)
@@ -139,6 +167,9 @@ def main():
         result_json = {
             "name": problem["name"],
             "language": problem["language"],
+            "temperature": args.temperature,
+            "top_p": TOP_P,
+            "max_tokens": MAX_TOKENS,
             "prompt": problem["prompt"],
             "tests": problem["tests"],
             "completions": completions,
@@ -146,6 +177,7 @@ def main():
         }
         with gzip.open(problem_filename, "wt") as f:
             json.dump(result_json, f)
+
 
 if __name__ == "__main__":
     main()
