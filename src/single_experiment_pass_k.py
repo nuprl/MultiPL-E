@@ -39,8 +39,8 @@ def main():
         name = d.split("/")[-1] if d.split("/")[-1] != "" else d.split("/")[-2]
         temperatures = set(r["temperature"] for r in results)
         if len(temperatures) != 1:
-            raise ValueError(f"Found multiple temperatures {temperatures} in {d}")
-        temperature = temperatures[0]
+            raise ValueError(f"Found multiple temperatures {temperatures} in {d} {results}")
+        temperature = list(temperatures)[0]
         if temperature == 0.2:
             pass_1 = np.mean([r["pass@1"] for r in results])
             print(f"{name},1,{pass_1}")
