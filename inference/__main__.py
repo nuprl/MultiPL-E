@@ -37,7 +37,7 @@ def from_remote_dataset(args):
 
 def from_local_dataset(args):
     with open(args.dataset, "r") as f:
-        problems_list = json.load(f)
+        problems_list = [ json.loads(line) for line in f ]
         start_index = (
             args.input_start_index if args.input_start_index is not None else 0
         )
@@ -112,6 +112,8 @@ def main():
     args = args.parse_args()
 
     model = importlib.import_module(args.model_name)
+
+    assert "-" not in model.name, "Model name must not have hyphens"
 
     if args.output_dir is None:
         args.output_dir = (

@@ -19,7 +19,8 @@ def extract_fim_part(s: str):
     stop = s.find(EOD, start) or len(s)
     return s[start:stop]
 
-NAME = "/work/arjunguha-research-group/arjun/bigcode/large-model"
+NAME = "bigcode/large-model"
+REVISION= "cf0b54a"
 
 class Model:
     def __init__(self):
@@ -27,7 +28,7 @@ class Model:
         self.model = self.model.half().cuda()
 
         # In case the model creator did not upload a copy of the tokenizer.
-        self.tokenizer = AutoTokenizer.from_pretrained(NAME, padding_side="left", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(NAME, revision=REVISION, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         self.special_tokens = SPEC_TOKS
         
@@ -105,4 +106,4 @@ class Model:
 
 model = Model()
 completions = model.completions
-name = "bigcode-15b-200m"
+name = "bigcode_15b_400m"
