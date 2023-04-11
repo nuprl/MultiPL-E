@@ -13,4 +13,4 @@ module load gnu-parallel
 
 parallel="parallel --bar --delay 0.2 -j $SLURM_NTASKS --joblog runtask.log"
 
-$parallel -a executions.txt "srun -N1 -n1 ./do_executions.py $1" 
+$parallel -a executions.txt "srun -N1 -n1 python3 do_executions.py $1" 
