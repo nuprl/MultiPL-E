@@ -4,7 +4,7 @@ Do not use this file directly.
 import torch
 from typing import List, Tuple
 from transformers import AutoTokenizer, AutoModelForCausalLM
-from .local_huggingface_model import _stop_at_stop_token
+from multipl_e.completions import partial_arg_parser, make_main, stop_at_stop_token
 
 FIM_PREFIX = "<fim_prefix>"
 FIM_MIDDLE = "<fim_middle>"
@@ -20,15 +20,14 @@ def extract_fim_part(s: str):
     return s[start:stop]
 
 NAME = "bigcode/large-model"
-REVISION= "cf0b54a"
 
 class Model:
-    def __init__(self):
-        self.model = AutoModelForCausalLM.from_pretrained(NAME, trust_remote_code=True)
+    def __init__(self, revision):
+        self.model = AutoModelForCausalLM.from_pretrained(NAME, revision=revision, trust_remote_code=True)
         self.model = self.model.half().cuda()
 
         # In case the model creator did not upload a copy of the tokenizer.
-        self.tokenizer = AutoTokenizer.from_pretrained(NAME, revision=REVISION, padding_side="left", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(NAME, revision=revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         self.special_tokens = SPEC_TOKS
         
@@ -79,7 +78,7 @@ class Model:
             top_p,
         )
         return [
-            _stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + self.special_tokens)
+            stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + self.special_tokens)
             for output_tensor in output_tensors
         ]
 
@@ -104,6 +103,17 @@ class Model:
             extract_fim_part(self.tokenizer.decode(tensor)) for tensor in output
         ]
 
-model = Model()
-completions = model.completions
-name = "bigcode_15b_400m"
+CHECKPOINT_TO_REVISION = {
+    "400m": "cf0b54a"
+}
+
+def main():
+    args = partial_arg_parser()
+    args.add_argument("--checkpoint", type=str, required=True)
+    args = args.parse_args()
+    revision = CHECKPOINT_TO_REVISION[args.checkpoint]
+    model = Model(revision)
+    make_main(args, "bigcode_15b_" + args.checkpoint, model.completions)
+
+if __name__ == "__main__":
+    main()
