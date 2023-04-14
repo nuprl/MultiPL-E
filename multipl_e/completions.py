@@ -147,11 +147,14 @@ def make_main(args, model_name, gen_completions):
             range(len(completions), args.completion_limit, args.batch_size),
             unit="completions",
         ):
+            this_batch = min(args.batch_size, args.completion_limit - len(completions))
+            if this_batch == 0:
+                break
             new_completions = gen_completions(
                 prompt=problem["prompt"],
                 max_tokens=MAX_TOKENS,
                 temperature=args.temperature,
-                n=args.batch_size,
+                n=this_batch,
                 top_p=TOP_P,
                 stop=problem["stop_tokens"],
             )
