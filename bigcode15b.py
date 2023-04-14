@@ -104,6 +104,7 @@ class Model:
         ]
 
 CHECKPOINT_TO_REVISION = {
+    "600m": "25c10ec",
     "400m": "cf0b54a",
     "200m": "882e307"
 }
