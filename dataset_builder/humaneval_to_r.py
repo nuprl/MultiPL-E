@@ -5,47 +5,6 @@ from typing import List
 
 DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
 
-needs_hashmap = False
-basic = ["number","string","boolean"]
-
-def translate_type(t):
-    global needs_hashmap
-    match t:
-        case ast.Subscript(ast.Name(id), slice, ctx):
-            match id:
-                case "List":
-                    if translate_type(slice) not in basic:
-                        return "complex"
-                    return "list"
-                case "Union":
-                    return "union"
-                case "Tuple":
-                    return "tuple"
-                case "Dict":
-                    return "dict"
-                case "Optional":
-                    return "undefined"
-                case other:
-                    raise Exception(f"Bad generic {other}")
-        case ast.Name("int") | "int":
-            return "number"
-        case ast.Name("float"):
-            return "number"
-        case ast.Name("bool"):
-            return "boolean"
-        case ast.Name("str") | "str":
-            return "string"
-        case None:
-            return "no type"
-        case ast.Name("Any"):
-            return "any"
-        case ast.Name(x):
-            raise Exception(f"unknown name {x}")
-        case ast.Constant(Ellipsis):
-            return "ellipsis"
-        case _other:
-            raise Exception(f"unknown annotation: {t}")
-
 def coerce(expr: str, type) -> str:
     match expr, type:
         case expr, ast.Subscript(ast.Name("List"), sub):
@@ -71,15 +30,12 @@ class Translator:
         return "r"
 
     def __init__(self):
-        global needs_hashmap
         self.type = None
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
-        global needs_hashmap
         r_description = (
             "# " + re.sub(DOCSTRING_LINESTART_RE, "\n# ", description.strip()) + "\n"
         )
-        needs_hashmap = False
         self.type = [[arg.annotation for arg in args], returns]
         
         arg_names = [arg.arg for arg in args]
@@ -105,6 +61,7 @@ class Translator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
+        # TODO: maybe try 'stopifnot' instead
         return "    if(!identical({}, {}))".format(left, right) + "{quit('no', 1)}"
 
     def gen_literal(self, c):
@@ -114,6 +71,10 @@ class Translator:
         if type(c) == bool:
             return 'TRUE' if c else 'FALSE'
         elif c is None:
+            # Note: Python's None is equivalent to R's NA or NULL, depending
+            # on how it's used. NULL is more appropriate for empty lists,
+            # but something like a tuple of Nones (None, None) would be more
+            # idiomatic as c(NA, NA) in R.
             return 'NULL'
         return repr(c)
     
@@ -121,23 +82,49 @@ class Translator:
         '''Translate a variable with name v.
         '''
         return v
-    
+
+    def _get_r_type(self, e:str):
+        if e.startswith("c("):
+            return "vector"
+        elif e.startswith("list("):
+            return "list"
+        elif e == "NULL":
+            return "null"
+        elif e == "TRUE" or e == "FALSE":
+            return "boolean"
+        else:
+            # https://stackoverflow.com/questions/354038/how-do-i-check-if-a-string-represents-a-number-float-or-int
+            return "numeric" if e.replace("-","",1).replace('.','',1).isdigit() else "string"
+
+    def is_atomic(self, l):
+        '''inputs are all strings, but we need to determine what type they are in R
+        '''
+        type_set = set([self._get_r_type(e) for e in l])
+        if "null" in type_set or "vector" in type_set or "list" in type_set:
+            return False
+        return len(type_set) <= 1
     
     def gen_list(self, l):
-        '''Translate a list with elements l
-           A list [ x, y, z ] translates to list(x, y, z)
         '''
-        #if len(set(types)) <= 1:
-        #    return "c(" + ", ".join(l) + ")"
+        Translate a list with elements l
+        A list [ x, y, z ] translates to:
+        - c(x, y, z) if x, y, and z have the same type
+        - list(x, y, z) otherwise
+        '''
+        if self.is_atomic(l):
+           return "c(" + ", ".join(l) + ")"
         return "list(" + ", ".join(l) + ")"
    
     #there are no r tuples, but r lists are mostly immutable?
     def gen_tuple(self, t):
-        '''Translate a tuple with elements t
-           A tuple (x, y, z) translates to list(x, y, z) }
         '''
-        #if len(set(types)) <= 1:
-        #    return "c(" + ", ".join(t) + ")"
+        Translate a tuple with elements t
+        A tuple (x, y, z) translates to:
+        - c(x, y, z) if x, y, and z have the same type
+        - list(x, y, z) otherwise
+        '''
+        if self.is_atomic(t):
+           return "c(" + ", ".join(t) + ")"
         return "list(" + ", ".join(t) + ")"
     
     def gen_dict(self, keys, values):
