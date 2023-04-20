@@ -277,7 +277,7 @@ class Translator:
         if type(c) == int:
             return repr(c), ast.Name("int")
         if type(c) == float:
-            return repr(c), ast.Name("float")
+            return repr(c) + "f", ast.Name("float")
         #It appears None occurs for only optional
         return self.none_type, ast.Name("None")
 
