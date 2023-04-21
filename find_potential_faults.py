@@ -10,7 +10,7 @@ def check_result_file(p: Path, delete: bool):
             p.unlink()
         return
     for result in data["results"]:
-        if result["status"] != "OK" and result["stdout"] == "" and result["stderr"] == "":
+        if result["status"] != "Timeout" and result["status"] != "OK" and result["stdout"] == "" and result["stderr"] == "":
             print(f"Error but no output in {p}")
             if delete:
                 p.unlink()
