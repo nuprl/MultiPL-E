@@ -48,7 +48,7 @@ class Translator:
         """
         return [
             "test_humaneval <- function() {",
-            f"candidate <- {entry_point}",
+            f"    candidate <- {entry_point}",
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
@@ -61,8 +61,7 @@ class Translator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        # TODO: maybe try 'stopifnot' instead
-        return "    if(!identical({}, {}))".format(left, right) + "{quit('no', 1)}"
+        return "    stopifnot(isTRUE(all.equal({}, {})))".format(left, right)
 
     def gen_literal(self, c):
         ''' Translate a literal expression
