@@ -8,7 +8,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 class Model:
     def __init__(self, name, revision):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision)
-        self.model = self.model.half().cuda()`
+        self.model = self.model.half().cuda()
         # self.model = self.model.cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left")
         self.tokenizer.pad_token = "<|endoftext|>"
