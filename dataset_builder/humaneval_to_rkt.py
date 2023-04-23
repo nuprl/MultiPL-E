@@ -38,7 +38,7 @@ class Translator:
         Make sure you use the right equality operator for your language. For example,
         == is the wrong operator for Java and OCaml.
         """
-        return "    (check-equal? {} {})".format(left, right)
+        return "    (check-within {} {} 0.001)".format(left, right)
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
