@@ -43,14 +43,16 @@ def for_file(path):
         "pass@10": estimator(n, c, 10),
         "pass@100": estimator(n, c, 100),
         "n": n,
-        "temperature": data["temperature"]
+        "temperature": data["temperature"] if "temperature" in data else 0.2
     }
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--suppress-header", action="store_true", help="Suppress the header")
     parser.add_argument("dirs", type=str,  help="Directories with results. ", nargs="+")
     args = parser.parse_args()
-    print("Dataset,Pass@k,Estimate,NumProblems,MinCompletions,MaxCompletions")
+    if not args.suppress_header:
+        print("Dataset,Pass@k,Estimate,NumProblems,MinCompletions,MaxCompletions")
     for d in args.dirs:
         results = [ for_file(p) for p in itertools.chain(Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz")) ]
         results = [ r for r in results if r is not None ]
