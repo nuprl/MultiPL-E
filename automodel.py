@@ -68,9 +68,13 @@ def main():
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
     args.add_argument("--revision", type=str)
+    args.add_argument("--name-override", type=str)
     args = args.parse_args()
     model = Model(args.name, args.revision)
-    name = args.name.replace("/", "_").replace("-", "_")
+    if args.name_override:
+        name = args.name_override
+    else:
+        name = args.name.replace("/", "_").replace("-", "_")
     make_main(args, name, model.completions)
 
 if __name__ == "__main__":
