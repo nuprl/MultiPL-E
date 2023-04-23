@@ -24,6 +24,8 @@ def get_tests(language: str):
     prompts/humaneval-{language}-reworded.json. The file has a list of
     objects with fields "name" and "tests".
     """
+    if language == "go_test.go":
+        language = "go"
     path = Path("prompts") / f"humaneval-{language}-reworded.json"
     with open(path, "rt") as f:
         data = json.load(f)
@@ -47,11 +49,15 @@ def check_completions_file(update: bool, p: Path):
     if expected_tests == data["tests"]:
         return
 
-    print(str(p)[: -len(".json.gz")] + ".results.json.gz")
+    results_filename = str(p)[: -len(".json.gz")] + ".results.json.gz"
     if update:
         data["tests"] = expected_tests
         with gzip.open(p, "wt") as f:
             json.dump(data, f)
+        Path(results_filename).unlink()
+    else:
+        print(results_filename)
+        
 
 
 def check_completions_dir(update: bool, p: Path):
@@ -62,7 +68,7 @@ def check_completions_dir(update: bool, p: Path):
     for f in p.iterdir():
         if f.name.endswith(".results.json.gz"):
             continue
-        check_completions_file(f)
+        check_completions_file(update, f)
 
 
 def main():
