@@ -9,7 +9,7 @@ from multipl_e.completions import partial_arg_parser, make_main, stop_at_stop_to
 FIM_PREFIX = "<fim_prefix>"
 FIM_MIDDLE = "<fim_middle>"
 FIM_SUFFIX = "<fim_suffix>"
-FIM_PAD = "<fim-pad>"
+FIM_PAD = "<fim_pad>"
 EOD = "<|endoftext|>"
 SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
 
@@ -23,11 +23,12 @@ NAME = "bigcode/large-model"
 
 class Model:
     def __init__(self, revision):
-        self.model = AutoModelForCausalLM.from_pretrained(NAME, revision=revision, trust_remote_code=True)
+        name = NAME
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
         self.model = self.model.half().cuda()
 
         # In case the model creator did not upload a copy of the tokenizer.
-        self.tokenizer = AutoTokenizer.from_pretrained(NAME, revision=revision, padding_side="left", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         self.special_tokens = SPEC_TOKS
         
@@ -104,6 +105,7 @@ class Model:
         ]
 
 CHECKPOINT_TO_REVISION = {
+    "1000m": "ff027dab19375ab76970819bd56787320b4a06fa",
     "800m": "53e1e76",
     "600m": "25c10ec",
     "400m": "cf0b54a",
