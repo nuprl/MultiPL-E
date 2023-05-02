@@ -101,6 +101,9 @@ def partial_arg_parser():
     args.add_argument(
         "--batch-size", type=int, default=16, help="Number of completions to batch"
     )
+    args.add_argument(
+        "--prompt-prefix", type=str, help="A prefix to prepend to every prompt"
+    )
     return args
 
 def make_main(args, model_name, gen_completions):
@@ -150,8 +153,12 @@ def make_main(args, model_name, gen_completions):
             this_batch = min(args.batch_size, args.completion_limit - len(completions))
             if this_batch == 0:
                 break
+            if args.prompt_prefix is not None:
+                prompt = args.prompt_prefix +  problem["prompt"]
+            else:
+                prompt = problem["prompt"]
             new_completions = gen_completions(
-                prompt=problem["prompt"],
+                prompt=prompt,
                 max_tokens=MAX_TOKENS,
                 temperature=args.temperature,
                 n=this_batch,
