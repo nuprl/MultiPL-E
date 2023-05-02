@@ -22,10 +22,11 @@ def extract_fim_part(s: str):
 NAME = "bigcode/large-model"
 
 class Model:
-    def __init__(self, revision):
+    def __init__(self, fim_return, revision):
         name = NAME
-        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True)
-        self.model = self.model.half().cuda()
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, trust_remote_code=True, torch_dtype=torch.float16)
+        self.model = self.model.cuda()
+        self.fim_return = fim_return
 
         # In case the model creator did not upload a copy of the tokenizer.
         self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left", trust_remote_code=True)
@@ -70,6 +71,11 @@ class Model:
     def completions(
         self, prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop
     ):
+        if self.fim_return:
+            middles = self.fill_in_the_middle([(prompt.strip(), "    return result")] * n, max_tokens, temperature)
+            middles = [stop_at_stop_token(middle, stop) for middle in middles]
+            return [ s + "    return result" for s in middles ]
+        
         prompt = prompt.strip()  # NOTE(arjun): Critical
         output_tensors = self.completion_tensors(
             prompt,
@@ -115,9 +121,10 @@ CHECKPOINT_TO_REVISION = {
 def main():
     args = partial_arg_parser()
     args.add_argument("--checkpoint", type=str, required=True)
+    args.add_argument("--fim-return", action="store_true")
     args = args.parse_args()
     revision = CHECKPOINT_TO_REVISION[args.checkpoint]
-    model = Model(revision)
+    model = Model(args.fim_return, revision)
     make_main(args, "bigcode_15b_" + args.checkpoint, model.completions)
 
 if __name__ == "__main__":
