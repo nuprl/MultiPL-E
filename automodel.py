@@ -7,8 +7,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class Model:
     def __init__(self, name, revision):
-        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=torch.float16).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left")
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=torch.float16, trust_remote_code=True).cuda()
+        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         
     def completion_tensors(
@@ -41,7 +41,7 @@ class Model:
 
     def decode_single_output(self, output_tensor, prompt):
         detok_hypo_str = self.tokenizer.decode(
-            output_tensor, clean_up_tokenization_spaces=False
+            output_tensor, clean_up_tokenization_spaces=False, skip_special_tokens=False,
         )
         # Skip the prompt (which may even have stop_tokens)
         return detok_hypo_str[len(prompt) :]
@@ -58,7 +58,7 @@ class Model:
             top_p,
         )
         return [
-            stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop)
+            stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + ["<|endoftext|>"])
             for output_tensor in output_tensors
         ]
 
