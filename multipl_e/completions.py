@@ -142,6 +142,10 @@ def make_main(args, model_name, gen_completions):
         else:
             completions = []
 
+        if args.prompt_prefix is not None:
+            problem["prompt"] = args.prompt_prefix +  problem["prompt"]
+
+
         if len(completions) > args.completion_limit:
             # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
             continue
@@ -153,10 +157,8 @@ def make_main(args, model_name, gen_completions):
             this_batch = min(args.batch_size, args.completion_limit - len(completions))
             if this_batch == 0:
                 break
-            if args.prompt_prefix is not None:
-                prompt = args.prompt_prefix +  problem["prompt"]
-            else:
-                prompt = problem["prompt"]
+
+            prompt = problem["prompt"]
             new_completions = gen_completions(
                 prompt=prompt,
                 max_tokens=MAX_TOKENS,
