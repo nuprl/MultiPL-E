@@ -497,7 +497,7 @@ class NeedTracker(object):
     def add_protocol_conformance(self, t: str, p: str, body: str):
         conf_str: str = f"""
 extension {t}: {p} {body}
-        """
+"""
         self.protocol_conformances.add(conf_str)
 
     def add_enum_definition(self, t: SwiftTypeUnion):
@@ -535,6 +535,9 @@ enum {enum_name}: Equatable, Hashable {{
         return needs_str
 
 class Translator(LanguageTranslator[TargetExp]):
+
+    self.require_libs = ["Swift", "Foundation"] # "CryptoKit", but just for one prgram
+
     def gen_literal(self, c: bool | str | int | float | None) -> TargetExp:
         return ast.Constant(value=c)
 
@@ -628,7 +631,9 @@ class Translator(LanguageTranslator[TargetExp]):
         swift_description = "/// " + re.sub(DOCSTRING_LINESTART_RE, "\n/// ", description.strip()) + "\n"
         swift_params = ", ".join([f"{name}: {ty.gen_type()}" for name, ty in self.param_names_types])
         swift_return = self.return_type.gen_type()
-        return f"{swift_needs}\n{swift_description}func {name}({swift_params}) -> {swift_return} {{\n"
+        swift_import = "\n".join([f"import {lib}" for lib in self.require_libs]) + "\n"
+
+        return f"{swift_import}{swift_needs}\n{swift_description}func {name}({swift_params}) -> {swift_return} {{\n"
     
     def file_ext(self) -> str:
         """
