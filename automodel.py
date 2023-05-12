@@ -6,9 +6,9 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class Model:
-    def __init__(self, name, revision):
+    def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=torch.float16, trust_remote_code=True).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained(name, revision=revision, padding_side="left", trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name or name, revision=tokenizer_revision or revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         
     def completion_tensors(
@@ -66,9 +66,11 @@ def main():
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
     args.add_argument("--revision", type=str)
+    args.add_argument("--tokenizer_name", type=str)
+    args.add_argument("--tokenizer_revision", type=str)
     args.add_argument("--name-override", type=str)
     args = args.parse_args()
-    model = Model(args.name, args.revision)
+    model = Model(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision)
     if args.name_override:
         name = args.name_override
     else:
