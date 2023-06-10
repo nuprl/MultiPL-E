@@ -213,6 +213,10 @@ class Translator(humaneval_to_cpp.Translator):
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
             return self.gen_type_cast(right[0], expected_type, right[1])
 
+        if '[' in expected_type and expected_type[:expected_type.find('[')] == self.optional_type != -1 \
+            and right[0].find(self.none_type) == -1:
+            return self.gen_optional('', right[0])
+
         return super().update_type(right, expected_type)
 
     def deep_equality(self, left: Tuple[str, ast.Expr], right: Tuple[str, ast.Expr]) -> str:
