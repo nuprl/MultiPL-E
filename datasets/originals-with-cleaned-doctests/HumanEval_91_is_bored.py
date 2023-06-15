@@ -14,7 +14,7 @@ def is_bored(S: str) -> int:
     ### Canonical solution below ###
     import re
     sentences = re.split(r'[.?!]\s*', S)
-    return sum(sentence[0:2] == 'I ' for sentence in sentences)
+    return sum(sentence.strip()[0:2] == 'I ' for sentence in sentences)
 
 ### Unit tests below ###
 def check(candidate):

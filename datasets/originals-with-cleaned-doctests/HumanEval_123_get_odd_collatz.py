@@ -20,20 +20,12 @@ def get_odd_collatz(n: int) -> List[int]:
     [1, 5]
     """
     ### Canonical solution below ###
-    if n%2==0:
-        odd_collatz = [] 
-    else:
-        odd_collatz = [n]
-    while n > 1:
-        if n % 2 == 0:
-            n = n/2
-        else:
-            n = n*3 + 1
-            
-        if n%2 == 1:
-            odd_collatz.append(int(n))
-
-    return sorted(odd_collatz)
+    ans, x = [], n
+    while x != 1:
+        if x % 2 == 1: ans.append(x)
+        x = x // 2 if x % 2 == 0 else x * 3 + 1
+    ans.append(1)
+    return sorted(ans)
 
 ### Unit tests below ###
 def check(candidate):

@@ -10,11 +10,12 @@ def fib(n: int) -> int:
     21
     """
     ### Canonical solution below ###
-    if n == 0:
-        return 0
-    if n == 1:
-        return 1
-    return fib(n - 1) + fib(n - 2)
+    if n == 0: return 0
+    if n <= 2: return 1
+    a, b = 1, 1
+    for _ in range(3, n + 1):
+        a, b, = b, a + b
+    return b
 
 ### Unit tests below ###
 

@@ -11,14 +11,9 @@ def x_or_y(n: int, x: int, y: int) -> int:
     
     """
     ### Canonical solution below ###
-    if n == 1:
-        return y
-    for i in range(2, n):
-        if n % i == 0:
-            return y
-            break
-    else:
-        return x
+    def is_prime(a):
+        return not (a < 2 or any(a % x == 0 for x in range(2, int(a ** 0.5) + 1)))
+    return x if is_prime(n) else y
 
 ### Unit tests below ###
 def check(candidate):

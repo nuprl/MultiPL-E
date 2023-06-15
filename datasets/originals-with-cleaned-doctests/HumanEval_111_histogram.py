@@ -24,12 +24,11 @@ def histogram(test: str) -> Dict[str, int]:
     t=0
 
     for i in list1:
-        if(list1.count(i)>t) and i!='':
+        if list1.count(i)>t and i!='':
             t=list1.count(i)
     if t>0:
         for i in list1:
-            if(list1.count(i)==t):
-                
+            if list1.count(i) == t and i!='':
                 dict1[i]=t
     return dict1
 

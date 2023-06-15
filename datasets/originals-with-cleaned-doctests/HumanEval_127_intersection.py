@@ -24,15 +24,8 @@ def intersection(interval1: Tuple[int, int], interval2: Tuple[int, int]) -> str:
     "YES"
     """
     ### Canonical solution below ###
-    def is_prime(num):
-        if num == 1 or num == 0:
-            return False
-        if num == 2:
-            return True
-        for i in range(2, num):
-            if num%i == 0:
-                return False
-        return True
+    def is_prime(a):
+        return not (a < 2 or any(a % x == 0 for x in range(2, int(a ** 0.5) + 1)))
 
     l = max(interval1[0], interval2[0])
     r = min(interval1[1], interval2[1])

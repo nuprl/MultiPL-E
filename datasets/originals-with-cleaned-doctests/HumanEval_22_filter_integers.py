@@ -9,7 +9,7 @@ def filter_integers(values: List[Any]) -> List[int]:
     [1, 2, 3]
     """
     ### Canonical solution below ###
-    return [x for x in values if isinstance(x, int)]
+    return [x for x in values if type(x) == int]
 
 ### Unit tests below ###
 
