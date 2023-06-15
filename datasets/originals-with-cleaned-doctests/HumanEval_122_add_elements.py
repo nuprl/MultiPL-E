@@ -15,7 +15,11 @@ def add_elements(arr: List[int], k: int) -> int:
         2. 1 <= k <= len(arr)
     """
     ### Canonical solution below ###
-    return sum(elem for elem in arr[:k] if len(str(elem)) <= 2)
+
+    def digits(x: int) -> int:
+        s = str(x)
+        return len(s) - 1 if s[0] == "-" else len(s)
+    return sum(elem for elem in arr[:k] if digits(elem) <= 2)
 
 ### Unit tests below ###
 def check(candidate):

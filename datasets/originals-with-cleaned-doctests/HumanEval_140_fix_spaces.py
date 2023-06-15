@@ -33,7 +33,7 @@ def fix_spaces(text: str) -> str:
     if end - start > 2:
         new_text += "-"
     elif end - start > 0:
-        new_text += "_"
+        new_text += "_"*(end - start)
     return new_text
 
 ### Unit tests below ###

@@ -20,26 +20,14 @@ def check_dict_case(dict: Dict[str, str]) -> bool:
     ### Canonical solution below ###
     if len(dict.keys()) == 0:
         return False
-    else:
-        state = "start"
-        for key in dict.keys():
-
-            if isinstance(key, str) == False:
-                state = "mixed"
-                break
-            if state == "start":
-                if key.isupper():
-                    state = "upper"
-                elif key.islower():
-                    state = "lower"
-                else:
-                    break
-            elif (state == "upper" and not key.isupper()) or (state == "lower" and not key.islower()):
-                    state = "mixed"
-                    break
-            else:
-                break
-        return state == "upper" or state == "lower" 
+    lower, upper = True, True
+    for key in dict.keys():
+        if isinstance(key, str) == False:
+            lower = upper = False
+            break
+        if not key.islower(): lower = False
+        if not key.isupper(): upper = False
+    return lower or upper
 
 ### Unit tests below ###
 def check(candidate):
