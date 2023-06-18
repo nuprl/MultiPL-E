@@ -62,19 +62,34 @@ class Model:
             for output_tensor in output_tensors
         ]
 
-def main():
+def automodel_partial_arg_parser():
+    """
+    This is also used by peftmodel.py.
+    """
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
     args.add_argument("--revision", type=str)
     args.add_argument("--tokenizer_name", type=str)
     args.add_argument("--tokenizer_revision", type=str)
     args.add_argument("--name-override", type=str)
-    args = args.parse_args()
-    model = Model(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision)
+    return args
+
+def do_name_override(args):
+    """
+    Applies the --name-override flag, or uses the model name, correcting / and - which the rest of
+    the toolchain does not like.
+    """
     if args.name_override:
         name = args.name_override
     else:
         name = args.name.replace("/", "_").replace("-", "_")
+    return name
+
+def main():
+    args = automodel_partial_arg_parser()
+    args = args.parse_args()
+    model = Model(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision)
+    name = do_name_override(args)
     make_main(args, name, model.completions)
 
 if __name__ == "__main__":
