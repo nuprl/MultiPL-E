@@ -13,53 +13,45 @@ class Model:
         
     def completion_tensors(
         self,
-        prompt: str,
+        prompts: list,
         max_length: int,
         temperature: float,
-        n: int,
         top_p: float,
     ):
-        """
-        Produces n samples.
-        """
-        input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
-        input_ids = input_ids.cuda()
-        max_length = max_length + input_ids.flatten().size(0)
-        attention_mask = torch.ones(input_ids.shape, dtype=torch.long, device="cuda")
+        inputs = self.tokenizer(prompts, padding=True, return_tensors="pt", return_token_type_ids=False).to("cuda")
         with torch.no_grad():
             output = self.model.generate(
-                input_ids=input_ids,
+                **inputs,
                 do_sample=True,
                 top_p=top_p,
                 temperature=temperature,
-                num_return_sequences=n,
                 max_length=max_length,
-                attention_mask=attention_mask,
                 pad_token_id=self.tokenizer.pad_token_id
             )
         return output
 
     def decode_single_output(self, output_tensor, prompt):
+        # NOTE(arjun): skip_special_tokens=True is the convenient way to strip out the left-side
+        # padding tokens.
         detok_hypo_str = self.tokenizer.decode(
-            output_tensor, clean_up_tokenization_spaces=False, skip_special_tokens=False,
+            output_tensor, clean_up_tokenization_spaces=False, skip_special_tokens=True,
         )
         # Skip the prompt (which may even have stop_tokens)
         return detok_hypo_str[len(prompt) :]
 
     def completions(
-        self, prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop
+        self, prompts: str, max_tokens: int, temperature: float, top_p, stop
     ):
-        prompt = prompt.strip()
+        prompts = [ prompt.strip() for prompt in prompts ]
         output_tensors = self.completion_tensors(
-            prompt,
+            prompts,
             max_tokens,
             temperature,
-            n,
             top_p,
         )
         return [
             stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + ["<|endoftext|>"])
-            for output_tensor in output_tensors
+            for (prompt, output_tensor) in zip(prompts, output_tensors)
         ]
 
 def automodel_partial_arg_parser():

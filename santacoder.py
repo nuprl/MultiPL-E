@@ -49,6 +49,7 @@ class Model:
         """
         Produces n samples.
         """
+        raise NotImplementedError("This code needs to be updated to take a list of prompts.")
         input_ids = self.tokenizer(prompt, return_tensors="pt").input_ids
         input_ids = input_ids.cuda()
         max_length = max_length + input_ids.flatten().size(0)
