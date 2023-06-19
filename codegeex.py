@@ -47,6 +47,7 @@ CODEGEEX_LANGS = {
 def completions(
     prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop
 ):
+    raise NotImplementedError("This code needs to be updated to take a list of prompts.")
     global language
     response = requests.post(
         "http://localhost:5000/predict",

@@ -18,6 +18,7 @@ global engine
 def completions(
     prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop
 ) -> List[str]:
+    raise NotImplementedError("This code needs to be updated to take a list of prompts.")
     while True:
         try:
             results = openai.Completion.create(

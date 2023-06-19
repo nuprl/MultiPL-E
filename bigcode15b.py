@@ -71,6 +71,7 @@ class Model:
     def completions(
         self, prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop
     ):
+        raise NotImplementedError("This code needs to be updated to take a list of prompts.")
         if self.fim_return:
             middles = self.fill_in_the_middle([(prompt.strip(), "    return result")] * n, max_tokens, temperature)
             middles = [stop_at_stop_token(middle, stop) for middle in middles]
