@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from tqdm import tqdm
 import sys
+from typing import List
 
 DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
 
@@ -133,53 +134,76 @@ def make_main(args, model_name, gen_completions):
     else:
         problems = from_remote_dataset(args)
 
-    for problem in tqdm(problems, unit="problems"):
-        problem_filename = exp_dir / f"{problem['name']}.json.gz"
-        if problem_filename.exists():
-            with gzip.open(problem_filename, "rt") as f:
-                existing = json.loads(f.read())
-            completions = existing["completions"]
-        else:
-            completions = []
+    # Read all existing completions
+    all_completions = dict(read_completions(exp_dir, args.temperature, problem) for problem in problems)
 
-        if len(completions) > args.completion_limit:
-            # Not strictly necessary, but avoid a pointless rewriting of the file with no changes.
+    # Generate a list of prompts, including multiple copies when needed.
+    problem_list = [ ]
+    stop: List[str] = None
+    for completions in all_completions.values():
+
+        if stop is None:
+            stop = completions["stop_tokens"]
+        else:
+            assert stop == completions["stop_tokens"], "Stop tokens must be the same for all completions"
+        
+        assert completions["temperature"] == args.temperature, "Temperature must be the same for all completions"
+
+        if len(completions["completions"]) >= args.completion_limit:
             continue
 
-        for _ in tqdm(
-            range(len(completions), args.completion_limit, args.batch_size),
-            unit="completions",
-        ):
-            this_batch = min(args.batch_size, args.completion_limit - len(completions))
-            if this_batch == 0:
-                break
-            if args.prompt_prefix is not None:
-                prompt = args.prompt_prefix +  problem["prompt"]
-            else:
-                prompt = problem["prompt"]
-            new_completions = gen_completions(
-                prompt=prompt,
+        num_new_completions = args.completion_limit - len(completions["completions"])
+
+        if args.prompt_prefix is not None:
+            prompt = args.prompt_prefix +  completions["prompt"]
+        else:
+            prompt = completions["prompt"]
+        item = { "prompt": prompt, "name": completions["name"] }
+
+        problem_list.extend([ item for _ in range(num_new_completions) ])
+    
+    # Break problem_list into batches of size args.batch_size.
+    problem_list = [ problem_list[i:i+args.batch_size] for i in range(0, len(problem_list), args.batch_size) ]
+
+    
+    for batch in tqdm(problem_list, unit="batch"):
+        new_completions = gen_completions(
+                prompts=[item["prompt"] for item in batch],
                 max_tokens=MAX_TOKENS,
                 temperature=args.temperature,
-                n=this_batch,
                 top_p=TOP_P,
-                stop=problem["stop_tokens"],
-            )
-            completions.extend(new_completions)
+                stop=stop
+        )
+        modified_problems = set()
+        for item, a_completion in zip(batch, new_completions):
+            all_completions[item["name"]]["completions"].append(a_completion)
+            modified_problems.add(item["name"])
+        
+        for name in modified_problems:
+            with gzip.open(exp_dir / f"{name}.json.gz", "wt") as f:
+                f.write(json.dumps(all_completions[name]))
 
-        result_json = {
-            "name": problem["name"],
-            "language": problem["language"],
-            "temperature": args.temperature,
-            "top_p": TOP_P,
-            "max_tokens": MAX_TOKENS,
-            "prompt": problem["prompt"],
-            "tests": problem["tests"],
-            "completions": completions,
-            "stop_tokens": problem["stop_tokens"],
-        }
-        with gzip.open(problem_filename, "wt") as f:
-            json.dump(result_json, f)
+
+def read_completions(exp_dir, temperature, problem):
+    problem_filename = exp_dir / f"{problem['name']}.json.gz"
+    if problem_filename.exists():
+        with gzip.open(problem_filename, "rt") as f:
+            existing = json.loads(f.read())
+            return (existing["name"], existing)
+    
+    new_completions = {
+        "name": problem["name"],
+        "language": problem["language"],
+        "temperature": temperature,
+        "top_p": TOP_P,
+        "max_tokens": MAX_TOKENS,
+        "prompt": problem["prompt"],
+        "tests": problem["tests"],
+        "completions": [],
+        "stop_tokens": problem["stop_tokens"],
+    }
+    return (new_completions["name"], new_completions)
+
 
 def stop_at_stop_token(decoded_string, stop_tokens):
     """
