@@ -68,7 +68,7 @@ class Translator:
             arg_list = ", ".join(arg_names_and_types)
             return_type = self.translate_type(returns)
             self.func_type.append((return_type, ""))
-            libraries = "\n".join([f"import {lib};" for lib in self.require_libs])
+            libraries = "\n".join([f"import {lib};" for lib in sorted(self.require_libs)])
 
             return f"{libraries}\n{dlang_desc}{return_type} {name}({arg_list}) \n"
         except Exception as err:

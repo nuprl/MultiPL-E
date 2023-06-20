@@ -71,7 +71,7 @@ def main():
         sys.exit(1)
 
     results = [ ]
-    for original in list_originals(args.originals).values():
+    for original in sorted(list_originals(args.originals).values()):
         original_name = original.name.split(".")[0]
         print(f"Processing {original_name}...")
 
