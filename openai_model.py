@@ -12,7 +12,7 @@ import os
 import time
 from typing import List
 
-global engine
+global engine, model
 
 
 def completions(
@@ -20,16 +20,27 @@ def completions(
 ) -> List[str]:
     while True:
         try:
-            results = openai.Completion.create(
-                engine=engine,
-                prompt=prompt,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                top_p=top_p,
-                n=n,
-                stop=stop,
-            )
-            time.sleep(0.5)
+            if engine is not None:
+              results = openai.Completion.create(
+                  engine=engine,
+                  prompt=prompt,
+                  temperature=temperature,
+                  max_tokens=max_tokens,
+                  top_p=top_p,
+                  n=n,
+                  stop=stop,
+              )
+              time.sleep(0.5)
+            elif model is not None:
+              results = openai.Completion.create(
+                  model=model,
+                  prompt=prompt,
+                  temperature=temperature,
+                  max_tokens=max_tokens,
+                  top_p=top_p,
+                  n=n,
+                  stop=stop,
+              )
             return [choice["text"] for choice in results["choices"]]
         except openai.error.RateLimitError:
             print("Rate limited...")
@@ -37,21 +48,33 @@ def completions(
 
 
 def main():
-    global engine
+    global engine, model
     args = partial_arg_parser()
-    args.add_argument("--engine", type=str, required=True)
+    args.add_argument("--model", type=str)
+    args.add_argument("--engine", type=str)
     args.add_argument("--name-override", type=str)
+    args.add_argument("--azure", action="store_true")
     args = args.parse_args()
 
+    if args.engine is None and args.model is None:
+        raise ValueError("Must specify either engine or model.")
+    elif args.engine is not None and args.model is not None:
+        raise ValueError("Must specify either engine or model, not both.")
+
     engine = args.engine
-    openai.api_type = "azure"
-    openai.api_base = os.getenv("OPENAI_API_BASE")
-    openai.api_version = "2022-12-01"
+    model = args.model
+    if args.azure:
+      openai.api_type = "azure"
+      openai.api_base = os.getenv("OPENAI_API_BASE")
+      openai.api_version = "2022-12-01"
     openai.api_key = os.getenv("OPENAI_API_KEY")
     if args.name_override:
         name = args.name_override
     else:
-        name = args.engine
+        if args.engine is not None:
+            name = args.engine
+        else:
+            name = args.model
 
     make_main(args, name, completions)
 
