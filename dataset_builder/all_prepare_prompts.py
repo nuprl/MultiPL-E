@@ -30,7 +30,8 @@ def doctests(variation):
 def originals(variation, dataset):
     if dataset == "mbpp":
         return "../datasets/mbpp-typed"
-
+    if dataset == "humaneval-plus":
+        return "../datasets/humaneval_plus"
     match variation:
         case "keep":
             return "../datasets/originals"
@@ -62,5 +63,5 @@ def prepare(lang: str, variation: str, dataset: str):
 if __name__ == "__main__":
     for lang in LANGS:
         for variation in VARIATIONS:
-            for dataset in [ "mbpp", "humaneval" ]:
+            for dataset in [ "mbpp", "humaneval", "humaneval_plus"]:
                 prepare(lang, variation, dataset)
