@@ -15,7 +15,14 @@ For more information:
 
 ## Versions
 
-- Version 0.3.0 (work in progress)
+- Version 0.4.0: Work in progress in the `dev` branch. **Please submit PRs to the dev branch instead of main**.
+
+- Version 0.3.0: used to evaluate [StarCoder]
+
+  - This version corrects several bugs in prompts and test cases that resulted in lower
+    pass@k rates for some of the statically typed languages. The most significant difference
+    is that the pass@k for Java increases by about 2% on HumanEval.
+  
 
 - Version 0.2.0: used to evaluate [SantaCoder]
 
@@ -24,3 +31,4 @@ For more information:
 [MultiPL-E: A Scalable and Polyglot Approach to Benchmarking Neural Code Generation]: https://ieeexplore.ieee.org/abstract/document/10103177
 [SantaCoder]: https://arxiv.org/abs/2301.03988
 [MultiPL-E dataset]: https://huggingface.co/datasets/nuprl/MultiPL-E
+[StarCoder]: https://arxiv.org/abs/2305.06161
