@@ -30,7 +30,7 @@ def doctests(variation):
 def originals(variation, dataset):
     if dataset == "mbpp":
         return "../datasets/mbpp-typed"
-    if dataset == "humaneval-plus":
+    if dataset == "humaneval_plus":
         return "../datasets/humaneval_plus"
     match variation:
         case "keep":
