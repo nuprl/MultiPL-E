@@ -14,7 +14,7 @@ def multiply(a: int, b: int) -> int:
     20
     """
     ### Canonical solution below ###
-    return abs(a % 10) * abs(b % 10)
+    return int(str(a)[-1]) * int(str(b)[-1])
 
 ### Unit tests below ###
 def check(candidate):

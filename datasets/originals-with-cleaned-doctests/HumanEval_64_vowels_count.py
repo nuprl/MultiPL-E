@@ -13,6 +13,7 @@ def vowels_count(s: str) -> int:
     3
     """
     ### Canonical solution below ###
+    if s == "": return 0
     vowels = "aeiouAEIOU"
     n_vowels = sum(c in vowels for c in s)
     if s[-1] == 'y' or s[-1] == 'Y':

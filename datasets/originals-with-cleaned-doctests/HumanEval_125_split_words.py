@@ -15,12 +15,10 @@ def split_words(txt: str) -> Union[List[str], int]:
     3 
     '''
     ### Canonical solution below ###
-    if " " in txt:
-        return txt.split()
-    elif "," in txt:
-        return txt.replace(',',' ').split()
-    else:
-        return len([i for i in txt if i.islower() and ord(i)%2 == 0])
+    whitespace = tuple(' \n\r\t')
+    if any([x in txt for x in whitespace]): return txt.split()
+    if "," in txt: return txt.split(",")
+    return len([i for i in txt if i.islower() and ord(i)%2 == 0])
 
 ### Unit tests below ###
 def check(candidate):

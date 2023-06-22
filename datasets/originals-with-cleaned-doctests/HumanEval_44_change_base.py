@@ -12,6 +12,7 @@ def change_base(x: int, base: int) -> str:
     '111'
     """
     ### Canonical solution below ###
+    if x == 0: return "0"
     ret = ""
     while x > 0:
         ret = str(x % base) + ret
