@@ -20,26 +20,22 @@ def completions(
 ) -> List[str]:
     results = []
     for prompt in prompts:
+        kwargs = {
+            "prompt": prompt,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+            "top_p": top_p,
+            "stop": stop
+        }
+
+        if engine is not None:
+            kwargs["engine"] = engine
+        elif model is not None:
+            kwargs["model"] = model
+
         while True:
-            try:
-                if engine is not None:
-                    result = openai.Completion.create(
-                        engine=engine,
-                        prompt=prompt,
-                        temperature=temperature,
-                        max_tokens=max_tokens,
-                        top_p=top_p,
-                        stop=stop,
-                    )
-                elif model is not None:
-                    result = openai.Completion.create(
-                        model=model,
-                        prompt=prompt,
-                        temperature=temperature,
-                        max_tokens=max_tokens,
-                        top_p=top_p,
-                        stop=stop,
-                    )
+            try:                
+                result = openai.Completion.create(**kwargs)
                 result = results["choices"][0]["text"]
                 break
             except openai.error.RateLimitError:
