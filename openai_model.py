@@ -16,36 +16,39 @@ global engine, model
 
 
 def completions(
-    prompt: str, max_tokens: int, temperature: float, n: int, top_p, stop
+    prompts: List[str], max_tokens: int, temperature: float, top_p, stop
 ) -> List[str]:
-    raise NotImplementedError("This code needs to be updated to take a list of prompts.")
-    while True:
-        try:
-            if engine is not None:
-              results = openai.Completion.create(
-                  engine=engine,
-                  prompt=prompt,
-                  temperature=temperature,
-                  max_tokens=max_tokens,
-                  top_p=top_p,
-                  n=n,
-                  stop=stop,
-              )
-              time.sleep(0.5)
-            elif model is not None:
-              results = openai.Completion.create(
-                  model=model,
-                  prompt=prompt,
-                  temperature=temperature,
-                  max_tokens=max_tokens,
-                  top_p=top_p,
-                  n=n,
-                  stop=stop,
-              )
-            return [choice["text"] for choice in results["choices"]]
-        except openai.error.RateLimitError:
-            print("Rate limited...")
-            time.sleep(5)
+    results = []
+    for prompt in prompts:
+        while True:
+            try:
+                if engine is not None:
+                    result = openai.Completion.create(
+                        engine=engine,
+                        prompt=prompt,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        top_p=top_p,
+                        stop=stop,
+                    )
+                elif model is not None:
+                    result = openai.Completion.create(
+                        model=model,
+                        prompt=prompt,
+                        temperature=temperature,
+                        max_tokens=max_tokens,
+                        top_p=top_p,
+                        stop=stop,
+                    )
+                result = results["choices"][0]["text"]
+                break
+            except openai.error.RateLimitError:
+                print("Rate limited...")
+                time.sleep(5)
+        results.append(result)
+        time.sleep(0.5)
+    return results
+
 
 
 def main():
