@@ -2,7 +2,7 @@ from pathlib import Path
 from safe_subprocess import run
 
 def eval_script(path): 
-    # Matlab has the insane requirement that all functions must appear at the end 
+    # Matlab has the requirement that all functions must appear at the end 
     # of the file. So we first have to write the call to the test-function at the 
     # beginning of the file.
     with open(path, 'r+') as f:
