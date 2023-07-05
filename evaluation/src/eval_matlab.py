@@ -16,7 +16,7 @@ def eval_script(path):
         status = "Timeout"
     elif r.exit_code == 0:
         status = "OK"
-    elif "Assertion failed" in r.sterr: 
+    elif "Assertion failed" in r.stderr: 
         status = "AssertionError"
     elif "File:" in r.stderr and "Line:" in r.stderr and "Column:" in r.stderr:
         status = "SyntaxError"
