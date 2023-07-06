@@ -37,7 +37,7 @@ def from_remote_dataset(args):
 
 def from_local_dataset(args):
     with open(args.dataset, "r") as f:
-        problems_list = [ json.loads(line) for line in f ]
+        problems_list = json.load(f) 
         start_index = (
             args.input_start_index if args.input_start_index is not None else 0
         )
