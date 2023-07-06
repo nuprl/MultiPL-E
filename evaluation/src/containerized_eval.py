@@ -48,7 +48,7 @@ EVALUATORS = {
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
     "jl": (eval_julia.eval_script, ".jl"),
     "fs": (eval_fs.eval_script, ".fsx"),
-    "ocaml": (eval_ocaml.eval_script, ".ml")
+    "ml": (eval_ocaml.eval_script, ".ml")
 }
 
 def eval_string_script(language, program):
