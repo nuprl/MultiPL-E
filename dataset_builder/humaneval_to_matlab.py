@@ -7,7 +7,7 @@ class Translator:
     '''
     Matlab translator
     '''
-    stop = ["end"]
+    stop = ["\nend"]
     def coerce_vector(self, expr, eltype):
         match eltype:
             case ast.Subscript(ast.Name("Union"), _, _):
