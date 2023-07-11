@@ -51,7 +51,7 @@ def prepare(lang: str, variation: str, dataset: str):
     o = originals(variation, dataset)
     p = prompt_terminology(variation)
     target_dir = "../prompts"
-    output = f"{target_dir}/{dataset}-{lang}-{variation}.json"
+    output = f"{target_dir}/{dataset}-{lang}-{variation}.jsonl"
     
     cmd = f"python3 prepare_prompts_json.py --lang humaneval_to_{lang}.py" + \
          f" --prompt-terminology {p} --doctests {d} --originals {o} --output {output}"
