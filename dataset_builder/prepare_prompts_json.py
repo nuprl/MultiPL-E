@@ -95,7 +95,9 @@ def main():
         }
         results.append(problem)
     with open(args.output, "w") as f:
-        json.dump(results, f, indent=2)
+        for item in results:
+            json.dump(item, f)
+            f.write("\n")
 
 
 if __name__ == "__main__":
