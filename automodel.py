@@ -6,8 +6,11 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class Model:
-    def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None):
+    def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None, peft_model=None):
         self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=torch.float16, trust_remote_code=True).cuda()
+        if peft_model:
+            from peft import PeftModel
+            self.model = PeftModel.from_pretrained(self.model, peft_model)
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name or name, revision=tokenizer_revision or revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         
@@ -60,6 +63,7 @@ def automodel_partial_arg_parser():
     """
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
+    args.add_argument("--peft-model", type=str, default=None)
     args.add_argument("--revision", type=str)
     args.add_argument("--tokenizer_name", type=str)
     args.add_argument("--tokenizer_revision", type=str)
@@ -80,7 +84,7 @@ def do_name_override(args):
 def main():
     args = automodel_partial_arg_parser()
     args = args.parse_args()
-    model = Model(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision)
+    model = Model(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision, args.peft_model)
     name = do_name_override(args)
     make_main(args, name, model.completions)
 
