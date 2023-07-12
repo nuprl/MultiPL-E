@@ -6,9 +6,14 @@ import sys
 
 def proc_result_file(file: Path):
     data = gunzip_json(file)
+    stop_tokens = data["stop_tokens"]
     for res in data["results"]:
         if res["status"] == "OK":
-            return res["program"]
+            full_prog = res["program"]
+            for stop in stop_tokens:
+                start_index = full_prog.find(stop)
+                if start_index != -1:
+                    return full_prog[:start_index+len(stop)]
     return None # no program found
         
 def proc_path(path: Path, outfile: Path):
