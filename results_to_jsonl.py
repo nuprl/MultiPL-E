@@ -17,16 +17,26 @@ def proc_result_file(resfile: Path, prompt_len):
         
 def proc_path(respath: Path, complpath: Path, outfile: Path):
     with open(outfile, "w") as of:
-        for file in respath.glob("*.results.json.gz"):
-            file_stem = file.stem.split(".")[0]
-            complfile = complpath / Path(f"{file_stem}.json.gz")
-            if not complfile.exists():
+        for results_path in respath.glob("*.results.json.gz"):
+            completions_path = results_path.parent / (results_path.name.split(".", maxsplit=1)[0] + ".json.gz")
+            if not completions_path.exists():
                 continue
-            prompt_len = len(gunzip_json(complfile)["prompt"])
-            program = proc_result_file(file, prompt_len)
-            if program is None:
+
+            results =  gunzip_json(results_path)
+            completions = gunzip_json(completions_path)
+
+            if results is None or completions is None:
                 continue
-            jsonstr = json.dumps({"content": program, "path": str(file.absolute())})
+
+            ok_result_indices = (i for i, item in enumerate(results["results"]) if item["status"] == "OK")
+            try:
+                ok_result_index = next(ok_result_indices)
+            except StopIteration:
+                continue
+
+            ok_program = completions["prompt"].rstrip() + completions["completions"][ok_result_index]
+
+            jsonstr = json.dumps({"content": ok_program, "path": str(results_path.absolute())})
             of.write(jsonstr + "\n")
     print(f"Done with {respath}")
 
@@ -42,8 +52,9 @@ if __name__ == "__main__":
     if args.compldir is None:
         args.compldir = args.resdir
 
-
     if not args.resdir.is_dir():
         raise ValueError(f"{args.resdir} is not a directory")
+    if not args.compldir.is_dir():
+        raise ValueError(f"{args.compldir} is not a directory")
     Path.mkdir(args.outfile.parent, parents=True, exist_ok=True)
     proc_path(args.resdir, args.compldir, args.outfile)
