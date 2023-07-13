@@ -21,7 +21,7 @@ def proc_path(respath: Path, complpath: Path, outfile: Path):
             file_stem = file.stem.split(".")[0]
             complfile = complpath / Path(f"{file_stem}.json.gz")
             if not complfile.exists():
-                raise ValueError(f"Completions file {complfile} does not exist")
+                continue
             prompt_len = len(gunzip_json(complfile)["prompt"])
             program = proc_result_file(file, prompt_len)
             if program is None:
