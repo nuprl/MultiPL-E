@@ -34,12 +34,16 @@ def proc_path(respath: Path, complpath: Path, outfile: Path):
 if __name__ == "__main__":
     args = argparse.ArgumentParser()
     # add args for respath and outfile
-    args.add_argument("--compldir", type=str, required=True, help="Path to directory containing completion .json.gz files")
-    args.add_argument("--resdir", type=str, required=True, help="Path to directory containing .results.json.gz files")
-    args.add_argument("--outfile", type=str, required=True, help="Path to output .jsonl file")
+    args.add_argument("--compldir", type=Path, help="Path to directory containing completion .json.gz files")
+    args.add_argument("--resdir", type=Path, required=True, help="Path to directory containing .results.json.gz files")
+    args.add_argument("--outfile", type=Path, required=True, help="Path to output .jsonl file")
     args = args.parse_args()
 
-    if not Path(args.resdir).is_dir():
+    if args.compldir is None:
+        args.compldir = args.resdir
+
+
+    if not args.resdir.is_dir():
         raise ValueError(f"{args.resdir} is not a directory")
-    Path.mkdir(Path(args.outfile).parent, parents=True, exist_ok=True)
-    proc_path(Path(args.resdir), Path(args.compldir), Path(args.outfile))
+    Path.mkdir(args.outfile.parent, parents=True, exist_ok=True)
+    proc_path(args.resdir, args.compldir, args.outfile)
