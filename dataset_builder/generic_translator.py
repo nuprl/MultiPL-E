@@ -45,10 +45,11 @@ def translate_expr(translator, py_expr: ast.AST):
 class PromptVisitor(ast.NodeVisitor):
     """Helper for translate_prompt"""
 
-    def __init__(self, translator):
+    def __init__(self, translator, added_canonical=""):
         super().__init__()
         self.state = "start"
         self.translator = translator
+        self.added_canonical = added_canonical
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         if self.state != "start":
@@ -65,7 +66,7 @@ class PromptVisitor(ast.NodeVisitor):
                 self.state = "complete"
             case _other:
                 self.state = "error"
-        
+
     def translate_func_decl(self, doctest_transformation: str) -> str | None:
         if self.state != "complete":
             return None
@@ -85,42 +86,49 @@ class PromptVisitor(ast.NodeVisitor):
                 # people have already done so in translate_prompt because it used
                 # to be called first all the time. Calling it here as a setup
                 # function should hopefully(!) not break anything
-                self.translator.translate_prompt(self.name, self.args, self.returns, self.description)
+                self.translator.translate_prompt(
+                    self.name, self.args, self.returns, self.description)
 
                 # Steps:
                 # Find the Python expression and result in each doctest
                 # py_ast = ast.parse("PYTHON EXPRESSION", "bogus filename")
                 # translate_expr(py_ast, self.translator) to get the string for that expression in the target language
-                
-                #Split up the prompt from the doctests
-                #promptAndDoctests = self.description.split('>>>')
-                if '>>>' in self.description: #checking if there are doctests
+
+                # Split up the prompt from the doctests
+                # promptAndDoctests = self.description.split('>>>')
+                if '>>>' in self.description:  # checking if there are doctests
                     doctestRegex = re.compile(r'>>>.*\n.*\n')
                     onlyDocTests = []
                     for m in re.finditer(doctestRegex, self.description):
-                        onlyDocTests.append((m.start(),m.end()))
+                        onlyDocTests.append((m.start(), m.end()))
                     desc = ''
                     pos = 0
                     for i in onlyDocTests:
                         desc += self.description[pos:i[0]]
                         doctest = self.description[i[0]:i[1]]
-                        doclist = doctest.split('\n') #Splitting up the output from the function call of the doctest
-                        funcCall = ast.parse(doclist[0].strip('>>> ')).body[0].value
+                        # Splitting up the output from the function call of the doctest
+                        doclist = doctest.split('\n')
+                        funcCall = ast.parse(
+                            doclist[0].strip('>>> ')).body[0].value
                         output = ast.parse(doclist[1].strip()).body[0].value
-                        transl_funccall = translate_expr(self.translator, funcCall)
+                        transl_funccall = translate_expr(
+                            self.translator, funcCall)
                         transl_output = translate_expr(self.translator, output)
                         if hasattr(self.translator, "finalize"):
-                            transl_funccall = self.translator.finalize(transl_funccall, "lhs")
-                            transl_output = self.translator.finalize(transl_output, "rhs")
+                            transl_funccall = self.translator.finalize(
+                                transl_funccall, "lhs")
+                            transl_output = self.translator.finalize(
+                                transl_output, "rhs")
                         # Why is this str() here?
-                        desc += '>>> ' + transl_funccall + '\n    ' + str(transl_output) + '\n'
+                        desc += '>>> ' + transl_funccall + \
+                            '\n    ' + str(transl_output) + '\n'
                         pos = i[1]
-                    
+
                     desc += self.description[pos:]
 
                     # for test in (promptAndDoctests[1:]): #Removing each doctest from any junk
                     #     onlyDocTests.append(doctestRegex.match(test).group())
-                    
+
                     # funcCalls = []
                     # outputs = []
                     # for doctest in onlyDocTests:
@@ -131,26 +139,28 @@ class PromptVisitor(ast.NodeVisitor):
                     # for i in range(len(funcCalls)):
                     #     funcCalls[i] = translate_expr(self.translator, funcCalls[i])
                     #     outputs[i] = translate_expr(self.translator, outputs[i])
-                    
+
                     # desc = promptAndDoctests[0]
                     # for i in range(len(funcCalls)):
                     #     desc += funcCalls[i] + '\n' + outputs[i] + '\n\n'
-                else: #else when there are no doctests
+                else:  # else when there are no doctests
                     # Still return the description, because we are probably rewording!
                     desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
+        if self.added_canonical:
+            desc = "** Canonical Python Solution **\n" + self.added_canonical + "\n" + desc
         return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
 
 
-def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str) -> str:
+def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str, added_canonical: str = "") -> str:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Language L. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
     """
-    prompt_ast = ast.parse(py_prompt + "    pass", filename)
-    prompt_visitor = PromptVisitor(translator)
     try:
+        prompt_ast = ast.parse(py_prompt + "    pass", filename)
+        prompt_visitor = PromptVisitor(translator, added_canonical)
         prompt_visitor.visit(prompt_ast)
         return prompt_visitor.translate_func_decl(doctest_transformation)
     except Exception as e:
@@ -225,19 +235,22 @@ def target_path(args, translator, file):
 
 
 lang_dict = {}
-with open('terms.csv','r') as of:
+with open('terms.csv', 'r') as of:
     term_list = csv.DictReader(of)
     for row in term_list:
         lang_dict[row['py']] = row
     fields = [k.strip() for k in row.keys()]
 
+
 def consonant(s):
     return s.lower() not in 'aeiou'
+
 
 def vowel(s):
     return s.lower() in 'aeiou'
 
-def translate_terms(language,fields,prompt):
+
+def translate_terms(language, fields, prompt):
     """
     Takes a programming language name, a list of vocabulary words to translate, and a portion of docstring text.
     Returns the docstring text with Python-specific vocab translated to the target language.
@@ -248,10 +261,11 @@ def translate_terms(language,fields,prompt):
     for f in fields:
         if f in prompt and target_dict[f] != 'Q':
             if 'an '+f in prompt and consonant(target_dict[f][0]):
-                prompt = prompt.replace('an '+f,'a '+target_dict[f])
+                prompt = prompt.replace('an '+f, 'a '+target_dict[f])
             elif 'a '+f in prompt and vowel(target_dict[f][0]):
-                prompt = prompt.replace('a '+f,'an '+target_dict[f])
-            prompt = prompt.replace(f,target_dict[f])    #can't be an else: need to catch 2nd occurences of term that don't have article
+                prompt = prompt.replace('a '+f, 'an '+target_dict[f])
+            # can't be an else: need to catch 2nd occurences of term that don't have article
+            prompt = prompt.replace(f, target_dict[f])
     return prompt
 
 
@@ -261,51 +275,64 @@ def edit_prompt_terminology(language, example):
     Translates Python-specific terms in natural language portions of the docstring to the target language.
     Returns the full text of the python file with translated natural language docstring.
     """
-    before,prompt,after = example.replace("'''",'"""').split('"""')
+    before, prompt, after = example.replace("'''", '"""').split('"""')
     doctestRegex = re.compile(r'>>>.*\n.*\n')
     doctests = []
-    for m in re.finditer(doctestRegex,prompt):
-        doctests.append((m.start(),m.end()))
+    for m in re.finditer(doctestRegex, prompt):
+        doctests.append((m.start(), m.end()))
     if len(doctests) == 0:
-        tar_prompt = translate_terms(language,fields,prompt)
+        tar_prompt = translate_terms(language, fields, prompt)
     else:
         tar_prompt = ''
         last = 0
         for i in doctests:
-            more_prompt = translate_terms(language,fields,prompt[last:i[0]])
+            more_prompt = translate_terms(language, fields, prompt[last:i[0]])
             more_doctest = prompt[i[0]:i[1]]
             last = i[1]
             tar_prompt += more_prompt+more_doctest
-        tar_prompt += translate_terms(language,fields,prompt[last:])
+        tar_prompt += translate_terms(language, fields, prompt[last:])
 
     return before+'"""'+tar_prompt+'"""'+after
 
 
-def translate_prompt_and_tests(original_file, translator, doctests, prompt_terminology):
-    entry_point = re.search("([^0-9]+_\d+)_(.+).py", original_file.name).group(2)
+def translate_prompt_and_tests(original_file, translator, doctests, prompt_terminology, add_canonical_to_prompt=False):
+    entry_point = re.search("([^0-9]+_\d+)_(.+).py",
+                            original_file.name).group(2)
     reading_prompt = True
     reading_tests = False
+    reading_canonical = False
+    canonical_body_buffer = []
     prompt_buffer = []
     tests_buffer = []
     with open(original_file) as f:
         for line in f:
             if "### Canonical solution below ###" in line:
                 reading_prompt = False
+                reading_canonical = True
+                line = ""
             if "### Unit tests below ###" in line:
+                reading_canonical = False
                 reading_tests = True
                 continue
             if "def test_check():" in line:
                 break
 
+            if reading_canonical:
+                canonical_body_buffer.append(line)
             if reading_prompt:
                 prompt_buffer.append(line)
             if reading_tests:
                 tests_buffer.append(line)
 
+    canonical = "".join(
+        ["* " + line[4:] for line in canonical_body_buffer if line.strip() != ""])
     prompt = "".join(prompt_buffer)
+
     if prompt_terminology == "reworded":
         prompt = edit_prompt_terminology(translator.file_ext(), prompt)
-    translated_prompt = translate_prompt(translator, doctests, prompt, original_file.name)
+    translated_prompt = translate_prompt(
+        translator, doctests, prompt, original_file.name, added_canonical=canonical if add_canonical_to_prompt else "")
+    print(translated_prompt)  # TODO: remove
     # When doctests == "remove" and there are no doctests in prompt, we get None.
     # If not, we could create a translated prompt that is identical to the
     # doctests == "keep" case.
@@ -322,18 +349,20 @@ def translate_prompt_and_tests(original_file, translator, doctests, prompt_termi
 
     return translated_prompt, translated_tests
 
+
 def get_stop_from_translator(translator) -> List[str]:
     if isinstance(translator, LanguageTranslator):
         return translator.stop()
     else:
         return translator.stop
 
+
 def list_originals(root):
     directory = Path(Path(__file__).parent, "..", "datasets").resolve()
-    files_unsorted = directory.glob(f"{root}/*.py") 
+    files_unsorted = directory.glob(f"{root}/*.py")
     # assumption: base filenames are in the format of HumanEval_X_*.py
     # Where X is a valid number
-    key_func = lambda s: int(str(s.name).split("_")[1])
+    def key_func(s): return int(str(s.name).split("_")[1])
     files_by_number = {key_func(file): file for file in files_unsorted}
-    
+
     return files_by_number

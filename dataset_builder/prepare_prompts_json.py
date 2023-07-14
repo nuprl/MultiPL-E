@@ -33,6 +33,7 @@ from generic_translator import list_originals, translate_prompt_and_tests, get_s
 from pathlib import Path
 import json
 
+
 def main():
     args = argparse.ArgumentParser()
     args.add_argument(
@@ -56,6 +57,12 @@ def main():
         help="How to translate terminology in prompts: verbatim or reworded"
     )
 
+    args.add_argument(
+        "--add-canonical-to-prompt",
+        action="store_true",
+        help="Add the canonical function implementation to the prompt. Useful for assisting the model in inferring the correct function.",
+    )
+
     args.add_argument("--originals", type=str, default="../datasets/originals")
 
     args = args.parse_args()
@@ -70,13 +77,13 @@ def main():
         print(f"Unknown doctests option: {args.doctests}")
         sys.exit(1)
 
-    results = [ ]
+    results = []
     for original in sorted(list_originals(args.originals).values()):
         original_name = original.name.split(".")[0]
         print(f"Processing {original_name}...")
 
         result = translate_prompt_and_tests(
-            original, translator, args.doctests, args.prompt_terminology
+            original, translator, args.doctests, args.prompt_terminology, add_canonical_to_prompt=args.add_canonical_to_prompt
         )
         if result is None:
             print(f"Skipping {original_name}")
