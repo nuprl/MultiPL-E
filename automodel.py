@@ -11,6 +11,9 @@ class Model:
         if peft_model:
             from peft import PeftModel
             self.model = PeftModel.from_pretrained(self.model, peft_model)
+            print("Loaded PEFT model. Merging...")
+            self.model.merge_and_unload()
+            print("Merge complete.")
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name or name, revision=tokenizer_revision or revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         
