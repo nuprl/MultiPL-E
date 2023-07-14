@@ -86,11 +86,11 @@ def main():
         problem = {
             "name": original_name,
             "language": translator.file_ext(),
-            "prompt": prompt,
-            "doctests": args.doctests,
+            "prompt": prompt.encode('utf-8', 'ignore').decode('utf-8'),
+            "doctests": args.doctests.encode('utf-8', 'ignore').decode('utf-8'),
             "original": str(original.absolute()),
             "prompt_terminology": args.prompt_terminology,
-            "tests": tests,
+            "tests": tests.encode('utf-8', 'ignore').decode('utf-8'),
             "stop_tokens": get_stop_from_translator(translator),
         }
         results.append(problem)
