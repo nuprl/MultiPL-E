@@ -148,9 +148,9 @@ def translate_prompt(translator, doctest_transformation: str, py_prompt: str, fi
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Language L. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
     """
-    prompt_ast = ast.parse(py_prompt + "    pass", filename)
-    prompt_visitor = PromptVisitor(translator)
     try:
+        prompt_ast = ast.parse(py_prompt + "    pass", filename)
+        prompt_visitor = PromptVisitor(translator)
         prompt_visitor.visit(prompt_ast)
         return prompt_visitor.translate_func_decl(doctest_transformation)
     except Exception as e:
@@ -169,8 +169,13 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
         assert(LHS == RHS)
         ...
     """
-    tests_ast = ast.parse(py_tests, filename)
-    test_cases = translator.test_suite_prefix_lines(entry_point)
+    try:
+        tests_ast = ast.parse(py_tests, filename)
+        test_cases = translator.test_suite_prefix_lines(entry_point)
+    except Exception as e: 
+        print(f"Exception parsing tests for {filename}: {e}")
+        traceback.print_exception(e)
+        return None
     match tests_ast:
         case ast.Module(body=[ast.FunctionDef(body=body)]):
             body_ast = body
