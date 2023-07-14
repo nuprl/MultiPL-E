@@ -178,10 +178,11 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
             body_ast = body
         case _other:
             return None  # TODO: Should this blow up?
-    for item_ast in body_ast:
+    for i, item_ast in enumerate(body_ast):
         match item_ast:
             case ast.Assert(
-                test=ast.Compare(left=left, ops=[ast.Eq()], comparators=[right])
+                test=ast.Compare(
+                    left=left, ops=[ast.Eq()], comparators=[right])
             ):
                 try:
                     left = translate_expr(translator, left)
@@ -191,14 +192,19 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                         right = translator.finalize(right, "rhs")
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
-                    print(f"Exception translating expressions for {filename}: {e}")
+                    print(
+                        f"Exception translating test case {i} for {filename}: {e}")
                     traceback.print_exception(e)
-                    return None
             case ast.Expr(value=ast.Name(id="print")):
                 pass
             case _other:
                 print("Failed to translate tests for " + filename)
                 return None
+
+    if len(test_cases) == 0:
+        print("No tests were translated for " + filename)
+        return None
+
     for line in translator.test_suite_suffix_lines():
         test_cases.append(line)
     return "\n".join(test_cases)
