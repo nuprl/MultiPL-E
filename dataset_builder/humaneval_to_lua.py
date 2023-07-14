@@ -4,10 +4,6 @@ import ast
 from typing import List
 from base_language_translator import LanguageTranslator
 
-# We turn multi-line docstrings into single-line comments. This captures the
-# start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
-
 TargetExp = str
 
 class Translator(LanguageTranslator[TargetExp]):
@@ -20,7 +16,7 @@ class Translator(LanguageTranslator[TargetExp]):
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns: ast.expr, description: str) -> str:
         lua_description = (
-            "-- " + re.sub(DOCSTRING_LINESTART_RE, "\n-- ", description.strip()) + "\n"
+            "-- " + description.replace("\n", "\n-- ") + "\n" if description else ""
         )
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
