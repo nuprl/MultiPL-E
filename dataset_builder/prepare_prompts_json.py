@@ -78,7 +78,8 @@ def main():
         sys.exit(1)
 
     results = []
-    for original in sorted(list_originals(args.originals).values()):
+    originals = sorted(list_originals(args.originals).values())
+    for original in originals:
         original_name = original.name.split(".")[0]
         print(f"Processing {original_name}...")
 
@@ -101,6 +102,12 @@ def main():
             "stop_tokens": get_stop_from_translator(translator),
         }
         results.append(problem)
+
+    print(f"Translation stats:")
+    print(f"  Num originals: {len(originals)}")
+    print(f"  Num translated: {len(results)}")
+    print(f"  Translation ratio: {len(results) / len(originals):.2f}")
+
     with open(args.output, "w") as f:
         for item in results:
             json.dump(item, f)
