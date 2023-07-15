@@ -181,11 +181,11 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
     """
     try:
         tests_ast = ast.parse(py_tests, filename)
-        test_cases = translator.test_suite_prefix_lines(entry_point)
-    except Exception as e: 
+    except Exception as e:
         print(f"Exception parsing tests for {filename}: {e}")
         traceback.print_exception(e)
         return None
+    test_cases = translator.test_suite_prefix_lines(entry_point)
     match tests_ast:
         case ast.Module(body=[ast.FunctionDef(body=body)]):
             body_ast = body
