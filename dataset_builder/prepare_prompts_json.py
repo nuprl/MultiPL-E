@@ -29,7 +29,7 @@ This ignores the tests cases, but it should be compact enough.
 
 import argparse
 import sys
-from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
+from generic_translator import list_originals, translate_prompt_and_tests_from_file, get_stop_from_translator
 from pathlib import Path
 import json
 
@@ -83,7 +83,7 @@ def main():
         original_name = original.name.split(".")[0]
         print(f"Processing {original_name}...")
 
-        result = translate_prompt_and_tests(
+        result = translate_prompt_and_tests_from_file(
             original, translator, args.doctests, args.prompt_terminology, add_canonical_to_prompt=args.add_canonical_to_prompt
         )
         if result is None:

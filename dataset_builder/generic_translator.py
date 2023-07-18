@@ -1,13 +1,14 @@
 # This is a helper script for translating problems from the OpenAI HumanEval
 # problems to Language L.
 import ast
+import os
 import traceback
 from glob import glob
 import re
 import csv
 from pathlib import Path
 import argparse
-from base_language_translator import LanguageTranslator
+from dataset_builder.base_language_translator import LanguageTranslator
 from typing import List
 
 
@@ -153,23 +154,23 @@ class PromptVisitor(ast.NodeVisitor):
         return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
 
 
-def translate_prompt(translator, doctest_transformation: str, py_prompt: str, filename: str, added_canonical: str = "") -> str:
+def translate_prompt(translator, doctest_transformation: str, py_prompt: str, added_canonical: str = "") -> str | None:
     """
     Reads in a prompt from the HumanEval dataset with "    pass" appended. Translates the prompt to
     Language L. Ignores type annotations and imports. Fails if the prompt has auxiliary functions.
     """
     try:
-        prompt_ast = ast.parse(py_prompt + "    pass", filename)
+        prompt_ast = ast.parse(py_prompt + "    pass")
         prompt_visitor = PromptVisitor(translator, added_canonical)
         prompt_visitor.visit(prompt_ast)
         return prompt_visitor.translate_func_decl(doctest_transformation)
     except Exception as e:
-        print(f"Exception translating prompt for {filename}: {e}")
+        print(f"Exception translating prompt: {e}")
         traceback.print_exception(e)
         return None
 
 
-def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
+def translate_tests(translator, py_tests: str, entry_point: str) -> str | None:
     """
     Translates a suite of tests from the HumanEval dataset to Language L. Expects the code to look like:
 
@@ -180,9 +181,9 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
         ...
     """
     try:
-        tests_ast = ast.parse(py_tests, filename)
+        tests_ast = ast.parse(py_tests)
     except Exception as e:
-        print(f"Exception parsing tests for {filename}: {e}")
+        print(f"Exception parsing tests for {entry_point}: {e}")
         traceback.print_exception(e)
         return None
     test_cases = translator.test_suite_prefix_lines(entry_point)
@@ -208,16 +209,16 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                     test_cases.append(translator.deep_equality(left, right))
                 except Exception as e:
                     print(
-                        f"Exception translating test case {i} for {filename}: {e}")
+                        f"Exception translating test case {i} for {entry_point}: {e}")
                     traceback.print_exception(e)
             case ast.Expr(value=ast.Name(id="print")):
                 pass
             case _other:
-                print("Failed to translate tests for " + filename)
+                print("Failed to translate tests for " + entry_point)
                 return None
 
     if len(test_cases) == 0:
-        print("No tests were translated for " + filename)
+        print("No tests were translated for " + entry_point)
         return None
 
     for line in translator.test_suite_suffix_lines():
@@ -240,7 +241,8 @@ def target_path(args, translator, file):
 
 
 lang_dict = {}
-with open('terms.csv', 'r') as of:
+this_script_dir = os.path.dirname(os.path.realpath(__file__))
+with open(f'{this_script_dir}/terms.csv', 'r') as of:
     term_list = csv.DictReader(of)
     for row in term_list:
         lang_dict[row['py']] = row
@@ -300,34 +302,48 @@ def edit_prompt_terminology(language, example):
     return before+'"""'+tar_prompt+'"""'+after
 
 
-def translate_prompt_and_tests(original_file, translator, doctests, prompt_terminology, add_canonical_to_prompt=False):
+def translate_prompt_and_tests_from_file(original_file, translator, doctests, prompt_terminology, add_canonical_to_prompt=False):
     entry_point = re.search("([^0-9]+_\d+)_(.+).py",
                             original_file.name).group(2)
+    with open(original_file) as f:
+        original_code = f.read()
+
+    return translate_prompt_and_tests(original_code, entry_point, translator, doctests, prompt_terminology, add_canonical_to_prompt)
+
+
+def translate_prompt_and_tests(
+        original_code: str,
+        entry_point: str,
+        translator: LanguageTranslator,
+        doctests: str = "keep",
+        prompt_terminology: str = "verbatim",
+        add_canonical_to_prompt: bool = False
+) -> (tuple[str, str] | None):
     reading_prompt = True
     reading_tests = False
     reading_canonical = False
     canonical_body_buffer = []
     prompt_buffer = []
     tests_buffer = []
-    with open(original_file) as f:
-        for line in f:
-            if "### Canonical solution below ###" in line:
-                reading_prompt = False
-                reading_canonical = True
-                line = ""
-            if "### Unit tests below ###" in line:
-                reading_canonical = False
-                reading_tests = True
-                continue
-            if "def test_check():" in line:
-                break
+    for line in original_code.split("\n"):
+        line = line + "\n"
+        if "### Canonical solution below ###" in line:
+            reading_prompt = False
+            reading_canonical = True
+            line = ""
+        if "### Unit tests below ###" in line:
+            reading_canonical = False
+            reading_tests = True
+            continue
+        if "def test_check():" in line:
+            break
 
-            if reading_canonical:
-                canonical_body_buffer.append(line)
-            if reading_prompt:
-                prompt_buffer.append(line)
-            if reading_tests:
-                tests_buffer.append(line)
+        if reading_canonical:
+            canonical_body_buffer.append(line)
+        if reading_prompt:
+            prompt_buffer.append(line)
+        if reading_tests:
+            tests_buffer.append(line)
 
     canonical = "".join(
         ["* " + line[4:] for line in canonical_body_buffer if line.strip() != ""])
@@ -336,8 +352,8 @@ def translate_prompt_and_tests(original_file, translator, doctests, prompt_termi
     if prompt_terminology == "reworded":
         prompt = edit_prompt_terminology(translator.file_ext(), prompt)
     translated_prompt = translate_prompt(
-        translator, doctests, prompt, original_file.name, added_canonical=canonical if add_canonical_to_prompt else "")
-    print(translated_prompt)  # TODO: remove
+        translator, doctests, prompt, added_canonical=canonical if add_canonical_to_prompt else "")
+
     # When doctests == "remove" and there are no doctests in prompt, we get None.
     # If not, we could create a translated prompt that is identical to the
     # doctests == "keep" case.
@@ -346,7 +362,7 @@ def translate_prompt_and_tests(original_file, translator, doctests, prompt_termi
 
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
-        translator, tests, entry_point, original_file.name
+        translator, tests, entry_point
     )
 
     if translated_tests is None:
