@@ -5,7 +5,7 @@ This script translates problems from the OpenAI HumanEval dataset into Ruby.
 import re
 import ast
 from typing import List, TypeVar
-from base_language_translator import LanguageTranslator
+from dataset_builder.base_language_translator import LanguageTranslator
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.

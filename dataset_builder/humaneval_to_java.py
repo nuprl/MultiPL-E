@@ -2,8 +2,8 @@
 import re
 import ast
 from typing import List, Optional, Tuple
-from humaneval_to_cpp import DOCSTRING_LINESTART_RE
-import humaneval_to_cpp
+from dataset_builder.humaneval_to_cpp import DOCSTRING_LINESTART_RE
+from dataset_builder import humaneval_to_cpp
 
 JAVA_CLASS_NAME = "Problem"
 

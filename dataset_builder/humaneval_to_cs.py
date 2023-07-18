@@ -2,17 +2,19 @@
 import re
 import ast
 from typing import List, Optional, Tuple
-from humaneval_to_cpp import DOCSTRING_LINESTART_RE
-import humaneval_to_cpp
+from dataset_builder.humaneval_to_cpp import DOCSTRING_LINESTART_RE
+from dataset_builder import humaneval_to_cpp
 
 CSHARP_CLASS_NAME = "Problem"
-#Refactoring needed
+# Refactoring needed
+
 
 def to_camel_case(snake_str):
     components = snake_str.split('_')
     # We capitalize the first letter of each component
     # with the 'title' method and join them together.
     return ''.join(x.title() for x in components)
+
 
 class Translator(humaneval_to_cpp.Translator):
     stop = ["\n    }\n"]
@@ -38,11 +40,11 @@ class Translator(humaneval_to_cpp.Translator):
     def file_ext(self):
         return "cs"
 
-    #Type creation and literal creation of List, Dict, Map, and Optional
+    # Type creation and literal creation of List, Dict, Map, and Optional
     def gen_list_type(self, elem_type):
         '''Generate type for List<T>
         '''
-        return self.list_type + "<%s>"% elem_type
+        return self.list_type + "<%s>" % elem_type
 
     def gen_make_list(self, elem_type, list_contents):
         '''Generate List literal using and array literal
@@ -52,7 +54,7 @@ class Translator(humaneval_to_cpp.Translator):
             array = ""
         else:
             array = f"new {elem_type}[]" + list_contents
-        return "new " + self.list_type + "<%s>"%elem_type + "(" + array + ")"
+        return "new " + self.list_type + "<%s>" % elem_type + "(" + array + ")"
 
     def gen_array_literal(self, list_contents):
         '''Generate an array literal with contents
@@ -63,14 +65,14 @@ class Translator(humaneval_to_cpp.Translator):
     def gen_dict_type(self, ktype, vtype):
         '''Generate Dict<K,V>
         '''
-        return self.dict_type + "<%s,%s>"  % (ktype, vtype)
+        return self.dict_type + "<%s,%s>" % (ktype, vtype)
 
     def gen_map_literal(self, keys, values):
         '''Generate dict literal
             {{k1,v1}, {k2,v2}, {k3,v3}, ...}
         '''
         return "{" + ", ".join(f"{{{k}, {v}}}" for k, v in zip(keys, values)) + "}"
-    
+
     def gen_map(self, dict_type, map_literal):
         '''Generate Dict object from literal
             `new Dict<K, V>() {{k,v}, {k,v}, ... }
@@ -93,11 +95,11 @@ class Translator(humaneval_to_cpp.Translator):
         if elem == self.none_type:
             return "(" + self.optional_type + "<%s>" % elem_type + ")" + elem
         return elem
-    
+
     def gen_union(self, elems):
         raise Exception("C# do not support union")
 
-    #gen_tuple_type and gen_make_tuple are same as C++
+    # gen_tuple_type and gen_make_tuple are same as C++
 
     def module_imports(self) -> str:
         return "\n".join([
@@ -109,7 +111,7 @@ class Translator(humaneval_to_cpp.Translator):
             "using System.Text;",
             "using System.Security.Cryptography;"
         ]) + "\n"
-    
+
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         '''Translate Python prompt to C#.
             The function name is converted to C#'s convention that uses CamelCase
@@ -119,14 +121,17 @@ class Translator(humaneval_to_cpp.Translator):
         indent = "    "
         comment_start = self.indent + "//"
         csharp_description = (
-            comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip() + "\n"
-        ))
-        self.args_type = [self.translate_pytype(arg.annotation) for arg in args]
-        formal_args = [f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
+            comment_start + " " + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip() + "\n"
+                                         ))
+        self.args_type = [self.translate_pytype(
+            arg.annotation) for arg in args]
+        formal_args = [
+            f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
         formal_arg_list = ", ".join(formal_args)
         self.entry_point = to_camel_case(name)
         self.ret_ann = _returns
-        self.translated_return_type = self.translate_pytype(_returns) #make it ret_translated_type 
+        self.translated_return_type = self.translate_pytype(
+            _returns)  # make it ret_translated_type
         csharp_prompt = f"{self.module_imports()}{class_decl}{csharp_description}{self.indent}public static {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
 
         return csharp_prompt
@@ -134,7 +139,7 @@ class Translator(humaneval_to_cpp.Translator):
     def gen_var(self, v: str) -> Tuple[str, None]:
         """Translate a variable with name v."""
         if v in self.keywords:
-            #Add _ around keyword
+            # Add _ around keyword
             return self.keywords[v], None
         return v, None
 
@@ -166,12 +171,15 @@ class Translator(humaneval_to_cpp.Translator):
             return '""'
         elif csharp_type.find(f"{self.list_type}<") == 0:
             elem_type = re.findall(rf'{self.list_type}<(.+)>', csharp_type)[0]
-            #List default is: new List<T>()
+            # List default is: new List<T>()
             return self.gen_make_list(elem_type, "")
         elif csharp_type.find(f"{self.tuple_type}<") == 0:
-            template_types = re.findall(rf'{self.tuple_type}<(.+),(.+)>', csharp_type)[0]
-            first_default = self.return_default_value(template_types[0].strip())
-            second_default = self.return_default_value(template_types[1].strip())
+            template_types = re.findall(
+                rf'{self.tuple_type}<(.+),(.+)>', csharp_type)[0]
+            first_default = self.return_default_value(
+                template_types[0].strip())
+            second_default = self.return_default_value(
+                template_types[1].strip())
             return self.gen_make_tuple(first_default + "," + second_default)
         elif csharp_type.find(self.optional_type) == 0:
             return f"({csharp_type})null"
@@ -188,19 +196,19 @@ class Translator(humaneval_to_cpp.Translator):
         return [
             # "return " + self.return_default_value(self.translated_return_type) + ";",
             self.indent + "}",
-            self.indent + "public static void Main(string[] args) {", 
+            self.indent + "public static void Main(string[] args) {",
         ]
-    
+
     def test_suite_suffix_lines(self) -> List[str]:
         '''End class definition and main definition
         '''
         return [self.indent + "}\n",
-        "}\n"
-        ]
-    
+                "}\n"
+                ]
+
     def update_type(self, right: Tuple[ast.Expr, str], expected_type: Tuple[str]) -> str:
         if self.is_primitive_type(expected_type) and self.translate_pytype(right[1]) != expected_type:
-            #Do not update type if it is primitive
+            # Do not update type if it is primitive
             return f"({expected_type}){right[0]}"
 
         return super().update_type(right, expected_type)
@@ -210,7 +218,7 @@ class Translator(humaneval_to_cpp.Translator):
         All tests are assertions that compare deep equality between left and right.
         Use ==  for primitive types and Equals for objects
         """
-        #Empty the union declarations
+        # Empty the union declarations
         self.union_decls = {}
         if self.is_primitive_type(self.translated_return_type):
             return f"    Debug.Assert({left} == {right});"
@@ -223,7 +231,7 @@ class Translator(humaneval_to_cpp.Translator):
             And other types can be coerced similar to C++
         '''
         if expr == "null":
-            #No need to coerce null
+            # No need to coerce null
             return []
         dict_elem_types = re.findall(fr"{self.dict_type}<.+,.+>\(", expr)
         if dict_elem_types != []:
