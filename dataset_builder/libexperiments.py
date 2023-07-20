@@ -18,25 +18,7 @@ DATASETS = [ "humaneval", "mbpp" ]
 TEMPS = ["0.2", "0.8"]
 VARIATIONS = ["reworded", "keep", "transform", "remove"]
 LANGS = [
-    "py",
-    "js",
-    "ts",
-    "java",
-    "d",
-    "cpp",
-    "r",
-    "rs",
-    "jl",
-    "sh",
-    "cs",
-    "go",
-    "lua",
-    "pl",
-    "php",
-    "rb",
-    "scala",
-    "swift",
-    "rkt",
+    "ml",
 ]
 MODELS = ["davinci", "incoder", "codegen"]
 
