@@ -149,6 +149,27 @@ class PromptVisitor(ast.NodeVisitor):
                     desc = self.description
             case _other:
                 raise Exception(f"bad doctest_transformation")
+        desc_lines = desc.split("\n")
+        # remove all empty lines
+        desc_lines = [line for line in desc_lines if line.strip() != ""]
+
+        # find first indentation amount
+        indent = 0
+        # we skip the first line because typically it is not indented
+        if len(desc_lines) > 1:
+            for line in desc_lines[1:]:
+                if line.strip() != "":
+                    indent = len(line) - len(line.lstrip())
+                    break
+
+        # remove indentation by that exact amount
+        for i, line in enumerate(desc_lines):
+            deindent = line[indent:]
+            if deindent.lstrip() == line.lstrip():
+                desc_lines[i] = deindent
+
+        desc = "\n".join(desc_lines)
+
         if self.added_canonical:
             desc = "** Canonical Python Solution **\n" + self.added_canonical + "\n" + desc
         return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
