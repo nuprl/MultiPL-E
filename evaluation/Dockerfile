@@ -1,9 +1,9 @@
 FROM ubuntu:22.04
-RUN apt-get update -yqq && apt-get install -yqq curl build-essential python3-pip python3-tqdm
-RUN apt-get install racket -yqq
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
+RUN apt-get update -yqq 
 RUN apt-get install -yqq \
+    curl racket build-essential python3-pip python3-tqdm \
     default-jdk-headless \
     golang-go \
     php-cli \
@@ -11,7 +11,11 @@ RUN apt-get install -yqq \
     lua5.3 \
     r-base \
     rustc \
-    scala
+    scala \
+    ocaml-interp \
+    libtest-deep-perl \
+    wget \
+    lua-unit
 
 RUN apt-get install -yqq libtest-deep-perl 
 RUN apt-get install -yqq wget 
@@ -35,7 +39,7 @@ RUN apt update
 RUN apt install -yqq mono-devel
 
 # F#
-RUN apt install -y dotnet6
+RUN apt-get install -y dotnet6
 
 # Post-processing
 
@@ -47,8 +51,6 @@ RUN curl https://download.swift.org/swift-5.7-release/ubuntu2204/swift-5.7-RELEA
 ENV PATH="/swift-5.7-RELEASE-ubuntu22.04/usr/bin:${PATH}"
 # Javatuples
 RUN mkdir /usr/multiple && wget https://repo.mavenlibs.com/maven/org/javatuples/javatuples/1.2/javatuples-1.2.jar -O /usr/multiple/javatuples-1.2.jar
-# Luaunit
-RUN apt-get update -yqq && apt-get install -yqq lua-unit
 
 COPY src /code
 WORKDIR /code
