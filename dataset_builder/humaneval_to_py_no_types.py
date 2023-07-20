@@ -4,8 +4,7 @@
 # in various ways.
 import ast
 from typing import List
-from generic_translator import main
-from base_language_translator import LanguageTranslator
+from dataset_builder.base_language_translator import LanguageTranslator
 
 
 TargetExp = str
@@ -63,8 +62,4 @@ class Translator(LanguageTranslator[TargetExp]):
 
     def gen_call(self, func: str, args: List[str]) -> str:
         return func + "(" + ", ".join(args) + ")"
-
-
-if __name__ == "__main__":
-    main(Translator())
 

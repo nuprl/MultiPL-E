@@ -10,7 +10,7 @@ python3 test.py  humaneval_to_ts ../datasets/originals/HumanEval_53_add.py
 
 import argparse
 import sys
-from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
+from generic_translator import list_originals, translate_prompt_and_tests_from_file, get_stop_from_translator
 from pathlib import Path
 
 def test_translate(translator: str, original: Path, doctests: str, terminology: str):
@@ -25,7 +25,7 @@ def test_translate(translator: str, original: Path, doctests: str, terminology: 
         sys.exit(1)
 
 
-    result = translate_prompt_and_tests(original, translator, doctests, terminology)
+    result = translate_prompt_and_tests_from_file(original, translator, doctests, terminology)
     if result is None:
         print(f"Error occurred")
         sys.exit(1)

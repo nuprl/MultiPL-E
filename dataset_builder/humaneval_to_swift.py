@@ -29,8 +29,8 @@ from __future__ import annotations
 import re
 import ast
 from typing import Any, List, Optional, OrderedDict, Set
-from base_language_translator import LanguageTranslator
-from generic_translator import translate_expr
+from dataset_builder.base_language_translator import LanguageTranslator
+from dataset_builder.generic_translator import translate_expr
 from abc import ABC, abstractmethod
 from typing import Tuple, List, TypeVar, Generic
 import ast

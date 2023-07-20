@@ -5,7 +5,7 @@
 import ast
 from typing import List
 
-from base_language_translator import LanguageTranslator
+from dataset_builder.base_language_translator import LanguageTranslator
 
 
 def translate_type(t, needs):

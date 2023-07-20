@@ -29,9 +29,10 @@ This ignores the tests cases, but it should be compact enough.
 
 import argparse
 import sys
-from generic_translator import list_originals, translate_prompt_and_tests, get_stop_from_translator
+from generic_translator import list_originals, translate_prompt_and_tests_from_file, get_stop_from_translator
 from pathlib import Path
 import json
+
 
 def main():
     args = argparse.ArgumentParser()
@@ -56,6 +57,12 @@ def main():
         help="How to translate terminology in prompts: verbatim or reworded"
     )
 
+    args.add_argument(
+        "--add-canonical-to-prompt",
+        action="store_true",
+        help="Add the canonical function implementation to the prompt. Useful for assisting the model in inferring the correct function.",
+    )
+
     args.add_argument("--originals", type=str, default="../datasets/originals")
 
     args = args.parse_args()
@@ -70,13 +77,14 @@ def main():
         print(f"Unknown doctests option: {args.doctests}")
         sys.exit(1)
 
-    results = [ ]
-    for original in sorted(list_originals(args.originals).values()):
+    results = []
+    originals = sorted(list_originals(args.originals).values())
+    for original in originals:
         original_name = original.name.split(".")[0]
         print(f"Processing {original_name}...")
 
-        result = translate_prompt_and_tests(
-            original, translator, args.doctests, args.prompt_terminology
+        result = translate_prompt_and_tests_from_file(
+            original, translator, args.doctests, args.prompt_terminology, add_canonical_to_prompt=args.add_canonical_to_prompt
         )
         if result is None:
             print(f"Skipping {original_name}")
@@ -94,6 +102,12 @@ def main():
             "stop_tokens": get_stop_from_translator(translator),
         }
         results.append(problem)
+
+    print(f"Translation stats:")
+    print(f"  Num originals: {len(originals)}")
+    print(f"  Num translated: {len(results)}")
+    print(f"  Translation ratio: {len(results) / len(originals):.2f}")
+
     with open(args.output, "w") as f:
         for item in results:
             json.dump(item, f)
