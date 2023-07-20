@@ -99,7 +99,6 @@ def make_main(args, model_name, gen_completions):
             "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
         )
 
-        problems = from_remote_dataset(args)
     
     start_index = args.input_start_index if args.input_start_index is not None else 0
     stop_index = min(
