@@ -171,7 +171,7 @@ class PromptVisitor(ast.NodeVisitor):
         desc = "\n".join(desc_lines)
 
         if self.added_canonical:
-            desc = "** Canonical Python Solution **\n" + self.added_canonical + "\n" + desc
+            desc = "## Canonical Python Solution ##\n" + self.added_canonical + "\n" + desc
         return self.translator.translate_prompt(self.name, self.args, self.returns, desc)
 
 
@@ -367,7 +367,7 @@ def translate_prompt_and_tests(
             tests_buffer.append(line)
 
     canonical = "".join(
-        ["* " + line[4:] for line in canonical_body_buffer if line.strip() != ""])
+        ["# " + line[4:] for line in canonical_body_buffer if line.strip() != ""])
     prompt = "".join(prompt_buffer)
 
     if prompt_terminology == "reworded":
