@@ -11,13 +11,17 @@ class Translator:
 
     USub = "-"
 
-    stop = [ '\n(define ', '\n#|', '\n;', '\n(' ]
+    stop = ['\n(define ', '\n#|', '\n;', '\n(']
 
     def file_ext(self):
         return "rkt"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
-        racket_description = "#lang racket\n\n;; " + re.sub(DOCSTRING_LINESTART_RE, "\n;; ", description.strip()) + "\n"
+        print(description)
+        racket_description = (
+            "#lang racket\n;; " + description.replace("\n", "\n;; ") +
+            "\n" if description else ""
+        )
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
         return f"{racket_description}(define ({name} {arg_list})\n"
@@ -26,7 +30,7 @@ class Translator:
         """
         This code goes at the start of the test suite.
         """
-        return [ "(require rackunit)", "", "(define (test-humaneval) \n",f"  (let (( candidate {entry_point}))" ]
+        return ["(require rackunit)", "", "(define (test-humaneval) \n", f"  (let (( candidate {entry_point}))"]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["))", "", "(test-humaneval)"]
@@ -49,7 +53,7 @@ class Translator:
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
-            return "#f" # NOTE: My guess
+            return "#f"  # NOTE: My guess
         return repr(c)
 
     def gen_var(self, v: str) -> str:
