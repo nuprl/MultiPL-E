@@ -163,10 +163,6 @@ def make_main(args, model_name, gen_completions):
         
         for name in modified_problems:
             filepath = exp_dir / f"{name}.json.gz"
-            # skip if the file already exists
-            if filepath.exists():
-                continue
-            
             with gzip.open(filepath, "wt") as f:
                 f.write(json.dumps(all_completions[name]))
 
