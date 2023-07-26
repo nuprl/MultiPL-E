@@ -207,7 +207,8 @@ def translate_tests(translator, py_tests: str, entry_point: str) -> str | None:
         print(f"Exception parsing tests for {entry_point}: {e}")
         traceback.print_exception(e)
         return None
-    test_cases = translator.test_suite_prefix_lines(entry_point)
+    prefix_lines = translator.test_suite_prefix_lines(entry_point)
+    test_cases = prefix_lines.copy()
     match tests_ast:
         case ast.Module(body=[ast.FunctionDef(body=body)]):
             body_ast = body
@@ -238,7 +239,7 @@ def translate_tests(translator, py_tests: str, entry_point: str) -> str | None:
                 print("Failed to translate tests for " + entry_point)
                 return None
 
-    if len(test_cases) == 0:
+    if len(test_cases) == len(prefix_lines):
         print("No tests were translated for " + entry_point)
         return None
 
