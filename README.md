@@ -13,6 +13,17 @@ For more information:
 - The [MultiPL-E dataset] of translated prompts is available on the Hugging Face
   Hub.
 
+### Usage
+
+MultiPL-E provides a package that allows you to translate prompts from one
+language to another. To utilize any of the provided translators, you must
+first install the package. Run the following command from the root directory
+of this repository:
+
+```bash
+pip install -e .
+```
+
 ## Versions
 
 - Version 0.4.0: Work in progress in the `dev` branch. **Please submit PRs to the dev branch instead of main**.
