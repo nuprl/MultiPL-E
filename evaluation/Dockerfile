@@ -13,6 +13,7 @@ RUN apt-get install -yqq \
     rustc \
     scala \
     ocaml-interp \
+    ocaml \
     libtest-deep-perl \
     wget \
     lua-unit
