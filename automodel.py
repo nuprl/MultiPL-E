@@ -23,6 +23,7 @@ class Model:
             output = self.model.generate(
                 **inputs,
                 do_sample=True,
+                use_cache=True,
                 top_p=top_p,
                 temperature=temperature,
                 max_length=max_length,
