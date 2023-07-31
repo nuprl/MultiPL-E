@@ -20,6 +20,7 @@ import eval_dlang
 import eval_julia
 import eval_r
 import eval_fs
+import eval_matlab
 import eval_ocaml
 import tempfile
 
@@ -48,6 +49,7 @@ EVALUATORS = {
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
     "jl": (eval_julia.eval_script, ".jl"),
     "fs": (eval_fs.eval_script, ".fsx"),
+    "m": (eval_matlab.eval_script, ".m")
     "ml": (eval_ocaml.eval_script, ".ml")
 }
 
