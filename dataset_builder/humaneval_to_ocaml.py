@@ -74,7 +74,7 @@ def coerce(expr: str, type) -> str:
 
 class Translator:
 
-    stop = ["\n\n", "\n(*", "\ntype"]
+    stop = ["\n\n", "\n(*", "\ntype", "\nlet"]
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str):
         description = ( 
@@ -92,7 +92,7 @@ class Translator:
             print(e)
             return None
         arg_list = " ".join(arg_strings)
-        return f"{description}let {name} {arg_list} : {return_type} ="
+        return f"{description}let rec {name} {arg_list} : {return_type} ="
 
     def file_ext(self):
         return "ml"
