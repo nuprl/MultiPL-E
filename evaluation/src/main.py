@@ -58,7 +58,7 @@ def get_test_results_json_path(output_dir: Path, problem_json_path: Path, input_
 def open_json(fpath: Path, mode: str):
     return  gzip.open(fpath, mode + "t") if fpath.suffix == ".gz" else open(fpath, mode) 
 
-def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int, input_dir: Path = None):
+def evaluate_problem(stop_on_success: bool, output_dir: Path, problem_json_path: Path, max_workers: int, input_dir: Path = None):
     with open_json(problem_json_path, "r") as f:
         problem = json.load(f)
 
@@ -98,6 +98,8 @@ def evaluate_problem(output_dir: Path, problem_json_path: Path, max_workers: int
             test_results["results"].append(j)
             with open_json(test_results_path, "w") as f:
                 f.write(json.dumps(test_results, indent=2))
+            if stop_on_success and j["status"] == "OK":
+                return
 
 
 def main():
@@ -118,6 +120,7 @@ def main():
     args.add_argument("--dir", type=str, help="The directory to evaluate")
     args.add_argument("--recursive", action="store_true", help="Read all files under each directory, recursively. Only works with --dir.")
     args.add_argument("--testing", action="store_true", help="Testing mode: expecting first completion to OK and second one to have some error. Note: clears the output directory!")
+    args.add_argument("--stop-on-success", action="store_true", help="Stop execution when a completion produces OK")
 
     args = args.parse_args()
 
@@ -140,7 +143,7 @@ def main():
         if args.job_file is not None or args.job_file_line is not None:
             print("--file and --job-file can't work together")
             exit(2)
-        evaluate_problem(args.output_dir, Path(args.file), args.max_workers)
+        evaluate_problem(args.stop_on_success, args.output_dir, Path(args.file), args.max_workers)
     elif args.dir:
         if args.output_dir is None:
             print("--dir requires --output-dir")
@@ -152,7 +155,7 @@ def main():
                                              Path(args.dir).glob("**/*.json.gz" if args.recursive else "*.json.gz")) \
                     if not p.name.endswith(".results.json") and not p.name.endswith(".results.json.gz")  ] 
         for file in tqdm(files):
-            evaluate_problem(args.output_dir, file, args.max_workers, args.dir)
+            evaluate_problem(args.stop_on_success, args.output_dir, file, args.max_workers, args.dir)
     elif args.job_file and args.job_file_line is not None:
         if args.output_dir is not None:
             print("--job-file and --output-dir can't work together")
@@ -162,7 +165,7 @@ def main():
         for f in files:
             print(f"Processing {f}")
             p = Path(f)
-            evaluate_problem(p.parent, p, args.max_workers)  
+            evaluate_problem(args.stop_on_success, p.parent, p, args.max_workers)  
     else:
         print("Specify either --file, --dir, or both --job-file and --job-file-line")
         exit(2)

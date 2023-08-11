@@ -7,7 +7,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 class Model:
     def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None):
-        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=torch.float16, trust_remote_code=True).cuda()
+        dtype = torch.float16
+        if torch.cuda.is_bf16_supported():
+            dtype = torch.bfloat16
+        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=dtype, trust_remote_code=True).cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name or name, revision=tokenizer_revision or revision, padding_side="left", trust_remote_code=True)
         self.tokenizer.pad_token = "<|endoftext|>"
         
@@ -23,6 +26,7 @@ class Model:
             output = self.model.generate(
                 **inputs,
                 do_sample=True,
+                use_cache=True,
                 top_p=top_p,
                 temperature=temperature,
                 max_length=max_length,

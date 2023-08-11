@@ -12,43 +12,6 @@ DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
 TOP_P = 0.95
 MAX_TOKENS = 512
 
-def from_remote_dataset(args):
-    problems = datasets.load_dataset(
-        "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION
-    )
-    start_index = args.input_start_index if args.input_start_index is not None else 0
-    stop_index = min(
-        len(problems),
-        start_index + args.input_limit
-        if args.input_limit is not None
-        else len(problems),
-    )
-    problems = problems["test"]
-    start_index = args.input_start_index if args.input_start_index is not None else 0
-    stop_index = min(
-        len(problems),
-        start_index + args.input_limit
-        if args.input_limit is not None
-        else len(problems),
-    )
-    problems = problems.select(range(start_index, stop_index))
-    return problems
-
-
-def from_local_dataset(args):
-    with open(args.dataset, "r") as f:
-        problems_list = json.load(f) 
-        start_index = (
-            args.input_start_index if args.input_start_index is not None else 0
-        )
-        stop_index = min(
-            len(problems_list),
-            start_index + args.input_limit
-            if args.input_limit is not None
-            else len(problems_list),
-        )
-        problems = datasets.Dataset.from_list(problems_list[start_index:stop_index])
-    return problems
 
 def partial_arg_parser():
     args = argparse.ArgumentParser()
@@ -130,9 +93,28 @@ def make_main(args, model_name, gen_completions):
         exp_dir.mkdir()
 
     if args.use_local:
-        problems = from_local_dataset(args)
+        problems = datasets.load_dataset("json", data_files=args.dataset, split="train")
     else:
-        problems = from_remote_dataset(args)
+        problems = datasets.load_dataset(
+            "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
+        )
+
+    
+    start_index = args.input_start_index if args.input_start_index is not None else 0
+    stop_index = min(
+        len(problems),
+        start_index + args.input_limit
+        if args.input_limit is not None
+        else len(problems),
+    )
+    start_index = args.input_start_index if args.input_start_index is not None else 0
+    stop_index = min(
+        len(problems),
+        start_index + args.input_limit
+        if args.input_limit is not None
+        else len(problems),
+    )
+    problems = problems.select(range(start_index, stop_index))
 
     # Read all existing completions
     all_completions = dict(read_completions(exp_dir, args.temperature, problem) for problem in problems)
@@ -180,7 +162,8 @@ def make_main(args, model_name, gen_completions):
             modified_problems.add(item["name"])
         
         for name in modified_problems:
-            with gzip.open(exp_dir / f"{name}.json.gz", "wt") as f:
+            filepath = exp_dir / f"{name}.json.gz"
+            with gzip.open(filepath, "wt") as f:
                 f.write(json.dumps(all_completions[name]))
 
 
