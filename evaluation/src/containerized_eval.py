@@ -21,6 +21,7 @@ import eval_julia
 import eval_r
 import eval_fs
 import eval_ocaml
+import eval_hs
 import tempfile
 
 
@@ -48,7 +49,8 @@ EVALUATORS = {
     "humaneval_to_r.py": (eval_r.eval_script, ".r"),
     "jl": (eval_julia.eval_script, ".jl"),
     "fs": (eval_fs.eval_script, ".fsx"),
-    "ml": (eval_ocaml.eval_script, ".ml")
+    "ml": (eval_ocaml.eval_script, ".ml"),
+    "hs": (eval_hs.eval_script, ".hs")
 }
 
 def eval_string_script(language, program):
