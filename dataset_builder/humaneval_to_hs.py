@@ -4,7 +4,7 @@ from typing import List
 
 # Turns multi-line docstrings into single-line comments. This captures the
 # start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)*""")
 
 def to_camel_case(str):
     '''
@@ -45,16 +45,22 @@ class Translator:
         comment_start = "-- | " # haddock comment string
 
         hs_description = (
-            comment_start + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip()) + "\n"
+            comment_start + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start, description.strip()) + "\n"
         )
 
         self.type = [[arg.annotation for arg in args], returns]
 
         function_name = to_camel_case(name)
 
-        # The type declaration, foo :: Bar -> Baz -> Biz
-        type_decl_list = [f"{self.pytype_to_hstype(arg.annotation)}" for arg in self.type]
-        type_decl = function_name + " :: " + " -> ".join(type_decl_list)
+
+        try:
+            # The type declaration, foo :: Bar -> Baz -> Biz
+            type_decl_list = ([f"{self.pytype_to_hstype(arg.annotation)}" for arg in args] +
+                    [f"{self.pytype_to_hstype(returns)}"])
+            type_decl = function_name + " :: " + " -> ".join(type_decl_list)
+        except Exception as e:
+            print(e)
+            return None
 
         # the function declaration, foo bar baz biz = ...
         func_decl_list = [f"{arg.arg}" for arg in args]
@@ -83,7 +89,7 @@ class Translator:
                         match slice:
                             case ast.Tuple(elts, _ctx):
                                 tys = [self.pytype_to_hstype(elem) for elem in elts]
-                                return f" ({', '.join(tys)})"
+                                return f"({', '.join(tys)})"
                             case other:
                                 raise Exception(f"Bad tuple: {slice}")
                     case "Dict":
@@ -98,15 +104,15 @@ class Translator:
                     case other:
                         raise Exception(f"Bad generic {other}")
             # Literals
-            case ast.Name(id="str"):
+            case ast.Name(id="str") | "str":
                 return "String"
-            case ast.Name(id="int"):
+            case ast.Name(id="int") | "int":
                 return "Int"
-            case ast.Name(id="float"):
+            case ast.Name(id="float") | "float":
                 return "Float"
-            case ast.Name(id="bool"):
+            case ast.Name(id="bool") | "bool":
                 return "Bool"
-            case ast.Name(id="None"):
+            case ast.Name(id="None") | "None":
                 return "Nothing"
             # Misc
             case None:
@@ -141,7 +147,7 @@ class Translator:
         return [
             "\nmain :: IO ()",
             "main = do"
-            f"  let candidate = {entry_point}"
+            f"\n  let candidate = {to_camel_case(entry_point)}"
         ]
 
     def test_suite_suffix_lines(self):
@@ -171,7 +177,7 @@ class Translator:
         # TODO: verify to_camel_case is necessary in gen_var
         return to_camel_case(name)
 
-    def gen_lift(self, elements: List[str]):
+    def gen_list(self, elements: List[str]):
         return f"[{','.join(elements)}]"
 
     def gen_tuple(self, elements: List[str]):
