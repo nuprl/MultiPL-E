@@ -7,6 +7,8 @@ def eval_script(path: Path):
         status = "Timeout"
     elif r.exit_code == 0:
         status = "OK"
+    elif "Syntax error":
+        status = "SyntaxError"
     else:
         status = "Exception"
     return {
