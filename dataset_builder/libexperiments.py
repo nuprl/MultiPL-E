@@ -18,7 +18,7 @@ DATASETS = [ "humaneval", "mbpp" ]
 TEMPS = ["0.2", "0.8"]
 VARIATIONS = ["reworded", "keep", "transform", "remove"]
 LANGS = [
-    "ml",
+    "zig",
 ]
 MODELS = ["davinci", "incoder", "codegen"]
 
