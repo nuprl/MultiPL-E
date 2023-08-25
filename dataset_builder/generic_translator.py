@@ -8,7 +8,7 @@ import re
 import csv
 from pathlib import Path
 import argparse
-from dataset_builder.base_language_translator import LanguageTranslator
+from base_language_translator import LanguageTranslator
 from typing import List
 
 
