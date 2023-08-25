@@ -92,7 +92,7 @@ class Translator:
             print(e)
             return None
         arg_list = " ".join(arg_strings)
-        return f"{description}let rec {name} {arg_list} : {return_type} ="
+        return f"{description}let {name} {arg_list} : {return_type} ="
 
     def file_ext(self):
         return "ml"
