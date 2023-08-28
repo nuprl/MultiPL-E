@@ -8,6 +8,8 @@ For more information:
 
 - MultiPL-E is part of the [BigCode Code Generation LM Harness]. This
   is the easiest way to use MultiPL-E.
+- The [Multilingual Code Models Evaluation] by BigCode evaluates Code LLMs
+  using several benchmarks, including MultiPL-E.
 - We have a [tutorial] on how to use MultiPL-E directly.
 - Read our paper [MultiPL-E: A Scalable and Polyglot Approach to Benchmarking Neural Code Generation].
 - The [MultiPL-E dataset] of translated prompts is available on the Hugging Face
@@ -43,3 +45,4 @@ pip install -e .
 [SantaCoder]: https://arxiv.org/abs/2301.03988
 [MultiPL-E dataset]: https://huggingface.co/datasets/nuprl/MultiPL-E
 [StarCoder]: https://arxiv.org/abs/2305.06161
+[Multilingual Code Models Evaluation]: https://huggingface.co/spaces/bigcode/multilingual-code-evals
