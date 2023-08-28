@@ -22,6 +22,7 @@ import eval_r
 import eval_fs
 import eval_ocaml
 import eval_hs
+import eval_matlab
 import tempfile
 
 
@@ -50,7 +51,8 @@ EVALUATORS = {
     "jl": (eval_julia.eval_script, ".jl"),
     "fs": (eval_fs.eval_script, ".fsx"),
     "ml": (eval_ocaml.eval_script, ".ml"),
-    "hs": (eval_hs.eval_script, ".hs")
+    "hs": (eval_hs.eval_script, ".hs"),
+    "m": (eval_matlab.eval_script, ".m")
 }
 
 def eval_string_script(language, program):
