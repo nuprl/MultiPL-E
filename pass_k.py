@@ -90,6 +90,7 @@ def main():
 
             
         if args.k is not None:
+            pass_k = np.mean([estimator(r["n"], r["c"], args.k) for r in results])
             print(
                 f"{name},{args.k},{pass_k},{num_problems},{min_completions},{max_completions}")
 
