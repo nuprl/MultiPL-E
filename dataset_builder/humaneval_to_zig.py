@@ -32,8 +32,8 @@ class Translator:
         '''
         #Dictionary of union name to a dictionary of type to field
         self.union_decls = {}
-        self.string_type = "[]const %s"
-        self.float_type = "float"
+        self.string_type = "[]const u8"
+        self.float_type = "f64"
         self.int_type = "i64"
         self.bool_type = "bool"
         self.none_type = "null"
@@ -239,7 +239,6 @@ class Translator:
         This code goes at the start of the test suite.
         """
         return [
-            "}",
             "pub fn main() void {",
             f"    auto candidate = {self.gen_var(entry_point)[0]};"
         ]
@@ -263,7 +262,9 @@ class Translator:
         In Zig using == checks for structural equality
         """
         #Empty the union declarations
-        return f"    test "add function test" { std.testing.expectEqual(({left} == {right});"
+        return f'''test "expectEqual demo" {{
+            try std.testing.expectEqual({left}, {right});
+        }}'''
 
     def gen_literal(self, c: bool | str | int | float | None) -> Tuple[str, ast.Name]:
         """Translate a literal expression
