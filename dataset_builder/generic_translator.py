@@ -359,7 +359,6 @@ def translate_prompt_and_tests(original_file, translator, doctests, prompt_termi
         prompt = edit_prompt_terminology(translator.file_ext(), prompt)
     translated_prompt = translate_prompt(
         translator, doctests, prompt, original_file.name, added_canonical=canonical if add_canonical_to_prompt else "")
-    print(translated_prompt)  # TODO: remove
     # When doctests == "remove" and there are no doctests in prompt, we get None.
     # If not, we could create a translated prompt that is identical to the
     # doctests == "keep" case.
