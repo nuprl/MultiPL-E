@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-RUN apt-get update -yqq 
+RUN apt-get update -yqq
 RUN apt-get install -yqq \
     curl racket build-essential python3-pip python3-tqdm \
     default-jdk-headless \
@@ -18,11 +18,11 @@ RUN apt-get install -yqq \
     wget \
     lua-unit
 
-RUN apt-get install -yqq libtest-deep-perl 
-RUN apt-get install -yqq wget 
+RUN apt-get install -yqq libtest-deep-perl
+RUN apt-get install -yqq wget
 
 # JS/TS
-RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - 
+RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g typescript
 
@@ -47,6 +47,8 @@ RUN apt-get install -y dotnet6
 # Julia
 RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz | tar xz
 ENV PATH="/julia-1.8.2/bin:${PATH}"
+# Matlab
+RUN apt-get install -y octave
 # Swift
 RUN curl https://download.swift.org/swift-5.7-release/ubuntu2204/swift-5.7-RELEASE/swift-5.7-RELEASE-ubuntu22.04.tar.gz | tar xz
 ENV PATH="/swift-5.7-RELEASE-ubuntu22.04/usr/bin:${PATH}"
