@@ -37,6 +37,7 @@ LANGS = [
     "scala",
     "swift",
     "rkt",
+    "ml",
 ]
 MODELS = ["davinci", "incoder", "codegen"]
 
