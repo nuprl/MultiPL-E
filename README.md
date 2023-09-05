@@ -17,7 +17,11 @@ For more information:
 
 ## Versions
 
-- Version 0.4.0: Work in progress in the `dev` branch. **Please submit PRs to the dev branch instead of main**.
+- Version 0.4.0: Work in progress.
+
+  - New languages: OCaml, MATLAB
+  - Using `.jsonl` instead of `.json` for prompts
+  - Several bugfixes to prompts
 
 - Version 0.3.0: used to evaluate [StarCoder]
 
