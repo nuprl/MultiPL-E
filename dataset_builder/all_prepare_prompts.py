@@ -65,5 +65,5 @@ def prepare(lang: str, variation: str, dataset: str):
 if __name__ == "__main__":
     for lang in LANGS:
         for variation in VARIATIONS:
-            for dataset in [ "mbpp", "humaneval", "humaneval_plus"]:
+            for dataset in [ "mbpp", "humaneval"]:
                 prepare(lang, variation, dataset)
