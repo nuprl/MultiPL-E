@@ -56,6 +56,8 @@ def prepare(lang: str, variation: str, dataset: str):
     cmd = f"python3 prepare_prompts_json.py --lang humaneval_to_{lang}.py" + \
          f" --prompt-terminology {p} --doctests {d} --originals {o} --output {output}"
     
+    print(cmd)
+    
     result = subprocess.run(cmd, shell=True, encoding="utf-8")
     if  result.returncode != 0:
         exit(1)

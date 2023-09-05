@@ -17,7 +17,7 @@ class Translator:
         return "rkt"
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
-        print(description)
+        # print(description)
         racket_description = (
             "#lang racket\n;; " + description.replace("\n", "\n;; ") +
             "\n" if description else ""
