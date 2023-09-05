@@ -23,6 +23,7 @@ import itertools
 import argparse
 from multipl_e.util import gunzip_json, eprint
 
+
 def estimator(n: int, c: int, k: int) -> float:
     """
     Calculates 1 - comb(n - c, k) / comb(n, k).
@@ -35,31 +36,39 @@ def estimator(n: int, c: int, k: int) -> float:
 def for_file(path):
     data = gunzip_json(path)
     if data is None:
-      return None   
+        return None
     n = len(data["results"])
-    c = len([True for r in data["results"] if r["status"] == "OK" and r["exit_code"] == 0])
+    c = len([True for r in data["results"] if r["status"]
+            == "OK" and r["exit_code"] == 0])
     return {
         "pass@1": estimator(n, c, 1),
         "pass@10": estimator(n, c, 10),
         "pass@100": estimator(n, c, 100),
         "n": n,
+        "c": c,
         "temperature": data["temperature"] if "temperature" in data else 0.2
     }
 
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--suppress-header", action="store_true", help="Suppress the header")
-    parser.add_argument("dirs", type=str,  help="Directories with results. ", nargs="+")
+    parser.add_argument("--suppress-header",
+                        action="store_true", help="Suppress the header")
+    parser.add_argument("-k", type=int, default=None, help="The value of k")
+    parser.add_argument(
+        "dirs", type=str,  help="Directories with results. ", nargs="+")
     args = parser.parse_args()
     if not args.suppress_header:
         print("Dataset,Pass@k,Estimate,NumProblems,MinCompletions,MaxCompletions")
     for d in args.dirs:
-        results = [ for_file(p) for p in itertools.chain(Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz")) ]
-        results = [ r for r in results if r is not None ]
+        results = [for_file(p) for p in itertools.chain(
+            Path(d).glob("*.results.json"), Path(d).glob("*.results.json.gz"))]
+        results = [r for r in results if r is not None]
         name = d.split("/")[-1] if d.split("/")[-1] != "" else d.split("/")[-2]
         temperatures = set(r["temperature"] for r in results)
         if len(temperatures) != 1:
-            eprint(f"Found multiple temperatures {temperatures} in {d} {results}")
+            eprint(
+                f"Found multiple temperatures {temperatures} in {d} {results}")
             continue
         temperature = list(temperatures)[0]
         num_problems = len(results)
@@ -67,14 +76,24 @@ def main():
         max_completions = np.max([r["n"] for r in results])
         if temperature == 0.2:
             pass_1 = np.mean([r["pass@1"] for r in results])
-            print(f"{name},1,{pass_1},{num_problems},{min_completions},{max_completions}")
+            print(
+                f"{name},1,{pass_1},{num_problems},{min_completions},{max_completions}")
         elif temperature == 0.8:
             pass_10 = np.mean([r["pass@10"] for r in results])
             pass_100 = np.mean([r["pass@100"] for r in results])
-            print(f"{name},10,{pass_10},{num_problems},{min_completions},{max_completions}")
-            print(f"{name},100,{pass_100},{num_problems},{min_completions},{max_completions}")
+            print(
+                f"{name},10,{pass_10},{num_problems},{min_completions},{max_completions}")
+            print(
+                f"{name},100,{pass_100},{num_problems},{min_completions},{max_completions}")
         else:
             raise ValueError(f"Unexpected temperature: {temperature}")
+
+            
+        if args.k is not None:
+            pass_k = np.mean([estimator(r["n"], r["c"], args.k) for r in results])
+            print(
+                f"{name},{args.k},{pass_k},{num_problems},{min_completions},{max_completions}")
+
 
 if __name__ == "__main__":
     main()
