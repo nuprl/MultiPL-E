@@ -48,6 +48,9 @@ RUN apt-get install -y dotnet6
 RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz | tar xz
 ENV PATH="/julia-1.8.2/bin:${PATH}"
 # Matlab
+# RUN apt-get install -y software-properties-common
+# RUN add-apt-repository ppa:ubuntuhandbook1/octave
+# RUN apt-get update
 RUN apt-get install -y octave
 # Swift
 RUN curl https://download.swift.org/swift-5.7-release/ubuntu2204/swift-5.7-RELEASE/swift-5.7-RELEASE-ubuntu22.04.tar.gz | tar xz

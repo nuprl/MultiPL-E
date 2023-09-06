@@ -30,7 +30,7 @@ def set_nonblocking(reader):
 
 def run(
     args: List[str], timeout_seconds: int = 15, max_output_size: int = 2048,
-    env = None,
+    env = None, cwd = None
 ) -> Result:
     """
     Runs the given program with arguments. After the timeout elapses, kills the process
@@ -45,6 +45,7 @@ def run(
         stderr=subprocess.PIPE,
         start_new_session=True,
         bufsize=MAX_BYTES_PER_READ,
+        cwd=cwd
     )
     set_nonblocking(p.stdout)
     set_nonblocking(p.stderr)
