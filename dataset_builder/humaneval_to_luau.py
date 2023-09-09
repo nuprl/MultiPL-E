@@ -1,9 +1,8 @@
-# This script translates problems from the OpenAI HumanEval dataset into Lua.
-import re
+# This script implements the translator for the Luau language used in Roblox.
 import ast
 from types import NoneType
 from typing import List
-from dataset_builder.base_language_translator import LanguageTranslator
+from base_language_translator import LanguageTranslator
 
 TargetExp = str
 
@@ -38,7 +37,7 @@ function _deepeq(a: any, b: any): boolean
 end
 """
 
-# goes from 1 to 9
+# goes from 1 to 9. does a tuple really need more than 9 elements?
 ORDINALS = [
     "first",
     "second",
@@ -53,7 +52,6 @@ ORDINALS = [
 
 
 def translate_type(t):
-    global needs_hashmap
     match t:
         case ast.Subscript(ast.Name(id), slice, ctx):
             match id:
@@ -64,13 +62,13 @@ def translate_type(t):
                         case ast.Tuple(elts, _ctx):
                             tys = [translate_type(elem) for elem in elts]
                             # dedup here because `float` and `int` both become `number`
-                            # can't use set because of nondeterminism
+                            # can't use set because i'd like to preserve order
                             deduped = []
                             for ty in tys:
                                 if ty not in deduped:
                                     deduped.append(ty)
 
-                            return " | ".join(tys)
+                            return " | ".join(deduped)
                         case other:
                             raise Exception(f"Unexpected slice: {slice}")
                 case "Tuple":
@@ -85,7 +83,6 @@ def translate_type(t):
                     match slice:
                         case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
                             key, value = translate_type(k), translate_type(v)
-                            needs_hashmap = True
                             return "{"+f"[{key}]: {value}" + "}"
                         case other:
                             raise Exception(f"Bad dict: {slice}")
@@ -143,7 +140,6 @@ class Translator(LanguageTranslator[TargetExp]):
             "-- " + description.replace("\n", "\n-- ") +
             "\n" if description else ""
         )
-        lua_description = "--!strict\n" + lua_description
         self.type = [[arg.annotation for arg in args], returns]
 
         def translate_arg(arg):
@@ -172,7 +168,7 @@ class Translator(LanguageTranslator[TargetExp]):
         """
         # _check_ret_type hack
         check_ret_type = f"""
-local function _check_ret_type(ret: {self.ret_type}): {self.ret_type}
+local function _check_ret_type(ret {self.ret_type}) {self.ret_type}
     return ret
 end
 """
@@ -201,7 +197,7 @@ end
         c: is the literal value
         """
         if type(c) == bool:
-            return str(c).lower()
+            return str(c).lower()  # True -> true
         elif type(c) == NoneType:
             return "nil"
         return repr(c)
