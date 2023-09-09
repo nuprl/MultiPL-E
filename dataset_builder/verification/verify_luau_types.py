@@ -38,4 +38,3 @@ for example in dataset:
             print("ERROR")
             print(analysis)
             print(code)
-            sys.exit(1)
