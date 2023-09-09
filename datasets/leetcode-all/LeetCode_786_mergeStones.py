@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def mergeStones(stones: List[Union[List[int], int]], k: int) -> int:

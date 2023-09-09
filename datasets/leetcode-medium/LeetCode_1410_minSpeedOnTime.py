@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def minSpeedOnTime(dist: List[int], hour: Union[int, float]) -> int:

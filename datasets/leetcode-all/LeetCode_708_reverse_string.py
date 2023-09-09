@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def reverse_string(s: Union[List[str], str]) -> Union[List[str], str]:

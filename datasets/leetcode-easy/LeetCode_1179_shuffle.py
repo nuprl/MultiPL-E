@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def shuffle(nums: List[Union[int, str]], n: int) -> List[Union[int, str]]:

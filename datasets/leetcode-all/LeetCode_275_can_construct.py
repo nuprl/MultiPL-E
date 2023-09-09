@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def can_construct(ransom_note: Union[List[str], str], magazine: Union[List[str], str]) -> bool:

@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def convert_temperature(celsius: Union[int, float]) -> List[Union[int, float]]:
