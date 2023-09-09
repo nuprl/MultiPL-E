@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def countPoints(points: List[List[int]], queries: List[List[Union[int, float]]]) -> List[int]:

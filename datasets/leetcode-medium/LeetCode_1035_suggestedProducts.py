@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def suggestedProducts(products: List[str], searchWord: str) -> List[Union]:

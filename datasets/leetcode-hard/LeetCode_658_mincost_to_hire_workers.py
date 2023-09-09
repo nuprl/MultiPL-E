@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def mincost_to_hire_workers(quality: List[int], wage: List[int], k: int) -> Union[int, float]:

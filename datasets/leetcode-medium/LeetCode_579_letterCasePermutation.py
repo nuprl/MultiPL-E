@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def letterCasePermutation(s: Union[List[str], str]) -> List[str]:

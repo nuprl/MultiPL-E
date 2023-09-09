@@ -1,7 +1,7 @@
 from typing import List
 
 
-def findMaximizedCapital(k: int, w: int, profits: int, capital: int) -> int:
+def findMaximizedCapital(k: int, w: int, profits: List[int], capital: List[int]) -> int:
     """
     Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
     You are given n projects where the ith project has a pure profit profits[i] and a minimum capital of capital[i] is needed to start it.

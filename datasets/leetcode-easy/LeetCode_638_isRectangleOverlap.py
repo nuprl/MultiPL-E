@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union, List
 
 
 def isRectangleOverlap(rec1: List[int], rec2: List[Union[int, float]]) -> bool:
