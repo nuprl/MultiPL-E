@@ -228,4 +228,6 @@ end
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
+        assert func not in ["open", "list", "dict", "tuple", "set",
+                            "range"], "Unsupported function call translation: " + func
         return func + "(" + ", ".join(args) + ")"
