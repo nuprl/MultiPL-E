@@ -8,6 +8,7 @@ import argparse
 parser = argparse.ArgumentParser(
     description='Verify luau types of a prompt dataset')
 parser.add_argument('dataset', type=str, help='Path to the dataset')
+parser.add_argument('output', type=str, help='Path to the output dataset')
 args = parser.parse_args()
 
 
@@ -23,8 +24,7 @@ def run_luau_analyze(code):
         return None
 
 
-dataset = datasets.load_dataset('json', data_files=args.dataset, split='train')
-for example in dataset:
+def proc(example):
     prompt = example['prompt']
     tests = example["tests"]
     # add some stuff to do the magic
@@ -34,7 +34,19 @@ for example in dataset:
     code += tests
     analysis = run_luau_analyze(code)
     if analysis is not None:
-        if "range" not in analysis and "list" not in analysis:
-            print("ERROR")
-            print(analysis)
-            print(code)
+        print(f"Error in {example['name']}")
+        return False
+    return True
+
+
+dataset = datasets.load_dataset('json', data_files=args.dataset, split='train')
+
+len_before = len(dataset)
+dataset = dataset.filter(proc)
+len_after = len(dataset)
+
+print(f"Removed {len_before - len_after} ill-typed examples")
+print(f"Remaining examples: {len_after}")
+
+# write as jsonl
+dataset.to_json(args.output, orient='records', lines=True)
