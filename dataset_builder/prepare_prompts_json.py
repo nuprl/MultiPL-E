@@ -63,6 +63,12 @@ def main():
         help="Add the canonical function implementation to the prompt. Useful for assisting the model in inferring the correct function.",
     )
 
+    args.add_argument(
+        "--skip-failing-tests",
+        action="store_true",
+        help="Skips tests that fail to translate. By default, if a test fails to translate, the entire problem is skipped.",
+    )
+
     args.add_argument("--originals", type=str, default="../datasets/originals")
 
     args = args.parse_args()
@@ -84,8 +90,14 @@ def main():
         print(f"Processing {original_name}...")
 
         result = translate_prompt_and_tests(
-            original, translator, args.doctests, args.prompt_terminology, add_canonical_to_prompt=args.add_canonical_to_prompt
+            original,
+            translator,
+            args.doctests,
+            args.prompt_terminology,
+            add_canonical_to_prompt=args.add_canonical_to_prompt,
+            panic_on_test_fail=not args.skip_failing_tests,
         )
+
         if result is None:
             print(f"Skipping {original_name}")
             continue

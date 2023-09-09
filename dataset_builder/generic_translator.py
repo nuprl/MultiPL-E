@@ -190,7 +190,13 @@ def translate_prompt(translator, doctest_transformation: str, py_prompt: str, fi
         return None
 
 
-def translate_tests(translator, py_tests: str, entry_point: str, filename: str) -> str:
+def translate_tests(
+        translator,
+        py_tests: str,
+        entry_point: str,
+        filename: str,
+        panic_on_test_fail=True,
+) -> str:
     """
     Translates a suite of tests from the HumanEval dataset to Language L. Expects the code to look like:
 
@@ -232,6 +238,8 @@ def translate_tests(translator, py_tests: str, entry_point: str, filename: str) 
                     print(
                         f"Exception translating test case {i} for {filename}: {e}")
                     traceback.print_exception(e)
+                    if panic_on_test_fail:
+                        return None
             case ast.Expr(value=ast.Name(id="print")):
                 pass
             case _other:
@@ -322,7 +330,14 @@ def edit_prompt_terminology(language, example):
     return before+'"""'+tar_prompt+'"""'+after
 
 
-def translate_prompt_and_tests(original_file, translator, doctests, prompt_terminology, add_canonical_to_prompt=False):
+def translate_prompt_and_tests(
+        original_file,
+        translator,
+        doctests,
+        prompt_terminology,
+        add_canonical_to_prompt=False,
+        panic_on_test_fail=True,
+):
     entry_point = re.search("([^0-9]+_\d+)_(.+).py",
                             original_file.name).group(2)
     reading_prompt = True
@@ -367,7 +382,11 @@ def translate_prompt_and_tests(original_file, translator, doctests, prompt_termi
 
     tests = "".join(tests_buffer)
     translated_tests = translate_tests(
-        translator, tests, entry_point, original_file.name
+        translator,
+        tests,
+        entry_point,
+        original_file.name,
+        panic_on_test_fail=panic_on_test_fail
     )
 
     if translated_tests is None:
