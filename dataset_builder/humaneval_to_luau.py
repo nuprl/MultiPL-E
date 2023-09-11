@@ -133,7 +133,7 @@ class Translator(LanguageTranslator[TargetExp]):
         return ["\nlocal", "\nfunction", "\n--", "\n\n"]
 
     def file_ext(self) -> str:
-        return "lua"
+        return "luau"
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns: ast.expr, description: str) -> str:
         lua_description = (
