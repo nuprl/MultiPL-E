@@ -24,3 +24,21 @@ def eval_script(path: Path):
         "stdout": r.stdout,
         "stderr": r.stderr,
     }
+
+# eval without type checking
+"""
+def eval_script(path: Path):
+    r = run(["luau", str(path)])
+    if r.timeout:
+        status = "Timeout"
+    elif r.exit_code == 0:
+        status = "OK"
+    else:
+        status = "Exception"
+    return {
+        "status": status,
+        "exit_code": r.exit_code,
+        "stdout": r.stdout,
+        "stderr": r.stderr,
+    }
+"""
