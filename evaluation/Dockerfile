@@ -44,6 +44,10 @@ RUN apt-get install -y dotnet6
 
 # Post-processing
 
+# Zig
+RUN curl https://ziglang.org/download/0.11.0/zig-linux-x86_64-0.11.0.tar.xz | tar xJ
+ENV PATH="/zig-linux-x86_64-0.11.0:${PATH}"
+
 # Julia
 RUN curl https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.2-linux-x86_64.tar.gz | tar xz
 ENV PATH="/julia-1.8.2/bin:${PATH}"
