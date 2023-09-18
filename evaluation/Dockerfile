@@ -53,6 +53,9 @@ ENV PATH="/swift-5.7-RELEASE-ubuntu22.04/usr/bin:${PATH}"
 # Javatuples
 RUN mkdir /usr/multiple && wget https://repo.mavenlibs.com/maven/org/javatuples/javatuples/1.2/javatuples-1.2.jar -O /usr/multiple/javatuples-1.2.jar
 
+# Luau
+RUN wget https://github.com/Roblox/luau/releases/download/0.594/luau-ubuntu.zip -O /tmp/luau.zip && unzip /tmp/luau.zip -d /bin/
+
 COPY src /code
 WORKDIR /code
 ENTRYPOINT ["python3", "main.py"]

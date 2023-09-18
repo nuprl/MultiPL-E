@@ -310,7 +310,7 @@ def edit_prompt_terminology(language, example):
     Translates Python-specific terms in natural language portions of the docstring to the target language.
     Returns the full text of the python file with translated natural language docstring.
     """
-    before, prompt, after = example.replace("'''", '"""').split('"""')
+    before, prompt, after = example.replace("'''", '"""').split('"""')[0:3]
     doctestRegex = re.compile(r'>>>.*\n.*\n')
     doctests = []
     for m in re.finditer(doctestRegex, prompt):
