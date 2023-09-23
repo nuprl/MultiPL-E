@@ -10,9 +10,9 @@ import torch
 class VLLM:
     def __init__(self, name, revision, tokenizer_name=None):
         assert revision is None, "TODO: implement revision"
-        dtype = torch.float16
+        dtype = "float16"
         if torch.cuda.is_bf16_supported():
-            dtype = torch.bfloat16
+            dtype = "bfloat16"
         self.model = LLM(
             model=name,
             tokenizer=tokenizer_name,
