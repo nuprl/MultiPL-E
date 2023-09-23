@@ -8,8 +8,14 @@ from vllm import LLM, SamplingParams
 
 class VLLM:
     def __init__(self, name, revision, tokenizer_name=None):
-        self.model = LLM(model=name, tokenizer=tokenizer_name,
-                         revision=revision, trust_remote_code=True)
+        assert revision is None, "TODO: implement revision"
+        self.model = LLM(
+            model=name,
+            tokenizer=tokenizer_name,
+            # TODO: this doesn't work as of now, implement later
+            #  revision=revision,
+            trust_remote_code=True,
+        )
 
     def completions(
         self, prompts: List[str], max_tokens: int, temperature: float, top_p, stop
