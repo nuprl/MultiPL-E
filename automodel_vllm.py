@@ -28,7 +28,7 @@ class VLLM:
         prompts = [prompt.strip() for prompt in prompts]
         params = SamplingParams(temperature=temperature,
                                 top_p=top_p, max_tokens=max_tokens, stop=stop)
-        outputs = self.model.generate(prompts, params, use_tdqm=False)
+        outputs = self.model.generate(prompts, params, use_tqdm=False)
         return [stop_at_stop_token(o.outputs[0].text, stop) for o in outputs]
 
 
