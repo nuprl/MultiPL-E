@@ -8,7 +8,7 @@ import torch
 
 
 class VLLM:
-    def __init__(self, name, revision, tokenizer_name=None):
+    def __init__(self, name, revision, tokenizer_name=None, num_gpus=1):
         assert revision is None, "TODO: implement revision"
         dtype = "float16"
         if torch.cuda.is_bf16_supported():
@@ -20,6 +20,7 @@ class VLLM:
             # TODO: this doesn't work as of now, implement later
             #  revision=revision,
             trust_remote_code=True,
+            tensor_parallel_size=num_gpus,
         )
 
     def completions(
@@ -33,14 +34,12 @@ class VLLM:
 
 
 def automodel_partial_arg_parser():
-    """
-    This is also used by peftmodel.py.
-    """
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
     args.add_argument("--revision", type=str)
     args.add_argument("--tokenizer_name", type=str)
     args.add_argument("--name-override", type=str)
+    args.add_argument("--num_gpus", type=int, default=1)
     return args
 
 
