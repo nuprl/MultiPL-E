@@ -170,6 +170,8 @@ add links to your new language in two places:
 examples available for you to look at, but the key should (likely) be the 
 file extension (i.e. `pl`) and the value should be a tuple of the form
 (eval_script function, file extension).
+3. Add your langauge to `terms.csv`, which instructs how to convert the prompt 
+into your language's verbiage.
 
 That's it, you're done! Enjoy learning about how NL2Code models work on your 
 language of choice and we hope you found this tutorial helpful.

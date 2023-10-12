@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-RUN apt-get update -yqq 
+RUN apt-get update -yqq
 RUN apt-get install -yqq \
     curl racket build-essential python3-pip python3-tqdm \
     default-jdk-headless \
@@ -14,15 +14,16 @@ RUN apt-get install -yqq \
     scala \
     ocaml-interp \
     ocaml \
+    ghc \
     libtest-deep-perl \
     wget \
     lua-unit
 
-RUN apt-get install -yqq libtest-deep-perl 
-RUN apt-get install -yqq wget 
+RUN apt-get install -yqq libtest-deep-perl
+RUN apt-get install -yqq wget
 
 # JS/TS
-RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - 
+RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g typescript
 
@@ -36,7 +37,7 @@ RUN apt-get update && apt-get install -yqq dmd-compiler dub
 RUN apt install gnupg ca-certificates
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 RUN echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list
-RUN apt update
+RUN apt update --allow-insecure-repositories
 RUN apt install -yqq mono-devel
 
 # F#
