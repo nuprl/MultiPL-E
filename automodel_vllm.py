@@ -58,7 +58,7 @@ def do_name_override(args):
 def main():
     args = automodel_partial_arg_parser()
     args = args.parse_args()
-    model = VLLM(args.name, args.revision, args.tokenizer_name)
+    model = VLLM(args.name, args.revision, args.tokenizer_name, args.num_gpus)
     name = do_name_override(args)
     make_main(args, name, model.completions)
 
