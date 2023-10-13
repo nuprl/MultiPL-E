@@ -1,11 +1,10 @@
-# This script translates problems from the OpenAI HumanEval dataset into Zig.
 import re
 import ast
 from typing import List, Dict, Tuple
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n""")
 
 class Translator:
     '''Translate Python to Zig.
@@ -35,7 +34,7 @@ class Translator:
         self.string_type = "[]const u8"
         self.float_type = "f64"
         self.int_type = "i64"
-        self.bool_type = "bool"
+        self.bool_type = ""
         self.none_type = "null"
         self.list_type = "std.ArrayList(%s)"
         self.tuple_type = "struct"
@@ -52,6 +51,8 @@ class Translator:
         return "zig"
 
     def gen_make_list(self, elem_type, list_literal):
+        pattern = re.compile(r'\((i64|f64)\)')
+        list_literal = re.sub(pattern, '', list_literal)
         return self.list_type%elem_type + "(" + list_literal + ")"
     
     def gen_make_tuple(self, elems):
@@ -146,7 +147,7 @@ class Translator:
         name = self.gen_var(name)[0]
         self.ret_ann = _returns
         self.translated_return_type = self.translate_pytype(_returns)
-        unions = ""
+        unions = ","
         if self.union_decls != {}:
             union = ""
             for decl, fields in self.union_decls.items():
@@ -164,6 +165,7 @@ class Translator:
                 
                 #Comparison operator
                 for ty,field in fields.items():
+#                    union += f"    operator==({ty} f) {{\n"
                     union += f"    bool operator==({ty} f) {{\n"
                     union += "        return " + f"{field} == f " + ";\n"
                     union += "    }"
@@ -247,7 +249,7 @@ class Translator:
         return "\n".join([
             'const std = @import("std");',
             #Include every Zig header
-            "const expect = std.testing.expect;",
+            "\nconst expect = std.testing.expect;",
             ""
         ])
 
@@ -278,7 +280,7 @@ class Translator:
         if type(c) == int:
             return repr(c), ast.Name("int")
         if type(c) == float:
-            return repr(c) + "f", ast.Name("float")
+            return repr(c), ast.Name("float")
         #It appears None occurs for only optional
         return self.none_type, ast.Name("None")
 
@@ -316,6 +318,7 @@ class Translator:
             #If all types are not same then it probably is any
             elem_type = ast.Name(id="Any")
         list_literal = self.gen_array_literal(", ".join([self.gen_type_cast(e[0], elem_type, e[1]) for e in l]))
+#        list_literal = self.gen_array_literal(", ".join([self.gen_type_cast(e[0], elem_type, e[1]) for e in l]))
         return self.gen_make_list(self.translate_pytype(elem_type), list_literal), ast.List([l[0][1]])
     
     def gen_optional_type(self, types):
