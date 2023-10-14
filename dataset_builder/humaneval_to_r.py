@@ -35,7 +35,6 @@ class Translator:
         self.type = None
 
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
-        print(description)
         r_description = (
             "# " + description.replace("\n", "\n# ") +
             "\n" if description else ""
