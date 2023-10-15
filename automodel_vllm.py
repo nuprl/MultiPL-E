@@ -21,6 +21,7 @@ class VLLM:
             #  revision=revision,
             trust_remote_code=True,
             tensor_parallel_size=num_gpus,
+            gpu_memory_utilization=0.95,
         )
 
     def completions(
