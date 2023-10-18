@@ -8,8 +8,7 @@ import torch
 
 
 class VLLM:
-    def __init__(self, name, revision, tokenizer_name=None, num_gpus=1):
-        assert revision is None, "TODO: implement revision"
+    def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None, num_gpus=1):
         dtype = "float16"
         if torch.cuda.is_bf16_supported():
             dtype = "bfloat16"
@@ -17,8 +16,8 @@ class VLLM:
             model=name,
             tokenizer=tokenizer_name,
             dtype=dtype,
-            # TODO: this doesn't work as of now, implement later
-            #  revision=revision,
+            revision=revision,
+            tokenizer_revision=tokenizer_revision,
             trust_remote_code=True,
             tensor_parallel_size=num_gpus,
             gpu_memory_utilization=0.95,
@@ -39,6 +38,7 @@ def automodel_partial_arg_parser():
     args.add_argument("--name", type=str, required=True)
     args.add_argument("--revision", type=str)
     args.add_argument("--tokenizer_name", type=str)
+    args.add_argument("--tokenizer_revision", type=str)
     args.add_argument("--name-override", type=str)
     args.add_argument("--num_gpus", type=int, default=1)
     return args
@@ -59,7 +59,7 @@ def do_name_override(args):
 def main():
     args = automodel_partial_arg_parser()
     args = args.parse_args()
-    model = VLLM(args.name, args.revision, args.tokenizer_name, args.num_gpus)
+    model = VLLM(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision, args.num_gpus)
     name = do_name_override(args)
     make_main(args, name, model.completions)
 
