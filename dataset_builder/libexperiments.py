@@ -38,6 +38,7 @@ LANGS = [
     "swift",
     "rkt",
     "ml",
+    "hs"
 ]
 MODELS = ["davinci", "incoder", "codegen"]
 
