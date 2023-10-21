@@ -215,13 +215,15 @@ def main():
     os.remove(os.path.join(args.output_folder,'HumanEval_4_mean_absolute_deviation.py'))
 
     run_test_str = 'import sys\nsys.set_int_max_str_digits(1000000)\n'
+    run_test_str += f"sys.path.insert(0, '{args.output_folder}')\n"
     for f in os.listdir(args.output_folder):
         if not f.endswith('.py'):
             continue
-        run_test_str += f'from {args.output_folder}.{f[:-3]} import test_check\nprint("{f}")\ntest_check()\n\n'
+        run_test_str += f'from {f[:-3]} import test_check\nprint("{f}")\ntest_check()\n\n'
         with open('tests.py', 'w') as outf:
             outf.write(run_test_str)
 
 if __name__ == "__main__":
-    # python3 generate_data.py --output-folder ../datasets/humaneval_plus --cache-folder ../cache --humaneval-plus-path ../datasets --humaneval-plus-version 0.1.2 --multiple-humaneval-path ../datasets/originals-with-cleaned-doctests
+    # https://github.com/ganler/release/releases/tag/humanevalplus
+    # python3 generate_data.py --output-folder ../datasets/humaneval_plus --cache-folder ../cache --humaneval-plus-path ../datasets --humaneval-plus-version 0.1.8 --multiple-humaneval-path ../datasets/originals-with-cleaned-doctests
     main()
