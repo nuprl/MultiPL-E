@@ -25,7 +25,7 @@ from pydoc import locate
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 
 GO_LIST_RE = re.compile(r"^\[\].*{.*\}$")
 

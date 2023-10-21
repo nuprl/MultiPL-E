@@ -4,7 +4,7 @@ import ast
 from typing import List
 from base_language_translator import LanguageTranslator
 
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 
 needs_hashmap = False
 
