@@ -2,7 +2,7 @@ from typing import Tuple, List, TypeVar, Generic
 import ast
 import re
 
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 class Translator:
     '''
     Matlab translator

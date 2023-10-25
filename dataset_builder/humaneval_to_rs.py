@@ -43,7 +43,7 @@ from typing import List, Optional
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 
 # i don't want this to be global but i also don't want to pass it all the way
 # through translate_type

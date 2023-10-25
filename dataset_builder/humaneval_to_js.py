@@ -6,7 +6,7 @@ from typing import List
 
 # We turn multi-line docstrings into single-line comments. This captures the
 # start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 
 
 class Translator:

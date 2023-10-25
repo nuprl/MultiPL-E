@@ -2,7 +2,7 @@ import re
 import ast
 from typing import List
 
-DOCSTRING_LINESTART_RE = re.compile("""\n(\s+)""")
+DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 
 def translate_type(t):
     global needs_hashmap
