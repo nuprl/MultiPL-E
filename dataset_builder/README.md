@@ -22,3 +22,8 @@ Builds everything:
 ```
 python3 all_prepare_propmts.py
 ```
+
+To generate HumanEval+ prompts, first generate the dataset:
+```
+python3 ../humaneval_plus/generate_data.py --output-folder ../datasets/humaneval_plus --cache-folder ../cache --humaneval-plus-path ../datasets --humaneval-plus-version 0.1.8 --multiple-humaneval-path ../datasets/originals-with-cleaned-doctests
+```
