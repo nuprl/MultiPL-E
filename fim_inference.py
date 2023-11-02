@@ -1,22 +1,22 @@
-# I've hacked this to hardcode BigCode15B.
+# I've hacked this to hardcode StarCoder2
 import json
 from pathlib import Path
 import argparse
 from more_itertools import chunked
 from tqdm import tqdm
-import bigcode15b
+import starcoder2
 
 
 def main():
     parser = argparse.ArgumentParser()
-    # parser.add_argument("--model", type=str, required=True, help="Module name of the model to use")
+    parser.add_argument("--model-path", type=Path, required=True, help="Module name of the model to use")
     parser.add_argument("--batch-size", type=int, required=True, help="Batch size to use")
     parser.add_argument("--output-dir", type=Path, default=Path("."), help="Output directory for results")
 
     args = parser.parse_args()
 
-    model = bigcode15b.Model(bigcode15b.CHECKPOINT_TO_REVISION["1000m"])
-    name = "bigcode15b"
+    name = args.model_path.name
+    model = starcoder2.Model(args.model_path)
 
     # Load existing results if any
     result_path = args.output_dir / f"fim-results-{name}.jsonl"
