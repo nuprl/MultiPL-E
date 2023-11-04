@@ -10,19 +10,48 @@ FIM_PAD = "<fim_pad>"
 EOD = "<|endoftext|>"
 SPEC_TOKS = [EOD, FIM_PREFIX, FIM_MIDDLE, FIM_SUFFIX, FIM_PAD]
 
-def extract_fim_part(s: str):
-    # Find the index of <fim-middle>
-    start = s.find(FIM_MIDDLE) + len(FIM_MIDDLE)
-    stop = s.find(EOD, start) or len(s)
-    return s[start:stop]
+def _fim_format(prefix: str, suffix: str, mode: str) -> str:
+    if mode == "PSM":
+        return f"{FIM_PREFIX}{prefix}{FIM_SUFFIX}{suffix}{FIM_MIDDLE}"
+    elif mode == "SPMv2":
+        # StarCoder and StarCoder 2 use SPMv2 and _not_ SPM.
+        return f"{FIM_PREFIX}{FIM_SUFFIX}{suffix}{FIM_MIDDLE}{prefix}"
+    else:
+        raise ValueError(f"Unknown mode {mode}")
+
 
 class Model:
     def __init__(self, name):
         self.model = AutoModelForCausalLM.from_pretrained(name, trust_remote_code=True, torch_dtype=torch.float16)
         self.model = self.model.cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained(name, padding_side="left", trust_remote_code=True)
-        self.tokenizer.pad_token = "<|endoftext|>"
+        tokenizer = AutoTokenizer.from_pretrained(name, padding_side="left", trust_remote_code=True)
+        self.tokenizer = tokenizer
+        tokenizer.pad_token = "<|endoftext|>"
         self.special_tokens = SPEC_TOKS
+        try:
+            fim_middle_index = tokenizer.additional_special_tokens.index("<fim_middle>")
+        except ValueError:
+           raise ValueError(f"Tokenizer does not have <fim_middle>. check that {name} is a StarCoder 2 model.")
+        self.fim_middle_token_id = tokenizer.additional_special_tokens_ids[fim_middle_index]
+
+
+    def _fim_decode(self, mode: str, prefix: str, tensor) -> str:
+        """
+        Decodes an output tensor produced in FIM mode and returns just the middle
+        text.
+        """
+        if mode not in [ "PSM", "SPMv2"]:
+            raise ValueError(f"unsupported mode {mode}")
+        fim_middle_index = torch.nonzero(tensor == self.fim_middle_token_id).view(-1)[0].item()
+        tensor = tensor[fim_middle_index + 1:]
+        # It should be safe to use skip_special_tokens here. We expect it to 
+        # remove the <|endoftext|>s that mark the end of the middle.
+        text = self.tokenizer.decode(tensor, skip_special_tokens=True)
+        
+        if mode == "SPMv2":
+            text = text[len(prefix):]
+        return text          
+
         
     def completion_tensors(
         self,
@@ -59,8 +88,8 @@ class Model:
         # Skip the prompt (which may even have stop_tokens)
         return detok_hypo_str[len(prompt) :]
 
-    def fill_in_the_middle(self, prefix_suffix_tuples: List[Tuple[str, str]], max_tokens: int, temperature: float) -> List[str]:
-        prompts = [f"{FIM_PREFIX}{prefix}{FIM_SUFFIX}{suffix}{FIM_MIDDLE}" for prefix, suffix in prefix_suffix_tuples]
+    def fill_in_the_middle(self, prefix_suffix_tuples: List[Tuple[str, str]], max_tokens: int, temperature: float, mode: str) -> List[str]:
+        prompts = [ _fim_format(prefix, suffix, mode) for prefix, suffix in prefix_suffix_tuples ]
         result = self.tokenizer(prompts, return_tensors="pt", padding=True, return_attention_mask=True)
         input_ids = result.input_ids.cuda()
         attention_mask = result.attention_mask.cuda()
@@ -75,7 +104,6 @@ class Model:
                 max_length=max_length,
                 pad_token_id=self.tokenizer.pad_token_id
             )
-        # WARNING: cannot use skip_special_tokens, because it clobbers the fim special tokens
         return [        
-            extract_fim_part(self.tokenizer.decode(tensor)) for tensor in output
+            self._fim_decode(mode, prefix, tensor) for (tensor, (prefix, _)) in zip(output, prefix_suffix_tuples)
         ]

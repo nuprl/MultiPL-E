@@ -5,7 +5,7 @@ from itertools import groupby
 
 
 def grouper(item):
-    return (item["model"], item["language"])
+    return (item["model"], item["language"], item["fim_mode"] if "fim_mode" in item else "PSM")
 
 def main():
     parser = argparse.ArgumentParser()
@@ -18,12 +18,12 @@ def main():
             results.extend([ json.loads(line) for line in f ])
     results.sort(key=grouper)
     groups = groupby(results, key=grouper)
-    print("Model,Language,Exact Match Rate")
-    for (model, language), items in groups:
+    print("Model,Language,Mode,Exact Match Rate")
+    for (model, language, mode), items in groups:
         lang_problems = list(items)
         lang_successes = sum(1 for p in lang_problems if p["exact_match"])
         exact_match_rate = lang_successes / len(lang_problems)
-        print(f"{model},{language},{exact_match_rate:.2f}")
+        print(f"{model},{language},{mode},{exact_match_rate:.2f}")
 
 
 
