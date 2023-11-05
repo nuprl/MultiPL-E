@@ -30,9 +30,11 @@ class Model:
         self.special_tokens = SPEC_TOKS
         try:
             fim_middle_index = tokenizer.additional_special_tokens.index("<fim_middle>")
+            self.fim_middle_token_id = tokenizer.additional_special_tokens_ids[fim_middle_index]
         except ValueError:
-           raise ValueError(f"Tokenizer does not have <fim_middle>. check that {name} is a StarCoder 2 model.")
-        self.fim_middle_token_id = tokenizer.additional_special_tokens_ids[fim_middle_index]
+           print("Tokenizer does not have <fim_middle>. We are using 2.")
+           self.fim_middle_token_id = 2
+        
 
 
     def _fim_decode(self, mode: str, prefix: str, tensor) -> str:
