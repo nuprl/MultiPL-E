@@ -17,7 +17,8 @@ RUN apt-get install -yqq \
     ghc \
     libtest-deep-perl \
     wget \
-    lua-unit
+    lua-unit \
+    elixir
 
 RUN apt-get install -yqq libtest-deep-perl
 RUN apt-get install -yqq wget

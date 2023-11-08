@@ -23,6 +23,7 @@ import eval_fs
 import eval_ocaml
 import eval_matlab
 import eval_hs
+import eval_elixir
 import tempfile
 
 
@@ -33,9 +34,9 @@ EVALUATORS = {
     "py": (eval_python.eval_script, ".py"),
     "notypes.py": (eval_python.eval_script, ".py"),
     "julia": (eval_julia.eval_script, ".jl"),
-    "java" : (eval_java.eval_script, ".java"),
-    "rust" : (eval_rust.eval_script, ".rs"),
-    "rs" : (eval_rust.eval_script, ".rs"),
+    "java": (eval_java.eval_script, ".java"),
+    "rust": (eval_rust.eval_script, ".rs"),
+    "rs": (eval_rust.eval_script, ".rs"),
     "swift": (eval_swift.eval_script, ".swift"),
     "lua": (eval_lua.eval_script, ".lua"),
     "racket": (eval_racket.eval_script, ".rkt"),
@@ -52,14 +53,18 @@ EVALUATORS = {
     "fs": (eval_fs.eval_script, ".fsx"),
     "ml": (eval_ocaml.eval_script, ".ml"),
     "m": (eval_matlab.eval_script, ".m"),
-    "hs": (eval_hs.eval_script, ".hs")
+    "hs": (eval_hs.eval_script, ".hs"),
+    "elixir": (eval_elixir.eval_script, ".exs"),
 }
+
 
 def eval_string_script(language, program):
     if language in EVALUATORS:
         (eval_script, file_ext) = EVALUATORS[language]
     else:
-        eval_module = __import__(f"eval_{language}" if language != "go_test.go" else "eval_go")
+        eval_module = __import__(
+            f"eval_{language}" if language != "go_test.go" else "eval_go"
+        )
         eval_script = eval_module.eval_script
         file_ext = f".{language}" if language != "go_test.go" else "_test.go"
     with tempfile.NamedTemporaryFile(suffix=file_ext, delete=True) as f:
@@ -81,9 +86,8 @@ def eval_string_script(language, program):
         assert type(result["stderr"]) == str
         return {
             "program": program,
-            "stdout": result['stdout'].replace("!!int", "")[:2048],
-            "stderr": result['stderr'][:2048],
-            "exit_code": result['exit_code'],
-            "status": result['status']
+            "stdout": result["stdout"].replace("!!int", "")[:2048],
+            "stderr": result["stderr"][:2048],
+            "exit_code": result["exit_code"],
+            "status": result["status"],
         }
-
