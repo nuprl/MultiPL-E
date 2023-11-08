@@ -5,6 +5,7 @@ in libexamples.
 import subprocess
 from libexperiments import LANGS, VARIATIONS
 
+
 def prompt_terminology(variation):
     match variation:
         case "keep":
@@ -16,6 +17,7 @@ def prompt_terminology(variation):
         case "reworded":
             return "reworded"
 
+
 def doctests(variation):
     match variation:
         case "keep":
@@ -26,6 +28,7 @@ def doctests(variation):
             return "transform"
         case "reworded":
             return "transform"
+
 
 def originals(variation, dataset):
     if dataset == "mbpp":
@@ -41,7 +44,8 @@ def originals(variation, dataset):
             return "../datasets/originals-with-cleaned-doctests"
         case "reworded":
             return f"../datasets/originals-with-cleaned-doctests"
-    
+
+
 def prepare(lang: str, variation: str, dataset: str):
     if dataset == "mbpp":
         if variation == "remove" or variation == "transform":
@@ -52,18 +56,21 @@ def prepare(lang: str, variation: str, dataset: str):
     p = prompt_terminology(variation)
     target_dir = "../prompts"
     output = f"{target_dir}/{dataset}-{lang}-{variation}.jsonl"
-    
-    cmd = f"python3 prepare_prompts_json.py --lang humaneval_to_{lang}.py" + \
-         f" --prompt-terminology {p} --doctests {d} --originals {o} --output {output}"
-    
+
+    cmd = (
+        f"python3 prepare_prompts_json.py --lang humaneval_to_{lang}.py"
+        + f" --prompt-terminology {p} --doctests {d} --originals {o} --output {output}"
+    )
+
     print(cmd)
-    
+
     result = subprocess.run(cmd, shell=True, encoding="utf-8")
-    if  result.returncode != 0:
+    if result.returncode != 0:
         exit(1)
+
 
 if __name__ == "__main__":
     for lang in LANGS:
         for variation in VARIATIONS:
-            for dataset in [ "mbpp", "humaneval"]:
+            for dataset in ["mbpp", "humaneval"]:
                 prepare(lang, variation, dataset)
