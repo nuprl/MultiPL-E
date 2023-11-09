@@ -37,6 +37,7 @@ class Translator(LanguageTranslator[TargetExp]):
             "defmodule HumanEval do",
             f"  def candidate({arg_list}), do: {name}({arg_list})",
             f"  def {name}({arg_list}) do",
+            f"    ",
         ]
         return "\n".join(result_list)
 
