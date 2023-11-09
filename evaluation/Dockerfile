@@ -17,8 +17,7 @@ RUN apt-get install -yqq \
     ghc \
     libtest-deep-perl \
     wget \
-    lua-unit \
-    elixir
+    lua-unit
 
 RUN apt-get install -yqq libtest-deep-perl
 RUN apt-get install -yqq wget
@@ -57,6 +56,9 @@ RUN mkdir /usr/multiple && wget https://repo.mavenlibs.com/maven/org/javatuples/
 
 # Luau
 RUN wget https://github.com/Roblox/luau/releases/download/0.594/luau-ubuntu.zip -O /tmp/luau.zip && unzip /tmp/luau.zip -d /bin/
+
+# Elixir
+RUN wget https://binaries2.erlang-solutions.com/ubuntu/pool/contrib/e/elixir/elixir_1.15.4_1_otp_26.0.2~ubuntu~jammy_all.deb -O /tmp/elixir.deb && dpkg -i /tmp/elixir.deb
 
 COPY src /code
 WORKDIR /code
