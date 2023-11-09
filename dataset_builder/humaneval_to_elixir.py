@@ -35,7 +35,8 @@ class Translator(LanguageTranslator[TargetExp]):
         result_list = [
             elixir_description,
             "defmodule HumanEval do",
-            f"  def candidate({arg_list}) do",
+            f"  def candidate({arg_list}), do: {name}({arg_list})",
+            f"  def {name}({arg_list}) do",
         ]
         return "\n".join(result_list)
 
@@ -47,7 +48,7 @@ class Translator(LanguageTranslator[TargetExp]):
             "ExUnit.start()",
             "defmodule HumanEvalTest do",
             "  use ExUnit.Case, async: true",
-            f'  test "{entry_point}" do',
+            f"  test '{entry_point}' do",
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
