@@ -34,9 +34,8 @@ class Translator(LanguageTranslator[TargetExp]):
         arg_list = ", ".join(arg_names)
         result_list = [
             elixir_description,
-            "",
             "defmodule HumanEval do",
-            f"  def {name}({', '.join(arg_list)}) do",
+            f"  def candidate({arg_list}) do",
         ]
         return "\n".join(result_list)
 
@@ -46,13 +45,9 @@ class Translator(LanguageTranslator[TargetExp]):
         """
         return [
             "ExUnit.start()",
-            "",
             "defmodule HumanEvalTest do",
             "  use ExUnit.Case, async: true",
             f'  test "{entry_point}" do',
-            "    functions = HumanEval.__info__(:functions)",
-            f"    {{function_name, arity}} = Enum.find(functions, fn {{name, _arity}} -> name == :{entry_point} end)",
-            f"    candidate = fn args -> apply(HumanEval, {entry_point}, args) end",
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
@@ -106,4 +101,4 @@ class Translator(LanguageTranslator[TargetExp]):
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to f(x, y, z)
         """
-        return f"{func}.([" + ", ".join(args) + "])"
+        return f"HumanEval.{func}({', '.join(args)})"
