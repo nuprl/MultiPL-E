@@ -17,6 +17,7 @@ class VLLM:
             tokenizer=tokenizer_name,
             dtype=dtype,
             revision=revision,
+            max_model_len=2048,
             tokenizer_revision=tokenizer_revision,
             trust_remote_code=True,
             tensor_parallel_size=num_gpus,
