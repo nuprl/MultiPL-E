@@ -59,7 +59,7 @@ class Translator:
         if self.needs_optional:
             daf_description = optional_def + daf_description
 
-        return f"{daf_description}method {name}({arg_list}) returns (result {return_type})\n{{\n"
+        return f"{daf_description}method {name}({arg_list}) returns (result {return_type})\n{{"
 
     def pytype_to_daftype(self, ann: ast.expr | None) -> str:
         '''

@@ -1,8 +1,7 @@
 FROM ubuntu:22.04
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-RUN apt-get update -yqq
-RUN apt-get install -yqq \
+RUN apt-get update -yqq && apt-get install -yqq \
     curl racket build-essential python3-pip python3-tqdm \
     default-jdk-headless \
     golang-go \
@@ -17,7 +16,9 @@ RUN apt-get install -yqq \
     ghc \
     libtest-deep-perl \
     wget \
-    lua-unit
+    lua-unit \ 
+    aspnetcore-runtime-6.0 \
+    z3
 
 RUN apt-get install -yqq libtest-deep-perl
 RUN apt-get install -yqq wget
@@ -59,6 +60,11 @@ RUN wget https://github.com/Roblox/luau/releases/download/0.594/luau-ubuntu.zip 
 
 # Elixir
 RUN wget https://binaries2.erlang-solutions.com/ubuntu/pool/contrib/e/elixir/elixir_1.15.4_1_otp_26.0.2~ubuntu~jammy_all.deb -O /tmp/elixir.deb && dpkg -i /tmp/elixir.deb
+
+# Dafny
+# https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip
+RUN mkdir -p /root/dafny
+RUN wget https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip -O /tmp/dafny.zip && unzip /tmp/dafny.zip -d /root/dafny/ && ln -s /root/dafny/danfy /bin/dafny
 
 COPY src /code
 WORKDIR /code
