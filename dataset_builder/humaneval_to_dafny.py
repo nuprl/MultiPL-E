@@ -7,13 +7,14 @@ from types import NoneType
 # start of the line.
 docstring_linestart_re = re.compile("""\n(\s+)*""")
 
+optional_def = "datatype Optional<T> = None | Some(value: T)\n\n"
+
 def coerce(expr: str, type) -> str:
-    return expr
     def coerce_to_maybe(expr: str) -> str:
         if expr == "None":
-            return "Nothing"
+            return "None"
         else:
-            return f"Just ({expr})"
+            return f"Some({expr})"
 
     match expr, type:
         case expr, ast.Subscript(ast.Name("Optional"), _):
@@ -42,25 +43,21 @@ class Translator:
             "\n" if description else ""
         )
         self.type = [[arg.annotation for arg in args], returns]
+        self.needs_optional = False
 
         def translate_arg(arg):
-            ty = ""
-            try:
-                ty = ": " + self.pytype_to_daftype(arg.annotation)
-            except Exception as e:
-                print(e)
+            ty = ": " + self.pytype_to_daftype(arg.annotation)
             return arg.arg + ty
         arg_strings = [translate_arg(arg) for arg in args]
-        return_type = ""
-        try:
-            return_type = ": " + self.pytype_to_daftype(returns)
-        except Exception as e:
-            print(e)
+        return_type = ": " + self.pytype_to_daftype(returns)
 
         self.ret_type = return_type.replace(": ", "")
 
         arg_list = ", ".join(arg_strings)
         self.func_name = name
+
+        if self.needs_optional:
+            daf_description = optional_def + daf_description
 
         return f"{daf_description}method {name}({arg_list}) returns (result {return_type})\n{{\n"
 
@@ -96,9 +93,8 @@ class Translator:
                             case other:
                                 raise Exception(f"Bad dict: {slice}")
                     case "Optional":
-                        # TODO add None later
-                        # return f"Maybe {self.pytype_to_daftype(slice)}"
-                        raise Exception("Dafny does not have Optionals")
+                        self.needs_optional = True
+                        return f"Optional<{self.pytype_to_daftype(slice)}>"
                     case other:
                         raise Exception(f"Bad generic {other}")
             # Literals
@@ -111,7 +107,6 @@ class Translator:
             case ast.Name(id="bool") | "bool":
                 return "bool"
             case ast.Name(id="None") | "None":
-                # TODO add None later
                 raise Exception("Dafny does not have None")
             # Misc
             case None:
@@ -162,7 +157,7 @@ class Translator:
         if type(c) == str:
             return f'"{c}"'
         if type(c) == NoneType:
-            return "null"
+            return "None"
         return repr(c)
 
     def gen_var(self, name: str):
@@ -182,11 +177,11 @@ class Translator:
             args = [coerce(arg, self.type[0][i]) for i, arg in enumerate(args)]
         return f"{self.func_name}({', '.join(args)})"
 
-#    def finalize(self, result, context) -> str:
-#        match context:
-#            case "lhs":
-#                return result
-#            case "rhs":
-#                return coerce(result, self.type[1])
-#            case _other:
-#                raise Exception("bad context to finalize")
+    def finalize(self, result, context) -> str:
+        match context:
+            case "lhs":
+                return result
+            case "rhs":
+                return coerce(result, self.type[1])
+            case _other:
+                raise Exception("bad context to finalize")
