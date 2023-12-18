@@ -173,9 +173,9 @@ class Translator:
         return f"map[{', '.join([f'{k} => {v}' for k, v in zip(keys, values)])}]"
 
     def gen_call(self, func: str, args: List[str]):
-        if func == "candidate":
+        if func == self.func_name:
             args = [coerce(arg, self.type[0][i]) for i, arg in enumerate(args)]
-        return f"{self.func_name}({', '.join(args)})"
+        return f"{func}({', '.join(args)})"
 
     def finalize(self, result, context) -> str:
         match context:
