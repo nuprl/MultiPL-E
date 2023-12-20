@@ -24,6 +24,8 @@ import eval_ocaml
 import eval_matlab
 import eval_hs
 import eval_elixir
+import eval_coq
+import eval_lean
 import tempfile
 
 
@@ -55,6 +57,8 @@ EVALUATORS = {
     "m": (eval_matlab.eval_script, ".m"),
     "hs": (eval_hs.eval_script, ".hs"),
     "elixir": (eval_elixir.eval_script, ".exs"),
+    "coq": (eval_coq.eval_script, ".v"),
+    "lean": (eval_lean.eval_script, ".lean"),
 }
 
 def eval_string_script(language, program):
