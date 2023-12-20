@@ -24,9 +24,9 @@ def eval_script(path: Path):
 
         elif "Unable to unify" in outmessage:
             status = "AssertionError"
-            returncode = -1
         else:
             status = "SyntaxError"
+        returncode = output.returncode
 
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"

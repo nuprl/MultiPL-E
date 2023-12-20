@@ -9,15 +9,13 @@ def eval_script(path: Path):
         output = subprocess.run(["lean", str(path)], capture_output=True, timeout=5)
         outmessage = str(output)
 
-        if "error: tactic 'rfl' failed" in outmessage:
+        if "error: tactic 'rfl' failed" in outmessage: # :skull:
             status = "AssertionError"
-            returncode = -1
         elif outmessage == "":
             status = "OK"
-            returncode = 0
         else:
             status = "SyntaxError"
-            returncode = -1
+        returncode = output.returncode
 
     except subprocess.TimeoutExpired as exc:
         status = "Timeout"
