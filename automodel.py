@@ -5,15 +5,25 @@ from multipl_e.completions import make_main, stop_at_stop_token, partial_arg_par
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+
 class Model:
     def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None):
         dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
-        self.model = AutoModelForCausalLM.from_pretrained(name, revision=revision, torch_dtype=dtype, trust_remote_code=True).cuda()
-        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name or name, revision=tokenizer_revision or revision, padding_side="left", trust_remote_code=True)
+        self.model = AutoModelForCausalLM.from_pretrained(
+            name, revision=revision, torch_dtype=dtype, trust_remote_code=True
+        ).cuda()
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            tokenizer_name or name,
+            revision=tokenizer_revision or revision,
+            padding_side="left",
+            trust_remote_code=True,
+        )
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
-        assert self.tokenizer.pad_token is not None, "tokenizer has neither pad_token nor eos_token"
-        
+        assert (
+            self.tokenizer.pad_token is not None
+        ), "tokenizer has neither pad_token nor eos_token"
+
     def completion_tensors(
         self,
         prompts: list,
@@ -21,7 +31,9 @@ class Model:
         temperature: float,
         top_p: float,
     ):
-        inputs = self.tokenizer(prompts, padding=True, return_tensors="pt", return_token_type_ids=False).to("cuda")
+        inputs = self.tokenizer(
+            prompts, padding=True, return_tensors="pt", return_token_type_ids=False
+        ).to("cuda")
         with torch.no_grad():
             output = self.model.generate(
                 **inputs,
@@ -38,7 +50,9 @@ class Model:
         # NOTE(arjun): skip_special_tokens=True is the convenient way to strip out the left-side
         # padding tokens.
         detok_hypo_str = self.tokenizer.decode(
-            output_tensor, clean_up_tokenization_spaces=False, skip_special_tokens=True,
+            output_tensor,
+            clean_up_tokenization_spaces=False,
+            skip_special_tokens=True,
         )
         # Skip the prompt (which may even have stop_tokens)
         return detok_hypo_str[len(prompt) :]
@@ -46,7 +60,7 @@ class Model:
     def completions(
         self, prompts: str, max_tokens: int, temperature: float, top_p, stop
     ):
-        prompts = [ prompt.strip() for prompt in prompts ]
+        prompts = [prompt.strip() for prompt in prompts]
         output_tensors = self.completion_tensors(
             prompts,
             max_tokens,
@@ -54,9 +68,13 @@ class Model:
             top_p,
         )
         return [
-            stop_at_stop_token(self.decode_single_output(output_tensor, prompt), stop + ["<|endoftext|>"])
+            stop_at_stop_token(
+                self.decode_single_output(output_tensor, prompt),
+                stop + ["<|endoftext|>"],
+            )
             for (prompt, output_tensor) in zip(prompts, output_tensors)
         ]
+
 
 def automodel_partial_arg_parser():
     """
@@ -70,6 +88,7 @@ def automodel_partial_arg_parser():
     args.add_argument("--name-override", type=str)
     return args
 
+
 def do_name_override(args):
     """
     Applies the --name-override flag, or uses the model name, correcting / and - which the rest of
@@ -81,12 +100,16 @@ def do_name_override(args):
         name = args.name.replace("/", "_").replace("-", "_")
     return name
 
+
 def main():
     args = automodel_partial_arg_parser()
     args = args.parse_args()
-    model = Model(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision)
+    model = Model(
+        args.name, args.revision, args.tokenizer_name, args.tokenizer_revision
+    )
     name = do_name_override(args)
     make_main(args, name, model.completions)
+
 
 if __name__ == "__main__":
     main()
