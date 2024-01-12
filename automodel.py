@@ -4,6 +4,8 @@ This script produces completions for roughly any AutoModelForCausalLM.
 from multipl_e.completions import make_main, stop_at_stop_token, partial_arg_parser
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import itertools
+from typing import List
 
 
 class Model:
@@ -46,13 +48,35 @@ class Model:
             )
         return output
 
+    def _remove_padding_and_stop_at_special_tokens(self, token_id_list: List[int]):
+        pad_token_id = self.tokenizer.pad_token_id
+        special_tokens = self.tokenizer.additional_special_tokens_ids
+        # Removes all the pad tokens on the left-hand side using the pad token
+        # ID. This is more robust than looking for the string representation of
+        # the pad token. Thus the prompt can begin with the literal string
+        # "<|endoftext|>" (which is a common representation of the pad token).
+        left_padding_removed = itertools.dropwhile(
+            lambda token_id: token_id == pad_token_id, token_id_list
+        )
+        # Returns all tokens to the left of the first special token. This has
+        # the effect of removing all right-hand padding. Moreover, it also
+        # stops generation at other special tokens. For example, consider
+        # StarCoder 2, where a completion may reach the end of a file and then
+        # continue onto a secønd file: A<file_sep>B. The code below removes
+        # <file_sep>B and only produces A.
+        right_specials_removed = itertools.takewhile(
+            lambda token_id: token_id not in special_tokens, left_padding_removed
+        )
+        return list(right_specials_removed)
+
     def decode_single_output(self, output_tensor, prompt):
-        # NOTE(arjun): skip_special_tokens=True is the convenient way to strip out the left-side
-        # padding tokens.
+        output_token_ids = self._remove_padding_and_stop_at_special_tokens(
+            output_tensor.tolist()
+        )
         detok_hypo_str = self.tokenizer.decode(
-            output_tensor,
+            output_token_ids,
             clean_up_tokenization_spaces=False,
-            skip_special_tokens=True,
+            skip_special_tokens=False,
         )
         # Skip the prompt (which may even have stop_tokens)
         return detok_hypo_str[len(prompt) :]
@@ -70,7 +94,7 @@ class Model:
         return [
             stop_at_stop_token(
                 self.decode_single_output(output_tensor, prompt),
-                stop + ["<|endoftext|>"],
+                stop,
             )
             for (prompt, output_tensor) in zip(prompts, output_tensors)
         ]
