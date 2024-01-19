@@ -26,6 +26,18 @@ class Model:
             self.tokenizer.pad_token is not None
         ), "tokenizer has neither pad_token nor eos_token"
 
+        self._all_special_token_ids = self.tokenizer.all_special_ids
+
+        assert (
+            len(self._all_special_token_ids) >= 1
+        ), "tokenizer.all_special_ids() is empty"
+        assert (
+            self.tokenizer.pad_token_id in self._all_special_token_ids
+        ), "pad_token_id not in all_special_ids"
+        assert (
+            self.tokenizer.eos_token_id in self._all_special_token_ids
+        ), "eos_token_id not in all_special_ids"
+
     def completion_tensors(
         self,
         prompts: list,
@@ -48,9 +60,11 @@ class Model:
             )
         return output
 
+    def _is_normal_token_id(self, token_id: int) -> bool:
+        return token_id not in self._all_special_token_ids
+
     def _remove_padding_and_stop_at_special_tokens(self, token_id_list: List[int]):
         pad_token_id = self.tokenizer.pad_token_id
-        special_tokens = self.tokenizer.additional_special_tokens_ids
         # Removes all the pad tokens on the left-hand side using the pad token
         # ID. This is more robust than looking for the string representation of
         # the pad token. Thus the prompt can begin with the literal string
@@ -62,10 +76,10 @@ class Model:
         # the effect of removing all right-hand padding. Moreover, it also
         # stops generation at other special tokens. For example, consider
         # StarCoder 2, where a completion may reach the end of a file and then
-        # continue onto a secønd file: A<file_sep>B. The code below removes
+        # continue onto a second file: A<file_sep>B. The code below removes
         # <file_sep>B and only produces A.
         right_specials_removed = itertools.takewhile(
-            lambda token_id: token_id not in special_tokens, left_padding_removed
+            self._is_normal_token_id, left_padding_removed
         )
         return list(right_specials_removed)
 
