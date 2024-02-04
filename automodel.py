@@ -9,10 +9,10 @@ from typing import List
 
 
 class Model:
-    def __init__(self, name, revision, tokenizer_name=None, tokenizer_revision=None):
+    def __init__(self, name, revision, model_kwargs, tokenizer_name=None, tokenizer_revision=None):
         dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
         self.model = AutoModelForCausalLM.from_pretrained(
-            name, revision=revision, torch_dtype=dtype, trust_remote_code=True
+            name, revision=revision, torch_dtype=dtype, trust_remote_code=True, **model_kwargs
         ).cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(
             tokenizer_name or name,
@@ -124,6 +124,7 @@ def automodel_partial_arg_parser():
     args.add_argument("--tokenizer_name", type=str)
     args.add_argument("--tokenizer_revision", type=str)
     args.add_argument("--name-override", type=str)
+    args.add_argument("--flash-attention2", action="store_true")
     return args
 
 
@@ -142,8 +143,15 @@ def do_name_override(args):
 def main():
     args = automodel_partial_arg_parser()
     args = args.parse_args()
+    model_kwargs = { }
+    if args.flash_attention2:
+        model_kwargs["attn_implementation"] = "flash_attention_2"
+
     model = Model(
-        args.name, args.revision, args.tokenizer_name, args.tokenizer_revision
+        args.name, args.revision,
+        model_kwargs=model_kwargs,
+        tokenizer_name=args.tokenizer_name,
+        tokenizer_revision=args.tokenizer_revision,
     )
     name = do_name_override(args)
     make_main(args, name, model.completions)
