@@ -63,14 +63,23 @@ class Model:
     def _is_normal_token_id(self, token_id: int) -> bool:
         return token_id not in self._all_special_token_ids
 
+    def _is_pad_or_bos_token_id(self, token_id: int) -> bool:
+        if token_id == self.tokenizer.pad_token_id:
+            return True
+        if self.tokenizer.bos_token_id is not None and token_id == self.tokenizer.bos_token_id:
+            return True
+        return False
+
     def _remove_padding_and_stop_at_special_tokens(self, token_id_list: List[int]):
         pad_token_id = self.tokenizer.pad_token_id
-        # Removes all the pad tokens on the left-hand side using the pad token
-        # ID. This is more robust than looking for the string representation of
+        # bos_token_id may be None
+        bos_token_id = self.tokenizer.bos_token_id
+        # Removes all the pad tokens or BOS tokens on the left-hand side using the 
+        # pad token ID. This is more robust than looking for the string representation of
         # the pad token. Thus the prompt can begin with the literal string
         # "<|endoftext|>" (which is a common representation of the pad token).
         left_padding_removed = itertools.dropwhile(
-            lambda token_id: token_id == pad_token_id, token_id_list
+            self._is_pad_or_bos_token_id, token_id_list
         )
         # Returns all tokens to the left of the first special token. This has
         # the effect of removing all right-hand padding. Moreover, it also
