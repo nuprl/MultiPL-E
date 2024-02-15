@@ -24,6 +24,7 @@ import eval_ocaml
 import eval_matlab
 import eval_hs
 import eval_elixir
+import eval_clj
 import tempfile
 
 
@@ -55,6 +56,7 @@ EVALUATORS = {
     "m": (eval_matlab.eval_script, ".m"),
     "hs": (eval_hs.eval_script, ".hs"),
     "elixir": (eval_elixir.eval_script, ".exs"),
+    "clj": (eval_clj.eval_script, ".clj"),
 }
 
 def eval_string_script(language, program):
