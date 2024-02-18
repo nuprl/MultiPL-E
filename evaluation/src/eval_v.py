@@ -11,7 +11,7 @@ def eval_script(path: Path):
 
     try:
         # sadly there seems to be no way to verify proofs in a coq file without compiling
-        output = subprocess.run(["coqc -noglob", str(path)], capture_output=True, timeout=5)
+        output = subprocess.run(["coqc", "-noglob", str(path)], capture_output=True, timeout=5)
         outmessage = str(output)
 
         if output.returncode == 0:
