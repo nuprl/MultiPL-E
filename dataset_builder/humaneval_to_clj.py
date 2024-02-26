@@ -21,7 +21,7 @@ class Translator:
         clojure_description = f'"{description}"' if description else ""
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
-        return f"{clojure_description}(defn {name}\n{clojure_description}\n[{arg_list}]\n"
+        return f"(defn {name}\n{clojure_description}\n[{arg_list}]\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -58,7 +58,7 @@ class Translator:
         return v
 
     def gen_list(self, l: List[str]) -> str:
-        return "(list " + " ".join(l) + ")"
+        return "[" + " ".join(l) + "]"
 
     def gen_tuple(self, t: List[str]) -> str:
         return "[" + " ".join(t) + "]"
