@@ -18,13 +18,10 @@ class Translator:
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         # print(description)
-        clojure_description = (
-            ";; " + description.replace("\n", "\n;; ") +
-            "\n" if description else ""
-        )
+        clojure_description = f'"{description}"' if description else ""
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
-        return f"{clojure_description}(defn [{arg_list}]\n"
+        return f"{clojure_description}(defn {name}\n{clojure_description}\n[{arg_list}]\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
