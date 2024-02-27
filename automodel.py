@@ -45,9 +45,18 @@ class Model:
         temperature: float,
         top_p: float,
     ):
+        self.model.eval() # Not essential, but just in case.
+
         inputs = self.tokenizer(
-            prompts, padding=True, return_tensors="pt", return_token_type_ids=False
+            prompts,
+            padding=True,
+            return_tensors="pt",
+            return_token_type_ids=False,
+            truncation=True,
+            max_length=max_length - 1,
         ).to("cuda")
+
+
         with torch.no_grad():
             output = self.model.generate(
                 **inputs,
