@@ -7,8 +7,11 @@ Tested on: openai==1.12.0
 """
 from typing import Dict, List
 from multipl_e.completions import make_main, partial_arg_parser
+from multipl_e.util import gunzip_json, gzip_json
 import openai
 import os
+from pathlib import Path
+import json
 
 
 def markdown_codeblock_extract(new: str) -> str:
@@ -24,6 +27,11 @@ def markdown_codeblock_extract(new: str) -> str:
         elif in_codeblock:
             buf += ln + "\n"
     return buf
+
+
+def post_process(new: str) -> str:
+    extracted = markdown_codeblock_extract(new)
+    return extracted.strip()
 
 
 def make_convo_prompt(prompt: str) -> List[Dict[str, str]]:
@@ -71,14 +79,17 @@ class OpenAIChat:
                 temperature=temperature,
                 top_p=top_p,
             )
-            outputs.append(response.choices[0].message.content)
+            o = response.choices[0].message.content
+            assert o is not None, "OpenAI returned a null response"
+            outputs.append(post_process(o))
 
-        return [markdown_codeblock_extract(o) for o in outputs]
+        return outputs
 
 
 def openai_partial_arg_parser():
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
+    args.add_argument("--name-override", type=str, default=None)
     args.add_argument("--endpoint", type=str, default=None)
     return args
 
@@ -101,6 +112,14 @@ def main():
     model = OpenAIChat(args.name, args.endpoint)
     name = do_name_override(args)
     make_main(args, name, model.completions)
+    # hotpatch the results to have empty "prompt" fields
+    # super hacky, but it works
+    path = Path(args.output_dir).glob("*.json.gz")
+    for p in path:
+        data = gunzip_json(p)
+        assert data is not None, f"Failed to read {p}"
+        data["prompt"] = ""
+        gzip_json(p, data)
 
 
 if __name__ == "__main__":
