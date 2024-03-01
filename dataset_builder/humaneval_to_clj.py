@@ -21,6 +21,7 @@ class Translator:
         clojure_description = f'"{description}"' if description else ""
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
+        self.entry_point = name
         return f"(defn {name}\n{clojure_description}\n[{arg_list}]\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
@@ -70,5 +71,8 @@ class Translator:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to (f x y z)
         """
-        return "(" + func + " " + " ".join(args) + ")"
+        func_name = func[0]
+        if func_name == "candidate":
+            func_name = self.entry_point
+        return "(" + func_name + " " + " ".join(args) + ")"
 
