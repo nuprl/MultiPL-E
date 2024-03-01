@@ -28,7 +28,7 @@ class Translator:
         """
         This code goes at the start of the test suite.
         """
-        return ["(require '[clojure.test :refer [deftest is run-test]])\n", "(def candidate {entry_point})\n", "(deftest test-humaneval\n"]
+        return ["(require '[clojure.test :refer [deftest is run-test]])\n", f"(def candidate {entry_point})\n", "(deftest test-humaneval\n"]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return [")", "", "(run-test test-humaneval)"]
