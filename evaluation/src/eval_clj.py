@@ -8,7 +8,7 @@ from libeval import run_without_exn
 
 
 def eval_script(path: Path):
-    result = run(["clojure", "-M", str(path)])
+    result = run(["clojure", "-M", "-Dclojure.main.report=stderr", str(path)])
 
     # will produce exit code 0 even if tests fail.
     if len(result.stderr) > 0 or result.exit_code != 0:
