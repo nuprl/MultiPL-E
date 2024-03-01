@@ -28,7 +28,7 @@ class Translator:
         """
         This code goes at the start of the test suite.
         """
-        return ["(require '[clojure.test :refer [deftest is run-test]])\n", "", "(deftest test-humaneval\n"]
+        return ["(require '[clojure.test :refer [deftest is run-test]])\n", "(def candidate {entry_point})\n", "(deftest test-humaneval\n"]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return [")", "", "(run-test test-humaneval)"]
@@ -71,8 +71,5 @@ class Translator:
         """Translate a function call `func(args)`
         A function call f(x, y, z) translates to (f x y z)
         """
-        func_name = func[0]
-        if func_name == "candidate":
-            func_name = self.entry_point
-        return "(" + func_name + " " + " ".join(args) + ")"
+        return "(" + func + " " + " ".join(args) + ")"
 
