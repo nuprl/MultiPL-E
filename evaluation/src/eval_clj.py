@@ -10,11 +10,14 @@ from libeval import run_without_exn
 def eval_script(path: Path):
     result = run(["clojure", "-J-Dclojure.main.report=stderr", "-M", str(path)])
 
-    # will produce exit code 0 even if tests fail.
-    if len(result.stderr) > 0 or result.exit_code != 0:
+    if result.timeout:
+        status = "Timeout"
+    elif result.exit_code != 0:
         status = "Exception"
-    else:
+    elif "\n0 failures, 0 errors.\n" in result.stdout:
         status = "OK"
+    else: # test failure
+        status = "Exception"
 
     return {
         "status": status,
