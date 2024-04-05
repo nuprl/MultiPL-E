@@ -41,7 +41,7 @@ def make_convo_prompt(prompt: str) -> List[Dict[str, str]]:
     return [
         {
             "role": "system",
-            "content": "You are a helpful programming assistant designed to complete code snippets"
+            "content": "You are a helpful programming assistant designed to complete code snippets.",
         },
         {
             "role": "user",
@@ -108,7 +108,7 @@ class VLLMEngine:
             ),
         )
 
-        return [o.outputs[0].text for o in outs]
+        return [post_process(o.outputs[0].text) for o in outs]
 
 
 class ChatModel:
