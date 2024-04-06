@@ -153,7 +153,7 @@ class ChatModel:
 def openai_partial_arg_parser():
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
-    args.add_argument("--engine", type=str, choices=["openai", "vllm"])
+    args.add_argument("--engine", type=str, choices=["openai", "vllm"], default="openai")
     args.add_argument("--chat-template", type=str,
                       default=str(DEFAULT_TEMPLATE_PATH))
     args.add_argument("--num-gpus", type=int, default=1)
