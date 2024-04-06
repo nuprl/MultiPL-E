@@ -10,7 +10,35 @@ from multipl_e.completions import make_main, partial_arg_parser
 from multipl_e.util import gunzip_json, gzip_json
 import os
 from pathlib import Path
-import json
+import yaml
+
+DEFAULT_TEMPLATE_PATH = Path(__file__).resolve(
+).parent / "chat-templates" / "default.yaml"
+
+
+def chat_template(interps: Dict[str, str] = {}, path=DEFAULT_TEMPLATE_PATH) -> List[Dict[str, str]]:
+    with open(path, "r") as f:
+        template: List[Dict[str, str]] = yaml.safe_load(f)
+
+    assert isinstance(template, list), "Template must be a list of messages"
+    assert all(
+        isinstance(msg, dict) for msg in template), "Each message must be a dictionary"
+    assert all(
+        "role" in msg and "content" in msg for msg in template), "Each message must have a role and content"
+
+    # interpolate the template with interps. every key in interps is a string.
+    # interp in the yaml content appear as ${key}.
+    def interpolate(content: str) -> str:
+        for k, v in interps.items():
+            content = content.replace(f"${{{k}}}", v)
+        return content
+
+    for msg in template:
+        msg["content"] = interpolate(msg["content"])
+        # check that no interpolation was missed
+        assert "${" not in msg["content"], f"Missed interpolation in {msg['content']}"
+
+    return template
 
 
 def markdown_codeblock_extract(new: str) -> str:
@@ -35,22 +63,6 @@ def post_process(new: str) -> str:
         print(f"Failed to extract codeblock from {new}: {e}")
         extracted = new
     return extracted.strip()
-
-
-def make_convo_prompt(prompt: str) -> List[Dict[str, str]]:
-    return [
-        {
-            "role": "system",
-            "content": "You are a helpful programming assistant designed to complete code snippets.",
-        },
-        {
-            "role": "user",
-            "content": f"""Please generate code to complete the following problem:
-```
-{prompt}
-```"""
-        },
-    ]
 
 
 class OpenAIEngine:
@@ -112,7 +124,8 @@ class VLLMEngine:
 
 
 class ChatModel:
-    def __init__(self, name, engine="openai", endpoint=None, num_gpus=1):
+    def __init__(self, name, engine="openai", template=DEFAULT_TEMPLATE_PATH, endpoint=None, num_gpus=1):
+        self.template = template
         if engine == "openai":
             self.engine = OpenAIEngine(name, endpoint)
         elif engine == "vllm":
@@ -129,7 +142,8 @@ class ChatModel:
         #  top_p=top_p, max_tokens=max_tokens, stop=stop)
         #  outputs = self.model.generate(prompts, params, use_tqdm=False)
         #  return [stop_at_stop_token(o.outputs[0].text, stop) for o in outputs]
-        convo_prompts = [make_convo_prompt(prompt) for prompt in prompts]
+        convo_prompts = [chat_template({"prompt": prompt}, path=self.template)
+                         for prompt in prompts]
         outputs = self.engine.generate(
             convo_prompts, max_tokens, temperature, top_p, stop)
 
@@ -140,6 +154,8 @@ def openai_partial_arg_parser():
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
     args.add_argument("--engine", type=str, choices=["openai", "vllm"])
+    args.add_argument("--chat-template", type=str,
+                      default=str(DEFAULT_TEMPLATE_PATH))
     args.add_argument("--num-gpus", type=int, default=1)
     args.add_argument("--name-override", type=str, default=None)
     args.add_argument("--endpoint", type=str, default=None)
@@ -161,7 +177,8 @@ def do_name_override(args):
 def main():
     args = openai_partial_arg_parser()
     args = args.parse_args()
-    model = ChatModel(args.name, args.engine, args.endpoint, args.num_gpus)
+    model = ChatModel(args.name, args.engine,
+                      args.chat_template, args.endpoint, args.num_gpus)
     name = do_name_override(args)
     make_main(args, name, model.completions)
     # hotpatch the results to have empty "prompt" fields
