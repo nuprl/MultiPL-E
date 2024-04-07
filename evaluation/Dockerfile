@@ -72,6 +72,9 @@ RUN apt-get install -yqq coq
 # Lean
 RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
 
+# install numpy for humanevalplus
+RUN python3 -m pip install numpy
+
 COPY src /code
 WORKDIR /code
 ENTRYPOINT ["python3", "main.py"]

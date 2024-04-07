@@ -41,7 +41,7 @@ def automodel_partial_arg_parser():
     args.add_argument("--tokenizer_name", type=str)
     args.add_argument("--tokenizer_revision", type=str)
     args.add_argument("--name-override", type=str)
-    args.add_argument("--num_gpus", type=int, default=1)
+    args.add_argument("--num-gpus", type=int, default=1)
     return args
 
 
