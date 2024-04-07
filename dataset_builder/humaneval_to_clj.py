@@ -2,10 +2,6 @@ import re
 import ast
 from typing import List
 
-# We turn multi-line docstrings into single-line comments. This captures the
-# start of the line.
-DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
-
 
 class Translator:
 
@@ -22,7 +18,10 @@ class Translator:
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
         self.entry_point = name
-        return f"(defn {name}\n{clojure_description}\n[{arg_list}]\n"
+        postlude = f"{clojure_description}\n[{arg_list}]\n"
+        postlude = "  " + re.sub(r'\n', r'\n  ', postlude)
+        sig =  f"(defn {name}\n{postlude}"
+        return sig
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
@@ -72,4 +71,3 @@ class Translator:
         A function call f(x, y, z) translates to (f x y z)
         """
         return "(" + func + " " + " ".join(args) + ")"
-
