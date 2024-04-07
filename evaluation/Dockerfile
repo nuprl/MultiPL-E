@@ -71,6 +71,7 @@ RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/
 RUN chmod +x linux-install.sh
 RUN ./linux-install.sh --prefix /clojure
 ENV PATH="/clojure/bin:${PATH}"
+RUN clojure -P
 
 COPY src /code
 WORKDIR /code
