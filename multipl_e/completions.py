@@ -9,9 +9,6 @@ from typing import List
 
 DATASET_REVISION = "bf4f3c31a1e0a164b7886c9eb04f82534edf4ce9"
 
-TOP_P = 0.95
-MAX_TOKENS = 512
-
 
 def partial_arg_parser():
     args = argparse.ArgumentParser()
@@ -68,7 +65,20 @@ def partial_arg_parser():
     args.add_argument(
         "--prompt-prefix", type=str, help="A prefix to prepend to every prompt"
     )
+    args.add_argument(
+        "--max-tokens",
+        type=int,
+        default=1024,
+        help="Maximum number of tokens to generate",
+    )
+    args.add_argument(
+        "--top-p",
+        type=float,
+        default=0.95,
+        help="Top-p value for sampling",
+    )
     return args
+
 
 def make_main(args, model_name, gen_completions):
 
@@ -93,13 +103,13 @@ def make_main(args, model_name, gen_completions):
         exp_dir.mkdir()
 
     if args.use_local:
-        problems = datasets.load_dataset("json", data_files=args.dataset, split="train")
+        problems = datasets.load_dataset(
+            "json", data_files=args.dataset, split="train")
     else:
         problems = datasets.load_dataset(
             "nuprl/MultiPL-E", f"{args.root_dataset}-{args.lang}", revision=DATASET_REVISION, split="test"
         )
 
-    
     start_index = args.input_start_index if args.input_start_index is not None else 0
     stop_index = min(
         len(problems),
@@ -117,10 +127,11 @@ def make_main(args, model_name, gen_completions):
     problems = problems.select(range(start_index, stop_index))
 
     # Read all existing completions
-    all_completions = dict(read_completions(exp_dir, args.temperature, problem) for problem in problems)
+    all_completions = dict(read_completions(
+        exp_dir, args.temperature, args.top_p, args.max_tokens, problem) for problem in problems)
 
     # Generate a list of prompts, including multiple copies when needed.
-    problem_list = [ ]
+    problem_list = []
     stop: List[str] = None
     for completions in all_completions.values():
 
@@ -128,57 +139,58 @@ def make_main(args, model_name, gen_completions):
             stop = completions["stop_tokens"]
         else:
             assert stop == completions["stop_tokens"], "Stop tokens must be the same for all completions"
-        
+
         assert completions["temperature"] == args.temperature, "Temperature must be the same for all completions"
 
         if len(completions["completions"]) >= args.completion_limit:
             continue
 
-        num_new_completions = args.completion_limit - len(completions["completions"])
+        num_new_completions = args.completion_limit - \
+            len(completions["completions"])
 
         if args.prompt_prefix is not None:
-            prompt = args.prompt_prefix +  completions["prompt"]
+            prompt = args.prompt_prefix + completions["prompt"]
         else:
             prompt = completions["prompt"]
-        item = { "prompt": prompt, "name": completions["name"] }
+        item = {"prompt": prompt, "name": completions["name"]}
 
-        problem_list.extend([ item for _ in range(num_new_completions) ])
-    
+        problem_list.extend([item for _ in range(num_new_completions)])
+
     # Break problem_list into batches of size args.batch_size.
-    problem_list = [ problem_list[i:i+args.batch_size] for i in range(0, len(problem_list), args.batch_size) ]
+    problem_list = [problem_list[i:i+args.batch_size]
+                    for i in range(0, len(problem_list), args.batch_size)]
 
-    
     for batch in tqdm(problem_list, unit="batch"):
         new_completions = gen_completions(
-                prompts=[item["prompt"] for item in batch],
-                max_tokens=MAX_TOKENS,
-                temperature=args.temperature,
-                top_p=TOP_P,
-                stop=stop
+            prompts=[item["prompt"] for item in batch],
+            max_tokens=args.max_tokens,
+            temperature=args.temperature,
+            top_p=args.top_p,
+            stop=stop
         )
         modified_problems = set()
         for item, a_completion in zip(batch, new_completions):
             all_completions[item["name"]]["completions"].append(a_completion)
             modified_problems.add(item["name"])
-        
+
         for name in modified_problems:
             with gzip.open(exp_dir / f"{name}.json.gz", "wt") as f:
                 f.write(json.dumps(all_completions[name]))
 
 
-def read_completions(exp_dir, temperature, problem):
+def read_completions(exp_dir, temperature, top_p, max_tokens, problem):
     problem_filename = exp_dir / f"{problem['name']}.json.gz"
     if problem_filename.exists():
         with gzip.open(problem_filename, "rt") as f:
             existing = json.loads(f.read())
             return (existing["name"], existing)
-    
+
     new_completions = {
         "name": problem["name"],
         "language": problem["language"],
         "temperature": temperature,
-        "top_p": TOP_P,
-        "max_tokens": MAX_TOKENS,
+        "top_p": top_p,
+        "max_tokens": max_tokens,
         "prompt": problem["prompt"],
         "tests": problem["tests"],
         "completions": [],
