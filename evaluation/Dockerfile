@@ -66,6 +66,13 @@ RUN wget https://binaries2.erlang-solutions.com/ubuntu/pool/contrib/e/elixir/eli
 RUN mkdir -p /root/dafny
 RUN wget https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip -O /tmp/dafny.zip && unzip /tmp/dafny.zip -d /root/dafny/ && ln -s /root/dafny/dafny/dafny /bin/dafny
 
+# Clojure - https://clojure.org/guides/install_clojure#_linux_instructions
+RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
+RUN chmod +x linux-install.sh
+RUN ./linux-install.sh --prefix /clojure
+ENV PATH="/clojure/bin:${PATH}"
+RUN clojure -P
+
 # Coq
 RUN apt-get install -yqq coq
 

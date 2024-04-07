@@ -30,7 +30,8 @@ CODEGEEX_LANGS = {
     "rkt": "racket", # Unsupported
     "sh": "shell",
     "swift": "swift",
-    "r": "r"
+    "r": "r",
+    "clj": "clojure"
 }
 
 
