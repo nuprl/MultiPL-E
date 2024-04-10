@@ -31,7 +31,13 @@ class VLLM:
         params = SamplingParams(temperature=temperature,
                                 top_p=top_p, max_tokens=max_tokens, stop=stop)
         outputs = self.model.generate(prompts, params, use_tqdm=False)
-        return [stop_at_stop_token(o.outputs[0].text, stop) for o in outputs]
+        outputs = [o.outputs[0] for o in outputs]
+        return [
+            (
+                stop_at_stop_token(o.text, stop),
+                o.cumulative_logprob,
+                o.token_ids,
+            ) for o in outputs]
 
 
 def automodel_partial_arg_parser():
@@ -60,7 +66,8 @@ def do_name_override(args):
 def main():
     args = automodel_partial_arg_parser()
     args = args.parse_args()
-    model = VLLM(args.name, args.revision, args.tokenizer_name, args.tokenizer_revision, args.num_gpus)
+    model = VLLM(args.name, args.revision, args.tokenizer_name,
+                 args.tokenizer_revision, args.num_gpus)
     name = do_name_override(args)
     make_main(args, name, model.completions)
 
