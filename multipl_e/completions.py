@@ -170,7 +170,21 @@ def make_main(args, model_name, gen_completions):
         )
         modified_problems = set()
         for item, a_completion in zip(batch, new_completions):
-            all_completions[item["name"]]["completions"].append(a_completion)
+            # if a_completion is just a string, run normal completion
+            if isinstance(a_completion, str):
+                completion = a_completion
+            else:
+                # assert it's a 3-tuple
+                assert len(
+                    a_completion) == 3, "Completion must be a 3-tuple or a string"
+                completion, logprob, token_ids = a_completion
+                if "tokens_info" not in all_completions[item["name"]]:
+                    all_completions[item["name"]]["tokens_info"] = []
+                all_completions[item["name"]]["tokens_info"].append(
+                    {"cumulative_logprob": logprob, "len": len(token_ids)})
+
+            all_completions[item["name"]
+                            ]["completions"].append(completion)
             modified_problems.add(item["name"])
 
         for name in modified_problems:
