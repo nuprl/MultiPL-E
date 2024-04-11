@@ -89,6 +89,7 @@ class OpenAIEngine:
             o = response.choices[0].message.content
             assert o is not None, "OpenAI returned a null response"
             outputs.append(post_process(o))
+            # TODO: logprobs
 
         return outputs
 
@@ -104,7 +105,7 @@ class VLLMEngine:
         self.model = LLM(name, dtype=dtype, tensor_parallel_size=num_gpus)
         self.tokenizer = self.model.get_tokenizer()
 
-    def generate(self, convos: List[List[Dict[str, str]]], max_tokens: int, temperature: float, top_p: float, stop) -> List[str]:
+    def generate(self, convos: List[List[Dict[str, str]]], max_tokens: int, temperature: float, top_p: float, stop):
         from vllm import SamplingParams
         formatted = []
         for convo in convos:
@@ -119,8 +120,13 @@ class VLLMEngine:
                 max_tokens=max_tokens,
             ),
         )
-
-        return [post_process(o.outputs[0].text) for o in outs]
+        outputs = [o.outputs[0] for o in outs]
+        return [
+            (
+                post_process(o.text),
+                o.cumulative_logprob,
+                o.token_ids,
+            ) for o in outputs]
 
 
 class ChatModel:
@@ -153,7 +159,8 @@ class ChatModel:
 def openai_partial_arg_parser():
     args = partial_arg_parser()
     args.add_argument("--name", type=str, required=True)
-    args.add_argument("--engine", type=str, choices=["openai", "vllm"], default="openai")
+    args.add_argument("--engine", type=str,
+                      choices=["openai", "vllm"], default="openai")
     args.add_argument("--chat-template", type=str,
                       default=str(DEFAULT_TEMPLATE_PATH))
     args.add_argument("--num-gpus", type=int, default=1)
