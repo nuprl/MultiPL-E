@@ -77,6 +77,13 @@ class OpenAIEngine:
         self.name = name
 
     def generate(self, convos: List[List[Dict[str, str]]], max_tokens: int, temperature: float, top_p: float, stop) -> List[str]:
+        def logprobs_to_cumulative(logprobs):  # NOTE: normalized
+            c = 0
+            for l in logprobs:
+                c += l
+            return c / len(logprobs)
+        
+        # TODO: homogeneous batching
         outputs = []
         for convo in convos:
             response = self.client.chat.completions.create(
@@ -84,12 +91,19 @@ class OpenAIEngine:
                 messages=convo,  # type: ignore
                 max_tokens=max_tokens,
                 temperature=temperature,
+                logprobs=True,
                 top_p=top_p,
             )
-            o = response.choices[0].message.content
+            choice = response.choices[0]
+            o = choice.message.content
+            logprobs = choice.logprobs.content  # type: ignore
             assert o is not None, "OpenAI returned a null response"
-            outputs.append(post_process(o))
-            # TODO: logprobs
+            assert logprobs is not None, "OpenAI returned a null logprobs"
+            logprobs = [l.logprob for l in logprobs]
+            num_tokens = len(logprobs)
+            proc = post_process(o)
+            cumulative_logprob = logprobs_to_cumulative(logprobs)
+            outputs.append((proc, cumulative_logprob, num_tokens))
 
         return outputs
 
@@ -125,7 +139,7 @@ class VLLMEngine:
             (
                 post_process(o.text),
                 o.cumulative_logprob,
-                o.token_ids,
+                len(o.token_ids),
             ) for o in outputs]
 
 
