@@ -82,28 +82,40 @@ class OpenAIEngine:
             for l in logprobs:
                 c += l
             return c / len(logprobs)
-        
-        # TODO: homogeneous batching
-        outputs = []
-        for convo in convos:
+
+        batches = {}  # raw prompt -> (real prompt, number of comps)
+        for i, convo in enumerate(convos):
+            # yes, this is a terrible hack, but it works
+            raw = "__RAW__\n".join([msg["content"] for msg in convo])
+            if raw in batches:
+                batches[raw][1] += 1
+                batches[raw][2].append(i)
+            else:
+                batches[raw] = [convo, 1, [i]]
+
+        batches = list(batches.values())
+        outputs = [None] * len(convos)
+        for convo, n, indexes in batches:
             response = self.client.chat.completions.create(
                 model=self.name,
                 messages=convo,  # type: ignore
                 max_tokens=max_tokens,
                 temperature=temperature,
                 logprobs=True,
+                n=n,
                 top_p=top_p,
             )
-            choice = response.choices[0]
-            o = choice.message.content
-            logprobs = choice.logprobs.content  # type: ignore
-            assert o is not None, "OpenAI returned a null response"
-            assert logprobs is not None, "OpenAI returned a null logprobs"
-            logprobs = [l.logprob for l in logprobs]
-            num_tokens = len(logprobs)
-            proc = post_process(o)
-            cumulative_logprob = logprobs_to_cumulative(logprobs)
-            outputs.append((proc, cumulative_logprob, num_tokens))
+            for choice, i in zip(response.choices, indexes):
+                o = choice.message.content
+                logprobs = choice.logprobs.content  # type: ignore
+                assert o is not None, "OpenAI returned a null response"
+                assert logprobs is not None, "OpenAI returned a null logprobs"
+                logprobs = [l.logprob for l in logprobs]
+                num_tokens = len(logprobs)
+                proc = post_process(o)
+                cumulative_logprob = logprobs_to_cumulative(logprobs)
+                item = (proc, cumulative_logprob, num_tokens)
+                outputs[i] = item
 
         return outputs
 
