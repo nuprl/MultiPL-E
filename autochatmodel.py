@@ -216,9 +216,10 @@ def main():
     make_main(args, name, model.completions)
     # hotpatch the results to have empty "prompt" fields
     # super hacky, but it works
-    os.system(f"chmod -R 777 {args.output_dir}")
     path = Path(args.output_dir).glob("*.json.gz")
     for p in path:
+        if ".results.json.gz" in p.name:
+            continue
         data = gunzip_json(p)
         assert data is not None, f"Failed to read {p}"
         data["prompt"] = ""
