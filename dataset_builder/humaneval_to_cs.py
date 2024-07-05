@@ -119,7 +119,7 @@ class Translator(humaneval_to_cpp.Translator):
         indent = "    "
         comment_start = self.indent + "//"
         csharp_description = (
-            comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip() + "\n"
+            comment_start +" " + re.sub(DOCSTRING_LINESTART_RE, "\n" + comment_start + " ", description.strip()
         ))
         self.args_type = [self.translate_pytype(arg.annotation) for arg in args]
         formal_args = [f"{self.translate_pytype(arg.annotation)} {self.gen_var(arg.arg)[0]}" for arg in args]
@@ -127,7 +127,7 @@ class Translator(humaneval_to_cpp.Translator):
         self.entry_point = to_camel_case(name)
         self.ret_ann = _returns
         self.translated_return_type = self.translate_pytype(_returns) #make it ret_translated_type 
-        csharp_prompt = f"{self.module_imports()}{class_decl}{csharp_description}{self.indent}public static {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
+        csharp_prompt = f"{self.module_imports()}{class_decl}{csharp_description}\n{self.indent}public static {self.translated_return_type} {self.entry_point}({formal_arg_list})" + " {\n"
 
         return csharp_prompt
 

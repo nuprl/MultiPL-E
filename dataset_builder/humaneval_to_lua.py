@@ -16,7 +16,7 @@ class Translator(LanguageTranslator[TargetExp]):
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns: ast.expr, description: str) -> str:
         lua_description = (
-            "-- " + description.replace("\n", "\n-- ") + "\n" if description else ""
+            "-- " + description.strip().replace("\n", "\n-- ") + "\n" if description else ""
         )
         arg_names = [arg.arg for arg in args]
         arg_list = ", ".join(arg_names)
