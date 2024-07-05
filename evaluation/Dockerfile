@@ -17,8 +17,7 @@ RUN apt-get update -yqq && apt-get install -yqq \
     libtest-deep-perl \
     wget \
     lua-unit \ 
-    aspnetcore-runtime-6.0 \
-    z3
+    aspnetcore-runtime-6.0
 
 RUN apt-get install -yqq libtest-deep-perl
 RUN apt-get install -yqq wget
@@ -42,7 +41,7 @@ RUN apt update --allow-insecure-repositories
 RUN apt install -yqq mono-devel
 
 # F#
-RUN apt-get install -y dotnet6
+# RUN apt-get install -y dotnet6
 
 # Post-processing
 
@@ -63,8 +62,8 @@ RUN wget https://binaries2.erlang-solutions.com/ubuntu/pool/contrib/e/elixir/eli
 
 # Dafny
 # https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip
-RUN mkdir -p /root/dafny
-RUN wget https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip -O /tmp/dafny.zip && unzip /tmp/dafny.zip -d /root/dafny/ && ln -s /root/dafny/dafny/dafny /bin/dafny
+# RUN mkdir -p /root/dafny
+# RUN wget https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip -O /tmp/dafny.zip && unzip /tmp/dafny.zip -d /root/dafny/ && ln -s /root/dafny/dafny/dafny /bin/dafny
 
 # Clojure - https://clojure.org/guides/install_clojure#_linux_instructions
 RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
@@ -74,10 +73,10 @@ ENV PATH="/clojure/bin:${PATH}"
 RUN clojure -P
 
 # Coq
-RUN apt-get install -yqq coq
+# RUN apt-get install -yqq coq
 
 # Lean
-RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
+# RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
 
 # install numpy for humanevalplus
 RUN python3 -m pip install numpy
