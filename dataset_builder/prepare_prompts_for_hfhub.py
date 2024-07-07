@@ -56,9 +56,9 @@ def main():
 
     args.add_argument("--dataset-name", type=str, default="nuprl-staging/MultiPL-E")
     
-    args.add_argument("--original-dataset", type=str, default="humaneval")
+    args.add_argument("--original-dataset", type=str, required=True)
 
-    args.add_argument("--originals", type=str, default="../datasets/originals")
+    args.add_argument("--originals", type=str, required=True)
 
     args = args.parse_args()
 
