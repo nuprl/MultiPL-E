@@ -16,7 +16,7 @@ RUN apt-get update -yqq && apt-get install -yqq \
     ghc \
     libtest-deep-perl \
     wget \
-    lua-unit \ 
+    lua-unit \
     aspnetcore-runtime-6.0
 
 RUN apt-get install -yqq libtest-deep-perl
@@ -58,7 +58,29 @@ RUN mkdir /usr/multiple && wget https://repo.mavenlibs.com/maven/org/javatuples/
 RUN wget https://github.com/Roblox/luau/releases/download/0.594/luau-ubuntu.zip -O /tmp/luau.zip && unzip /tmp/luau.zip -d /bin/
 
 # Elixir
-RUN wget https://binaries2.erlang-solutions.com/ubuntu/pool/contrib/e/elixir/elixir_1.15.4_1_otp_26.0.2~ubuntu~jammy_all.deb -O /tmp/elixir.deb && dpkg -i /tmp/elixir.deb
+# Install Erlang
+RUN mkdir -p /erlang && \
+    cd /erlang && \
+    wget -nv -O erlang.tar.gz https://builds.hex.pm/builds/otp/ubuntu-22.04/OTP-27.0.tar.gz && \
+    tar xzf erlang.tar.gz --strip-components=1 && \
+    ./Install -minimal "$(pwd)"
+
+# Erlang runtime dependencies, see https://github.com/hexpm/bob/blob/4fe43eb9853bb95dbfe276957bd7d3f931a451b3/priv/scripts/docker/erlang-ubuntu-jammy.dockerfile
+RUN apt-get update && \
+    apt-get -y --no-install-recommends install \
+    ca-certificates \
+    libodbc1 \
+    libssl3 \
+    libsctp1
+
+# Install Elixir
+RUN mkdir -p /elixir && \
+    cd /elixir && \
+    wget -nv -O elixir.zip https://builds.hex.pm/builds/elixir/v1.17.2-otp-27.zip && \
+    unzip -q elixir.zip
+
+ENV PATH="/erlang/bin:/elixir/bin:${PATH}"
+ENV LANG=C.UTF-8
 
 # Dafny
 # https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip
