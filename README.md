@@ -17,6 +17,13 @@ For more information:
 
 ## Versions
 
+- Version 3.0
+
+  - We are going to maintain the changelog on the dataset page: https://huggingface.co/datasets/nuprl/MultiPL-E
+  - The dataset was versioned at 3.0, and we are bumping the software version to stay in sync.
+  - We have published several new PLs in the dataset. However, we have not included
+    these PLs at this time: Dafny, Coq, Lean, Luau, and MATLAB.
+
 - Version 0.5.0: Instruction-following support and new languages
 
   - New languages: Luau, Elixir, Lean, Coq, Dafny
