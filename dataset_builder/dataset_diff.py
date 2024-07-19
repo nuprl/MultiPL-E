@@ -102,7 +102,7 @@ def main():
         description="Summarize the delta between two revisions of MultiPL-E."
     )
     parser.add_argument(
-        "--path", type=str, default="nuprl-staging/MultiPL-E", help="Path to the dataset"
+        "--path", type=str, default="nuprl/MultiPL-E", help="Path to the dataset"
     )
     parser.add_argument(
         "--old_revision",
