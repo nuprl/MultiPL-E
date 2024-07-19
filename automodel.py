@@ -16,7 +16,7 @@ class Model:
         ).cuda()
         self.tokenizer = AutoTokenizer.from_pretrained(
             tokenizer_name or name,
-            revision=tokenizer_revision or revision,
+            revision=tokenizer_revision,
             padding_side="left",
             trust_remote_code=True,
         )
