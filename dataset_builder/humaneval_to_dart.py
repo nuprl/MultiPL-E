@@ -83,7 +83,9 @@ class Translator:
     def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
         global needs_hashmap
         description = (
-            "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
+            "// " + re.sub(DOCSTRING_LINESTART_RE + "\n",
+            "// ",
+            description.strip()) + "\n",
         )
         # Store this for later coercions on tests
         needs_hashmap = False
