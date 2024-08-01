@@ -1,18 +1,6 @@
 # This script translates problems from the OpenAI HumanEval dataset into Dart.
 #
-# Note that we reject Union types.
-
-# TODO: we need to translate 'None' prompts into 'null'
-#       ("Return None in case the input list is empty.")
-
-# TODO: we need to translate 'tuple' prompts into 'Record'.
-#       ("Create a function that returns a tuple (a, b), where ...")
-
-# TODO: we should translate 'dictionary' to 'map'
-#       ("// Given a dictionary, return True if all keys ...")
-
-# TODO: we should translate 'True' to 'true'
-#       ("// Given a dictionary, return True if all keys ...")
+# Note that for the Dart translation we reject Union types.
 
 import re
 import ast
@@ -69,7 +57,7 @@ def translate_type(t):
         case ast.Name(x):
             raise Exception(f"unknown name {x}")
         case ast.Constant(Ellipsis):
-            raise Exception("ellipsis unsupported") # todo:
+            raise Exception("ellipsis unsupported")
         case _other:
             raise Exception(f"unknown annotation: {t}")
 
@@ -82,8 +70,7 @@ def coerce(expr: str, type) -> str:
 
 class Translator:
 
-    # TODO: I'm not 100% sure what these are used for
-    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ]
+    stop = [ '\n}' ]
 
     def __init__(self):
         global needs_hashmap
@@ -125,10 +112,7 @@ class Translator:
         ]
 
     def test_suite_suffix_lines(self) -> List[str]:
-        # TODO: unsure if we should have the 'success' output at the end
         return [
-            "",
-            "  print('success');",
             "}",
             "",
             "void expect(dynamic a, dynamic b) {",
