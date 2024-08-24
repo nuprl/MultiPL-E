@@ -96,24 +96,45 @@ class OpenAIEngine:
         batches = list(batches.values())
         outputs = [None] * len(convos)
         for convo, n, indexes in batches:
-            response = self.client.chat.completions.create(
-                model=self.name,
-                messages=convo,  # type: ignore
-                max_tokens=max_tokens,
-                temperature=temperature,
-                logprobs=True,
-                n=n,
-                top_p=top_p,
-            )
-            for choice, i in zip(response.choices, indexes):
-                o = choice.message.content
-                logprobs = choice.logprobs.content  # type: ignore
-                assert o is not None, "OpenAI returned a null response"
-                assert logprobs is not None, "OpenAI returned a null logprobs"
-                logprobs = [l.logprob for l in logprobs]
-                num_tokens = len(logprobs)
-                proc = post_process(o)
-                cumulative_logprob = logprobs_to_cumulative(logprobs)
+            for i in indexes:
+                for _ in range(5):
+                    try:
+                        full_content = ""
+                        full_logprobs = []
+                        stream = self.client.chat.completions.create(
+                            model=self.name,
+                            messages=convo,  # type: ignore
+                            max_tokens=max_tokens,
+                            temperature=temperature,
+                            logprobs=True,
+                            n=1,
+                            top_p=top_p,
+                            stream=True,
+                            timeout=100,
+                        )
+                        for chunk in stream:
+                            print("chunk!")
+                            delta = chunk.choices[0].delta
+                            if delta.content:
+                                full_content += delta.content
+                            if chunk.choices[0].logprobs:
+                                full_logprobs.extend([l.logprob for l in chunk.choices[0].logprobs.content])
+                    except Exception as e:
+                        print(f"Error in stream: {e}")
+                        continue
+                    break
+                else:
+                    raise Exception(f"Failed to get response for conversation {i}")
+                
+                if full_content is None:
+                    raise Exception("OpenAI returned a null response")
+                if not full_logprobs:
+                    print(f"Warning: No logprobs found for conversation {i}")
+                    full_logprobs = [0] * len(full_content.split())
+                
+                num_tokens = len(full_logprobs)
+                proc = post_process(full_content)
+                cumulative_logprob = logprobs_to_cumulative(full_logprobs)
                 item = (proc, cumulative_logprob, num_tokens)
                 outputs[i] = item
 
