@@ -69,7 +69,7 @@ def main():
         help="Skips tests that fail to translate. By default, if a test fails to translate, the entire problem is skipped.",
     )
 
-    args.add_argument("--originals", type=str, default="../datasets/originals")
+    args.add_argument("--originals", type=str, default="../datasets/originals-with-cleaned-doctests")
 
     args = args.parse_args()
 
