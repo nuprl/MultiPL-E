@@ -104,6 +104,9 @@ class Translator:
         This code goes at the start of the test suite.
         """
         return [
+            # Since we use "\n}" as the stop token for the function body, we start
+            # the test suite with "}" to close the generated function.
+            "}",
             "void main() {",
             f"  final candidate = {entry_point};",
             ""
