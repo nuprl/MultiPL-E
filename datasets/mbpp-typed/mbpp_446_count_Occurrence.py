@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import Any, List, Tuple
 
-def count_Occurrence(tup: Any, lst: List[Any]) -> int:
+def count_Occurrence(tup: Tuple[Any, ...], lst: List[Any]) -> int:
     """
 	Write a python function to count the occurence of all elements of list in a tuple.
 	"""

@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import Union
 
-def rearrange_bigger(n: int) -> Any:
+def rearrange_bigger(n: int) -> Union[int, bool]:
     """
 	Write a function to create the next bigger number by rearranging the digits of a given number.
 	"""
