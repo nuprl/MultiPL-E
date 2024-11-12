@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import List, Tuple
 
-def list_tuple(listx: List[int]) -> Any:
+def list_tuple(listx: List[int]) -> Tuple[int, ...]:
     """
 	Write a function to convert a list to a tuple.
 	"""

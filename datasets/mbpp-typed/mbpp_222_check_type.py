@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import Any, Tuple
 
-def check_type(test_tuple: Any) -> bool:
+def check_type(test_tuple: Tuple[Any, ...]) -> bool:
     """
 	Write a function to check if all the elements in tuple have same data type or not.
 	"""

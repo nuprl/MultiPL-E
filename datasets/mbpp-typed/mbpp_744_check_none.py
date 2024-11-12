@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import Any, Tuple
 
-def check_none(test_tup: Any) -> bool:
+def check_none(test_tup: Tuple[Any, ...]) -> bool:
     """
 	Write a function to check if the given tuple has any none value or not.
 	"""
