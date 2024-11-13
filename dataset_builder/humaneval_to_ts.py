@@ -12,6 +12,7 @@ needs_hashmap = False
 def translate_type(t):
     return translate_type_rec(t, "top")
 
+
 def translate_type_rec(t):
     """
     The context is the syntactic context in which the type is being translated.
@@ -34,7 +35,7 @@ def translate_type_rec(t):
 
     - a | b[] is parsed as a | (b[]) so parens are not needed
     - To get (a | b)[] we need parens
-    
+
     """
     global needs_hashmap
     match t:
@@ -44,14 +45,14 @@ def translate_type_rec(t):
                     inner = translate_type_rec(slice, "bracket")
                     return inner + "[]"
                 case "Union":
-                    match slice: 
-                        case ast.Tuple(elts, _ctx): 
+                    match slice:
+                        case ast.Tuple(elts, _ctx):
                             tys = [translate_type_rec(elem, "bar") for elem in elts]
                             union = " | ".join(tys)
                             if context == "bracket":
                                 return f"({union})"
                             return union
-                        case other: 
+                        case other:
                             raise Exception(f"Unexpected slice: {slice}")
                 case "Tuple":
                     match slice:
@@ -63,9 +64,11 @@ def translate_type_rec(t):
                 case "Dict":
                     match slice:
                         case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
-                            key, value = translate_type_rec(k, "top"), translate_type_rec(v, "top")
+                            key, value = translate_type_rec(
+                                k, "top"
+                            ), translate_type_rec(v, "top")
                             needs_hashmap = True
-                            return "{"+f"[key: {key}]: {value}" + "}"
+                            return "{" + f"[key: {key}]: {value}" + "}"
                         case other:
                             raise Exception(f"Bad dict: {slice}")
                 case "Optional":
@@ -94,16 +97,20 @@ def translate_type_rec(t):
             raise Exception("no ellipsis!!")
         case _other:
             raise Exception(f"unknown annotation: {t}")
+
+
 TargetExp = str
 
-def coerce(expr: str, type) -> str: 
+
+def coerce(expr: str, type) -> str:
     match expr, type:
-        case _: 
+        case _:
             return expr
+
 
 class Translator:
 
-    stop = [ '\nfunction ', '\n/*', '\n//', '\nclass' ]
+    stop = ["\nfunction ", "\n/*", "\n//", "\nclass"]
 
     def __init__(self):
         global needs_hashmap
@@ -113,14 +120,20 @@ class Translator:
     def file_ext(self):
         return "ts"
 
-    def translate_prompt(self, name: str, args: List[ast.arg], returns, description: str) -> str:
+    def translate_prompt(
+        self, name: str, args: List[ast.arg], returns, description: str
+    ) -> str:
         global needs_hashmap
-        js_description = "//" + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
+        js_description = (
+            "//" + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
+        )
         # Store this for later coercions on tests
         needs_hashmap = False
         self.type = [[arg.annotation for arg in args], returns]
+
         def translate_arg(arg):
             return arg.arg + ": " + translate_type(arg.annotation)
+
         arg_strings = []
         return_type = ""
         try:
@@ -130,13 +143,18 @@ class Translator:
             print(e)
             return None
         arg_list = ", ".join(arg_strings)
-        return f"{js_description}function {name}({arg_list}): {return_type} "+"{\n"
+        return f"{js_description}function {name}({arg_list}): {return_type} " + "{\n"
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
         This code goes at the start of the test suite.
         """
-        return [ "declare var require: any;\nconst assert = require('node:assert');\n", "", "function test() {",f"  let candidate = {entry_point};" ]
+        return [
+            "declare var require: any;\nconst assert = require('node:assert');\n",
+            "",
+            "function test() {",
+            f"  let candidate = {entry_point};",
+        ]
 
     def test_suite_suffix_lines(self) -> List[str]:
         return ["}", "", "test();"]
@@ -160,7 +178,7 @@ class Translator:
         if type(c) == bool:
             return "true" if c else "false"
         elif type(c) == str:
-            c = c.replace('\n','\\n')
+            c = c.replace("\n", "\\n")
             return f'"{c}"'
         elif c is None:
             return "undefined"
