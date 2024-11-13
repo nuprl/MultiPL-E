@@ -8,37 +8,72 @@ DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
 
 needs_hashmap = False
 
+
 def translate_type(t):
+    return translate_type_rec(t, "top")
+
+def translate_type_rec(t):
+    """
+    The context is the syntactic context in which the type is being translated.
+
+    Valid contexts are:
+
+    - "top" - the type is either:
+       + at the top level of the function signature
+       + in a context where it is comma-separated such as a tuple type or
+         argument list
+       + in a context where it is within angle brackets such as a generic type
+         argument
+    - "bar" - the type is inside a bar (|) of a union type
+    - "bracket" - the type is to the left of the brackets ([]) in an array type
+
+    Based on the context, we may or may not need to insert parentheses around the
+    translated type.
+
+    Some examples:
+
+    - a | b[] is parsed as a | (b[]) so parens are not needed
+    - To get (a | b)[] we need parens
+    
+    """
     global needs_hashmap
     match t:
         case ast.Subscript(ast.Name(id), slice, ctx):
             match id:
                 case "List":
-                    return translate_type(slice) + "[]"
+                    inner = translate_type_rec(slice, "bracket")
+                    return inner + "[]"
                 case "Union":
                     match slice: 
                         case ast.Tuple(elts, _ctx): 
-                            tys = [translate_type(elem) for elem in elts]
-                            return  "| ".join(tys)
+                            tys = [translate_type_rec(elem, "bar") for elem in elts]
+                            union = " | ".join(tys)
+                            if context == "bracket":
+                                return f"({union})"
+                            return union
                         case other: 
                             raise Exception(f"Unexpected slice: {slice}")
                 case "Tuple":
                     match slice:
                         case ast.Tuple(elts, _ctx):
-                            tys = [translate_type(elem) for elem in elts]
+                            tys = [translate_type_rec(elem, "top") for elem in elts]
                             return "[" + ", ".join(tys) + "]"
                         case other:
                             raise Exception(f"Bad tuple: {slice}")
                 case "Dict":
                     match slice:
                         case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx):
-                            key, value = translate_type(k), translate_type(v)
+                            key, value = translate_type_rec(k, "top"), translate_type_rec(v, "top")
                             needs_hashmap = True
                             return "{"+f"[key: {key}]: {value}" + "}"
                         case other:
                             raise Exception(f"Bad dict: {slice}")
                 case "Optional":
-                    return translate_type(slice) + " | undefined"
+                    inner = translate_type_rec(slice, "bar")
+                    union = f"{inner} | undefined"
+                    if context == "bracket":
+                        return f"({union})"
+                    return union
                 case other:
                     raise Exception(f"Bad generic {other}")
         case ast.Name("int") | "int":
@@ -59,7 +94,6 @@ def translate_type(t):
             raise Exception("no ellipsis!!")
         case _other:
             raise Exception(f"unknown annotation: {t}")
-
 TargetExp = str
 
 def coerce(expr: str, type) -> str: 
