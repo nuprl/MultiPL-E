@@ -13,7 +13,7 @@ def translate_type(t):
     return translate_type_rec(t, "top")
 
 
-def translate_type_rec(t):
+def translate_type_rec(t, context):
     """
     The context is the syntactic context in which the type is being translated.
 
