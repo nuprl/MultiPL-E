@@ -96,6 +96,12 @@ class Translator(LanguageTranslator[TargetExp]):
     def gen_dict(self, keys: List[str], values: List[str]) -> str:
         return "{ " + ", ".join(f'{k}: {v}' for k, v in zip(keys, values)) + " }"
 
+    def gen_set(self, s: List[TargetExp]) -> TargetExp:
+        """
+        Translate a set with elements s
+        """
+        raise NotImplementedError("This translator does not currently support translating sets")
+
     def gen_call(self, func: str, args: List[str]) -> str:
         return func + "(" + ", ".join(args) + ")"
 
