@@ -43,6 +43,13 @@ class LanguageTranslator(ABC, Generic[TargetExp]):
         pass
 
     @abstractmethod
+    def gen_set(self, s: List[TargetExp]) -> TargetExp:
+        """
+        Translate a set with elements s
+        """
+        pass
+
+    @abstractmethod
     def gen_call(self, func: TargetExp, args: List[TargetExp]) -> TargetExp:
         """
         Translate a function call `func(args)`
