@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import List
 
-def multiply_elements(test_tup: List[int]) -> List[Any]:
+def multiply_elements(test_tup: List[int]) -> List[int]:
     """
 	Write a function that takes as input a list of numbers (t_1,...,t_{N+1}) and returns a list of length N where the i-th element of the tuple is equal to t_i * t_{i+1}.
 	"""

@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import List, Tuple, Union
 
-def extract_nth_element(list1: List[Tuple[str, int, int]], n: int) -> List[Any]:
+def extract_nth_element(list1: List[Tuple[str, int, int]], n: int) -> List[Union[str, int]]:
     """
 	Write a function to extract the nth element from a given list of tuples.
 	"""

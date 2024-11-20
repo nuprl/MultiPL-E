@@ -1,6 +1,6 @@
-from typing import List, Dict, Tuple
+from typing import Literal, Union
 
-def min_Swaps(str1: str, str2: str) -> Any:
+def min_Swaps(str1: str, str2: str) -> Union[int, Literal['Not Possible']]:
     """
 	Write a python function to count minimum number of swaps required to convert one binary number represented as a string to another.
 	"""
