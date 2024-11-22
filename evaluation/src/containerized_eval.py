@@ -4,6 +4,7 @@ for problem_evaluator.py.
 """
 
 from pathlib import Path
+import eval_adb
 import eval_ruby
 import eval_lua
 import eval_python
@@ -32,6 +33,7 @@ import tempfile
 
 
 EVALUATORS = {
+    "ada": (eval_adb.eval_script, ".adb"),
     "rb": (eval_ruby.eval_script, ".rb"),
     "lua": (eval_lua.eval_script, ".lua"),
     "python": (eval_python.eval_script, ".py"),
