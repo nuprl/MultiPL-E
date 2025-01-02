@@ -27,6 +27,8 @@ def translate_expr(translator, py_expr: ast.AST):
             return translator.gen_list([translate_expr(translator, e) for e in elts])
         case ast.Tuple(elts=elts):
             return translator.gen_tuple([translate_expr(translator, e) for e in elts])
+        case ast.Set(elts=elts):
+            return translator.gen_set([translate_expr(translator, e) for e in elts])
         case ast.Dict(keys=keys, values=values):
             return translator.gen_dict(
                 [translate_expr(translator, e) for e in keys],

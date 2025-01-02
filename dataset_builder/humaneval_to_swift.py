@@ -550,6 +550,12 @@ class Translator(LanguageTranslator[TargetExp]):
     def gen_dict(self, keys: List[TargetExp], values: List[TargetExp]) -> TargetExp:
         return ast.Dict(keys, values)
 
+    def gen_set(self, s: List[TargetExp]) -> TargetExp:
+        """
+        Translate a set with elements s
+        """
+        raise NotImplementedError("This translator does not currently support translating sets")
+
     def gen_call(self, func: TargetExp, args: List[TargetExp]) -> TargetExp:
         return ast.Call(func, args)
 
