@@ -7,7 +7,7 @@ from tqdm import tqdm
 import sys
 from typing import List
 
-DATASET_REVISION = "8a4cb75204eb3d5855a81778db6b95bfc80c9136"
+DATASET_REVISION = "3a9e8d226c127392ce81dca29d09f33f0ce3247d"
 
 
 def partial_arg_parser():

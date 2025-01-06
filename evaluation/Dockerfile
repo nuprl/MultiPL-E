@@ -22,9 +22,6 @@ RUN apt-get update -yqq && apt-get install -yqq \
 RUN apt-get install -yqq libtest-deep-perl
 RUN apt-get install -yqq wget
 
-# Ada
-RUN apt-get install -yqq gnat-12
-
 # JS/TS
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
 RUN apt-get install -y nodejs
