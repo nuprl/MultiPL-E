@@ -70,8 +70,19 @@ which is originally in Python, but translated to Rust with MultiPL-E:
 
 ```
 mkdir tutorial
-python3 automodel.py --name bigcode/gpt_bigcode-santacoder --root-dataset humaneval --lang rs --temperature 0.2 --batch-size 20 --completion-limit 20 --output-dir-prefix tutorial
+python3 automodel.py \
+    --name bigcode/gpt_bigcode-santacoder \
+    --root-dataset humaneval \
+    --lang rs \
+    --temperature 0.2 \
+    --batch-size 20 \
+    --completion-limit 20 \
+    --output-dir-prefix tutorial
 ```
+
+The model name above refers to the
+[SantaCoder](https://huggingface.co/bigcode/gpt_bigcode-santacoder) model on the
+Hugging Face Hub. You can use any other text generation model instead.
 
 Notes:
 
@@ -388,6 +399,81 @@ To compute pass@1:
 cd MultiPL-E
 python3 pass_k.py humaneval-L-MODEL_NAME-0.2-reworded
 ```
+
+## Add a New Benchmark
+
+**These directions are a little stale. Email a.guha@northeastern.edu if you
+need some help.**
+
+This is the really easy part. All you need to do is write a Python
+program that looks like the following:
+
+```python
+def my_function(a: int, b: int, c: int, k: int) -> int:
+    """
+    Given positive integers a, b, and c, return an integer n > k such that
+    (a ** n) + (b ** n) = (c ** n).
+    """
+    pass
+    
+
+### Unit tests below ###
+def check(candidate):
+    assert candidate(1, 1, 2, 0) == 1
+    assert candidate(3, 4, 5, 0) == 2
+
+def test_check():
+    check(my_function)
+```
+
+You can then put your benchmark in a directory and run through the steps
+in the tutorial.
+
+Some things to note:
+
+1. The *unit tests below* line is important, because we look for that in our
+   scripts.
+
+2. We also rely on the name `candidate`. This is not fundamental, and we may get
+   around to removing it.
+
+3. You can use `from typing import ...` and `import typing`, but you cannot
+   have any other code above the function signature.
+
+4. The type annotations are not required, but are necessary to evaluate some
+   languages.
+
+5. The assertions must be equalities with simple input and output values,
+   as shown above.
+
+6. Finally, note that you do implement the function yourself. You can leave
+   the body as `pass`.
+
+
+## Credits
+
+MultiPL-E was originally authored by:
+
+- Federico Cassano (Northeastern University)
+- John Gouwar (Northeastern University)
+- Daniel Nguyen (Hanover High School)
+- Sydney Nguyen (Wellesley College)
+- Luna Phipps-Costin (Northeastern University)
+- Donald Pinckney (Northeastern University)
+- Ming-Ho Yee (Northeastern University)
+- Yangtian Zi (Northeastern University)
+- Carolyn Jane Anderson (Wellesley College)
+- Molly Q Feldman (Oberlin College)
+- Arjun Guha (Northeastern University and Roblox Research)
+- Michael Greenberg (Stevens Institute of Technology)
+- Abhinav Jangda (University of Massachusetts Amherst)
+
+We thank Steven Holtzen for loaning us his GPUs for a few weeks. We thank
+[Research Computing at Northeastern University] for supporting the
+Discovery cluster.
+
+Several people have since contributed to MultiPL-E. Please see the
+[changelog](https://huggingface.co/datasets/nuprl/MultiPL-E) for those acknowledgments.
 
 ## Versions
 
