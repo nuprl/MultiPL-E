@@ -177,7 +177,7 @@ support for several languages:
 - [Clojure](https://github.com/nuprl/MultiPL-E/pull/136)
 - [Elixir](https://github.com/nuprl/MultiPL-E/pull/117)
 
-In general, you need to make four changes to support language *L*:
+In general, you need to make three changes to support a new language *L*:
 
 1. Write an execution script to run and test *L* language that goes in
    [evaluation/src](https://github.com/nuprl/MultiPL-E/tree/main/evaluation/src).
