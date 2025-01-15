@@ -402,11 +402,8 @@ python3 pass_k.py humaneval-L-MODEL_NAME-0.2-reworded
 
 ## Add a New Benchmark
 
-**These directions are a little stale. Email a.guha@northeastern.edu if you
-need some help.**
-
-This is the really easy part. All you need to do is write a Python
-program that looks like the following:
+This is the really easy part. All you need to do is create directory of Python
+programs that looks like the following:
 
 ```python
 def my_function(a: int, b: int, c: int, k: int) -> int:
@@ -426,8 +423,9 @@ def test_check():
     check(my_function)
 ```
 
-You can then put your benchmark in a directory and run through the steps
-in the tutorial.
+For an example, see `datasets/originals-with-cleaned-doctests`. These
+are the HumanEval problems (with some cleanup) that we translate to the
+MultiPl-E supported languages.
 
 Some things to note:
 
@@ -446,9 +444,25 @@ Some things to note:
 5. The assertions must be equalities with simple input and output values,
    as shown above.
 
-6. Finally, note that you do implement the function yourself. You can leave
+6. Finally, note that you do not implement the function yourself. You can leave
    the body as `pass`.
 
+Let's suppose that you've created a set of benchmark problems in the directory
+`datasets/new_benchmark`. You can then translate the benchmark to language $L$
+ as follows:
+
+```bash
+cd MultiPL-E/dataset_builder
+python3 prepare_prompts_json.py \
+     --originals ../datasets/new_benchmark
+     --lang humaneval_to_L.py \
+     --doctests transform \
+     --prompt-terminology reworded \
+     --output ../L_prompts.jsonl
+```
+
+You can then test the dataset by following the steps in 
+[Testing a new language](https://github.com/nuprl/MultiPL-E?tab=readme-ov-file#testing-a-new-language).
 
 ## Credits
 
