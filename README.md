@@ -22,7 +22,7 @@ These are instructions on how to use MultiPl-E directly, without the
 BigCode evaluation harness.
 
 In this tutorial, we will run a small experiment to evaluate the performance of
-[InCoder] on Rust with a small subset of the MBPP benchmarks. 
+[SantaCoder] on Rust with a small subset of the MBPP benchmarks. 
 We will only fetch 20 completions per problem, so that you
 can run it quickly on a single machine.  
 You can also run on the full suite of benchmarks or substitute your own
@@ -94,7 +94,7 @@ Notes:
 3. If you're feeling impatient, you can kill the command early (use `Ctrl+C`)
    before all generations are complete. Your results won't be accurate,
    but you can move on to the evaluation step to get a partial result. Before
-   proceeding, ensure that a few files have been generated:
+   killing generation, ensure that a few files have been generated:
 
    ```bash
    ls tutorial/*/*.json.gz
@@ -156,15 +156,14 @@ Finally, you can calculate the pass rates:
 python3 pass_k.py ./tutorial/*
 ```
 
-The experiment prints pass rates for k=1 as we only made 20 results at a
-temperature of 0.2. If you want to see pass@10 and pass@100 pass rates, use
-`--temperature 0.8` and when you generate completions and *remove the
-`--completion-limit 20` flag*.
+The experiment prints pass rates for k=1 as we only made 20 results at
+temperature 0.2. If you want to see pass@10 and pass@100 pass rates, you
+can regenerate with `--temperature 0.8`.
 
 **Warning:** In generation, we used `--completion-limit 20` to only generate
-20 samples for each prompt. You can remove this flag to generate 200 samples,
-which is typical, but can take 10 times longer. We have found that 20 samples
-is adequate for estimate pass@1. However, you need more samples to estimate
+20 samples for each prompt. You should remove this flag to generate 200 samples
+for temperature 0.8. We have found that 20 samples is adequate for estimate 
+pass@1 (there will be a little variance). However, you need more samples to estimate
 pass@10 and pass@100.
 
 ## Adding Support for a New Programming Language
