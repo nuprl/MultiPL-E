@@ -6,7 +6,7 @@ web server.
 Tested on: openai==1.12.0
 """
 from typing import Dict, List
-from multipl_e.completions import make_main, partial_arg_parser
+from multipl_e.completions import make_main, partial_arg_parser, stop_at_stop_token
 from multipl_e.util import gunzip_json, gzip_json
 import os
 from pathlib import Path
@@ -178,9 +178,15 @@ class ChatModel:
                          for prompt in prompts]
         outputs = self.engine.generate(
             convo_prompts, max_tokens, temperature, top_p, stop)
-
-        return outputs
-
+        processed_outputs = []
+        for (out, logprob, num_tokens), prompt in zip(outputs, prompts):
+            # Some chat models may echo the prompt back in the completion.  If
+            # so, strip it off before applying the stop token logic.
+            likely_prompt = out[:len(prompt)]
+            likely_completion_and_extras = out[len(prompt):]
+            likely_completion = stop_at_stop_token(likely_completion_and_extras, stop)
+            processed_outputs.append((likely_prompt + likely_completion, logprob, num_tokens))
+        return processed_outputs
 
 def openai_partial_arg_parser():
     args = partial_arg_parser()
