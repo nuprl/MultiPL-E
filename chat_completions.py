@@ -7,8 +7,34 @@
 #     "tqdm",
 # ]
 # ///
+"""
+This script produces MultiPL-E completions from a *chat model*.  MultiPL-E was
+developed before ChatGPT, before the idea of chat models was popularized. The
+original MultiPL-E prompts are sub-optimal for all chat models, and are not
+compatible with chat-only models, such as those hosted by OpenAI and Anthropic.
+This script addresses these problems, and remains compatible with the
+MultiPL-E execution code.
 
-# cspell:ignore mbpp dspy humaneval aforward
+You can use this script to generate completions from any chat model that
+is compatible with LiteLLM. For example:
+
+    python3 chat_completions.py bench\
+        --name "openai/gpt-4.1-nano" \
+        --name-override "gpt_4p1_nano" \
+        --lang jl \
+        --max-completions 20 \
+        --root-dataset humaneval \
+        --temperature 0.2
+
+This will create a directory called humaneval-jl-gpt_4p1_nano-0.2-reworded.
+
+You can then evaluate the generated completions by following these
+directions:
+
+    https://github.com/nuprl/MultiPL-E/tree/main?tab=readme-ov-file#execution-with-a-container
+"""
+
+# cspell:ignore mbpp dspy humaneval aforward nuprl sema
 import datasets
 import dspy
 import argparse
@@ -90,7 +116,7 @@ def missing_completions(problem_filename: Path, max_completions: int) -> int:
     with gzip.open(problem_filename, "rt") as f:
         existing = json.loads(f.read())
         existing_completions = len(existing["completions"])
-        return min(0, max_completions - existing_completions)
+        return max(0, max_completions - existing_completions)
 
 
 def build_task_list(
