@@ -65,6 +65,9 @@ and datasets.  Using MultiPL-E is a two step process:
 
 ### Generation
 
+**The following directions are for evaluating base models. If you want to
+evaluate a chat model, see [chat_completions.py](chat_completions.py).
+
 The following command will generate completions for the HumanEval benchmark,
 which is originally in Python, but translated to Rust with MultiPL-E:
 

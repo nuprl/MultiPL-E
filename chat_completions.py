@@ -18,7 +18,7 @@ MultiPL-E execution code.
 You can use this script to generate completions from any chat model that
 is compatible with LiteLLM. For example:
 
-    python3 chat_completions.py bench\
+    python3 chat_completions.py bench \
         --name "openai/gpt-4.1-nano" \
         --name-override "gpt_4p1_nano" \
         --lang jl \
