@@ -28,11 +28,7 @@ RUN apt-get install -y nodejs
 RUN npm install -g typescript
 
 # Dlang
-RUN wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EDC4FB09C3AEEDD0
-RUN apt-get update
-RUN apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
-RUN apt-get update && apt-get install -yqq dmd-compiler dub
+RUN wget -qO - https://dlang.org/install.sh | bash -s dmd
 
 # C#
 RUN apt install gnupg ca-certificates
