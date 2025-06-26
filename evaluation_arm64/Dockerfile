@@ -110,4 +110,4 @@ RUN python3 -m pip install numpy fastapi "uvicorn[standard]"
 
 COPY src /code
 WORKDIR /code
-ENTRYPOINT ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "9090"]
+ENTRYPOINT ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "9090", "--workers", "4", "--limit-concurrency", "100"]
