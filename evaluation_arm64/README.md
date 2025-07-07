@@ -27,7 +27,7 @@ singularity exec \
     --bind ${PWD}/inputs:/inputs:ro \
     --bind ${PWD}/outputs:/outputs:rw \
     multipl-e-evaluation.sif \
-    python3 main.py --dir $INPUT_DIR --output-dir $OUTPUT_DIR
+    python3 main.py --input-dir $INPUT_DIR --output-dir $OUTPUT_DIR
 ```
 
 The `$INPUT_DIR` argument should be a directory with completions. See the `test_inputs` for an example.
@@ -70,7 +70,7 @@ singularity exec \
     --network none \
     --bind test_inputs:/inputs:ro,test_outputs:/outputs:rw \
     /home/a.guha/multipl-e-evaluation_latest.sif \
-    python3 src/main.py --dir /inputs --output-dir /outputs --testing
+    python3 src/main.py --input-dir /inputs --output-dir /outputs --testing
 ```
 
 Some differences from Docker/Podman:
