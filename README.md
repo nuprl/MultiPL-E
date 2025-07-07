@@ -129,7 +129,11 @@ podman tag ghcr.io/nuprl/multipl-e multipl-e-eval
 The following command will run execution on the generated completions:
 
 ```bash
-podman run --rm --network none -v ./tutorial:/tutorial:rw multipl-e-eval --dir /tutorial --output-dir /tutorial --recursive
+podman run --rm --network none \
+    --volume ./tutorial:/tutorial:rw \
+    --entrypoint python3 \
+    multipl-e-eval \
+    main.py --input-dir /tutorial --output-dir /tutorial
 ```
 
 If execution is successful, you will see several `.results.json.gz` files
@@ -177,9 +181,7 @@ singularity run \
   --bind $(pwd)/tutorial:/tutorial \
   --pwd /code \
   multipl-e-eval_sandbox \
-  --dir /tutorial \
-  --output-dir /tutorial \
-  --recursive
+  python3 main.py --input-dir /tutorial --output-dir /tutorial
 ```
 
 #### Execution via FastAPI
@@ -220,7 +222,7 @@ do executions without a container:
 
 ```bash
 cd evaluation/src
-python3 main.py --dir ../../tutorial --output-dir ../../tutorial --recursive
+python3 main.py --input-dir ../../tutorial --output-dir ../../tutorial
 ```
 
 If execution is successful, you will see several `.results.json.gz` files
@@ -468,7 +470,7 @@ Finally, you can test the generated code with the following command:
 ```
 cd MultiPL-E
 python3 evaluation/src/main.py \
-  --dir humaneval-L-MODEL_NAME-0.2-reworded \
+  --input-dir humaneval-L-MODEL_NAME-0.2-reworded \
   --output-dir humaneval-L-MODEL_NAME-0.2-reworded
 ```
 
