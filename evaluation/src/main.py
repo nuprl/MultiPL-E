@@ -78,11 +78,20 @@ def process_file(path: Path, output_dir: Path, max_workers: int) -> None:
 
 
 def watch_directory(input_dir: Path, output_dir: Path, max_workers: int, interval: float = 1.0) -> None:
-    """Watch ``input_dir`` for JSON files and process them when they appear."""
+    """Watch ``input_dir`` for JSON files and process them when they appear.
+
+    The previous implementation processed files sequentially which could be slow
+    when many completion files were present. This version evaluates multiple
+    files concurrently using a ``ThreadPoolExecutor``.
+    """
     while True:
         files = list(input_dir.glob("*.json")) + list(input_dir.glob("*.json.gz"))
-        for file in files:
-            process_file(file, output_dir, max_workers)
+
+        if files:
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                for file in files:
+                    executor.submit(process_file, file, output_dir, max_workers)
+
         time.sleep(interval)
 
 
