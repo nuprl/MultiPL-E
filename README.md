@@ -466,6 +466,44 @@ python3 prepare_prompts_json.py \
 You can then test the dataset by following the steps in 
 [Testing a new language](https://github.com/nuprl/MultiPL-E?tab=readme-ov-file#testing-a-new-language).
 
+## Updating MultiPL-E
+
+This is an example of how I update MultiPL-E after a bug fix. For example,
+suppose I've made a change that affects Lua. I first update the dataset on
+`nuprl-staging/MultiPL-E`:
+
+```bash
+cd dataset_builder
+uv run prepare_prompts_for_hfhub.py \
+    --lang humaneval_to_lua.py \
+    --original-dataset humaneval \
+    --originals originals-with-cleaned-doctests
+```
+
+I then generate a diff of changes to the prompts:
+
+
+```bash
+mkdir diffs
+uv run dataset_diff.py \
+    --path nuprl-staging/MultiPL-E \
+    --old_revision 1039ca32f0069ef09b817aa8894c6725e4f3f289 \
+    --output-dir diffs
+```
+
+Assuming the diffs look OK, I then publish the new dataset to `nuprl/MultiPL-E`:
+I then update the dataset on `nuprl/MultiPL-E`:
+
+```bash
+uv run prepare_prompts_for_hfhub.py \
+    --dataset-name nuprl/MultiPL-E \
+    --lang humaneval_to_lua.py \
+    --original-dataset humaneval \
+    --originals originals-with-cleaned-doctests
+```
+
+Finally, document the change in the `README.md` file of the dataset.
+
 ## Credits
 
 MultiPL-E was originally authored by:

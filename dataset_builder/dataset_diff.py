@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "datasets",
+# ]
+# ///
 """
 This script summarizes the delta between two revisions of MultiPL-E.
 """
@@ -16,7 +22,7 @@ def simple_diff(txt1: str, txt2: str):
     return "\n".join(differ.compare(txt1.splitlines(), txt2.splitlines()))
 
 def find_common_configs_and_report_added_and_removed(
-    path: str, trust_remote_code, old_revision: str, new_revision: str
+    path: str,  old_revision: str, new_revision: str
 ) -> List[str]:
     """
     Returns the list of common configs. Prints the configs added and removed
@@ -24,12 +30,12 @@ def find_common_configs_and_report_added_and_removed(
     """
     old_configs = set(
         datasets.get_dataset_config_names(
-            path, revision=old_revision, trust_remote_code=trust_remote_code
+            path, revision=old_revision
         )
     )
     new_configs = set(
         datasets.get_dataset_config_names(
-            path, revision=new_revision, trust_remote_code=trust_remote_code
+            path, revision=new_revision
         )
     )
 
@@ -52,12 +58,12 @@ def find_common_configs_and_report_added_and_removed(
     return common_splits
 
 
-def compare_configs_revisions(path: str, config: str, old_revision: str, new_revision: str, trust_remote_code: bool):
+def compare_configs_revisions(path: str, config: str, old_revision: str, new_revision: str):
     old_df = datasets.load_dataset(
-        path, config, split="test", trust_remote_code=trust_remote_code, revision=old_revision
+        path, config, split="test", revision=old_revision
     ).to_pandas()
     new_df = datasets.load_dataset(
-        path, config, split="test", trust_remote_code=trust_remote_code, revision=new_revision
+        path, config, split="test", revision=new_revision
     ).to_pandas()
 
     # Outer join includes rows that are in either of the dataframes.
@@ -70,15 +76,15 @@ def compare_configs_revisions(path: str, config: str, old_revision: str, new_rev
 
 
 def main_with_args(
-    path: str, old_revision: str, new_revision: str, trust_remote_code: bool,
+    path: str, old_revision: str, new_revision: str,
     output_dir: Path
 ):
     common_splits = find_common_configs_and_report_added_and_removed(
-        path, old_revision, new_revision, trust_remote_code
+        path, old_revision, new_revision
     )
     diffs = [ ]
     for split in tqdm(common_splits, desc="Common splits"):
-        diff = compare_configs_revisions(path, split, old_revision, new_revision, trust_remote_code)
+        diff = compare_configs_revisions(path, split, old_revision, new_revision)
         diffs.append(diff)
     diffs_df = pd.concat(diffs)
     diffs.clear()
@@ -112,9 +118,6 @@ def main():
     )
     parser.add_argument(
         "--new_revision", type=str, help="New revision of the dataset", default="main"
-    )
-    parser.add_argument(
-        "--trust-remote-code", action="store_true", help="Trust remote code on the Hub"
     )
     parser.add_argument("--output-dir", type=Path, required=True, help="Path to output the diffs")
     args = parser.parse_args()

@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "datasets",
+# ]
+# ///
 """
 This script prepares all prompts for a particular language and pushes them to
 the Hugging Face Hub.
