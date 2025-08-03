@@ -1,0 +1,124 @@
+From c6075146a71a399afd66be37878c6947b522bdc1 Mon Sep 17 00:00:00 2001
+From: Li-yao Xia <lysxia@gmail.com>
+Date: Wed, 21 Aug 2024 11:22:34 +0200
+Subject: [PATCH] Fix mycppo script for Windows
+
+Don't use shebangs, call sh explicitly
+---
+ examples/other/dune |  2 +-
+ plugin/dune         | 14 +++++++-------
+ scripts/dune        |  4 ++--
+ scripts/mk-mycppo   |  7 +++----
+ src/dune            |  8 ++++----
+ 5 files changed, 17 insertions(+), 18 deletions(-)
+ mode change 100755 => 100644 scripts/mk-mycppo
+
+diff --git a/examples/other/dune b/examples/other/dune
+index ea33692a..12ca5f61 100644
+--- a/examples/other/dune
++++ b/examples/other/dune
+@@ -21,5 +21,5 @@
+ (rule
+   (alias compat)
+   (target TacticExampleX.v)
+-  (action (run %{exe:../../scripts/mycppo} %{dep:TacticExampleX.v.cppo} %{target}))
++  (action (run sh %{dep:../../scripts/mycppo} %{dep:TacticExampleX.v.cppo} %{target}))
+   (deps TacticExample.v))
+diff --git a/plugin/dune b/plugin/dune
+index 28e45409..2512d53b 100644
+--- a/plugin/dune
++++ b/plugin/dune
+@@ -38,28 +38,28 @@
+ (rule
+   (alias compat)
+   (target depDriver.ml)
+-  (action (run %{exe:../scripts/mycppo} %{dep:depDriver.ml.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:depDriver.ml.cppo} %{target})))
+ (rule
+   (alias compat)
+   (target genericLib.ml)
+-  (action (run %{exe:../scripts/mycppo} %{dep:genericLib.ml.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:genericLib.ml.cppo} %{target})))
+ (rule
+   (alias compat)
+   (target mergeTypes.ml)
+-  (action (run %{exe:../scripts/mycppo} %{dep:mergeTypes.ml.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:mergeTypes.ml.cppo} %{target})))
+ (rule
+   (alias compat)
+   (target quickChick.mlg)
+-  (action (run %{exe:../scripts/mycppo} %{dep:quickChick.mlg.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:quickChick.mlg.cppo} %{target})))
+ (rule
+   (alias compat)
+   (target tactic_quickchick.mlg)
+-  (action (run %{exe:../scripts/mycppo} %{dep:tactic_quickchick.mlg.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:tactic_quickchick.mlg.cppo} %{target})))
+ (rule
+   (alias compat)
+   (target unifyQC.ml)
+-  (action (run %{exe:../scripts/mycppo} %{dep:unifyQC.ml.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:unifyQC.ml.cppo} %{target})))
+ (rule
+   (alias compat)
+   (target weightmap.mlg)
+-  (action (run %{exe:../scripts/mycppo} %{dep:weightmap.mlg.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:weightmap.mlg.cppo} %{target})))
+diff --git a/scripts/dune b/scripts/dune
+index e8b0861c..648c7946 100644
+--- a/scripts/dune
++++ b/scripts/dune
+@@ -1,3 +1,3 @@
+ (rule
+- (target ./mycppo)
+- (action (run ./mk-mycppo)))
++ (target mycppo)
++ (action (run sh %{dep:mk-mycppo})))
+diff --git a/scripts/mk-mycppo b/scripts/mk-mycppo
+old mode 100755
+new mode 100644
+index 06248650..54b4a216
+--- a/scripts/mk-mycppo
++++ b/scripts/mk-mycppo
+@@ -1,7 +1,6 @@
+-#!/bin/sh
+-# Usage: mycppo input.v.cppo output.v
++# sh mk-mycppo generates the script mycppo
++# Usage: sh mycppo input.v.cppo output.v
+ 
+ COQVER=$(coqc -print-version)
+ COQVER=${COQVER%% *}
+-printf "#!/bin/sh\ncppo -V OCAML:$(ocamlc -version) -V COQ:$COQVER -n \$1 -o \$2" > mycppo
+-chmod u+x mycppo
++printf "cppo -V OCAML:$(ocamlc -version) -V COQ:$COQVER -n \$1 -o \$2" > mycppo
+diff --git a/src/dune b/src/dune
+index 8fcc3ec0..0505fb00 100644
+--- a/src/dune
++++ b/src/dune
+@@ -6,19 +6,19 @@
+ (rule
+   (alias compat)
+   (target Compat.v)
+-  (action (run %{exe:../scripts/mycppo} %{dep:Compat.v.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:Compat.v.cppo} %{target})))
+ 
+ (rule
+   (alias compat)
+   (target ExtractionQC.v)
+-  (action (run %{exe:../scripts/mycppo} %{dep:ExtractionQC.v.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:ExtractionQC.v.cppo} %{target})))
+ 
+ (rule
+   (alias compat)
+   (target QuickChick.v)
+-  (action (run %{exe:../scripts/mycppo} %{dep:QuickChick.v.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:QuickChick.v.cppo} %{target})))
+ 
+ (rule
+   (alias compat)
+   (target TacticsUtil.v)
+-  (action (run %{exe:../scripts/mycppo} %{dep:TacticsUtil.v.cppo} %{target})))
++  (action (run sh %{dep:../scripts/mycppo} %{dep:TacticsUtil.v.cppo} %{target})))
+-- 
+2.45.1
+

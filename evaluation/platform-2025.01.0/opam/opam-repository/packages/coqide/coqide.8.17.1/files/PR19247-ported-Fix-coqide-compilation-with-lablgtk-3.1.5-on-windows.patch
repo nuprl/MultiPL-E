@@ -1,0 +1,132 @@
+From dfc4dac053bead3ef3dfdc7d762eead99c144cc3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ga=C3=ABtan=20Gilbert?= <gaetan.gilbert@skyskimmer.net>
+Date: Wed, 19 Jun 2024 21:27:29 +0200
+Subject: [PATCH] Fix coqide compilation with lablgtk 3.1.5 on windows
+
+---
+ coqide.opam                   | 2 +-
+ dune-project                  | 2 +-
+ ide/coqide/coq.ml             | 5 +----
+ ide/coqide/coq.mli            | 3 ---
+ ide/coqide/coqide_WIN32.ml.in | 1 -
+ lib/spawn.ml                  | 7 ++-----
+ lib/spawn.mli                 | 3 +--
+ 7 files changed, 6 insertions(+), 17 deletions(-)
+
+diff --git a/coqide.opam b/coqide.opam
+index b0e6fe0556..ebef9085dd 100644
+--- a/coqide.opam
++++ b/coqide.opam
+@@ -19,7 +19,7 @@ bug-reports: "https://github.com/coq/coq/issues"
+ depends: [
+   "dune" {>= "2.9"}
+   "coqide-server" {= version}
+-  "lablgtk3-sourceview3" {>= "3.1.2"}
++  "lablgtk3-sourceview3" {>= "3.1.5"}
+ ]
+ build: [
+   # Requires dune 2.8 due to https://github.com/ocaml/dune/issues/3219
+diff --git a/dune-project b/dune-project
+index 311aeed70b..36678cdb4c 100644
+--- a/dune-project
++++ b/dune-project
+@@ -85,7 +85,7 @@ structured way."))
+  (name coqide)
+  (depends
+   (coqide-server (= :version))
+-  (lablgtk3-sourceview3 (>= 3.1.2)))
++  (lablgtk3-sourceview3 (>= 3.1.5)))
+  (synopsis "The Coq Proof Assistant --- GTK3 IDE")
+  (description "Coq is a formal proof management system. It provides
+ a formal language to write mathematical definitions, executable
+diff --git a/ide/coqide/coq.ml b/ide/coqide/coq.ml
+index 416b17a7b5..fbf2d4cd2f 100644
+--- a/ide/coqide/coq.ml
++++ b/ide/coqide/coq.ml
+@@ -180,8 +180,6 @@ let breaker = ref (fun pid -> Unix.kill pid Sys.sigusr1)
+ 
+ (** * The structure describing a coqtop sub-process *)
+ 
+-let gio_channel_of_descr_socket = ref Glib.Io.channel_of_descr
+-
+ module GlibMainLoop = struct
+   type async_chan = Glib.Io.channel
+   type watch_id = Glib.Io.id
+@@ -190,8 +188,7 @@ module GlibMainLoop = struct
+     Glib.Io.add_watch ~cond:[`ERR; `HUP; `IN; `NVAL; `PRI] ~callback chan
+   let remove_watch x = try Glib.Io.remove x with Glib.GError _ -> ()
+   let read_all = Ideutils.io_read_all
+-  let async_chan_of_file fd = Glib.Io.channel_of_descr fd
+-  let async_chan_of_socket s = !gio_channel_of_descr_socket s
++  let async_chan_of_file_or_socket fd = Glib.Io.channel_of_descr fd
+ end
+ 
+ module CoqTop = Spawn.Async(GlibMainLoop)
+diff --git a/ide/coqide/coq.mli b/ide/coqide/coq.mli
+index 0b38c012aa..923a91f971 100644
+--- a/ide/coqide/coq.mli
++++ b/ide/coqide/coq.mli
+@@ -119,9 +119,6 @@ val get_arguments : coqtop -> string list
+ val set_arguments : coqtop -> string list -> unit
+ (** Set process arguments. This also forces a planned reset. *)
+ 
+-(** In win32, sockets are not like regular files *)
+-val gio_channel_of_descr_socket : (Unix.file_descr -> Glib.Io.channel) ref
+-
+ (** {5 Task processing} *)
+ 
+ val try_grab : ?db:bool -> coqtop -> unit task -> (unit -> unit) -> bool
+diff --git a/ide/coqide/coqide_WIN32.ml.in b/ide/coqide/coqide_WIN32.ml.in
+index b34204fdc6..2de6b5d059 100644
+--- a/ide/coqide/coqide_WIN32.ml.in
++++ b/ide/coqide/coqide_WIN32.ml.in
+@@ -48,7 +48,6 @@ let interrupter pid =
+   win32_interrupt pid
+       
+ let () =
+-  Coq.gio_channel_of_descr_socket := Glib.Io.channel_of_descr_socket;
+   set_win32_path ();
+   Coq.interrupter := interrupter;
+   reroute_stdout_stderr ();
+diff --git a/lib/spawn.ml b/lib/spawn.ml
+index b509eb042b..ada7b36130 100644
+--- a/lib/spawn.ml
++++ b/lib/spawn.ml
+@@ -36,8 +36,7 @@ module type MainLoopModel = sig
+   val add_watch : callback:(condition list -> bool) -> async_chan -> watch_id
+   val remove_watch : watch_id -> unit
+   val read_all : async_chan -> string
+-  val async_chan_of_file : Unix.file_descr -> async_chan
+-  val async_chan_of_socket : Unix.file_descr -> async_chan
++  val async_chan_of_file_or_socket : Unix.file_descr -> async_chan
+ end
+ 
+ (* Common code *)
+@@ -191,9 +190,7 @@ let spawn ?(prefer_sock=prefer_sock) ?(env=Unix.environment ())
+   let pid, oob_resp, oob_req, cin, cout, main, is_sock =
+     spawn_with_control prefer_sock env prog args in
+   Unix.set_nonblock (fst main);
+-  let gchan =
+-    if is_sock then ML.async_chan_of_socket (fst main)
+-    else ML.async_chan_of_file (fst main) in
++  let gchan = ML.async_chan_of_file_or_socket (fst main) in
+   let alive, watch = true, None in
+   let p = { cin; cout; gchan; pid; oob_resp; oob_req; alive; watch } in
+   p.watch <- Some (
+diff --git a/lib/spawn.mli b/lib/spawn.mli
+index 34a2cee31b..010eaa48cc 100644
+--- a/lib/spawn.mli
++++ b/lib/spawn.mli
+@@ -43,8 +43,7 @@ module type MainLoopModel = sig
+   val add_watch : callback:(condition list -> bool) -> async_chan -> watch_id
+   val remove_watch : watch_id -> unit
+   val read_all : async_chan -> string
+-  val async_chan_of_file : Unix.file_descr -> async_chan
+-  val async_chan_of_socket : Unix.file_descr -> async_chan
++  val async_chan_of_file_or_socket : Unix.file_descr -> async_chan
+ end
+ 
+ (* spawn a process and read its output asynchronously *)
+-- 
+2.43.0
+

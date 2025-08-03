@@ -1,0 +1,87 @@
+From d5dcd0e658f27375ddbe8a80709c8a291f831ad4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ga=C3=ABtan=20Gilbert?= <gaetan.gilbert@skyskimmer.net>
+Date: Tue, 6 Jun 2023 15:49:37 +0200
+Subject: [PATCH] coq_makefile: put file to install list in file instead of
+ shell script
+
+Should avoid command line length limits, see
+https://coq.zulipchat.com/#narrow/stream/250632-Coq-Platform-devs-.26-users/topic/Strange.20command.20length.20limit.20on.20Linux
+
+(each command in the rule is passed as a single argument to sh, so
+`for f in $(FILESTOINSTALL) ...` makes for a single big argument)
+---
+ .../09-cli-tools/17697-filestoinstall.rst     |  6 +++++
+ tools/CoqMakefile.in                          | 26 ++++++++++++++-----
+ 2 files changed, 26 insertions(+), 6 deletions(-)
+ create mode 100644 doc/changelog/09-cli-tools/17697-filestoinstall.rst
+
+diff --git a/doc/changelog/09-cli-tools/17697-filestoinstall.rst b/doc/changelog/09-cli-tools/17697-filestoinstall.rst
+new file mode 100644
+index 0000000000..0cbec882eb
+--- /dev/null
++++ b/doc/changelog/09-cli-tools/17697-filestoinstall.rst
+@@ -0,0 +1,6 @@
++- **Fixed:**
++  `coq_makefile` avoids generating a command containing all files to install in a make rule,
++  which could surpass the maximum single argument size in some developments
++  (`#17697 <https://github.com/coq/coq/pull/17697>`_,
++  fixes `#17721 <https://github.com/coq/coq/issues/17721>`_,
++  by Gaëtan Gilbert).
+diff --git a/tools/CoqMakefile.in b/tools/CoqMakefile.in
+index a41dd08422..ce7a0ea614 100644
+--- a/tools/CoqMakefile.in
++++ b/tools/CoqMakefile.in
+@@ -592,13 +592,27 @@ beautify: $(BEAUTYFILES)
+ # There rules can be extended in @LOCAL_FILE@
+ # Extensions can't assume when they run.
+ 
++# We use $(file) to avoid generating a very long command string to pass to the shell
++# (cf https://coq.zulipchat.com/#narrow/stream/250632-Coq-Platform-devs-.26-users/topic/Strange.20command.20length.20limit.20on.20Linux)
++# However Apple ships old make which doesn't have $(file) so we need a fallback
++$(file >.hasfile,1)
++HASFILE:=$(shell if [ -e .hasfile ]; then echo 1; rm .hasfile; fi)
++
++.filestoinstall:
++	@:$(if $(HASFILE),$(file >$@,$(FILESTOINSTALL)),\
++	  $(shell rm -f $@) \
++	  $(foreach x,$(FILESTOINSTALL),$(shell printf '%s\n' "$x" >> $@)))
++
++
++.PHONY: .filestoinstall
++
+ # findlib needs the package to not be installed, so we remove it before
+ # installing it (see the call to findlib_remove)
+-install: META
+-	$(HIDE)code=0; for f in $(FILESTOINSTALL); do\
++install: META .filestoinstall
++	$(HIDE)code=0; for f in $$(cat .filestoinstall); do\
+ 	 if ! [ -f "$$f" ]; then >&2 echo $$f does not exist; code=1; fi \
+ 	done; exit $$code
+-	$(HIDE)for f in $(FILESTOINSTALL); do\
++	$(HIDE)for f in $$(cat .filestoinstall); do\
+ 	 df="`$(COQMKFILE) -destination-of "$$f" $(COQLIBS)`";\
+ 	 if [ "$$?" != "0" -o -z "$$df" ]; then\
+ 	   echo SKIP "$$f" since it has no logical path;\
+@@ -640,16 +654,16 @@ install-doc:: html mlihtml
+ 	done
+ .PHONY: install-doc
+ 
+-uninstall::
++uninstall:: .filestoinstall
+ 	@# Extension point
+ 	$(call findlib_remove)
+-	$(HIDE)for f in $(FILESTOINSTALL); do \
++	$(HIDE)for f in $$(cat .filestoinstall); do \
+ 	 df="`$(COQMKFILE) -destination-of "$$f" $(COQLIBS)`" &&\
+ 	 instf="$(COQLIBINSTALL)/$$df/`basename $$f`" &&\
+ 	 rm -f "$$instf" &&\
+ 	 echo RM "$$instf" ;\
+ 	done
+-	$(HIDE)for f in $(FILESTOINSTALL); do \
++	$(HIDE)for f in $$(cat .filestoinstall); do \
+ 	 df="`$(COQMKFILE) -destination-of "$$f" $(COQLIBS)`" &&\
+ 	 echo RMDIR "$(COQLIBINSTALL)/$$df/" &&\
+ 	 (rmdir "$(COQLIBINSTALL)/$$df/" 2>/dev/null || true); \
+-- 
+2.34.1
+

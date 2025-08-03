@@ -17,10 +17,42 @@ RUN apt-get update -yqq && apt-get install -yqq \
     libtest-deep-perl \
     wget \
     lua-unit \
-    aspnetcore-runtime-6.0
+    aspnetcore-runtime-6.0 \
+    gnat gprbuild \
+    vim \
+    unzip m4 git opam \
+    libgmp-dev libgtk-3-dev libgtksourceview-3.0-dev pkg-config bubblewrap \
+    gnupg \
+    ca-certificates \
+    libodbc1 \
+    libssl3 \
+    libsctp1 \
+    jq \
+    zlib1g-dev \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install -yqq libtest-deep-perl
-RUN apt-get install -yqq wget
+# Ada
+ARG ALR_VERSION=2.1.0
+ARG ALR_ARCH=x86_64
+RUN set -eux; \
+  url="https://downloads.sourceforge.net/project/alire.mirror/v${ALR_VERSION}/alr-${ALR_VERSION}-bin-${ALR_ARCH}-linux.zip"; \
+  curl -fL "$url" -o /tmp/alr.zip; \
+  mkdir -p /opt/alire; \
+  unzip -q /tmp/alr.zip -d /opt/alire; \
+  ln -s /opt/alire/bin/alr /usr/local/bin/alr; \
+  rm -f /tmp/alr.zip
+RUN set -eux; \
+  alr -n toolchain --select gnat_native; \
+  eval "$(alr -n printenv)"; \
+  TOOLBIN="$(dirname "$(command -v gnatmake)")"; \
+  echo "Detected toolchain bin: ${TOOLBIN}"; \
+  test -x "${TOOLBIN}/gnatmake"; \
+  test -x "${TOOLBIN}/gprbuild" || true; \
+  ln -s "${TOOLBIN}" /opt/gnat-bin
+
+ENV PATH="/opt/gnat-bin:${PATH}"
+RUN gnatmake --version && gprbuild --version
 
 # JS/TS
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash -
@@ -28,17 +60,29 @@ RUN apt-get install -y nodejs
 RUN npm install -g typescript
 
 # Dlang
-RUN wget -qO - https://dlang.org/install.sh | bash -s dmd
+RUN mkdir -p /root/dlang && \
+    wget -qO /root/dlang/install.sh https://dlang.org/install.sh && \
+    bash /root/dlang/install.sh install dmd-2.111.0 --path /root/dlang
+ENV PATH="/root/dlang/dmd-2.111.0/linux/bin64:${PATH}"
+ENV LD_LIBRARY_PATH="/root/dlang/dmd-2.111.0/linux/lib64:${LD_LIBRARY_PATH}"
+ENV LIBRARY_PATH="/root/dlang/dmd-2.111.0/linux/lib64:${LIBRARY_PATH}"
+ENV DMD=dmd
+ENV DC=dmd
 
 # C#
-RUN apt install gnupg ca-certificates
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 RUN echo "deb https://download.mono-project.com/repo/ubuntu stable-focal main" | tee /etc/apt/sources.list.d/mono-official-stable.list
 RUN apt update --allow-insecure-repositories
 RUN apt install -yqq mono-devel
 
 # F#
-# RUN apt-get install -y dotnet6
+RUN wget -q https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb \
+    -O packages-microsoft-prod.deb \
+  && dpkg -i packages-microsoft-prod.deb \
+  && rm packages-microsoft-prod.deb \
+  && apt-get update -qq \
+  && apt-get install -y --no-install-recommends dotnet-sdk-8.0 \
+  && rm -rf /var/lib/apt/lists/*
 
 # Post-processing
 
@@ -63,12 +107,12 @@ RUN mkdir -p /erlang && \
     ./Install -minimal "$(pwd)"
 
 # Erlang runtime dependencies, see https://github.com/hexpm/bob/blob/4fe43eb9853bb95dbfe276957bd7d3f931a451b3/priv/scripts/docker/erlang-ubuntu-jammy.dockerfile
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install \
-    ca-certificates \
-    libodbc1 \
-    libssl3 \
-    libsctp1
+# RUN apt-get update && \
+#     apt-get -y --no-install-recommends install \
+#     ca-certificates \
+#     libodbc1 \
+#     libssl3 \
+#     libsctp1
 
 # Install Elixir
 RUN mkdir -p /elixir && \
@@ -80,9 +124,10 @@ ENV PATH="/erlang/bin:/elixir/bin:${PATH}"
 ENV LANG=C.UTF-8
 
 # Dafny
-# https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip
-# RUN mkdir -p /root/dafny
-# RUN wget https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip -O /tmp/dafny.zip && unzip /tmp/dafny.zip -d /root/dafny/ && ln -s /root/dafny/dafny/dafny /bin/dafny
+RUN mkdir -p /root/dafny
+RUN wget https://github.com/dafny-lang/dafny/releases/download/v4.3.0/dafny-4.3.0-x64-ubuntu-20.04.zip -O /tmp/dafny.zip && \
+    unzip /tmp/dafny.zip -d /root/dafny/ && \
+    ln -s /root/dafny/dafny/dafny /bin/dafny
 
 # Clojure - https://clojure.org/guides/install_clojure#_linux_instructions
 RUN curl -L -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
@@ -97,10 +142,43 @@ RUN echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storag
 RUN apt-get update -yqq && apt-get install -yqq dart
 
 # Coq
-# RUN apt-get install -yqq coq
+ENV OPAMYES=1 OPAMROOTISOK=1
+RUN opam init --disable-sandboxing -y
+RUN opam update
+RUN opam install -y dune
+WORKDIR /tmp
+RUN git clone --depth 1 https://github.com/coq/platform.git
+WORKDIR /tmp/platform
+ENV OPAMYES=1
+RUN ./coq_platform_make.sh \
+      -packages=8.20~2025.01 \
+      -extent=b \
+      -parallel=s -jobs=4 \
+      -compcert=n -vst=n -unimath=n -fiatcrypto=n \
+      -set-switch=y -dumplogs
+RUN opam install -y coq-mathcomp-ssreflect
+RUN opam install -y coq-mathcomp-fingroup
+RUN opam install -y coq-mathcomp-algebra
+RUN opam install -y coq-mathcomp-solvable
+RUN opam install -y coq-mathcomp-field
+RUN opam install -y coq-mathcomp-character
+RUN opam install -y coq-mathcomp-finmap
+RUN opam install -y coq-mathcomp-bigenough
+RUN opam install -y coq-mathcomp-multinomials
+RUN opam install -y coq-equations
+RUN opam install -y coq-aac-tactics
+RUN opam install -y coq-stdpp
+RUN opam clean -a -v || true
+RUN rm -rf /tmp/platform-2025.01.0
+ENV PATH="/root/.opam/CP.2025.01.0~8.20~2025.01/bin:${PATH}"
 
 # Lean
-# RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
+ENV ELAN_HOME=/root/.elan
+RUN curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh \
+ && bash /tmp/elan-init.sh -y --default-toolchain stable \
+ && rm -f /tmp/elan-init.sh
+ENV PATH="${ELAN_HOME}/bin:${PATH}"
+RUN lean --version && lake --version && elan --version
 
 # install numpy for humanevalplus
 RUN python3 -m pip install numpy fastapi "uvicorn[standard]"

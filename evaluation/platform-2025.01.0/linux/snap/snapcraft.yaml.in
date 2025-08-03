@@ -1,0 +1,115 @@
+name: coq-prover
+base: core20
+version: '@@PLATFORM_RELEASE@@'
+summary: Coq
+description: |
+  @@COQ_DESCRIPTION@@
+
+grade: stable
+confinement: strict
+
+parts:
+  coq:
+    plugin: nil
+    # Note: to find out which libstdc++ version is required, enter a shell with "multipass shell snapcraft-coq-prover" and run "gcc-version" there.
+    build-packages: [build-essential, curl, m4, unzip, git, libstdc++-9-dev]
+    stage-packages: [make, libmpfr6, libgmp10]
+    source: .
+    source-type: local
+    override-build: |
+      if [ -d $SNAPCRAFT_PART_INSTALL/coq-platform/ ]; then exit 0; fi
+      # build
+      echo "COQ_PLATFORM_RELEASE=@@PLATFORM_RELEASE@@" >> package_picks/coq_platform_release.sh
+      echo "COQ_PLATFORM_SWITCH_NAME=@@PLATFORM_RELEASE@@" >> package_picks/coq_platform_switch_name.sh
+      echo "COQ_PLATFORM_REPO_NAME=@@PLATFORM_RELEASE@@" >> package_picks/coq_platform_switch_name.sh
+      COQREGTESTING=y ./coq_platform_make.sh @@PLATFORM_ARGS@@ -dumplogs
+      linux/snap/create_image_snap.sh -dest=$SNAPCRAFT_PART_INSTALL/coq-platform/ 
+
+  wrapper:
+    plugin: nil
+    after: [coq]
+    source: .
+    source-type: local
+    override-build: |
+      # install wrapper for apps
+      mkdir -p $SNAPCRAFT_PART_INSTALL/coq-platform/bin/
+      cp linux/snap/coq_wrapper $SNAPCRAFT_PART_INSTALL/coq-platform/bin/
+
+  shell:
+    plugin: nil
+    after: [coq]
+    source: .
+    source-type: local
+    override-build: |
+      # install coq-shell.sh
+      mkdir -p $SNAPCRAFT_PART_INSTALL/coq-platform/bin/
+      cp linux/snap/coq-shell.sh $SNAPCRAFT_PART_INSTALL/coq-platform/bin/
+
+  env:
+    plugin: nil
+    after: [coq]
+    source: .
+    source-type: local
+    override-build: |
+      # install coq-env.sh
+      mkdir -p $SNAPCRAFT_PART_INSTALL/coq-platform/bin/
+      cp linux/snap/coq-env.sh $SNAPCRAFT_PART_INSTALL/coq-platform/bin/
+
+apps:
+  # For the approved aliases see: https://forum.snapcraft.io/t/aliases-request-for-coq-prover/21925
+  # coqide -> coq-prover.coqide
+  # coq_makefile -> coq-prover.coq-makefile
+  # coqtop -> coq-prover.coqtop
+  # coqc -> coq-prover.coqc
+  # coqdep -> coq-prover.coqdep
+  # coqidetop.opt -> coq-prover.coqidetop
+  # The aliases are auto-handled by the store and not available when installed from a local snap
+  # See https://snapcraft.io/docs/deprecation-notice-5
+
+  coqide:
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/coqide
+    plugs:
+    - home
+    - desktop
+    - desktop-legacy
+    - gsettings
+    - unity7
+    - wayland
+    - x11
+    # See https://snapcraft.io/docs/supported-extensions for a core/extension version matrix
+    extensions: [gnome-3-38]
+  coqtop:
+    plugs: [home]
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/coqtop
+  coqc:
+    plugs: [home]
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/coqc
+  coq-makefile:
+    plugs: [home]
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/coq_makefile
+  coqidetop:
+    plugs: [home,network-bind]
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/coqidetop.opt
+  coqdep:
+    plugs: [home]
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/coqdep
+  sertop:
+    plugs: [home]
+    command-chain: [ coq-platform/bin/coq_wrapper ]
+    command: coq-platform/bin/sertop
+  # Note: one cannot start an interactive shell from snap in a sensible way cause the shell would run in the snap sandbox.
+  # One can register exceptions for required files, but making it work for all common shells would be too complicated.
+  # But one can start this script from /snap/coq-prover/current/coq-platform/bin
+  # Also we provide coq-env.sh which can be used with eval to set the environment
+  # shell:
+  #   plugs: [home]
+  #   command: coq-platform/bin/coq-shell.sh
+  env:
+     plugs: [home]
+     command: coq-platform/bin/coq-env.sh

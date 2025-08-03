@@ -1,0 +1,28 @@
+From 9b1f27ad3b9a921229354fd119f6ad819de9c1be Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <7895506+MSoegtropIMC@users.noreply.github.com>
+Date: Thu, 3 Oct 2024 10:21:47 +0200
+Subject: [PATCH] Windows: fix path normalization in coqdep
+
+---
+ tools/coqdep/lib/file_util.ml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/coqdep/lib/file_util.ml b/tools/coqdep/lib/file_util.ml
+index 17d8622d78..77e9553810 100644
+--- a/tools/coqdep/lib/file_util.ml
++++ b/tools/coqdep/lib/file_util.ml
+@@ -10,8 +10,9 @@
+ 
+ let to_relative_path : string -> string = fun full_path ->
+   if Filename.is_relative full_path then full_path else
+-  let cwd  = String.split_on_char '/' (Sys.getcwd ()) in
+-  let path = String.split_on_char '/' full_path in
++  let re_delim = if Sys.win32 then "[/\\]" else "/" in
++  let cwd = Str.split_delim (Str.regexp re_delim) (Sys.getcwd ()) in
++  let path = Str.split_delim (Str.regexp re_delim) full_path in
+   let rec remove_common_prefix l1 l2 =
+     match (l1, l2) with
+     | (x1 :: l1, x2 :: l2) when x1 = x2 -> remove_common_prefix l1 l2
+-- 
+2.39.3 (Apple Git-146)
+

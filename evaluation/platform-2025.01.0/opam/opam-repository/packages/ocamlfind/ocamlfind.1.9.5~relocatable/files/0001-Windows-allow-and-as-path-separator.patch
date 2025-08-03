@@ -1,0 +1,57 @@
+From 6e1ad797be4c752a3242e26b7f555c006f6c1570 Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <7895506+MSoegtropIMC@users.noreply.github.com>
+Date: Tue, 5 Dec 2023 14:26:54 +0100
+Subject: [PATCH] Windows: allow : and ; as path separator
+
+---
+ src/findlib/fl_split.ml | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/src/findlib/fl_split.ml b/src/findlib/fl_split.ml
+index 8600458..28cb391 100644
+--- a/src/findlib/fl_split.ml
++++ b/src/findlib/fl_split.ml
+@@ -69,25 +69,31 @@ let is_valid_package_name s =
+ ;;
+ 
+ 
+-let path_separator =
++let path_separators =
+   match Sys.os_type with
+-    | "Unix" | "BeOS"   -> ':'
+-    | "Cygwin" -> ';'   (* You might want to change this *)
+-    | "Win32"  -> ';'
+-    | "MacOS"  -> failwith "Findlib: I do not know what is the correct path separator for MacOS. If you can help me, write a mail to gerd@gerd-stolpmann.de"
++    | "Unix" | "BeOS"   -> ":"
++    | "Cygwin" -> ":;"
++    | "Win32"  -> ":;"
++    | "MacOS"  -> ":"
+     | _ -> failwith "Findlib: unknown operating system"
+ ;;
+ 
+ 
+ let path str =
+-  (* split "str" into parts separated by "path_separator" *)
++  (* split "str" into parts separated by "path_separators" *)
+   let l = String.length str in
+   let rec split_up j k =
+     if k < l then begin
+       let c = str.[k] in
+-      if c = path_separator then begin
+-        if k - j > 0 then
+-	  String.sub str j (k-j) :: split_up (k+1) (k+1)
++      if String.contains path_separators c then begin
++        if k - j > 0 then begin
++          let cju = Char.uppercase_ascii str.[j] in
++          if path_separators == ":;" && k - j == 1 && cju >= 'A' && cju <= 'Z' then
++            (* this handles the "C:" case on Windows - paths with just one letter are not split on Windows *)
++            split_up j (k+1)    
++          else
++            String.sub str j (k-j) :: split_up (k+1) (k+1)
++        end
+         else
+ 	  split_up (k+1) (k+1)
+       end
+-- 
+2.37.3
+

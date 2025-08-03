@@ -1,0 +1,28 @@
+From 11c92005b041f6f6a9bd6e0411d188199b39eb4a Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <7895506+MSoegtropIMC@users.noreply.github.com>
+Date: Fri, 17 Nov 2023 19:29:46 +0100
+Subject: [PATCH] ocamldep: fix to_relative_path on Windows
+
+---
+ tools/coqdep/lib/fl.ml | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/coqdep/lib/fl.ml b/tools/coqdep/lib/fl.ml
+index 8e58715238..c1ee718fc1 100644
+--- a/tools/coqdep/lib/fl.ml
++++ b/tools/coqdep/lib/fl.ml
+@@ -91,8 +91,9 @@ let rec find_plugin meta_file plugin_name path p { Fl_metascanner.pkg_defs ; pkg
+     is already relative, then it is returned immediately. *)
+ let to_relative_path : string -> string = fun full_path ->
+   if Filename.is_relative full_path then full_path else
+-  let cwd  = String.split_on_char '/' (Sys.getcwd ()) in
+-  let path = String.split_on_char '/' full_path in
++  let re_delim = if Sys.win32 then "[/\\]" else "/" in
++  let cwd = Str.split_delim (Str.regexp re_delim) (Sys.getcwd ()) in
++  let path = Str.split_delim (Str.regexp re_delim) full_path in
+   let rec remove_common_prefix l1 l2 =
+     match (l1, l2) with
+     | (x1 :: l1, x2 :: l2) when x1 = x2 -> remove_common_prefix l1 l2
+-- 
+2.37.1 (Apple Git-137.1)
+

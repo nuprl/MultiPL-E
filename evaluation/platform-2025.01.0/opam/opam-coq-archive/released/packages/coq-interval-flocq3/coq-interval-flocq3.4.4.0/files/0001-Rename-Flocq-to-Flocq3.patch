@@ -1,0 +1,459 @@
+From e5d16c80a13da57e3306895e3d44971492b097ef Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <7895506+MSoegtropIMC@users.noreply.github.com>
+Date: Tue, 29 Mar 2022 21:15:15 +0200
+Subject: [PATCH] Rename Flocq to Flocq3
+
+---
+ Remakefile.in                 | 14 +++++++-------
+ configure.in                  |  8 ++++----
+ src/Eval/Eval.v               |  2 +-
+ src/Eval/Reify.v              |  2 +-
+ src/Float/Basic.v             |  2 +-
+ src/Float/Generic.v           |  2 +-
+ src/Float/Generic_ops.v       |  2 +-
+ src/Float/Generic_proof.v     |  2 +-
+ src/Float/Primitive_ops.v     |  2 +-
+ src/Float/Sig.v               |  2 +-
+ src/Float/Specific_bigint.v   |  2 +-
+ src/Float/Specific_ops.v      |  2 +-
+ src/Float/Specific_sig.v      |  2 +-
+ src/Float/Specific_stdz.v     |  2 +-
+ src/Integral/Bertrand.v       |  2 +-
+ src/Interval/Float.v          |  2 +-
+ src/Interval/Transcend.v      |  2 +-
+ src/Missing/Stdlib.v          |  2 +-
+ src/Poly/Bound_quad.v         |  2 +-
+ src/Poly/Datatypes.v          |  2 +-
+ src/Poly/Taylor_model_sharp.v |  2 +-
+ src/Poly/Taylor_poly.v        |  2 +-
+ src/Real/Xreal.v              |  2 +-
+ src/Real/Xreal_derive.v       |  2 +-
+ src/Tactic.v                  |  2 +-
+ src/Tactics/Integral_helper.v |  2 +-
+ src/Tactics/Interval_helper.v |  2 +-
+ testsuite/bug-20201223.v      |  2 +-
+ 28 files changed, 37 insertions(+), 37 deletions(-)
+
+diff --git a/Remakefile.in b/Remakefile.in
+index ef0391a..5c69968 100644
+--- a/Remakefile.in
++++ b/Remakefile.in
+@@ -64,8 +64,8 @@ src/Tactic_float.v: src/Tactic_bignum.v src/Tactic_primfloat.v Remakefile
+ 	cp @PRIM_FLOAT_TAC@ src/Tactic_float.v
+ 
+ %.vo: %.v | src/Tactic_float.v
+-	@COQDEP@ -R src Interval $< | @REMAKE@ -r $@
+-	@COQC@ @COQEXTRAFLAGS@ -R src Interval $<
++	@COQDEP@ -R src IntervalFlocq3 $< | @REMAKE@ -r $@
++	@COQC@ @COQEXTRAFLAGS@ -R src IntervalFlocq3 $<
+ 
+ COQPKGS = clib engine kernel interp lib library parsing pretyping printing proofs tactics toplevel vernac plugins.ltac
+ PACKAGES = $(addprefix -package @COQROOT@., $(COQPKGS)) -package @BIGINTPKG@
+@@ -82,7 +82,7 @@ src/Plot/interval_plot.cmxs: src/Plot/interval_plot.ml
+ MLTARGETS = $(addprefix src/Plot/, @TACTIC_TARGETS@)
+ 
+ src/Plot.vo: src/Plot.v $(MLTARGETS)
+-	@COQC@ @COQEXTRAFLAGS@ @TACTIC_PARAM@ -R src Interval -I src/Plot $<
++	@COQC@ @COQEXTRAFLAGS@ @TACTIC_PARAM@ -R src IntervalFlocq3 -I src/Plot $<
+ 
+ src/clean:
+ 	rm -f $(VOFILES) $(GLOBS)
+@@ -102,7 +102,7 @@ check: src/Tactic.vo
+ 	rm -f check_tmp.v
+ 	for f in *.v; do
+ 	  cp "$f" check_tmp.v
+-	  @COQC@ -R ../src Interval check_tmp.v > output.tmp 2>&1
++	  @COQC@ -R ../src IntervalFlocq3 check_tmp.v > output.tmp 2>&1
+ 	  return_code=$?
+ 	  if [ ${return_code} -ne 0 ]; then
+ 	    (echo "*** $f exited with error code ${return_code}"; cat output.tmp; echo) >> "$logfile"
+@@ -130,7 +130,7 @@ check-plot: src/Tactic.vo src/Plot.vo
+ 	Definition p := ltac:(plot (fun x => x^2) (-10) 10 with (i_size 20 20)).
+ 	Plot p as "check_plot_tmp.gp".
+ 	EOF
+-	@COQC@ -R src Interval -I src/Plot check_plot_tmp.v
++	@COQC@ -R src IntervalFlocq3 -I src/Plot check_plot_tmp.v
+ 	[ `wc -l < check_plot_tmp.gp` = 30 ]
+ 	rm check_plot_tmp.*
+ 
+@@ -160,7 +160,7 @@ deps.map: deps.dot
+ html/index.html: $(VOFILES)
+ 	rm -rf html
+ 	mkdir -p html
+-	@COQDOC@ -toc -interpolate -utf8 -html -g -R src Interval -d html \
++	@COQDOC@ -toc -interpolate -utf8 -html -g -R src IntervalFlocq3 -d html \
+ 	  --coqlib http://coq.inria.fr/distrib/current/stdlib \
+ 	  --external https://math-comp.github.io/htmldoc mathcomp \
+ 	  --external http://flocq.gforge.inria.fr/html Flocq \
+@@ -178,7 +178,7 @@ public: deps.png deps.map html/index.html
+ 	cp -r html deps.png public/
+ 
+ install:
+-	dir="${DESTDIR}@COQUSERCONTRIB@/Interval"
++	dir="${DESTDIR}@COQUSERCONTRIB@/IntervalFlocq3"
+ 	mkdir -p $dir
+ 	for d in Eval Float Integral Interval Missing Poly Real Tactics; do mkdir -p $dir/$d; done
+ 	for f in $(FILES); do cp src/$f.vo $dir/$f.vo; done
+diff --git a/configure.in b/configure.in
+index 5b26070..9dd939a 100644
+--- a/configure.in
++++ b/configure.in
+@@ -77,19 +77,19 @@ fi
+ AC_MSG_RESULT([$OCAMLFIND])
+ if test ! "$OCAMLFIND"; then OCAMLFIND=ocamlfind; fi
+ 
+-AC_MSG_CHECKING([for Flocq])
++AC_MSG_CHECKING([for Flocq3])
+ AS_IF(
+-  [ echo "Require Import Flocq.Version BinNat." \
++  [ echo "Require Import Flocq3.Version BinNat." \
+          "Goal (30100 <= Flocq_version)%N. easy. Qed." > conftest.v
+     $COQC conftest.v 2> conftest.err ],
+   [ AC_MSG_RESULT([yes]) ],
+   [ AC_MSG_RESULT([no])
+-    AC_MSG_ERROR([ *** Unable to find library Flocq >= 3.1 (http://flocq.gforge.inria.fr/)])])
++    AC_MSG_ERROR([ *** Unable to find library Flocq3 >= 3.1 (http://flocq.gforge.inria.fr/)])])
+ rm -f conftest.v conftest.vo conftest.err
+ 
+ AC_MSG_CHECKING([for primitive floats])
+ AS_IF(
+-  [ echo "Require Import Flocq.IEEE754.PrimFloat." > conftest.v
++  [ echo "Require Import Flocq3.IEEE754.PrimFloat." > conftest.v
+     $COQC conftest.v 2> conftest.err ],
+   [prim_float=yes], [prim_float=no])
+ rm -f conftest.v conftest.vo conftest.err
+diff --git a/src/Eval/Eval.v b/src/Eval/Eval.v
+index 63d0e28..f374dc3 100644
+--- a/src/Eval/Eval.v
++++ b/src/Eval/Eval.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Bool Reals.
+-From Flocq Require Import Zaux Raux.
++From Flocq3 Require Import Zaux Raux.
+ From Coq Require Import List.
+ From Coquelicot Require Import Coquelicot.
+ From mathcomp.ssreflect Require Import ssreflect.
+diff --git a/src/Eval/Reify.v b/src/Eval/Reify.v
+index b753083..05d7862 100644
+--- a/src/Eval/Reify.v
++++ b/src/Eval/Reify.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals Psatz.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ From Coq Require Import List.
+ 
+ Require Import Xreal.
+diff --git a/src/Float/Basic.v b/src/Float/Basic.v
+index c41312d..58a8b45 100644
+--- a/src/Float/Basic.v
++++ b/src/Float/Basic.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals ZArith Psatz.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ 
+ Require Import Xreal.
+ 
+diff --git a/src/Float/Generic.v b/src/Float/Generic.v
+index 35116fe..2aa5f51 100644
+--- a/src/Float/Generic.v
++++ b/src/Float/Generic.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals Bool ZArith.
+-From Flocq Require Import Zaux Raux Div Sqrt.
++From Flocq3 Require Import Zaux Raux Div Sqrt.
+ 
+ Require Import Xreal.
+ Require Import Basic.
+diff --git a/src/Float/Generic_ops.v b/src/Float/Generic_ops.v
+index 73f0215..0d951d1 100644
+--- a/src/Float/Generic_ops.v
++++ b/src/Float/Generic_ops.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Reals Psatz.
+-From Flocq Require Import Zaux Raux.
++From Flocq3 Require Import Zaux Raux.
+ 
+ Require Import Xreal.
+ Require Import Basic.
+diff --git a/src/Float/Generic_proof.v b/src/Float/Generic_proof.v
+index 5e84e5d..26312e3 100644
+--- a/src/Float/Generic_proof.v
++++ b/src/Float/Generic_proof.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals Bool ZArith Psatz.
+-From Flocq Require Import Core Digits Bracket Round Operations.
++From Flocq3 Require Import Core Digits Bracket Round Operations.
+ From mathcomp.ssreflect Require Import ssrbool.
+ 
+ Require Import Stdlib.
+diff --git a/src/Float/Primitive_ops.v b/src/Float/Primitive_ops.v
+index 18bc84c..3e74f6b 100644
+--- a/src/Float/Primitive_ops.v
++++ b/src/Float/Primitive_ops.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import ZArith Reals Int63 Floats Psatz.
+-From Flocq Require Import Zaux Raux BinarySingleNaN PrimFloat Sterbenz Mult_error.
++From Flocq3 Require Import Zaux Raux BinarySingleNaN PrimFloat Sterbenz Mult_error.
+ 
+ Require Import Xreal.
+ Require Import Basic.
+diff --git a/src/Float/Sig.v b/src/Float/Sig.v
+index 8a7f338..6d48ea5 100644
+--- a/src/Float/Sig.v
++++ b/src/Float/Sig.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Reals.
+-From Flocq Require Import Zaux Raux.
++From Flocq3 Require Import Zaux Raux.
+ 
+ Require Import Xreal.
+ Require Import Basic.
+diff --git a/src/Float/Specific_bigint.v b/src/Float/Specific_bigint.v
+index e3defcc..cb86edf 100644
+--- a/src/Float/Specific_bigint.v
++++ b/src/Float/Specific_bigint.v
+@@ -19,7 +19,7 @@ liability. See the COPYING file for more details.
+ 
+ From Coq Require Import Bool ZArith Reals Psatz.
+ From Bignums Require Import BigN BigZ.
+-From Flocq Require Import Zaux Raux Digits.
++From Flocq3 Require Import Zaux Raux Digits.
+ 
+ Require Import Basic.
+ Require Import Generic.
+diff --git a/src/Float/Specific_ops.v b/src/Float/Specific_ops.v
+index 9953e99..3ba688b 100644
+--- a/src/Float/Specific_ops.v
++++ b/src/Float/Specific_ops.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Reals Lia Bool Psatz.
+-From Flocq Require Import Zaux Raux Digits Bracket.
++From Flocq3 Require Import Zaux Raux Digits Bracket.
+ From mathcomp.ssreflect Require Import ssrbool.
+ 
+ Require Import Xreal.
+diff --git a/src/Float/Specific_sig.v b/src/Float/Specific_sig.v
+index bff4f01..a335e5a 100644
+--- a/src/Float/Specific_sig.v
++++ b/src/Float/Specific_sig.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Reals.
+-From Flocq Require Import Zaux Raux.
++From Flocq3 Require Import Zaux Raux.
+ 
+ Require Import Basic.
+ Require Import Generic.
+diff --git a/src/Float/Specific_stdz.v b/src/Float/Specific_stdz.v
+index 2259a30..e8741b2 100644
+--- a/src/Float/Specific_stdz.v
++++ b/src/Float/Specific_stdz.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Reals Psatz Bool.
+-From Flocq Require Import Zaux Raux.
++From Flocq3 Require Import Zaux Raux.
+ 
+ Require Import Basic.
+ Require Import Generic.
+diff --git a/src/Integral/Bertrand.v b/src/Integral/Bertrand.v
+index b5fd430..e8cc19e 100644
+--- a/src/Integral/Bertrand.v
++++ b/src/Integral/Bertrand.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Reals ZArith Psatz Fourier_util.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ From Coquelicot Require Import Coquelicot AutoDerive.
+ From mathcomp.ssreflect Require Import ssreflect ssrfun ssrbool ssrnat bigop.
+ 
+diff --git a/src/Interval/Float.v b/src/Interval/Float.v
+index a8d63bd..1c7e168 100644
+--- a/src/Interval/Float.v
++++ b/src/Interval/Float.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Bool Reals Psatz.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ 
+ Require Import Stdlib.
+ Require Import Xreal.
+diff --git a/src/Interval/Transcend.v b/src/Interval/Transcend.v
+index a710762..59e8434 100644
+--- a/src/Interval/Transcend.v
++++ b/src/Interval/Transcend.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals Psatz.
+-From Flocq Require Import Zaux Raux Digits.
++From Flocq3 Require Import Zaux Raux Digits.
+ 
+ Require Import Stdlib.
+ Require Import Xreal.
+diff --git a/src/Missing/Stdlib.v b/src/Missing/Stdlib.v
+index 7b2e5f2..18701d8 100644
+--- a/src/Missing/Stdlib.v
++++ b/src/Missing/Stdlib.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals Psatz.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ 
+ Ltac evar_last :=
+   match goal with
+diff --git a/src/Poly/Bound_quad.v b/src/Poly/Bound_quad.v
+index 55feb4a..8cf1ce9 100644
+--- a/src/Poly/Bound_quad.v
++++ b/src/Poly/Bound_quad.v
+@@ -21,7 +21,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Reals.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ From mathcomp.ssreflect Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq fintype bigop.
+ 
+ Require Import Xreal.
+diff --git a/src/Poly/Datatypes.v b/src/Poly/Datatypes.v
+index 0e875b8..15e585d 100644
+--- a/src/Poly/Datatypes.v
++++ b/src/Poly/Datatypes.v
+@@ -23,7 +23,7 @@ liability. See the COPYING file for more details.
+ From Coq Require Import ZArith Reals.
+ From Coquelicot Require Import Coquelicot.
+ From mathcomp.ssreflect Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq fintype bigop.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ 
+ Require Import Stdlib.
+ Require Import MathComp.
+diff --git a/src/Poly/Taylor_model_sharp.v b/src/Poly/Taylor_model_sharp.v
+index c07a45a..339c6b5 100644
+--- a/src/Poly/Taylor_model_sharp.v
++++ b/src/Poly/Taylor_model_sharp.v
+@@ -21,7 +21,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import ZArith Psatz Reals.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ From Coquelicot Require Import Coquelicot.
+ From mathcomp.ssreflect Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq fintype bigop.
+ 
+diff --git a/src/Poly/Taylor_poly.v b/src/Poly/Taylor_poly.v
+index 4f440ad..392102e 100644
+--- a/src/Poly/Taylor_poly.v
++++ b/src/Poly/Taylor_poly.v
+@@ -22,7 +22,7 @@ liability. See the COPYING file for more details.
+ 
+ 
+ From Coq Require Import ZArith Reals.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ From mathcomp.ssreflect Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq fintype bigop.
+ 
+ Require Import Interval.
+diff --git a/src/Real/Xreal.v b/src/Real/Xreal.v
+index 285ee88..8b61ea4 100644
+--- a/src/Real/Xreal.v
++++ b/src/Real/Xreal.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals Bool.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ From mathcomp.ssreflect Require Import ssreflect.
+ 
+ Require Import Stdlib.
+diff --git a/src/Real/Xreal_derive.v b/src/Real/Xreal_derive.v
+index b363ce3..18b2c08 100644
+--- a/src/Real/Xreal_derive.v
++++ b/src/Real/Xreal_derive.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals.
+-From Flocq Require Import Raux.
++From Flocq3 Require Import Raux.
+ 
+ Require Import Stdlib.
+ Require Import Xreal.
+diff --git a/src/Tactic.v b/src/Tactic.v
+index 7227cf8..4208130 100644
+--- a/src/Tactic.v
++++ b/src/Tactic.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals List ZArith Psatz.
+-From Flocq Require Import Zaux.
++From Flocq3 Require Import Zaux.
+ From Coquelicot Require Import Coquelicot.
+ 
+ Require Import Sig.
+diff --git a/src/Tactics/Integral_helper.v b/src/Tactics/Integral_helper.v
+index f3e09cf..59de1b7 100644
+--- a/src/Tactics/Integral_helper.v
++++ b/src/Tactics/Integral_helper.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals List ZArith Psatz.
+-From Flocq Require Import Zaux.
++From Flocq3 Require Import Zaux.
+ From Coquelicot Require Import Coquelicot.
+ 
+ Require Import Stdlib.
+diff --git a/src/Tactics/Interval_helper.v b/src/Tactics/Interval_helper.v
+index 5c9fcc7..38c01aa 100644
+--- a/src/Tactics/Interval_helper.v
++++ b/src/Tactics/Interval_helper.v
+@@ -18,7 +18,7 @@ liability. See the COPYING file for more details.
+ *)
+ 
+ From Coq Require Import Reals List ZArith Psatz.
+-From Flocq Require Import Zaux.
++From Flocq3 Require Import Zaux.
+ 
+ Require Import Stdlib.
+ Require Import Xreal.
+diff --git a/testsuite/bug-20201223.v b/testsuite/bug-20201223.v
+index 51f145e..992b68a 100644
+--- a/testsuite/bug-20201223.v
++++ b/testsuite/bug-20201223.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Reals.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ From Interval Require Import Tactic.
+ 
+ Goal forall x, (IZR (1 + 1) <= IZR x -> 1 <= sqrt (IZR x))%R.
+-- 
+2.33.0
+

@@ -1,0 +1,90 @@
+From 7073b2644dacc8d43f1a0059d2166506fd46407f Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <7895506+MSoegtropIMC@users.noreply.github.com>
+Date: Sat, 4 Jul 2020 21:31:23 +0200
+Subject: [PATCH] Add function channel_of_descr_socket (windows has different
+ handles for sockets and files)
+
+---
+ src/glib.ml   |  2 ++
+ src/glib.mli  |  1 +
+ src/ml_glib.c | 18 +++++++++++++++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/src/glib.ml b/src/glib.ml
+index 87bb4986..369ece6b 100644
+--- a/src/glib.ml
++++ b/src/glib.ml
+@@ -72,6 +72,8 @@ module Io = struct
+   type id
+   external channel_of_descr : Unix.file_descr -> channel
+     = "ml_g_io_channel_unix_new"
++  external channel_of_descr_socket : Unix.file_descr -> channel
++    = "ml_g_io_channel_unix_new_socket"
+   external remove : id -> unit = "ml_g_source_remove"
+   external add_watch :
+     cond:condition list -> callback:(condition list -> bool) -> ?prio:int -> channel -> id
+diff --git a/src/glib.mli b/src/glib.mli
+index 999bec12..92b0edd3 100644
+--- a/src/glib.mli
++++ b/src/glib.mli
+@@ -75,6 +75,7 @@ module Io : sig
+   type condition = [ `ERR | `HUP | `IN | `NVAL | `OUT | `PRI]
+   type id
+   val channel_of_descr : Unix.file_descr -> channel
++  val channel_of_descr_socket : Unix.file_descr -> channel
+   val add_watch :
+     cond:condition list -> callback:(condition list -> bool) -> ?prio:int -> channel -> id
+   val remove : id -> unit
+diff --git a/src/ml_glib.c b/src/ml_glib.c
+index 070cd66d..db9c8332 100644
+--- a/src/ml_glib.c
++++ b/src/ml_glib.c
+@@ -25,6 +25,8 @@
+ #include <string.h>
+ #include <locale.h>
+ #ifdef _WIN32
++/* to kill a #warning: include winsock2.h before windows.h */
++#include <winsock2.h>
+ #include "win32.h"
+ #include <wtypes.h>
+ #include <io.h>
+@@ -38,6 +40,11 @@
+ #include <caml/callback.h>
+ #include <caml/threads.h>
+ 
++#ifdef _WIN32
++/* for Socket_val */
++#include <caml/unixsupport.h>
++#endif
++
+ #include "wrappers.h"
+ #include "ml_glib.h"
+ #include "glib_tags.h"
+@@ -326,14 +333,23 @@ Make_Val_final_pointer_ext (GIOChannel, _noref, Ignore, g_io_channel_unref, 20)
+ 
+ #ifndef _WIN32
+ ML_1 (g_io_channel_unix_new, Int_val, Val_GIOChannel_noref)
++CAMLprim value ml_g_io_channel_unix_new_socket (value arg1) {
++  return Val_GIOChannel_noref (g_io_channel_unix_new (Int_val (arg1))); 
++}
+ 
+ #else
+ CAMLprim value ml_g_io_channel_unix_new(value wh)
+ {
+   return Val_GIOChannel_noref
+-    (g_io_channel_unix_new
++    (g_io_channel_win32_new_fd
+      (_open_osfhandle((long)*(HANDLE*)Data_custom_val(wh), O_BINARY)));
+ }
++
++CAMLprim value ml_g_io_channel_unix_new_socket(value wh)
++{
++  return Val_GIOChannel_noref
++    (g_io_channel_win32_new_socket(Socket_val(wh)));
++}
+ #endif
+ 
+ static gboolean ml_g_io_channel_watch(GIOChannel *s, GIOCondition c,
+-- 
+2.27.0
+

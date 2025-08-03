@@ -1,0 +1,192 @@
+From 90b4a8e1354d5f00e36c4b9d9d567bb56e767d1c Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <msoegtrop@apple.com>
+Date: Tue, 20 Sep 2022 17:47:57 +0200
+Subject: [PATCH] Allow executable relative paths staring with ... - allow to
+ specify a different path at compile- and run time for findlib.conf
+
+---
+ Makefile               |  2 +-
+ configure              | 22 ++++++++++++++++++
+ src/findlib/Makefile   |  2 +-
+ src/findlib/findlib.ml | 51 ++++++++++++++++++++++++++++--------------
+ 4 files changed, 58 insertions(+), 19 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f2f1df6..cfe56f3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -54,7 +54,7 @@ findlib.conf: findlib.conf.in
+ 	USE_CYGPATH="$(USE_CYGPATH)"; \
+ 	export USE_CYGPATH; \
+ 	cat findlib.conf.in | \
+-	    $(SH) tools/patch '@SITELIB@' '$(OCAML_SITELIB)' >findlib.conf
++	    $(SH) tools/patch '@SITELIB@' '$(OCAML_SITELIB_RUN)' >findlib.conf
+ 	if ./tools/cmd_from_same_dir ocamlc; then \
+ 		echo 'ocamlc="ocamlc.opt"' >>findlib.conf; \
+ 	fi
+diff --git a/configure b/configure
+index 71ec745..82d6c66 100755
+--- a/configure
++++ b/configure
+@@ -118,7 +118,9 @@ cygpath_to_unix () {
+ ocamlfind_bin=""
+ ocamlfind_man=""
+ ocaml_sitelib=""
++ocaml_sitelib_run=""
+ ocamlfind_config=""
++ocamlfind_config_run=""
+ with_toolbox=0
+ with_topfind=1
+ with_camlp4=1
+@@ -137,9 +139,15 @@ while [ "$#" != "0" ]; do
+         -sitelib) ocaml_sitelib=$2
+ 	          shift 2
+ 		  ;;
++        -sitelib_run) ocaml_sitelib_run=$2
++	          shift 2
++		  ;;
+         -config) ocamlfind_config=$2
+ 	         shift 2
+ 		 ;;
++        -config_run) ocamlfind_config_run=$2
++	         shift 2
++		 ;;
+         -no-custom) custom=
+                 shift
+                 ;;
+@@ -283,6 +291,10 @@ if [ -z "$ocaml_sitelib" ]; then
+     esac
+ fi
+ 
++if [ -z "$ocaml_sitelib_run" ]; then
++    ocaml_sitelib_run="$ocaml_sitelib"
++fi
++
+ # Find out the directory where ocamlc is:
+ 
+ ocamlc=`get_path ocamlc`
+@@ -346,6 +358,11 @@ if [ -z "${ocamlfind_config}" ]; then
+     esac
+ fi
+ 
++if [-z "$ocamlfind_config_run" ]
++then
++  ocamlfind_config_run="$ocamlfind_config"
++fi
++
+ ######################################################################
+ # do we have #remove_directory?
+ 
+@@ -703,10 +720,12 @@ echo "OCAML_CORE_STDLIB=${ocaml_core_stdlib}" >>Makefile.config
+ echo "OCAML_CORE_BIN=${ocaml_core_bin}" >>Makefile.config
+ echo "OCAML_CORE_MAN=${ocaml_core_man}" >>Makefile.config
+ echo "OCAML_SITELIB=${ocaml_sitelib}" >>Makefile.config
++echo "OCAML_SITELIB_RUN=${ocaml_sitelib_run}" >>Makefile.config
+ echo "OCAML_THREADS=${ocaml_threads}" >>Makefile.config
+ echo "OCAMLFIND_BIN=${ocamlfind_bin}" >>Makefile.config
+ echo "OCAMLFIND_MAN=${ocamlfind_man}" >>Makefile.config
+ echo "OCAMLFIND_CONF=${ocamlfind_config}" >>Makefile.config
++echo "OCAMLFIND_CONF_RUN=${ocamlfind_config_run}" >>Makefile.config
+ echo "OCAMLFIND_OCAMLFLAGS=${ocamlfind_ocamlflags}" >>Makefile.config
+ echo "OCAMLFIND_ARCHIVES=${ocamlfind_archives}" >>Makefile.config
+ echo "OCAML_AUTOLINK=${ocaml_autolink}" >>Makefile.config
+@@ -745,8 +764,11 @@ echo "    Manual pages:          ${ocaml_core_man}"
+ echo "    Multi-threading type:  ${ocaml_threads}"
+ echo "The directory of site-specific packages will be"
+ echo "    site-lib:              ${ocaml_sitelib}"
++echo "    site-lib (run time):   ${ocaml_sitelib_run}"
+ echo "The configuration file is written to:"
+ echo "    findlib config file:   ${ocamlfind_config}"
++echo "The configuration file is read at runtime from:"
++echo "    findlib config file:   ${ocamlfind_config_run}"
+ echo "Software will be installed:"
+ echo "    Libraries:             in <site-lib>/findlib"
+ echo "    Binaries:              ${ocamlfind_bin}"
+diff --git a/src/findlib/Makefile b/src/findlib/Makefile
+index 84514b6..3421db7 100644
+--- a/src/findlib/Makefile
++++ b/src/findlib/Makefile
+@@ -91,7 +91,7 @@ findlib_config.ml: findlib_config.mlp $(TOP)/Makefile.config
+ 	USE_CYGPATH="$(USE_CYGPATH)"; \
+ 	export USE_CYGPATH; \
+ 	cat findlib_config.mlp | \
+-	        $(SH) $(TOP)/tools/patch '@CONFIGFILE@' '$(OCAMLFIND_CONF)' | \
++	        $(SH) $(TOP)/tools/patch '@CONFIGFILE@' '$(OCAMLFIND_CONF_RUN)' | \
+ 	        $(SH) $(TOP)/tools/patch '@STDLIB@' '$(OCAML_CORE_STDLIB)' | \
+ 		sed -e 's;@AUTOLINK@;$(OCAML_AUTOLINK);g' \
+ 		    -e 's;@SYSTEM@;$(SYSTEM);g' \
+diff --git a/src/findlib/findlib.ml b/src/findlib/findlib.ml
+index dc9b2b4..ad328b8 100644
+--- a/src/findlib/findlib.ml
++++ b/src/findlib/findlib.ml
+@@ -106,12 +106,29 @@ let command_names cmd_spec =
+ 	[]
+ ;;
+ 
++let rec find_root_path (p : string) =
++  let up = Filename.dirname p in
++  if p = up || Sys.file_exists (Filename.concat p "findlib.root")
++  then p
++  else find_root_path up
++;;
++
++let absolutify_path (p : string) : string =
++  let prefix = "..." ^ Filename.dir_sep in
++  if String.starts_with ~prefix:prefix p
++  then
++    let exe_path = Filename.dirname Sys.executable_name in
++    let exe_path_abs = if Filename.is_relative exe_path then Filename.concat (Sys.getcwd()) exe_path else exe_path in
++    let root_path = find_root_path exe_path_abs in
++    Filename.concat root_path (String.sub p (String.length prefix) ((String.length p)-(String.length prefix)))
++  else p
++;;
++
+ let auto_config_file() =
+   let p =
+     ( try Sys.getenv "OCAMLFIND_CONF" with Not_found -> "") in
+-  if p = "" then Findlib_config.config_file else p
+-                                                   
+-  
++  absolutify_path (if p = "" then Findlib_config.config_file else p)
++
+ let init
+       ?env_ocamlpath ?env_ocamlfind_destdir ?env_ocamlfind_metadir
+       ?env_ocamlfind_commands ?env_ocamlfind_ignore_dups_in
+@@ -189,20 +206,20 @@ let init
+ 	  with Not_found -> default
+ 	in
+         let config_tuple =
+-	  ( (lookup "ocamlc" ocamlc_default),
+-	    (lookup "ocamlopt" ocamlopt_default),
+-	    (lookup "ocamlcp" ocamlcp_default),
+-	    (lookup "ocamloptp" ocamloptp_default),
+-	    (lookup "ocamlmklib" ocamlmklib_default),
+-	    (lookup "ocamlmktop" ocamlmktop_default),
+-	    (lookup "ocamldep" ocamldep_default),
+-	    (lookup "ocamlbrowser" ocamlbrowser_default),
+-	    (lookup "ocamldoc" ocamldoc_default),
+-	    Fl_split.path (lookup "path" ""),
+-	    (lookup "destdir" ""),
+-	    (lookup "metadir" "none"),
+-	    (lookup "stdlib" Findlib_config.ocaml_stdlib),
+-	    (lookup "ldconf" Findlib_config.ocaml_ldconf)
++	  ( (absolutify_path (lookup "ocamlc" ocamlc_default)),
++	    (absolutify_path (lookup "ocamlopt" ocamlopt_default)),
++	    (absolutify_path (lookup "ocamlcp" ocamlcp_default)),
++	    (absolutify_path (lookup "ocamloptp" ocamloptp_default)),
++	    (absolutify_path (lookup "ocamlmklib" ocamlmklib_default)),
++	    (absolutify_path (lookup "ocamlmktop" ocamlmktop_default)),
++	    (absolutify_path (lookup "ocamldep" ocamldep_default)),
++	    (absolutify_path (lookup "ocamlbrowser" ocamlbrowser_default)),
++	    (absolutify_path (lookup "ocamldoc" ocamldoc_default)),
++	    (List.map absolutify_path (Fl_split.path (lookup "path" ""))),
++	    (absolutify_path (lookup "destdir" "")),
++	    (absolutify_path (lookup "metadir" "none")),
++	    (absolutify_path (lookup "stdlib" Findlib_config.ocaml_stdlib)),
++	    (absolutify_path (lookup "ldconf" Findlib_config.ocaml_ldconf))
+ 	  ) in
+         if not !found && config_preds <> [] then
+           prerr_endline("ocamlfind: [WARNING] Undefined toolchain: " ^ 
+-- 
+2.37.0
+

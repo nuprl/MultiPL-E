@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# This shell scripts uses the path of the script itself to
+# set the COQBIN, COQLIB and PATH variables before invoking
+# the real program
+
+export COQBIN="$(cd $(dirname $0); pwd)"
+export COQLIB="$(cd $(dirname $0)/../lib/coq/; pwd)"
+COQSTUBLIBS="$(cd $(dirname $0)/../lib/stublibs/; pwd)"
+SELF="$(basename $1)"
+
+shift # drop $1
+
+# this path also contains coq extra utilities like gappa
+export PATH="$COQBIN:$PATH"
+# this folder contains shared libraries like libz3.so
+export LD_LIBRARY_PATH="$COQSTUBLIBS:$LD_LIBRARY_PATH"
+
+if [ "$SELF" == "bash" -o "$SELF" == "sh" ]; then # for debugging the snap
+  exec $SELF "$@"
+elif [ "$SELF" == "coq_makefile" ]; then
+  exec $COQBIN/$SELF "$@" COQBIN = "$COQBIN/"
+else
+  exec $COQBIN/$SELF "$@"
+fi

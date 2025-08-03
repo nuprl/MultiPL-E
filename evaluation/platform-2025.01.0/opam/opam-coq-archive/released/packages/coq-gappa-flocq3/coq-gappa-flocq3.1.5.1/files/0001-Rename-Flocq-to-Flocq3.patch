@@ -1,0 +1,474 @@
+From 3cb86789202c9632aae827a0dd0f9c6e2c397bfb Mon Sep 17 00:00:00 2001
+From: Michael Soegtrop <7895506+MSoegtropIMC@users.noreply.github.com>
+Date: Wed, 30 Mar 2022 09:54:01 +0200
+Subject: [PATCH] Rename Flocq to Flocq3
+
+---
+ Remakefile.in                | 20 +++++++++----------
+ _CoqProject                  |  2 +-
+ configure.in                 | 14 ++++++-------
+ src/Gappa_common.v           |  2 +-
+ src/Gappa_decimal.v          |  2 +-
+ src/Gappa_definitions.v      |  2 +-
+ src/Gappa_dyadic.v           |  2 +-
+ src/Gappa_fixed.v            |  2 +-
+ src/Gappa_float.v            |  2 +-
+ src/Gappa_pred_fixflt.v      |  2 +-
+ src/Gappa_round.v            |  2 +-
+ src/Gappa_round_aux.v        |  2 +-
+ src/Gappa_round_def.v        |  2 +-
+ src/Gappa_tactic.v           |  4 ++--
+ src/Gappa_user.v             |  2 +-
+ src/gappatac.c               | 38 ++++++++++++++++++------------------
+ testsuite/bug-20091016.v     |  2 +-
+ testsuite/bug-20121219.v     |  2 +-
+ testsuite/example-20080417.v |  2 +-
+ testsuite/example-20090706.v |  2 +-
+ testsuite/example-20101018.v |  2 +-
+ 21 files changed, 55 insertions(+), 55 deletions(-)
+
+diff --git a/Remakefile.in b/Remakefile.in
+index 17ab8a3..47eaf0f 100644
+--- a/Remakefile.in
++++ b/Remakefile.in
+@@ -39,31 +39,31 @@ configure config.status: configure.in
+ 	./config.status --recheck
+ 
+ %.vo: %.v
+-	@COQDEP@ -R src Gappa -I src $< | @REMAKE@ -r $@
+-	@COQC@ @COQEXTRAFLAGS@ -R src Gappa -I src $<
++	@COQDEP@ -R src GappaFlocq3 -I src $< | @REMAKE@ -r $@
++	@COQC@ @COQEXTRAFLAGS@ -R src GappaFlocq3 -I src $<
+ 
+ COQPKGS = clib engine kernel interp lib library parsing pretyping printing proofs tactics toplevel vernac plugins.ltac
+ PACKAGES = $(addprefix -package @COQROOT@., $(COQPKGS)) -package @BIGINTPKG@
+ 
+-src/gappatac.ml: src/gappatac.c
++src/gappatac_flocq3.ml: src/gappatac.c
+ 	@CPP@ -DCOQVERSION=@COQVERSION@ $< -o $@
+ 
+-src/gappatac.cmo: src/gappatac.ml
++src/gappatac_flocq3.cmo: src/gappatac_flocq3.ml
+ 	@OCAMLFIND@ ocamlc -rectypes -thread $(PACKAGES) -c $< -o $@
+ 
+-src/gappatac.cmxs: src/gappatac.ml
++src/gappatac_flocq3.cmxs: src/gappatac_flocq3.ml
+ 	@OCAMLFIND@ ocamlopt -rectypes -thread $(PACKAGES) -shared $< -o $@
+ 
+ MLTARGETS = $(addprefix src/, @TACTIC_TARGETS@)
+ 
+ src/Gappa_tactic.vo: src/Gappa_tactic.v $(MLTARGETS)
+-	@COQDEP@ -R src Gappa -I src $< | @REMAKE@ -r $@
+-	@COQC@ @COQEXTRAFLAGS@ @TACTIC_PARAM@ -R src Gappa -I src $<
++	@COQDEP@ -R src GappaFlocq3 -I src $< | @REMAKE@ -r $@
++	@COQC@ @COQEXTRAFLAGS@ @TACTIC_PARAM@ -R src GappaFlocq3 -I src $<
+ 
+ src/clean:
+ 	rm -f $(OBJS)
+ 	cd src
+-	rm -f gappatac.ml gappatac.cmi gappatac.cmo gappatac.cmx gappatac.cmxs gappatac.o *.glob *.vos *.vok
++	rm -f gappatac_flocq3.ml gappatac_flocq3.cmi gappatac_flocq3.cmo gappatac_flocq3.cmx gappatac_flocq3.cmxs gappatac_flocq3.o *.glob *.vos *.vok
+ 	rm -rf .coq-native
+ 
+ testsuite/check: src/Gappa_tactic.vo
+@@ -74,7 +74,7 @@ testsuite/check: src/Gappa_tactic.vo
+ 	cat /dev/null > "$logfile"
+ 	for f in *.v; do
+ 	  cp "$f" check_tmp.v
+-	  @COQC@ -R ../src Gappa -I ../src check_tmp.v > output.tmp 2>&1
++	  @COQC@ -R ../src GappaFlocq3 -I ../src check_tmp.v > output.tmp 2>&1
+ 	  return_code=$?
+ 	  if [ ${return_code} -ne 0 ]; then
+ 	    (echo "*** $f exited with error code ${return_code}"; cat output.tmp; echo) >> "$logfile"
+@@ -97,7 +97,7 @@ testsuite/clean:
+ 	rm -f testsuite/failures-*.log
+ 
+ install:
+-	dir="${DESTDIR}@COQUSERCONTRIB@/Gappa"
++	dir="${DESTDIR}@COQUSERCONTRIB@/GappaFlocq3"
+ 	mkdir -p $dir
+ 	cp $(OBJS) $(MLTARGETS) $dir
+ 	( cd src && find . -type d -name ".coq-native" -exec cp -RT "{}" "$dir/{}" \; )
+diff --git a/_CoqProject b/_CoqProject
+index 0e03e19..f622018 100644
+--- a/_CoqProject
++++ b/_CoqProject
+@@ -1 +1 @@
+--R src Gappa -I src
++-R src GappaFlocq3 -I src
+diff --git a/configure.in b/configure.in
+index 011d515..89465a5 100644
+--- a/configure.in
++++ b/configure.in
+@@ -1,4 +1,4 @@
+-AC_INIT([Coq support library for Gappa], [1.5.1],
++AC_INIT([Coq support library for GappaFlocq3], [1.5.1],
+         [Guillaume Melquiond <guillaume.melquiond@inria.fr>],
+         [gappalib-coq])
+ 
+@@ -51,14 +51,14 @@ fi
+ AC_MSG_RESULT([$OCAMLFIND])
+ if test ! "$OCAMLFIND"; then OCAMLFIND=ocamlfind; fi
+ 
+-AC_MSG_CHECKING([for Flocq >= 3.0])
++AC_MSG_CHECKING([for Flocq3 >= 3.0])
+ AS_IF(
+-  [ echo "Require Import Flocq.Version BinNat." \
++  [ echo "Require Import Flocq3.Version BinNat." \
+          "Goal (30000 <= Flocq_version)%N. easy. Qed." > conftest.v
+     $COQC conftest.v > conftest.err ],
+   [ AC_MSG_RESULT([yes]) ],
+   [ AC_MSG_RESULT([no])
+-    AC_MSG_ERROR([ *** Unable to find library Flocq >= 3.0 (https://flocq.gitlabpages.inria.fr/)])])
++    AC_MSG_ERROR([ *** Unable to find library Flocq3 >= 3.0 (https://flocq.gitlabpages.inria.fr/)])])
+ rm -f conftest.v conftest.vo conftest.err
+ 
+ AC_SUBST(COQLIB)
+@@ -137,14 +137,14 @@ AC_SUBST(TACTIC_PARAM)
+ tactic_mode=""
+ if test "$native_tactic" = yes; then
+   tactic_mode="$tactic_mode native"
+-  TACTIC_TARGETS="$TACTIC_TARGETS gappatac.cmxs"
++  TACTIC_TARGETS="$TACTIC_TARGETS gappatac_flocq3.cmxs"
+   if test "$byte_tactic" = no; then
+     TACTIC_PARAM="-opt"
+   fi
+ fi
+ if test "$byte_tactic" = yes; then
+   tactic_mode="$tactic_mode bytecode"
+-  TACTIC_TARGETS="$TACTIC_TARGETS gappatac.cmo"
++  TACTIC_TARGETS="$TACTIC_TARGETS gappatac_flocq3.cmo"
+   if test "$native_tactic" = no; then
+     TACTIC_PARAM="-byte"
+   fi
+@@ -155,7 +155,7 @@ if test -z "$tactic_mode"; then tactic_mode=" none"; fi
+ echo
+ echo "=== Summary ==="
+ echo "Installation directory   $COQUSERCONTRIB"
+-echo "Gappa tactic            $tactic_mode"
++echo "GappaFlocq3 tactic            $tactic_mode"
+ echo
+ 
+ AC_CONFIG_FILES(Remakefile)
+diff --git a/src/Gappa_common.v b/src/Gappa_common.v
+index 0b18036..fc40764 100644
+--- a/src/Gappa_common.v
++++ b/src/Gappa_common.v
+@@ -1,5 +1,5 @@
+ From Coq Require Export Bool ZArith Reals.
+-From Flocq Require Export Zaux Raux.
++From Flocq3 Require Export Zaux Raux.
+ 
+ Require Export Gappa_real Gappa_definitions Gappa_dyadic.
+ 
+diff --git a/src/Gappa_decimal.v b/src/Gappa_decimal.v
+index 3dcdbf0..deac535 100644
+--- a/src/Gappa_decimal.v
++++ b/src/Gappa_decimal.v
+@@ -1,4 +1,4 @@
+-Require Import Flocq.Core.Defs.
++Require Import Flocq3.Core.Defs.
+ Require Import Gappa_common.
+ 
+ Definition Dcompare (x : float2) (y : float10) :=
+diff --git a/src/Gappa_definitions.v b/src/Gappa_definitions.v
+index a4bdb22..4f68f69 100644
+--- a/src/Gappa_definitions.v
++++ b/src/Gappa_definitions.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Reals ZArith.
+-From Flocq Require Import Zaux Raux Defs.
++From Flocq3 Require Import Zaux Raux Defs.
+ 
+ Notation radix2 := Zaux.radix2.
+ Record float2 : Set := Float2 { Fnum : Z ; Fexp : Z }.
+diff --git a/src/Gappa_dyadic.v b/src/Gappa_dyadic.v
+index 31af2b5..b8fb361 100644
+--- a/src/Gappa_dyadic.v
++++ b/src/Gappa_dyadic.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import ZArith Reals Lia.
+-From Flocq Require Import Raux Defs Float_prop Operations.
++From Flocq3 Require Import Raux Defs Float_prop Operations.
+ Require Import Gappa_definitions.
+ 
+ Lemma float2_zero :
+diff --git a/src/Gappa_fixed.v b/src/Gappa_fixed.v
+index 1aa3ef0..81450a9 100644
+--- a/src/Gappa_fixed.v
++++ b/src/Gappa_fixed.v
+@@ -1,7 +1,7 @@
+ Require Import Bool.
+ Require Import ZArith.
+ Require Import Reals.
+-Require Import Flocq.Core.Core.
++Require Import Flocq3.Core.Core.
+ Require Import Gappa_definitions.
+ Require Import Gappa_dyadic.
+ Require Import Gappa_pred_bnd.
+diff --git a/src/Gappa_float.v b/src/Gappa_float.v
+index c75410d..ae62170 100644
+--- a/src/Gappa_float.v
++++ b/src/Gappa_float.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Bool ZArith Reals Lia.
+-From Flocq Require Import Core Digits Round Relative.
++From Flocq3 Require Import Core Digits Round Relative.
+ Require Import Gappa_definitions.
+ Require Import Gappa_dyadic.
+ Require Import Gappa_pred_bnd.
+diff --git a/src/Gappa_pred_fixflt.v b/src/Gappa_pred_fixflt.v
+index 3cdc3d2..adf01a1 100644
+--- a/src/Gappa_pred_fixflt.v
++++ b/src/Gappa_pred_fixflt.v
+@@ -1,4 +1,4 @@
+-From Flocq Require Import Core Sterbenz.
++From Flocq3 Require Import Core Sterbenz.
+ Require Import Gappa_common.
+ Require Import Gappa_round_aux.
+ 
+diff --git a/src/Gappa_round.v b/src/Gappa_round.v
+index 32e85d5..b0614e3 100644
+--- a/src/Gappa_round.v
++++ b/src/Gappa_round.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Decidable Bool ZArith Reals Lia.
+-From Flocq Require Import Core Bracket Digits.
++From Flocq3 Require Import Core Bracket Digits.
+ Require Import Gappa_definitions.
+ Require Import Gappa_dyadic.
+ Require Import Gappa_round_def.
+diff --git a/src/Gappa_round_aux.v b/src/Gappa_round_aux.v
+index 4decc5c..71a6e23 100644
+--- a/src/Gappa_round_aux.v
++++ b/src/Gappa_round_aux.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import ZArith Reals.
+-From Flocq Require Import Zaux Raux Defs Digits Float_prop Generic_fmt FIX FLX.
++From Flocq3 Require Import Zaux Raux Defs Digits Float_prop Generic_fmt FIX FLX.
+ 
+ Require Import Gappa_definitions.
+ Require Import Gappa_dyadic.
+diff --git a/src/Gappa_round_def.v b/src/Gappa_round_def.v
+index dfa1859..5c3c9b7 100644
+--- a/src/Gappa_round_def.v
++++ b/src/Gappa_round_def.v
+@@ -1,6 +1,6 @@
+ Require Import Bool.
+ Require Import ZArith.
+-From Flocq Require Import Raux Generic_fmt Round_NE.
++From Flocq3 Require Import Raux Generic_fmt Round_NE.
+ 
+ Record rnd_record : Set := rnd_record_mk {
+   rnd_m : N ;
+diff --git a/src/Gappa_tactic.v b/src/Gappa_tactic.v
+index 04366a0..09b5068 100644
+--- a/src/Gappa_tactic.v
++++ b/src/Gappa_tactic.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import ZArith Reals List Lia.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ 
+ Require Export Gappa_library.
+ 
+@@ -1292,7 +1292,7 @@ End Gappa_Private.
+ 
+ Import Gappa_Private.
+ 
+-Declare ML Module "gappatac".
++Declare ML Module "gappatac_flocq3".
+ 
+ Ltac gappa_prepare :=
+   intros ; fold rndNE rndNA in * ;
+diff --git a/src/Gappa_user.v b/src/Gappa_user.v
+index 006cdaa..2a4457d 100644
+--- a/src/Gappa_user.v
++++ b/src/Gappa_user.v
+@@ -1,4 +1,4 @@
+-Require Import Flocq.Core.Defs.
++Require Import Flocq3.Core.Defs.
+ Require Import Gappa_common.
+ Require Import Gappa_pred_bnd.
+ 
+diff --git a/src/gappatac.c b/src/gappatac.c
+index 5f2ebf9..88244d1 100644
+--- a/src/gappatac.c
++++ b/src/gappatac.c
+@@ -129,7 +129,7 @@ let constr_of_global f = Lazy.force f
+ 
+ #endif
+ 
+-let __coq_plugin_name = "gappatac"
++let __coq_plugin_name = "gappatac_flocq3"
+ let _ = Mltop.add_known_module __coq_plugin_name
+ 
+ let debug = ref false
+@@ -186,7 +186,7 @@ type pred =
+ 
+ (** {1 Symbols needed by the tactics} *)
+ 
+-let coq_Logic = coq_reference "Gappa" ["Init"; "Logic"]
++let coq_Logic = coq_reference "GappaFlocq3" ["Init"; "Logic"]
+ let coq_False = coq_Logic "False"
+ let coq_True = coq_Logic "True"
+ let coq_eq = coq_Logic "eq"
+@@ -195,14 +195,14 @@ let coq_not = coq_Logic "not"
+ let coq_and = coq_Logic "and"
+ let coq_or = coq_Logic "or"
+ 
+-let coq_ref_Datatypes = coq_reference "Gappa" ["Init"; "Datatypes"]
++let coq_ref_Datatypes = coq_reference "GappaFlocq3" ["Init"; "Datatypes"]
+ let coq_Some = coq_ref_Datatypes "Some"
+ let coq_cons = coq_ref_Datatypes "cons"
+ let coq_nil = coq_ref_Datatypes "nil"
+ let coq_bool = coq_ref_Datatypes "bool"
+ let coq_true = coq_ref_Datatypes "true"
+ 
+-let coq_ref_BinNums = coq_reference "Gappa" ["Numbers"; "BinNums"]
++let coq_ref_BinNums = coq_reference "GappaFlocq3" ["Numbers"; "BinNums"]
+ let coq_Z0 = coq_ref_BinNums "Z0"
+ let coq_Zpos = coq_ref_BinNums "Zpos"
+ let coq_Zneg = coq_ref_BinNums "Zneg"
+@@ -210,7 +210,7 @@ let coq_xH = coq_ref_BinNums "xH"
+ let coq_xI = coq_ref_BinNums "xI"
+ let coq_xO = coq_ref_BinNums "xO"
+ 
+-let coq_ref_Rdefinitions = coq_reference "Gappa" ["Reals"; "Rdefinitions"]
++let coq_ref_Rdefinitions = coq_reference "GappaFlocq3" ["Reals"; "Rdefinitions"]
+ let coq_R = coq_ref_Rdefinitions "R"
+ let coq_R0 = coq_ref_Rdefinitions "R0"
+ let coq_R1 = coq_ref_Rdefinitions "R1"
+@@ -222,13 +222,13 @@ let coq_Rmult = coq_ref_Rdefinitions "Rmult"
+ let coq_Rinv = coq_ref_Rdefinitions "Rinv"
+ let coq_Rdiv = coq_ref_Rdefinitions "Rdiv"
+ let coq_IZR = coq_ref_Rdefinitions "IZR"
+-let coq_Rabs = coq_reference "Gappa" ["Reals"; "Rbasic_fun"] "Rabs"
+-let coq_sqrt = coq_reference "Gappa" ["Reals"; "R_sqrt"] "sqrt"
+-let coq_powerRZ = coq_reference "Gappa" ["Reals"; "Rfunctions"] "powerRZ"
++let coq_Rabs = coq_reference "GappaFlocq3" ["Reals"; "Rbasic_fun"] "Rabs"
++let coq_sqrt = coq_reference "GappaFlocq3" ["Reals"; "R_sqrt"] "sqrt"
++let coq_powerRZ = coq_reference "GappaFlocq3" ["Reals"; "Rfunctions"] "powerRZ"
+ 
+-let coq_radix_val = find_reference "Gappa" ["Flocq"; "Core"; "Zaux"] "radix_val"
++let coq_radix_val = find_reference "GappaFlocq3" ["Flocq3"; "Core"; "Zaux"] "radix_val"
+ 
+-let coq_ref_Gappa_Private = find_reference "Gappa" ["Gappa"; "Gappa_tactic"; "Gappa_Private"]
++let coq_ref_Gappa_Private = find_reference "GappaFlocq3" ["GappaFlocq3"; "Gappa_tactic"; "Gappa_Private"]
+ let coq_convert_tree = coq_ref_Gappa_Private "convert_tree"
+ let coq_RTree = coq_ref_Gappa_Private "RTree"
+ let coq_rtTrue = coq_ref_Gappa_Private "rtTrue"
+@@ -274,24 +274,24 @@ let coq_uoNeg = coq_ref_Gappa_Private "uoNeg"
+ let coq_uoInv = coq_ref_Gappa_Private "uoInv"
+ let coq_uoSqrt = coq_ref_Gappa_Private "uoSqrt"
+ 
+-let coq_ref_Fcore_Raux = find_reference "Gappa" ["Flocq"; "Core"; "Raux"]
++let coq_ref_Fcore_Raux = find_reference "GappaFlocq3" ["Flocq3"; "Core"; "Raux"]
+ let coq_bpow = coq_ref_Fcore_Raux "bpow"
+ let coq_rndDN = coq_ref_Fcore_Raux "Zfloor"
+ let coq_rndUP = coq_ref_Fcore_Raux "Zceil"
+ let coq_rndZR = coq_ref_Fcore_Raux "Ztrunc"
+-let coq_ref_Gappa_round_def = find_reference "Gappa" ["Gappa"; "Gappa_round_def"]
++let coq_ref_Gappa_round_def = find_reference "GappaFlocq3" ["GappaFlocq3"; "Gappa_round_def"]
+ let coq_rndNE = coq_ref_Gappa_round_def "rndNE"
+ let coq_rndNA = coq_ref_Gappa_round_def "rndNA"
+-let coq_ref_Fcore_generic_fmt = find_reference "Gappa" ["Flocq"; "Core"; "Generic_fmt"]
++let coq_ref_Fcore_generic_fmt = find_reference "GappaFlocq3" ["Flocq3"; "Core"; "Generic_fmt"]
+ let coq_round = coq_ref_Fcore_generic_fmt "round"
+ let coq_generic_format = coq_ref_Fcore_generic_fmt "generic_format"
+-let coq_ref_Fcore_FLT = find_reference "Gappa" ["Flocq"; "Core"; "FLT"]
++let coq_ref_Fcore_FLT = find_reference "GappaFlocq3" ["Flocq3"; "Core"; "FLT"]
+ let coq_FLT_format = coq_ref_Fcore_FLT "FLT_format"
+ let coq_FLT_exp = coq_ref_Fcore_FLT "FLT_exp"
+-let coq_ref_Fcore_FLX = find_reference "Gappa" ["Flocq"; "Core"; "FLX"]
++let coq_ref_Fcore_FLX = find_reference "GappaFlocq3" ["Flocq3"; "Core"; "FLX"]
+ let coq_FLX_format = coq_ref_Fcore_FLX "FLX_format"
+ let coq_FLX_exp = coq_ref_Fcore_FLX "FLX_exp"
+-let coq_ref_Fcore_FIX = find_reference "Gappa" ["Flocq"; "Core"; "FIX"]
++let coq_ref_Fcore_FIX = find_reference "GappaFlocq3" ["Flocq3"; "Core"; "FIX"]
+ let coq_FIX_format = coq_ref_Fcore_FIX "FIX_format"
+ let coq_FIX_exp = coq_ref_Fcore_FIX "FIX_exp"
+ 
+@@ -796,7 +796,7 @@ let call_gappa c_of_s p =
+   close_out c;
+   let gappa_out = temp_file "gappa_out" in
+   let gappa_err = temp_file "gappa_err" in
+-  let cmd = sprintf "gappa -Bcoq-lambda %s > %s 2> %s" gappa_in gappa_out gappa_err in
++  let cmd = sprintf "gappa -Bcoq-lambda %s | sed 's/Gappa[.]/GappaFlocq3./g' > %s 2> %s" gappa_in gappa_out gappa_err in
+   let out = Sys.command cmd in
+   if out <> 0 then begin
+     let c = open_in_bin gappa_err in
+@@ -885,13 +885,13 @@ let gappa_internal =
+   end
+ 
+ let () =
+-  Tacentries.tactic_extend __coq_plugin_name "gappatac_gappa_internal" ~level:0
++  Tacentries.tactic_extend __coq_plugin_name "gappatac_flocq3_gappa_internal" ~level:0
+     [Tacentries.TyML
+        (Tacentries.TyIdent ("gappa_internal", Tacentries.TyNil),
+         (fun ist -> gappa_internal))]
+ 
+ let () =
+-  Tacentries.tactic_extend __coq_plugin_name "gappatac_gappa_quote" ~level:0
++  Tacentries.tactic_extend __coq_plugin_name "gappatac_flocq3_gappa_quote" ~level:0
+     [Tacentries.TyML
+        (Tacentries.TyIdent ("gappa_quote", Tacentries.TyNil),
+         (fun ist -> gappa_quote))]
+diff --git a/testsuite/bug-20091016.v b/testsuite/bug-20091016.v
+index ced1926..ccb0cd8 100644
+--- a/testsuite/bug-20091016.v
++++ b/testsuite/bug-20091016.v
+@@ -1,5 +1,5 @@
+ Require Import Reals.
+-Require Import Flocq.Core.Core.
++Require Import Flocq3.Core.Core.
+ Require Import Gappa_tactic.
+ 
+ Definition rnd := rounding_float rndNE 53 (-1074).
+diff --git a/testsuite/bug-20121219.v b/testsuite/bug-20121219.v
+index 0f15c7a..40d5295 100644
+--- a/testsuite/bug-20121219.v
++++ b/testsuite/bug-20121219.v
+@@ -1,5 +1,5 @@
+ Require Import Reals.
+-Require Import Flocq.Core.Core.
++Require Import Flocq3.Core.Core.
+ Require Import Gappa_tactic.
+ 
+ Coercion F2R : float >-> R.
+diff --git a/testsuite/example-20080417.v b/testsuite/example-20080417.v
+index 0ec1807..5915e09 100644
+--- a/testsuite/example-20080417.v
++++ b/testsuite/example-20080417.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Reals.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ From Gappa Require Import Gappa_tactic.
+ Open Scope R_scope.
+ 
+diff --git a/testsuite/example-20090706.v b/testsuite/example-20090706.v
+index 84ea9ca..a6e87da 100644
+--- a/testsuite/example-20090706.v
++++ b/testsuite/example-20090706.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Reals.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ From Gappa Require Import Gappa_tactic.
+ Open Scope R_scope.
+ 
+diff --git a/testsuite/example-20101018.v b/testsuite/example-20101018.v
+index 96ef521..0f179bd 100644
+--- a/testsuite/example-20101018.v
++++ b/testsuite/example-20101018.v
+@@ -1,5 +1,5 @@
+ From Coq Require Import Reals.
+-From Flocq Require Import Core.
++From Flocq3 Require Import Core.
+ From Gappa Require Import Gappa_tactic.
+ Open Scope R_scope.
+ 
+-- 
+2.33.0
+

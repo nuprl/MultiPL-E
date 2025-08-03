@@ -29,7 +29,7 @@ def eval_script(path: Path):
             "-g",
             "-j0",
             "-gnata",
-            "-gnat2022",
+#            "-gnat2022",
             "-gnateE",
             "-bargs",
             "-Es",

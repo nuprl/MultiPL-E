@@ -1,0 +1,138 @@
+# Main doc: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/introduction-to-github-actions
+# Runners spec: https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners
+# Glob expressions: https://github.com/actions/toolkit/tree/main/packages/glob
+
+name: Windows
+
+###############################################################################
+# Schedule:
+# - push on any branch whose name matches v** or master
+# - any pull request
+###############################################################################
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Arguments for the platform script:'
+        required: true
+        default: '-extent=x -parallel=p -jobs=2 -large=e -compcert=y -set-switch=y'
+
+###############################################################################
+# Platform script options shared among all jobs
+###############################################################################
+env:
+  PLATFORM_ARGS: -extent=x -parallel=p -jobs=2 -large=e -compcert=y -set-switch=y
+  COQREGTESTING: y
+
+###############################################################################
+# Windows
+#
+# 2 jobs, the former builds the installer, the second tests it
+#
+# CAVEATS:
+# - git is misconfigured, by default it puts \r in between \n\n
+###############################################################################
+jobs:
+  Windows_platform:
+    name: Windows
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+          - '64'
+        variant:
+          # Keep this in sync with the Smoke test below
+          - '8.20~2025.01'
+          - '8.19~2024.10'
+
+    steps:
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: Set PLATFORM
+        if: ${{ github.event.inputs.platform != '' }}
+        run: echo "PLATFORM=${{ github.event.inputs.platform }}" >> $GITHUB_ENV
+
+      - name: Run common platform script
+        shell: cmd
+        run: coq_platform_make_windows.bat -destcyg=C:\cygwin_coq_platform -arch=${{matrix.architecture}} -packages=${{matrix.variant}} %PLATFORM_ARGS% -dumplogs
+
+      - name: Create installer
+        shell: cmd
+        run: C:\cygwin_coq_platform\bin\bash --login -c "cd /platform/ && windows/create_installer_windows.sh && mkdir /cygdrive/c/installer && cp windows_installer/*exe /cygdrive/c/installer/"
+
+      - name: Create smoke test kit
+        shell: cmd
+        run: C:\cygwin_coq_platform\bin\bash --login -c "cd /platform/ && shell_scripts/create_smoke_test_kit.sh && mkdir /cygdrive/c/smoke && cp -ra smoke-test-kit/* /cygdrive/c/smoke/"
+
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'Windows installer ${{matrix.variant}} ${{matrix.architecture}}'
+          path: C:\installer\*.exe
+          retention-days: 5
+
+      - name: 'Upload smoke test kit'
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'Smoke Test Kit Windows ${{matrix.variant}} ${{matrix.architecture}}'
+          path: C:\smoke\
+          retention-days: 5
+
+  Windows_smoke:
+    name: Smoke test Windows
+    needs: Windows_platform
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        architecture:
+          - '64'
+        variant:
+          - '8.20~2025.01'
+          - '8.19~2024.10'
+
+    steps:
+      - name: 'Download Artifact'
+        uses: actions/download-artifact@v4
+        id: download
+        with:
+          name: 'Windows installer ${{matrix.variant}} ${{matrix.architecture}}'
+
+      - name: 'Download smoke test kit'
+        uses: actions/download-artifact@v4
+        id: download-smoke
+        with:
+          name: 'Smoke Test Kit Windows ${{matrix.variant}} ${{matrix.architecture}}'
+
+      - name: 'Run Installer'
+        shell: cmd
+        run: |
+          cd ${{steps.download.outputs.download-path}}
+          FOR %%f IN (*.exe) DO %%f /S /D=C:\Coq
+
+      - name: 'Smoke coqc'
+        shell: cmd
+        run: C:\Coq\bin\coqc.exe -v
+
+      - name: 'Run Windows smoke test kit'
+        shell: cmd
+        run: |
+          CD ${{steps.download-smoke.outputs.download-path}}
+          DIR
+          SET PATH=C:\Coq\bin\;%PATH%
+          CALL run-smoke-test.bat

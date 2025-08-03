@@ -1,0 +1,48 @@
+From 5fbaa7048e50556c3b9d996712bf22f14da6726e Mon Sep 17 00:00:00 2001
+From: Ali Caglayan <alizter@gmail.com>
+Date: Mon, 20 Nov 2023 18:22:44 +0000
+Subject: [PATCH] fix(coq): unescape :\ to :
+
+coqdep outputs escaped paths for makefile which means on Windows that
+`C:\foo\bar` gets escaped to `C\:\\foo\\bar` causing Dune to interpret
+escaped absolute Windows directories as relative ones.
+
+This patch searches for `:\` in the deps output of coqdep and replaces it
+with `:` allowing the paths to be interpreted correctly.
+
+Signed-off-by: Ali Caglayan <alizter@gmail.com>
+---
+ doc/changes/9231_coq.md         | 2 ++
+ src/dune_rules/coq/coq_rules.ml | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
+ create mode 100644 doc/changes/9231_coq.md
+
+diff --git a/doc/changes/9231_coq.md b/doc/changes/9231_coq.md
+new file mode 100644
+index 00000000000..b42918a1664
+--- /dev/null
++++ b/doc/changes/9231_coq.md
+@@ -0,0 +1,2 @@
++- Fixed a bug where Dune was incorrectly parsing the output of coqdep when it was escaped,
++  as is the case on Windows. (#9231, fixes #9218, @Alizter)
+\ No newline at end of file
+diff --git a/src/dune_rules/coq/coq_rules.ml b/src/dune_rules/coq/coq_rules.ml
+index 2bb912bed52..abaa846c8b3 100644
+--- a/src/dune_rules/coq/coq_rules.ml
++++ b/src/dune_rules/coq/coq_rules.ml
+@@ -448,7 +448,14 @@ let parse_line ~dir line =
+     in
+     (* let depname, ext = Filename.split_extension ff in *)
+     let target = Path.relative (Path.build dir) target in
+-    let deps = String.extract_blank_separated_words deps in
++    let deps =
++      (* Before we split the deps on spaces, we do some preprocessing to handle the case
++         where the path contains ":" and coqdep escapes this as "\:" causing Dune to
++         misinterpret the path. We simply revert that escaping alllowing this to work on
++         Windows. *)
++      Re.replace_string (Re.compile (Re.str "\\:")) ~by:":" deps
++      |> String.extract_blank_separated_words
++    in
+     (* Add prelude deps for when stdlib is in scope and we are not actually
+        compiling the prelude *)
+     let deps = List.map ~f:(Path.relative (Path.build dir)) deps in
