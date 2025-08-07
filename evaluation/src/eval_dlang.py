@@ -8,7 +8,7 @@ import re
 ENABLE_SYNTAX_CHECK = False
 
 def eval_script(path: Path):
-    result = run(["rdmd", "-unittest", "-main" str(path)], timeout_seconds=15)
+    result = run(["rdmd", "-unittest", "-main", str(path)], timeout_seconds=15)
     if "might not be correctly installed" in result.stderr:
         raise Exception("D is not correctly installed")
     
