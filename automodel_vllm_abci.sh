@@ -72,5 +72,5 @@ DATASETS_AND_LANGS=(
 for pair in "${DATASETS_AND_LANGS[@]}"; do
   IFS=',' read -r DATASET LANG <<< "$pair"
   echo "[$(date +%T)] Generating for dataset=${DATASET}, lang=${LANG}"
-  python automodel_vllm.py --name "$MODEL" --root-dataset "$DATASET" --lang "$LANG" --temperature "$TEMP" --batch-size "$BATCH" --completion-limit "$N_SAMPLE" --output-dir-prefix "$OUT_ROOT"
+  python automodel_vllm.py --name "$MODEL" --root-dataset "$DATASET" --lang "$LANG" --temperature "$TEMP" --batch-size "$BATCH" --completion-limit "$N_SAMPLES" --output-dir-prefix "$OUT_ROOT"
 done
