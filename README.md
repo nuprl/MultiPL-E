@@ -36,7 +36,9 @@ and evaluate other models.
 2. You will need to install some Python packages:
 
     ```bash
-    pip3 install aiohttp numpy tqdm pytest datasets torch transformers
+    python -m venv env_vllm
+    source env_vllm/bin/activate
+    pip install aiohttp numpy tqdm pytest datasets torch transformers vllm
     ```
 
 3. You need to install one of [Podman] or [Docker].
@@ -69,9 +71,15 @@ The following command will generate completions for the HumanEval benchmark,
 which is originally in Python, but translated to Rust with MultiPL-E:
 
 ```
+module purge
+module load cuda/12.8 python/3.12
+export CUDA_VISIBLE_DEVICES=$(
+  nvidia-smi --query-gpu=index,uuid --format=csv,noheader |
+  awk -v U="$CUDA_VISIBLE_DEVICES" 'BEGIN{gsub(/ /,"",U)} $2==U{print $1}'
+)
 mkdir tutorial
 python3 automodel.py \
-    --name bigcode/gpt_bigcode-santacoder \
+    --name Qwen/Qwen3-Coder-30B-A3B-Instruct \
     --root-dataset humaneval \
     --lang rs \
     --temperature 0.2 \
