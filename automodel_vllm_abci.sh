@@ -4,6 +4,15 @@
 #PBS -l walltime=8:00:00
 #PBS -P gcf51099
 
+module purge
+module load cuda/12.8 python/3.12
+export CUDA_VISIBLE_DEVICES=$(
+  nvidia-smi --query-gpu=index,uuid --format=csv,noheader |
+  awk -v U="$CUDA_VISIBLE_DEVICES" 'BEGIN{gsub(/ /,"",U)} $2==U{print $1}'
+)
+source env_vllm/bin/activate
+cd MultiPL-E
+
 MODEL="Qwen/Qwen3-Coder-30B-A3B-Instruct"
 TEMP=0.2
 BATCH=20
