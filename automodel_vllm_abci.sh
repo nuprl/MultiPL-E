@@ -2,7 +2,7 @@
 #PBS -q rt_HG
 #PBS -l select=1
 #PBS -l walltime=8:00:00
-#PBS -P gcf51099
+#PBS -P gcb50389
 
 module purge
 module load cuda/12.8 python/3.12
