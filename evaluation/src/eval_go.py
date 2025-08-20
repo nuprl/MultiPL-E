@@ -11,8 +11,8 @@ def eval_script(path: Path):
     stderr = None
     exit_code = None
     try:
-        build = subprocess.run(["go", "test", path],
-                               timeout=30,
+        build = subprocess.run(["env", "GOMAXPROCS=1", "go", "test", "-p", "1", "-timeout=30s", path],
+                               timeout=60,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
 
