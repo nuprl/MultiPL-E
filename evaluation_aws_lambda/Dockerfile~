@@ -106,14 +106,6 @@ RUN mkdir -p /erlang && \
     tar xzf erlang.tar.gz --strip-components=1 && \
     ./Install -minimal "$(pwd)"
 
-# Erlang runtime dependencies, see https://github.com/hexpm/bob/blob/4fe43eb9853bb95dbfe276957bd7d3f931a451b3/priv/scripts/docker/erlang-ubuntu-jammy.dockerfile
-# RUN apt-get update && \
-#     apt-get -y --no-install-recommends install \
-#     ca-certificates \
-#     libodbc1 \
-#     libssl3 \
-#     libsctp1
-
 # Install Elixir
 RUN mkdir -p /elixir && \
     cd /elixir && \
@@ -153,9 +145,18 @@ RUN curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-ini
 ENV PATH="${ELAN_HOME}/bin:${PATH}"
 RUN lean --version && lake --version && elan --version
 
-# install numpy for humanevalplus
-RUN python3 -m pip install numpy fastapi "uvicorn[standard]"
+# Python libraries for Lambda handler
+RUN python3 -m pip install --no-cache-dir numpy fastapi "uvicorn[standard]" \
+    && python3 -m pip install --no-cache-dir awslambdaric mangum
 
-COPY src /code
-WORKDIR /code
-CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "9090", "--workers", "4", "--limit-concurrency", "100"]
+# ---- WORKDIR ----
+WORKDIR /var/task
+COPY src/ /var/task/
+ENV HOME=/tmp
+ENV GOCACHE=/tmp/go-build
+ENV GOPATH=/tmp/go
+RUN mkdir -p /tmp/go-build /tmp/go
+
+# ---- Lambda (RIC + Mangum) ----
+ENTRYPOINT ["python3", "-m", "awslambdaric"]
+CMD ["api.handler"]
