@@ -358,7 +358,7 @@ HumanEval to *L* with the following command:
 
 ```bash
 cd MultiPL-E/dataset_builder
-python3 prepare_prompts_json.py \
+python3 prepare_prompts_for_hfhub.py \
      --lang humaneval_to_L.py \
      --doctests transform \
      --prompt-terminology reworded \
@@ -458,7 +458,7 @@ Let's suppose that you've created a set of benchmark problems in the directory
 
 ```bash
 cd MultiPL-E/dataset_builder
-python3 prepare_prompts_json.py \
+python3 prepare_prompts_for_hfhub.py \
      --originals ../datasets/new_benchmark
      --lang humaneval_to_L.py \
      --doctests transform \
