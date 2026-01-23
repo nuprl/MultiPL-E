@@ -22,17 +22,16 @@ To run the container, place all of the completion files under a directory, then 
 Use the `--volume` option to create directory mappings.
 
 ```bash
-	docker run --rm --network none 
-		--volume ${PWD}/inputs:/inputs:ro \
-		--volume ${PWD}/outputs:/outputs:rw \
-		multipl-e-evaluation \
-                --dir $INPUT_DIR \
-                --output-dir $OUTPUT_DIR
+docker run \
+    --rm \
+    --network none \
+	--volume ${INPUT_DIR}:/inputs:ro \
+	--volume ${OUTPUT_DIR}:/outputs:rw \
+	multipl-e-evaluation --dir /inputs --output-dir /outputs
 ```
 
 The `$INPUT_DIR` argument should be a directory with completions. See the `test_inputs` for an example.
 The `$OUTPUT_DIR` argument is the directory where results are generated.
-
 
 ## Specifying alternate docker instance
 
