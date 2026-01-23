@@ -31,7 +31,8 @@ RUN npm install -g typescript
 RUN wget https://master.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
 RUN apt-get update --allow-insecure-repositories
 RUN apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring
-RUN apt-get update && apt-get install -yqq dmd-compiler dub
+RUN apt-get update
+RUN apt-get install -yqq dmd-compiler dub
 
 # C#
 RUN apt install gnupg ca-certificates
