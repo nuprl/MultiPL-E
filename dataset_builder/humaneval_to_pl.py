@@ -46,7 +46,20 @@ class Translator:
         == is the wrong operator for Java and OCaml.
         """
         arr_prefix = f"    " + "    ".join(array_list)
+        if right == "0+0":
+            return (
+                arr_prefix
+                + f"    my $got = {left};\n"
+                + "    if(!$got) "
+                + "{\n        print \"ok!\" }else{\n        exit 1;\n        }"
+            )
         return arr_prefix+f"    if(eq_deeply({left},{right})) "+"{\n        print \"ok!\" }else{\n        exit 1;\n        }"
+        return (
+            arr_prefix
+            + f"    my $got = {left};\n"
+            + f"    if({condition}) "
+            + "{\n        print \"ok!\" }else{\n        exit 1;\n        }"
+        )
 
     def gen_literal(self, c: bool | str | int | float):
         """Translate a literal expression
@@ -55,7 +68,7 @@ class Translator:
         if c is True:
             return 1
         elif c is False:
-            return "\"\""
+            return "0+0"
         elif type(c) == str:
             return f'"{c}"'
         elif c is None:
