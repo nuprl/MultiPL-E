@@ -42,6 +42,7 @@ LANGS = [
     "elixir",
     "clj",
     "ada",
+    "fnl",
 ]
 MODELS = ["davinci", "incoder", "codegen"]
 
