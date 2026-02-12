@@ -29,6 +29,7 @@ import eval_clj
 import eval_v
 import eval_lean
 import eval_dart
+import eval_lisp
 import tempfile
 
 
@@ -65,6 +66,7 @@ EVALUATORS = {
     "coq": (eval_v.eval_script, ".v"),
     "lean": (eval_lean.eval_script, ".lean"),
     "dart": (eval_dart.eval_script, ".dart"),
+    "lisp": (eval_lisp.eval_script, ".lisp"),
 }
 
 def eval_string_script(language, program):
