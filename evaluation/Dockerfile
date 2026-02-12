@@ -106,6 +106,9 @@ RUN apt-get update -yqq && apt-get install -yqq dart
 # Lean
 # RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
 
+# Scheme (GNU Guile, R7RS-compliant)
+RUN apt install -y guile-3.0
+
 # install numpy for humanevalplus
 RUN python3 -m pip install numpy
 
