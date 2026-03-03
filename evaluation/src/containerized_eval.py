@@ -78,9 +78,6 @@ def eval_string_script(language, program):
         f.write(program.encode("utf-8"))
         f.flush()
         result = eval_script(Path(f.name))
-        # Only save the first 2K of output from the running program. Any futher
-        # output is very likely an exceptionally long stack trace or a long
-        # series of prints.
         if type(result["stdout"]) == bytes:
             result["stdout"] = result["stdout"].decode("utf-8", errors="ignore")
         if result["stdout"] is None:
@@ -93,8 +90,8 @@ def eval_string_script(language, program):
         assert type(result["stderr"]) == str
         return {
             "program": program,
-            "stdout": result['stdout'].replace("!!int", "")[:2048],
-            "stderr": result['stderr'][:2048],
+            "stdout": result['stdout'].replace("!!int", ""),
+            "stderr": result['stderr'],
             "exit_code": result['exit_code'],
             "status": result['status']
         }
