@@ -14,7 +14,8 @@ class Translator:
 
     def translate_prompt(self, name: str, args: List[ast.arg], _returns, description: str) -> str:
         # print(description)
-        clojure_description = f'"{description}"' if description else ""
+        escaped_description = description.replace('"', '\\"')
+        clojure_description = f'"{escaped_description}"' if description else ""
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
         self.entry_point = name
