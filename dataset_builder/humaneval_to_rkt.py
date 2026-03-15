@@ -24,7 +24,7 @@ class Translator:
         )
         arg_names = [arg.arg for arg in args]
         arg_list = " ".join(arg_names)
-        return f"{racket_description}(define ({name} {arg_list})\n"
+        return f"{racket_description}(define ({name} {arg_list})\n  "
 
     def test_suite_prefix_lines(self, entry_point) -> List[str]:
         """
