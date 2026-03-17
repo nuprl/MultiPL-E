@@ -31,7 +31,7 @@ def set_nonblocking(reader):
 def run(
     args: List[str],
     timeout_seconds: int = 15,
-    max_output_size: int = 2048,
+    max_output_size: int = 16384,
     env = None,
     cwd: str | None = None
 ) -> Result:
@@ -47,7 +47,9 @@ def run(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         start_new_session=True,
-        bufsize=MAX_BYTES_PER_READ,
+        # Use raw IO because BufferedReader returns None for partial
+        # reads on non-blocking pipes which can lead to data loss.
+        bufsize=0,
         cwd=cwd
     )
     set_nonblocking(p.stdout)
@@ -61,6 +63,7 @@ def run(
     stderr_saved_bytes = []
     stdout_bytes_read = 0
     stderr_bytes_read = 0
+    exit_code = None
 
     for _ in range(max_iterations):
         this_stdout_read = p.stdout.read(MAX_BYTES_PER_READ)
@@ -74,9 +77,21 @@ def run(
             stderr_saved_bytes.append(this_stderr_read)
             stderr_bytes_read += len(this_stderr_read)
         exit_code = p.poll()
-        if exit_code is not None:
-            break
-        time.sleep(SLEEP_BETWEEN_READS)
+        if exit_code is None:
+            time.sleep(SLEEP_BETWEEN_READS)
+        else:
+            # After exit, keep looping without sleeping to drain any output
+            # remaining in the pipe buffers; stop once both pipes are empty.
+            this_stdout_read = p.stdout.read(MAX_BYTES_PER_READ)
+            this_stderr_read = p.stderr.read(MAX_BYTES_PER_READ)
+            if this_stdout_read is not None and stdout_bytes_read < max_output_size:
+                stdout_saved_bytes.append(this_stdout_read)
+                stdout_bytes_read += len(this_stdout_read)
+            if this_stderr_read is not None and stderr_bytes_read < max_output_size:
+                stderr_saved_bytes.append(this_stderr_read)
+                stderr_bytes_read += len(this_stderr_read)
+            if not this_stdout_read and not this_stderr_read:
+                break
 
     try:
         # Kills the process group. Without this line, test_fork_once fails.
