@@ -106,6 +106,14 @@ RUN apt-get update -yqq && apt-get install -yqq dart
 # Lean
 # RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
 
+# Fennel
+# TODO Once on Ubuntu 25.10+, replace with `apt install -y fennel'.
+RUN curl -L -O https://fennel-lang.org/downloads/fennel-1.6.1
+RUN curl -L -O https://git.sr.ht/~technomancy/faith/blob/main/faith.fnl
+RUN chmod +x fennel-1.6.1
+RUN ln -s /fennel-1.6.1 /bin/fennel
+ENV FENNEL_PATH=/?.fnl
+
 # install numpy for humanevalplus
 RUN python3 -m pip install numpy
 
