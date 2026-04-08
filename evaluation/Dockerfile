@@ -106,6 +106,26 @@ RUN apt-get update -yqq && apt-get install -yqq dart
 # Lean
 # RUN wget https://github.com/leanprover/lean4/releases/download/v4.6.0-rc1/lean-4.6.0-rc1-linux.zip -O /tmp/lean.zip && unzip /tmp/lean.zip -d /root/lean/ && ln -s /root/lean/bin/lean /bin/lean
 
+# Common Lisp
+# SBCL 2.1.8 binary because Jammy's 2.1.11 has a Quicklisp-breaking compiler bug.
+RUN curl -Lo /root/sbcl.tar.bz2 https://downloads.sourceforge.net/project/sbcl/sbcl/2.1.8/sbcl-2.1.8-x86-64-linux-binary.tar.bz2
+RUN tar xjf /root/sbcl.tar.bz2 -C /root
+RUN cd /root/sbcl-2.1.8-x86-64-linux && sh install.sh
+RUN curl -o /root/quicklisp.lisp https://beta.quicklisp.org/quicklisp.lisp
+RUN sbcl --load /root/quicklisp.lisp \
+         --eval '(quicklisp-quickstart:install)' \
+         --eval '(ql:quickload :alexandria)' \
+         --eval '(ql:quickload :serapeum)' \
+         --eval '(ql:quickload :cl-ppcre)' \
+         --eval '(ql:quickload :fiveam)' \
+         --eval '(quit)'
+RUN sbcl --eval '(load (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname)))' \
+         --eval '(asdf:load-system :alexandria)' \
+         --eval '(asdf:load-system :serapeum)' \
+         --eval '(asdf:load-system :cl-ppcre)' \
+         --eval '(asdf:load-system :fiveam)' \
+         --eval '(sb-ext:save-lisp-and-die "/usr/local/bin/sbcl-multipl-e" :executable t)'
+
 # install numpy for humanevalplus
 RUN python3 -m pip install numpy
 
