@@ -30,6 +30,7 @@ import eval_v
 import eval_lean
 import eval_dart
 import eval_hy
+import eval_zig
 import tempfile
 
 
@@ -67,6 +68,7 @@ EVALUATORS = {
     "lean": (eval_lean.eval_script, ".lean"),
     "dart": (eval_dart.eval_script, ".dart"),
     "hy": (eval_hy.eval_script, ".hy"),
+    "zig": (eval_zig.eval_script, ".zig"),
 }
 
 def eval_string_script(language, program):
