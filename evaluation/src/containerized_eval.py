@@ -33,6 +33,7 @@ import eval_hy
 import eval_zig
 import eval_tcl
 import eval_elm
+import eval_pas
 import tempfile
 
 
@@ -73,6 +74,7 @@ EVALUATORS = {
     "zig": (eval_zig.eval_script, ".zig"),
     "tcl": (eval_tcl.eval_script, ".tcl"),
     "elm": (eval_elm.eval_script, ".elm"),
+    "pas": (eval_pas.eval_script, ".pas"),
 }
 
 def eval_string_script(language, program):
