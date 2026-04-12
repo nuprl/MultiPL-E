@@ -32,6 +32,7 @@ import eval_dart
 import eval_hy
 import eval_zig
 import eval_tcl
+import eval_elm
 import tempfile
 
 
@@ -71,6 +72,7 @@ EVALUATORS = {
     "hy": (eval_hy.eval_script, ".hy"),
     "zig": (eval_zig.eval_script, ".zig"),
     "tcl": (eval_tcl.eval_script, ".tcl"),
+    "elm": (eval_elm.eval_script, ".elm"),
 }
 
 def eval_string_script(language, program):

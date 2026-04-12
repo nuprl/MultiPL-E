@@ -1,11 +1,12 @@
 DOCKER_EXEC=podman
 
-build: Dockerfile Adb.dockerfile Hy.dockerfile Zig.dockerfile Tcl.dockerfile
+build: Dockerfile Adb.dockerfile Hy.dockerfile Zig.dockerfile Tcl.dockerfile Elm.dockerfile
 	${DOCKER_EXEC} build -t multipl-e-evaluation .
 	${DOCKER_EXEC} build -t ghcr.io/nuprl/multipl-e:adb -f Adb.dockerfile .
 	${DOCKER_EXEC} build -t ghcr.io/nuprl/multipl-e:hy -f Hy.dockerfile .
 	${DOCKER_EXEC} build -t ghcr.io/nuprl/multipl-e:zig -f Zig.dockerfile .
 	${DOCKER_EXEC} build -t ghcr.io/nuprl/multipl-e:tcl -f Tcl.dockerfile .
+	${DOCKER_EXEC} build -t ghcr.io/nuprl/multipl-e:elm -f Elm.dockerfile .
 
 test: build
 	${DOCKER_EXEC} run --rm \
