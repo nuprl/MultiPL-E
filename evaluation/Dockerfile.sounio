@@ -1,0 +1,54 @@
+# Sounio-only evaluation image for MultiPL-E.
+#
+# This is a smaller, language-specific image used for `eval_sounio.py`.  The
+# main multi-language `Dockerfile` in this directory installs every supported
+# toolchain; this one isolates Sounio so iteration is faster and the
+# resulting image is reproducible from a single pinned binary.
+#
+# Reproducibility contract:
+#   * SOUNIO_VERSION pins the GitHub release tag.
+#   * SOUNIO_BIN_SHA256 pins the published `souc-linux-x86_64` asset.
+#   * The build fails (`sha256sum -c`) if the asset's digest drifts.
+#
+# Build:
+#   docker build -f evaluation/Dockerfile.sounio -t multipl-e-sounio evaluation/
+#
+# Run (against a generated `.sio` file on stdin via main.py):
+#   docker run -i --rm multipl-e-sounio --lang sio --target_dir /code/test_inputs
+
+FROM debian:bookworm-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
+RUN apt-get update -yqq && \
+    apt-get install -yqq --no-install-recommends \
+        ca-certificates \
+        curl \
+        python3 \
+        python3-tqdm \
+        libc6 \
+        coreutils \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- Pinned Sounio compiler ------------------------------------------------
+#
+# The release-tag + SHA256 pin is the reproducibility contract.  To bump
+# Sounio, update SOUNIO_VERSION + SOUNIO_BIN_SHA256 together.  Never refer
+# to a moving tag like `latest`.
+ENV SOUNIO_VERSION=v1.0.0-beta.5
+ENV SOUNIO_BIN_SHA256=3cbea2b475e79737046f8ccf463c07d22cd5fb678fd479a032ee04bd8e19da93
+
+RUN set -eu; \
+    url="https://github.com/Sounio-lang/sounio/releases/download/${SOUNIO_VERSION}/souc-linux-x86_64"; \
+    curl -fsSL "$url" -o /usr/local/bin/souc; \
+    echo "${SOUNIO_BIN_SHA256}  /usr/local/bin/souc" | sha256sum -c -; \
+    chmod +x /usr/local/bin/souc; \
+    /usr/local/bin/souc --version
+
+ENV SOUC=/usr/local/bin/souc
+
+COPY src /code
+WORKDIR /code
+
+ENTRYPOINT ["python3", "main.py"]
