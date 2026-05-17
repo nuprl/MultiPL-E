@@ -64,3 +64,35 @@ sources to verify *semantic* intent:
 
 No semantic divergences found. The remaining 13 unsupported HumanEval
 problems are upstream-untyped or `Union`-typed — not a translator bug.
+
+## Cycle 4 — actually compile-test the hand bodies
+
+After advisor flagged that the original "20/20 PASS" claim is mechanical
+(hand = auto + body insert), we compile-tested five trivial hand bodies
+against the local `souc 1.0.0-beta.5`:
+
+| Problem | `souc <src> <out>` | `./out` | Notes |
+|---|---|---|---|
+| `HumanEval_24_largest_divisor` | OK | exit 0 — all asserts pass | divisor sweep with `while`/`%` |
+| `HumanEval_13_greatest_common_divisor` | OK | exit 0 — all asserts pass | Euclid loop |
+| `HumanEval_31_is_prime` | OK | exit 0 — all asserts pass | `i*i <= n` sieve |
+| `HumanEval_23_strlen` | typecheck failed | n/a | body `string.len()` is not a stable Sounio surface op |
+| `HumanEval_45_triangle_area` | typecheck failed | n/a | body uses `as f64` cast which the typechecker doesn't accept here |
+
+What this proves: for three trivial HumanEval problems, the translator
+output is consumable end-to-end by `souc 1.0.0-beta.5` when paired with
+straightforward Sounio bodies — header, type annotations, `let candidate =
+…` alias, `assert(…)` macro, and `main`-with-effects all type-check and
+the produced ELF runs the asserts cleanly.
+
+What this does not prove: the broader Sounio stdlib surface needed for
+the remaining ~17 problems. The two failures pinpoint exactly which
+surface ops are not yet stable in `souc 1.0.0-beta.5` (string length, int
+→ f64 cast), and those rows have been demoted to `panic!("hand body:
+needs <op>")` stubs so the validate.py PASS remains honest. Re-running
+`references/validate.py` after the demotion still reports 20/20 because
+the body region is stripped.
+
+A stronger follow-up: hand-translate three problems *from the Python
+source without looking at translator output*, compile them, and compare.
+Tracked for the same follow-up commit that adds the baseline pass@1.
