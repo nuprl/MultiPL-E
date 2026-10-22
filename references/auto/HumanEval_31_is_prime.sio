@@ -1,0 +1,590 @@
+// MultiPL-E process-lifetime arena. Handles remain stable when storage grows.
+// Every slot is one 64-bit word; typed adapters preserve its interpretation.
+// No fixed element capacity and no silent out-of-bounds sentinel values.
+
+fn mp_alloc_words(count: i64) -> i64 with Alloc, Panic, Div {
+    assert(count > 0)
+    assert(count <= 9223372036854775807 / 8)
+    let memory = heap_alloc(count * 8) as i64
+    assert(memory > 0)
+    memory
+}
+
+fn mp_header_get(handle: i64, slot: i64) -> i64 {
+    read_i64(handle as *mut i64, slot)
+}
+
+fn mp_header_set(handle: i64, slot: i64, value: i64) with Mut {
+    write_i64(handle as *mut i64, slot, value)
+}
+
+fn mp_seq_new() -> i64 with Alloc, Mut, Panic, Div {
+    let handle = mp_alloc_words(3)
+    mp_header_set(handle, 0, 0)
+    mp_header_set(handle, 1, 0)
+    mp_header_set(handle, 2, 0)
+    handle
+}
+
+fn mp_seq_len(handle: i64) -> i64 {
+    mp_header_get(handle, 1)
+}
+
+fn mp_seq_reserve(handle: i64, required: i64) with Alloc, Mut, Panic, Div {
+    let limit: i64 = 9223372036854775807 / 8
+    assert(required >= 0)
+    assert(required <= limit)
+    let old_capacity = mp_header_get(handle, 2)
+    if required <= old_capacity { return }
+    var capacity: i64 = old_capacity
+    if capacity == 0 { capacity = 4 }
+    while capacity < required {
+        if capacity > limit / 2 { capacity = limit }
+        else { capacity = capacity * 2 }
+    }
+    let storage = mp_alloc_words(capacity)
+    let old_storage = mp_header_get(handle, 0)
+    let length = mp_seq_len(handle)
+    var i: i64 = 0
+    while i < length {
+        write_i64(storage as *mut i64, i, read_i64(old_storage as *mut i64, i))
+        i = i + 1
+    }
+    mp_header_set(handle, 0, storage)
+    mp_header_set(handle, 2, capacity)
+    if old_capacity > 0 { heap_free(old_storage as *mut i8) }
+}
+
+fn mp_seq_push(handle: i64, word: i64) with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(handle)
+    assert(length < 9223372036854775807 / 8)
+    mp_seq_reserve(handle, length + 1)
+    write_i64(mp_header_get(handle, 0) as *mut i64, length, word)
+    mp_header_set(handle, 1, length + 1)
+}
+
+fn mp_seq_index(handle: i64, index: i64) -> i64 with Panic {
+    let length = mp_seq_len(handle)
+    var normalized = index
+    if normalized < 0 { normalized = length + normalized }
+    assert(normalized >= 0)
+    assert(normalized < length)
+    normalized
+}
+
+fn mp_seq_get(handle: i64, index: i64) -> i64 with Panic {
+    let normalized = mp_seq_index(handle, index)
+    read_i64(mp_header_get(handle, 0) as *mut i64, normalized)
+}
+
+fn mp_seq_set(handle: i64, index: i64, word: i64) with Mut, Panic {
+    let normalized = mp_seq_index(handle, index)
+    write_i64(mp_header_get(handle, 0) as *mut i64, normalized, word)
+}
+
+fn mp_seq_copy(handle: i64) -> i64 with Alloc, Mut, Panic, Div {
+    let result = mp_seq_new()
+    let length = mp_seq_len(handle)
+    mp_seq_reserve(result, length)
+    var i: i64 = 0
+    while i < length {
+        mp_seq_push(result, mp_seq_get(handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_seq_equal(left: i64, right: i64) -> bool with Panic {
+    let length = mp_seq_len(left)
+    if length != mp_seq_len(right) { return false }
+    var i: i64 = 0
+    while i < length {
+        if mp_seq_get(left, i) != mp_seq_get(right, i) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_float_word(value: f64) -> i64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_f64(memory as *mut f64, 0, value)
+    let word = read_i64(memory as *mut i64, 0)
+    heap_free(memory as *mut i8)
+    word
+}
+
+fn mp_word_float(word: i64) -> f64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_i64(memory as *mut i64, 0, word)
+    let value = read_f64(memory as *mut f64, 0)
+    heap_free(memory as *mut i8)
+    value
+}
+
+
+// bigint: process-lifetime heap value; no fixed capacity.
+
+struct MPBigint { handle: i64 }
+
+// Generated-prefix template: follows MPBigint and the common mp_seq helpers.
+// Immutable signed arbitrary-precision values. Sign slot followed by base-1e9 limbs.
+// Constructors/arithmetic own their result; operands are never modified.
+
+fn mp_bigint_new() -> MPBigint with Alloc, Mut, Panic, Div {
+    let value = MPBigint { handle: mp_seq_new() }
+    mp_seq_push(value.handle, 0)
+    mp_seq_push(value.handle, 0)
+    value
+}
+
+fn mp_bigint_normalize(value: MPBigint) with Mut, Panic {
+    var length = mp_seq_len(value.handle)
+    while length > 2 {
+        if mp_seq_get(value.handle, length - 1) != 0 { break }
+        length = length - 1
+        mp_header_set(value.handle, 1, length)
+    }
+    if length == 2 {
+        if mp_seq_get(value.handle, 1) == 0 { mp_seq_set(value.handle, 0, 0) }
+    }
+}
+
+fn mp_bigint_from_i64(number: i64) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_new()
+    if number == 0 { return result }
+    var remaining = number
+    var sign: i64 = -1
+    if number > 0 { remaining = 0 - number; sign = 1 }
+    mp_seq_set(result.handle, 0, sign)
+    mp_header_set(result.handle, 1, 1)
+    while remaining < 0 {
+        mp_seq_push(result.handle, 0 - remaining % 1000000000)
+        remaining = remaining / 1000000000
+    }
+    result
+}
+
+fn mp_bigint_eq(a: MPBigint, b: MPBigint) -> bool with Mut, Panic {
+    mp_seq_equal(a.handle, b.handle)
+}
+
+fn mp_bigint_abs_compare(a: MPBigint, b: MPBigint) -> i64 with Mut, Panic {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    if al < bl { return -1 }
+    if al > bl { return 1 }
+    var i = al - 1
+    while i > 0 {
+        let av = mp_seq_get(a.handle, i)
+        let bv = mp_seq_get(b.handle, i)
+        if av < bv { return -1 }
+        if av > bv { return 1 }
+        i = i - 1
+    }
+    0
+}
+
+fn mp_bigint_lt(a: MPBigint, b: MPBigint) -> bool with Mut, Panic {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    if sa != sb { return sa < sb }
+    let comparison = mp_bigint_abs_compare(a, b)
+    if sa < 0 { return comparison > 0 }
+    comparison < 0
+}
+
+fn mp_bigint_copy(value: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    MPBigint { handle: mp_seq_copy(value.handle) }
+}
+
+fn mp_bigint_neg(value: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_copy(value)
+    mp_seq_set(result.handle, 0, 0 - mp_seq_get(result.handle, 0))
+    result
+}
+
+fn mp_bigint_abs_add(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_new()
+    mp_header_set(result.handle, 1, 1)
+    mp_seq_set(result.handle, 0, 1)
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var length = al
+    if bl > length { length = bl }
+    var carry: i64 = 0
+    var i: i64 = 1
+    while i < length {
+        var av: i64 = 0
+        var bv: i64 = 0
+        if i < al { av = mp_seq_get(a.handle, i) }
+        if i < bl { bv = mp_seq_get(b.handle, i) }
+        let sum = av + bv + carry
+        mp_seq_push(result.handle, sum % 1000000000)
+        carry = sum / 1000000000
+        i = i + 1
+    }
+    if carry > 0 { mp_seq_push(result.handle, carry) }
+    mp_bigint_normalize(result)
+    result
+}
+
+fn mp_bigint_abs_sub(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    assert(mp_bigint_abs_compare(a, b) >= 0)
+    let result = mp_bigint_new()
+    mp_header_set(result.handle, 1, 1)
+    mp_seq_set(result.handle, 0, 1)
+    var borrow: i64 = 0
+    var i: i64 = 1
+    while i < mp_seq_len(a.handle) {
+        var bv: i64 = 0
+        if i < mp_seq_len(b.handle) { bv = mp_seq_get(b.handle, i) }
+        var digit = mp_seq_get(a.handle, i) - bv - borrow
+        borrow = 0
+        if digit < 0 { digit = digit + 1000000000; borrow = 1 }
+        mp_seq_push(result.handle, digit)
+        i = i + 1
+    }
+    assert(borrow == 0)
+    mp_bigint_normalize(result)
+    result
+}
+
+fn mp_bigint_add(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    if sa == 0 { return mp_bigint_copy(b) }
+    if sb == 0 { return mp_bigint_copy(a) }
+    if sa == sb {
+        let result = mp_bigint_abs_add(a, b)
+        mp_seq_set(result.handle, 0, sa)
+        return result
+    }
+    let comparison = mp_bigint_abs_compare(a, b)
+    if comparison == 0 { return mp_bigint_new() }
+    if comparison > 0 {
+        let result = mp_bigint_abs_sub(a, b)
+        mp_seq_set(result.handle, 0, sa)
+        return result
+    }
+    let result = mp_bigint_abs_sub(b, a)
+    mp_seq_set(result.handle, 0, sb)
+    result
+}
+
+fn mp_bigint_sub(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    mp_bigint_add(a, mp_bigint_neg(b))
+}
+
+fn mp_bigint_mul(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    if sa == 0 { return mp_bigint_new() }
+    if sb == 0 { return mp_bigint_new() }
+    let na = mp_seq_len(a.handle) - 1
+    let nb = mp_seq_len(b.handle) - 1
+    let result = mp_bigint_new()
+    mp_header_set(result.handle, 1, 1)
+    mp_seq_set(result.handle, 0, sa * sb)
+    var i: i64 = 0
+    while i < na + nb { mp_seq_push(result.handle, 0); i = i + 1 }
+    i = 1
+    while i <= na {
+        var carry: i64 = 0
+        var j: i64 = 1
+        while j <= nb {
+            let index = i + j - 1
+            let product = mp_seq_get(a.handle, i) * mp_seq_get(b.handle, j)
+            let total = mp_seq_get(result.handle, index) + product + carry
+            mp_seq_set(result.handle, index, total % 1000000000)
+            carry = total / 1000000000
+            j = j + 1
+        }
+        mp_seq_set(result.handle, i + nb, carry)
+        i = i + 1
+    }
+    mp_bigint_normalize(result)
+    result
+}
+
+struct MPBigintDivmod { quotient: MPBigint, remainder: MPBigint }
+
+fn mp_bigint_abs(value: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_copy(value)
+    if mp_seq_get(result.handle, 0) < 0 { mp_seq_set(result.handle, 0, 1) }
+    result
+}
+
+// Unsigned long division. All limb products stay below 1e18.
+// The one-limb fast path is linear; larger divisors use bounded digit search.
+fn mp_bigint_abs_divmod(a: MPBigint, b: MPBigint) -> MPBigintDivmod with Alloc, Mut, Panic, Div {
+    assert(mp_seq_get(b.handle, 0) != 0)
+    let quotient = mp_bigint_copy(a)
+    var remainder = mp_bigint_new()
+    var i = mp_seq_len(a.handle) - 1
+    if mp_seq_len(b.handle) == 2 {
+        let divisor = mp_seq_get(b.handle, 1)
+        var carry: i64 = 0
+        while i > 0 {
+            let word = carry * 1000000000 + mp_seq_get(a.handle, i)
+            mp_seq_set(quotient.handle, i, word / divisor)
+            carry = word % divisor
+            i = i - 1
+        }
+        remainder = mp_bigint_from_i64(carry)
+    } else {
+        while i > 0 {
+            // remainder = remainder * base + next dividend limb.
+            let shifted = mp_bigint_new()
+            mp_header_set(shifted.handle, 1, 1)
+            mp_seq_set(shifted.handle, 0, 1)
+            mp_seq_push(shifted.handle, mp_seq_get(a.handle, i))
+            var j: i64 = 1
+            while j < mp_seq_len(remainder.handle) {
+                mp_seq_push(shifted.handle, mp_seq_get(remainder.handle, j))
+                j = j + 1
+            }
+            mp_bigint_normalize(shifted)
+            remainder = shifted
+            var low: i64 = 0
+            var high: i64 = 999999999
+            while low < high {
+                let middle = low + (high - low + 1) / 2
+                let product = mp_bigint_mul(b, mp_bigint_from_i64(middle))
+                if mp_bigint_abs_compare(product, remainder) <= 0 { low = middle }
+                else { high = middle - 1 }
+            }
+            mp_seq_set(quotient.handle, i, low)
+            remainder = mp_bigint_abs_sub(remainder, mp_bigint_mul(b, mp_bigint_from_i64(low)))
+            i = i - 1
+        }
+    }
+    if mp_seq_get(quotient.handle, 0) != 0 { mp_seq_set(quotient.handle, 0, 1) }
+    mp_bigint_normalize(quotient)
+    MPBigintDivmod { quotient: quotient, remainder: remainder }
+}
+
+// Python floor division: a == b*q+r; nonzero r has the divisor's sign.
+// Division by zero fails explicitly; neither operand is modified.
+fn mp_bigint_divmod(a: MPBigint, b: MPBigint) -> MPBigintDivmod with Alloc, Mut, Panic, Div {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    assert(sb != 0)
+    let pair = mp_bigint_abs_divmod(mp_bigint_abs(a), mp_bigint_abs(b))
+    var quotient = pair.quotient
+    var remainder = pair.remainder
+    if sa * sb < 0 {
+        quotient = mp_bigint_neg(quotient)
+        if mp_seq_get(remainder.handle, 0) != 0 {
+            quotient = mp_bigint_sub(quotient, mp_bigint_from_i64(1))
+            remainder = mp_bigint_abs_sub(mp_bigint_abs(b), remainder)
+        }
+    }
+    if mp_seq_get(remainder.handle, 0) != 0 { mp_seq_set(remainder.handle, 0, sb) }
+    MPBigintDivmod { quotient: quotient, remainder: remainder }
+}
+
+fn mp_bigint_floordiv(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let pair = mp_bigint_divmod(a, b)
+    pair.quotient
+}
+
+fn mp_bigint_mod(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let pair = mp_bigint_divmod(a, b)
+    pair.remainder
+}
+
+// Explicit checked conversion for finite native container indices, not a
+// fallback arithmetic representation. Negative accumulation admits MIN_I64.
+fn mp_bigint_to_i64(value: MPBigint) -> i64 with Mut, Panic, Div {
+    var result: i64 = 0
+    var i = mp_seq_len(value.handle) - 1
+    let minimum = 0 - 9223372036854775807 - 1
+    while i > 0 {
+        let digit = mp_seq_get(value.handle, i)
+        assert(result >= minimum / 1000000000)
+        result = result * 1000000000
+        assert(result >= minimum + digit)
+        result = result - digit
+        i = i - 1
+    }
+    if mp_seq_get(value.handle, 0) >= 0 {
+        assert(result != minimum)
+        return 0 - result
+    }
+    result
+}
+
+// Correctly rounded finite binary64 conversion, round-to-nearest/ties-even.
+// Overflow is an explicit failure, not silent narrowing or wraparound.
+fn mp_bigint_to_f64(value: MPBigint) -> f64 with Alloc, Mut, Panic, Div {
+    var magnitude = mp_bigint_abs(value)
+    let limit = mp_bigint_from_i64(9007199254740991)
+    let two = mp_bigint_from_i64(2)
+    var shifts: i64 = 0
+    var round_bit = false
+    var sticky = false
+    while mp_bigint_lt(limit, magnitude) {
+        if round_bit { sticky = true }
+        let pair = mp_bigint_abs_divmod(magnitude, two)
+        round_bit = !mp_bigint_eq(pair.remainder, mp_bigint_new())
+        magnitude = pair.quotient
+        shifts = shifts + 1
+        assert(shifts <= 1024)
+    }
+    var top = mp_bigint_to_i64(magnitude)
+    if round_bit { if sticky || top % 2 != 0 { top = top + 1 } }
+    var result = top as f64
+    var i: i64 = 0
+    while i < shifts { result = result * 2.0; i = i + 1 }
+    assert(result <= 1.7976931348623157e308)
+    if mp_seq_get(value.handle, 0) < 0 { return 0.0 - result }
+    result
+}
+
+
+// list_bigint: process-lifetime heap value; no fixed capacity.
+
+struct MPListBigint { handle: i64 }
+
+fn mp_list_bigint_new() -> MPListBigint with Alloc, Mut, Panic, Div {
+    MPListBigint { handle: mp_seq_new() }
+}
+
+fn mp_list_bigint_len(value: MPListBigint) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_len(value.handle)
+}
+
+fn mp_list_bigint_get(value: MPListBigint, index: i64) -> MPBigint with Alloc, Mut, Panic, Div {
+    MPBigint { handle: mp_seq_get(value.handle, index) }
+}
+
+fn mp_list_bigint_contains(value: MPListBigint, item: MPBigint) -> bool with Alloc, Mut, Panic, Div {
+    var i: i64 = 0
+    while i < mp_seq_len(value.handle) {
+        if mp_bigint_eq(mp_list_bigint_get(value, i), item) { return true }
+        i = i + 1
+    }
+    false
+}
+
+fn mp_list_bigint_push(value: MPListBigint, item: MPBigint) with Alloc, Mut, Panic, Div {
+    mp_seq_push(value.handle, (item).handle)
+}
+
+fn mp_list_bigint_set(value: MPListBigint, index: i64, item: MPBigint) with Alloc, Mut, Panic, Div {
+    mp_seq_set(value.handle, index, (item).handle)
+}
+
+fn mp_list_bigint_pop(value: MPListBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let word = mp_seq_get(value.handle, -1)
+    mp_header_set(value.handle, 1, mp_seq_len(value.handle) - 1)
+    MPBigint { handle: word }
+}
+
+fn mp_list_bigint_copy(value: MPListBigint) -> MPListBigint with Alloc, Mut, Panic, Div {
+    MPListBigint { handle: mp_seq_copy(value.handle) }
+}
+
+fn mp_list_bigint_slice(value: MPListBigint, start: i64, stop: i64) -> MPListBigint with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(value.handle)
+    var begin = start
+    var end = stop
+    if begin < 0 { begin = begin + length }
+    if end < 0 { end = end + length }
+    if begin < 0 { begin = 0 }
+    if end < 0 { end = 0 }
+    if begin > length { begin = length }
+    if end > length { end = length }
+    let result = mp_list_bigint_new()
+    var i = begin
+    while i < end {
+        mp_seq_push(result.handle, mp_seq_get(value.handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_list_bigint_eq(a: MPListBigint, b: MPListBigint) -> bool with Alloc, Mut, Panic, Div {
+    if mp_seq_len(a.handle) != mp_seq_len(b.handle) { return false }
+    var i: i64 = 0
+    while i < mp_seq_len(a.handle) {
+        if !mp_bigint_eq(mp_list_bigint_get(a, i), mp_list_bigint_get(b, i)) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_list_bigint_lt(a: MPListBigint, b: MPListBigint) -> bool with Alloc, Mut, Panic, Div {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var i: i64 = 0
+    while i < al {
+        if i >= bl { return false }
+        let av = mp_list_bigint_get(a, i)
+        let bv = mp_list_bigint_get(b, i)
+        if mp_bigint_lt(av, bv) { return true }
+        if mp_bigint_lt(bv, av) { return false }
+        i = i + 1
+    }
+    al < bl
+}
+
+fn mp_list_bigint_sort(value: MPListBigint) with Alloc, Mut, Panic, Div {
+    var i: i64 = 1
+    while i < mp_seq_len(value.handle) {
+        var j = i
+        while j > 0 {
+            let a = mp_list_bigint_get(value, j)
+            let b = mp_list_bigint_get(value, j - 1)
+            if !mp_bigint_lt(a, b) { break }
+            mp_list_bigint_set(value, j - 1, a)
+            mp_list_bigint_set(value, j, b)
+            j = j - 1
+        }
+        i = i + 1
+    }
+}
+
+// Compound adapters use mp_<type>_new/get/push/set/len/eq.
+// Strings contain Unicode code points; concat and slice return new values.
+// Lists/dictionaries preserve shared mutable handles across growth.
+// All Python int annotations use immutable MPBigint, including nested types.
+// Arithmetic: mp_bigint_add/sub/mul/floordiv/mod/eq/lt; never native handle arithmetic.
+// Container indices and lengths use native i64; conversion to i64 is checked.
+// Return true if a given number is prime, and false otherwise.
+// >>> is_prime(mp_bigint_from_i64(6))
+// false
+// >>> is_prime(mp_bigint_from_i64(101))
+// true
+// >>> is_prime(mp_bigint_from_i64(11))
+// true
+// >>> is_prime(mp_bigint_from_i64(13441))
+// true
+// >>> is_prime(mp_bigint_from_i64(61))
+// true
+// >>> is_prime(mp_bigint_from_i64(4))
+// false
+// >>> is_prime(mp_bigint_from_i64(1))
+// false
+fn is_prime(n: MPBigint) -> bool with Alloc, Mut, Panic, Div {
+    // Unimplemented reference: must never count as a pass.
+        assert(false)
+        false
+}
+
+fn main() -> i64 with Alloc, Mut, Panic, Div {
+    assert((is_prime(mp_bigint_from_i64(6)) == false))
+    assert((is_prime(mp_bigint_from_i64(101)) == true))
+    assert((is_prime(mp_bigint_from_i64(11)) == true))
+    assert((is_prime(mp_bigint_from_i64(13441)) == true))
+    assert((is_prime(mp_bigint_from_i64(61)) == true))
+    assert((is_prime(mp_bigint_from_i64(4)) == false))
+    assert((is_prime(mp_bigint_from_i64(1)) == false))
+    assert((is_prime(mp_bigint_from_i64(5)) == true))
+    assert((is_prime(mp_bigint_from_i64(11)) == true))
+    assert((is_prime(mp_bigint_from_i64(17)) == true))
+    assert((is_prime(mp_bigint_from_i64(85)) == false))
+    assert((is_prime(mp_bigint_from_i64(77)) == false))
+    assert((is_prime(mp_bigint_from_i64(255379)) == false))
+    0
+}

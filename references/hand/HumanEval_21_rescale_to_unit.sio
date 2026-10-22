@@ -1,0 +1,349 @@
+// MultiPL-E process-lifetime arena. Handles remain stable when storage grows.
+// Every slot is one 64-bit word; typed adapters preserve its interpretation.
+// No fixed element capacity and no silent out-of-bounds sentinel values.
+
+fn mp_alloc_words(count: i64) -> i64 with Alloc, Panic, Div {
+    assert(count > 0)
+    assert(count <= 9223372036854775807 / 8)
+    let memory = heap_alloc(count * 8) as i64
+    assert(memory > 0)
+    memory
+}
+
+fn mp_header_get(handle: i64, slot: i64) -> i64 {
+    read_i64(handle as *mut i64, slot)
+}
+
+fn mp_header_set(handle: i64, slot: i64, value: i64) with Mut {
+    write_i64(handle as *mut i64, slot, value)
+}
+
+fn mp_seq_new() -> i64 with Alloc, Mut, Panic, Div {
+    let handle = mp_alloc_words(3)
+    mp_header_set(handle, 0, 0)
+    mp_header_set(handle, 1, 0)
+    mp_header_set(handle, 2, 0)
+    handle
+}
+
+fn mp_seq_len(handle: i64) -> i64 {
+    mp_header_get(handle, 1)
+}
+
+fn mp_seq_reserve(handle: i64, required: i64) with Alloc, Mut, Panic, Div {
+    let limit: i64 = 9223372036854775807 / 8
+    assert(required >= 0)
+    assert(required <= limit)
+    let old_capacity = mp_header_get(handle, 2)
+    if required <= old_capacity { return }
+    var capacity: i64 = old_capacity
+    if capacity == 0 { capacity = 4 }
+    while capacity < required {
+        if capacity > limit / 2 { capacity = limit }
+        else { capacity = capacity * 2 }
+    }
+    let storage = mp_alloc_words(capacity)
+    let old_storage = mp_header_get(handle, 0)
+    let length = mp_seq_len(handle)
+    var i: i64 = 0
+    while i < length {
+        write_i64(storage as *mut i64, i, read_i64(old_storage as *mut i64, i))
+        i = i + 1
+    }
+    mp_header_set(handle, 0, storage)
+    mp_header_set(handle, 2, capacity)
+    if old_capacity > 0 { heap_free(old_storage as *mut i8) }
+}
+
+fn mp_seq_push(handle: i64, word: i64) with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(handle)
+    assert(length < 9223372036854775807 / 8)
+    mp_seq_reserve(handle, length + 1)
+    write_i64(mp_header_get(handle, 0) as *mut i64, length, word)
+    mp_header_set(handle, 1, length + 1)
+}
+
+fn mp_seq_index(handle: i64, index: i64) -> i64 with Panic {
+    let length = mp_seq_len(handle)
+    var normalized = index
+    if normalized < 0 { normalized = length + normalized }
+    assert(normalized >= 0)
+    assert(normalized < length)
+    normalized
+}
+
+fn mp_seq_get(handle: i64, index: i64) -> i64 with Panic {
+    let normalized = mp_seq_index(handle, index)
+    read_i64(mp_header_get(handle, 0) as *mut i64, normalized)
+}
+
+fn mp_seq_set(handle: i64, index: i64, word: i64) with Mut, Panic {
+    let normalized = mp_seq_index(handle, index)
+    write_i64(mp_header_get(handle, 0) as *mut i64, normalized, word)
+}
+
+fn mp_seq_copy(handle: i64) -> i64 with Alloc, Mut, Panic, Div {
+    let result = mp_seq_new()
+    let length = mp_seq_len(handle)
+    mp_seq_reserve(result, length)
+    var i: i64 = 0
+    while i < length {
+        mp_seq_push(result, mp_seq_get(handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_seq_equal(left: i64, right: i64) -> bool with Panic {
+    let length = mp_seq_len(left)
+    if length != mp_seq_len(right) { return false }
+    var i: i64 = 0
+    while i < length {
+        if mp_seq_get(left, i) != mp_seq_get(right, i) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_float_word(value: f64) -> i64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_f64(memory as *mut f64, 0, value)
+    let word = read_i64(memory as *mut i64, 0)
+    heap_free(memory as *mut i8)
+    word
+}
+
+fn mp_word_float(word: i64) -> f64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_i64(memory as *mut i64, 0, word)
+    let value = read_f64(memory as *mut f64, 0)
+    heap_free(memory as *mut i8)
+    value
+}
+
+
+// list_f64: process-lifetime heap value; no fixed capacity.
+
+struct MPListF64 { handle: i64 }
+
+fn mp_list_f64_new() -> MPListF64 with Alloc, Mut, Panic, Div {
+    MPListF64 { handle: mp_seq_new() }
+}
+
+fn mp_list_f64_len(value: MPListF64) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_len(value.handle)
+}
+
+fn mp_list_f64_get(value: MPListF64, index: i64) -> f64 with Alloc, Mut, Panic, Div {
+    mp_word_float(mp_seq_get(value.handle, index))
+}
+
+fn mp_list_f64_contains(value: MPListF64, item: f64) -> bool with Alloc, Mut, Panic, Div {
+    var i: i64 = 0
+    while i < mp_seq_len(value.handle) {
+        if (mp_list_f64_get(value, i) == item) { return true }
+        i = i + 1
+    }
+    false
+}
+
+fn mp_list_f64_push(value: MPListF64, item: f64) with Alloc, Mut, Panic, Div {
+    mp_seq_push(value.handle, mp_float_word(item))
+}
+
+fn mp_list_f64_set(value: MPListF64, index: i64, item: f64) with Alloc, Mut, Panic, Div {
+    mp_seq_set(value.handle, index, mp_float_word(item))
+}
+
+fn mp_list_f64_pop(value: MPListF64) -> f64 with Alloc, Mut, Panic, Div {
+    let word = mp_seq_get(value.handle, -1)
+    mp_header_set(value.handle, 1, mp_seq_len(value.handle) - 1)
+    mp_word_float(word)
+}
+
+fn mp_list_f64_copy(value: MPListF64) -> MPListF64 with Alloc, Mut, Panic, Div {
+    MPListF64 { handle: mp_seq_copy(value.handle) }
+}
+
+fn mp_list_f64_slice(value: MPListF64, start: i64, stop: i64) -> MPListF64 with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(value.handle)
+    var begin = start
+    var end = stop
+    if begin < 0 { begin = begin + length }
+    if end < 0 { end = end + length }
+    if begin < 0 { begin = 0 }
+    if end < 0 { end = 0 }
+    if begin > length { begin = length }
+    if end > length { end = length }
+    let result = mp_list_f64_new()
+    var i = begin
+    while i < end {
+        mp_seq_push(result.handle, mp_seq_get(value.handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_list_f64_eq(a: MPListF64, b: MPListF64) -> bool with Alloc, Mut, Panic, Div {
+    if mp_seq_len(a.handle) != mp_seq_len(b.handle) { return false }
+    var i: i64 = 0
+    while i < mp_seq_len(a.handle) {
+        if !(mp_list_f64_get(a, i) == mp_list_f64_get(b, i)) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_list_f64_lt(a: MPListF64, b: MPListF64) -> bool with Alloc, Mut, Panic, Div {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var i: i64 = 0
+    while i < al {
+        if i >= bl { return false }
+        let av = mp_list_f64_get(a, i)
+        let bv = mp_list_f64_get(b, i)
+        if (av < bv) { return true }
+        if (bv < av) { return false }
+        i = i + 1
+    }
+    al < bl
+}
+
+fn mp_list_f64_sort(value: MPListF64) with Alloc, Mut, Panic, Div {
+    var i: i64 = 1
+    while i < mp_seq_len(value.handle) {
+        var j = i
+        while j > 0 {
+            let a = mp_list_f64_get(value, j)
+            let b = mp_list_f64_get(value, j - 1)
+            if !(a < b) { break }
+            mp_list_f64_set(value, j - 1, a)
+            mp_list_f64_set(value, j, b)
+            j = j - 1
+        }
+        i = i + 1
+    }
+}
+
+// Compound adapters use mp_<type>_new/get/push/set/len/eq.
+// Strings contain Unicode code points; concat and slice return new values.
+// Lists/dictionaries preserve shared mutable handles across growth.
+// All Python int annotations use immutable MPBigint, including nested types.
+// Arithmetic: mp_bigint_add/sub/mul/floordiv/mod/eq/lt; never native handle arithmetic.
+// Container indices and lengths use native i64; conversion to i64 is checked.
+// Given vector of numbers (of at least two elements), apply a linear transform to that vector,
+// such that the smallest number will become 0 and the largest will become 1
+// >>> rescale_to_unit({
+// let value = mp_list_f64_new()
+// mp_list_f64_push(value, 1.0)
+// mp_list_f64_push(value, 2.0)
+// mp_list_f64_push(value, 3.0)
+// mp_list_f64_push(value, 4.0)
+// mp_list_f64_push(value, 5.0)
+// value
+// })
+// {
+// let value = mp_list_f64_new()
+// mp_list_f64_push(value, 0.0)
+// mp_list_f64_push(value, 0.25)
+// mp_list_f64_push(value, 0.5)
+// mp_list_f64_push(value, 0.75)
+// mp_list_f64_push(value, 1.0)
+// value
+// }
+fn rescale_to_unit(numbers: MPListF64) -> MPListF64 with Alloc, Mut, Panic, Div {
+    let result = mp_list_f64_new()
+    var low = mp_list_f64_get(numbers, 0)
+    var high = low
+    var i: i64 = 1
+    while i < mp_list_f64_len(numbers) {
+        let value = mp_list_f64_get(numbers, i)
+        if value < low { low = value }
+        if value > high { high = value }
+        i = i + 1
+    }
+    let span = high - low
+    i = 0
+    while i < mp_list_f64_len(numbers) {
+        mp_list_f64_push(result, (mp_list_f64_get(numbers, i) - low) / span)
+        i = i + 1
+    }
+    result
+}
+
+fn main() -> i64 with Alloc, Mut, Panic, Div {
+    assert(mp_list_f64_eq(rescale_to_unit({
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 2.0)
+    mp_list_f64_push(value, 49.9)
+    value
+}), {
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 0.0)
+    mp_list_f64_push(value, 1.0)
+    value
+}))
+    assert(mp_list_f64_eq(rescale_to_unit({
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 100.0)
+    mp_list_f64_push(value, 49.9)
+    value
+}), {
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 1.0)
+    mp_list_f64_push(value, 0.0)
+    value
+}))
+    assert(mp_list_f64_eq(rescale_to_unit({
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 1.0)
+    mp_list_f64_push(value, 2.0)
+    mp_list_f64_push(value, 3.0)
+    mp_list_f64_push(value, 4.0)
+    mp_list_f64_push(value, 5.0)
+    value
+}), {
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 0.0)
+    mp_list_f64_push(value, 0.25)
+    mp_list_f64_push(value, 0.5)
+    mp_list_f64_push(value, 0.75)
+    mp_list_f64_push(value, 1.0)
+    value
+}))
+    assert(mp_list_f64_eq(rescale_to_unit({
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 2.0)
+    mp_list_f64_push(value, 1.0)
+    mp_list_f64_push(value, 5.0)
+    mp_list_f64_push(value, 3.0)
+    mp_list_f64_push(value, 4.0)
+    value
+}), {
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 0.25)
+    mp_list_f64_push(value, 0.0)
+    mp_list_f64_push(value, 1.0)
+    mp_list_f64_push(value, 0.5)
+    mp_list_f64_push(value, 0.75)
+    value
+}))
+    assert(mp_list_f64_eq(rescale_to_unit({
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 12.0)
+    mp_list_f64_push(value, 11.0)
+    mp_list_f64_push(value, 15.0)
+    mp_list_f64_push(value, 13.0)
+    mp_list_f64_push(value, 14.0)
+    value
+}), {
+    let value = mp_list_f64_new()
+    mp_list_f64_push(value, 0.25)
+    mp_list_f64_push(value, 0.0)
+    mp_list_f64_push(value, 1.0)
+    mp_list_f64_push(value, 0.5)
+    mp_list_f64_push(value, 0.75)
+    value
+}))
+    0
+}

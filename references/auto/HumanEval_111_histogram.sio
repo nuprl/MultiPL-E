@@ -1,0 +1,3601 @@
+// MultiPL-E process-lifetime arena. Handles remain stable when storage grows.
+// Every slot is one 64-bit word; typed adapters preserve its interpretation.
+// No fixed element capacity and no silent out-of-bounds sentinel values.
+
+fn mp_alloc_words(count: i64) -> i64 with Alloc, Panic, Div {
+    assert(count > 0)
+    assert(count <= 9223372036854775807 / 8)
+    let memory = heap_alloc(count * 8) as i64
+    assert(memory > 0)
+    memory
+}
+
+fn mp_header_get(handle: i64, slot: i64) -> i64 {
+    read_i64(handle as *mut i64, slot)
+}
+
+fn mp_header_set(handle: i64, slot: i64, value: i64) with Mut {
+    write_i64(handle as *mut i64, slot, value)
+}
+
+fn mp_seq_new() -> i64 with Alloc, Mut, Panic, Div {
+    let handle = mp_alloc_words(3)
+    mp_header_set(handle, 0, 0)
+    mp_header_set(handle, 1, 0)
+    mp_header_set(handle, 2, 0)
+    handle
+}
+
+fn mp_seq_len(handle: i64) -> i64 {
+    mp_header_get(handle, 1)
+}
+
+fn mp_seq_reserve(handle: i64, required: i64) with Alloc, Mut, Panic, Div {
+    let limit: i64 = 9223372036854775807 / 8
+    assert(required >= 0)
+    assert(required <= limit)
+    let old_capacity = mp_header_get(handle, 2)
+    if required <= old_capacity { return }
+    var capacity: i64 = old_capacity
+    if capacity == 0 { capacity = 4 }
+    while capacity < required {
+        if capacity > limit / 2 { capacity = limit }
+        else { capacity = capacity * 2 }
+    }
+    let storage = mp_alloc_words(capacity)
+    let old_storage = mp_header_get(handle, 0)
+    let length = mp_seq_len(handle)
+    var i: i64 = 0
+    while i < length {
+        write_i64(storage as *mut i64, i, read_i64(old_storage as *mut i64, i))
+        i = i + 1
+    }
+    mp_header_set(handle, 0, storage)
+    mp_header_set(handle, 2, capacity)
+    if old_capacity > 0 { heap_free(old_storage as *mut i8) }
+}
+
+fn mp_seq_push(handle: i64, word: i64) with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(handle)
+    assert(length < 9223372036854775807 / 8)
+    mp_seq_reserve(handle, length + 1)
+    write_i64(mp_header_get(handle, 0) as *mut i64, length, word)
+    mp_header_set(handle, 1, length + 1)
+}
+
+fn mp_seq_index(handle: i64, index: i64) -> i64 with Panic {
+    let length = mp_seq_len(handle)
+    var normalized = index
+    if normalized < 0 { normalized = length + normalized }
+    assert(normalized >= 0)
+    assert(normalized < length)
+    normalized
+}
+
+fn mp_seq_get(handle: i64, index: i64) -> i64 with Panic {
+    let normalized = mp_seq_index(handle, index)
+    read_i64(mp_header_get(handle, 0) as *mut i64, normalized)
+}
+
+fn mp_seq_set(handle: i64, index: i64, word: i64) with Mut, Panic {
+    let normalized = mp_seq_index(handle, index)
+    write_i64(mp_header_get(handle, 0) as *mut i64, normalized, word)
+}
+
+fn mp_seq_copy(handle: i64) -> i64 with Alloc, Mut, Panic, Div {
+    let result = mp_seq_new()
+    let length = mp_seq_len(handle)
+    mp_seq_reserve(result, length)
+    var i: i64 = 0
+    while i < length {
+        mp_seq_push(result, mp_seq_get(handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_seq_equal(left: i64, right: i64) -> bool with Panic {
+    let length = mp_seq_len(left)
+    if length != mp_seq_len(right) { return false }
+    var i: i64 = 0
+    while i < length {
+        if mp_seq_get(left, i) != mp_seq_get(right, i) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_float_word(value: f64) -> i64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_f64(memory as *mut f64, 0, value)
+    let word = read_i64(memory as *mut i64, 0)
+    heap_free(memory as *mut i8)
+    word
+}
+
+fn mp_word_float(word: i64) -> f64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_i64(memory as *mut i64, 0, word)
+    let value = read_f64(memory as *mut f64, 0)
+    heap_free(memory as *mut i8)
+    value
+}
+
+
+// str: process-lifetime heap value; no fixed capacity.
+
+struct MPStr { handle: i64 }
+
+fn mp_str_new() -> MPStr with Alloc, Mut, Panic, Div {
+    MPStr { handle: mp_seq_new() }
+}
+
+fn mp_str_len(value: MPStr) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_len(value.handle)
+}
+
+fn mp_str_codepoint(value: MPStr, index: i64) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_get(value.handle, index)
+}
+
+fn mp_str_from_codepoint(point: i64) -> MPStr with Alloc, Mut, Panic, Div {
+    assert(point >= 0)
+    assert(point <= 1114111)
+    let result = mp_str_new()
+    mp_seq_push(result.handle, point)
+    result
+}
+
+fn mp_str_eq(a: MPStr, b: MPStr) -> bool with Alloc, Mut, Panic, Div {
+    mp_seq_equal(a.handle, b.handle)
+}
+
+fn mp_str_lt(a: MPStr, b: MPStr) -> bool with Alloc, Mut, Panic, Div {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var i: i64 = 0
+    while i < al {
+        if i >= bl { return false }
+        let av = mp_seq_get(a.handle, i)
+        let bv = mp_seq_get(b.handle, i)
+        if av < bv { return true }
+        if av > bv { return false }
+        i = i + 1
+    }
+    al < bl
+}
+
+fn mp_str_concat(a: MPStr, b: MPStr) -> MPStr with Alloc, Mut, Panic, Div {
+    let result = MPStr { handle: mp_seq_copy(a.handle) }
+    var i: i64 = 0
+    while i < mp_seq_len(b.handle) {
+        mp_seq_push(result.handle, mp_seq_get(b.handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_str_slice(value: MPStr, start: i64, stop: i64) -> MPStr with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(value.handle)
+    var begin = start
+    var end = stop
+    if begin < 0 { begin = begin + length }
+    if end < 0 { end = end + length }
+    if begin < 0 { begin = 0 }
+    if end < 0 { end = 0 }
+    if begin > length { begin = length }
+    if end > length { end = length }
+    let result = mp_str_new()
+    var i = begin
+    while i < end {
+        mp_seq_push(result.handle, mp_seq_get(value.handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_str_get(value: MPStr, index: i64) -> MPStr with Alloc, Mut, Panic, Div {
+    mp_str_from_codepoint(mp_seq_get(value.handle, index))
+}
+
+fn mp_str_starts_with(value: MPStr, prefix: MPStr) -> bool with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(prefix.handle)
+    if length > mp_seq_len(value.handle) { return false }
+    var i: i64 = 0
+    while i < length {
+        if mp_seq_get(value.handle, i) != mp_seq_get(prefix.handle, i) { return false }
+        i = i + 1
+    }
+    true
+}
+
+// Generated by generate_sounio_unicode.cpp from Unicode 15.0.0.
+// Unicode data copyright Unicode, Inc.; https://www.unicode.org/license.txt
+fn mp_unicode_cased0(point: i64) -> bool {
+if point >= 65 { if point <= 90 { return true } }
+if point >= 97 { if point <= 122 { return true } }
+if point >= 170 { if point <= 170 { return true } }
+if point >= 181 { if point <= 181 { return true } }
+if point >= 186 { if point <= 186 { return true } }
+if point >= 192 { if point <= 214 { return true } }
+if point >= 216 { if point <= 246 { return true } }
+if point >= 248 { if point <= 255 { return true } }
+false
+}
+fn mp_unicode_cased1(point: i64) -> bool {
+if point >= 256 { if point <= 442 { return true } }
+if point >= 444 { if point <= 447 { return true } }
+if point >= 452 { if point <= 511 { return true } }
+false
+}
+fn mp_unicode_cased2(point: i64) -> bool {
+if point >= 512 { if point <= 659 { return true } }
+if point >= 661 { if point <= 696 { return true } }
+if point >= 704 { if point <= 705 { return true } }
+if point >= 736 { if point <= 740 { return true } }
+false
+}
+fn mp_unicode_cased3(point: i64) -> bool {
+if point >= 837 { if point <= 837 { return true } }
+if point >= 880 { if point <= 883 { return true } }
+if point >= 886 { if point <= 887 { return true } }
+if point >= 890 { if point <= 893 { return true } }
+if point >= 895 { if point <= 895 { return true } }
+if point >= 902 { if point <= 902 { return true } }
+if point >= 904 { if point <= 906 { return true } }
+if point >= 908 { if point <= 908 { return true } }
+if point >= 910 { if point <= 929 { return true } }
+if point >= 931 { if point <= 1013 { return true } }
+if point >= 1015 { if point <= 1023 { return true } }
+false
+}
+fn mp_unicode_cased4(point: i64) -> bool {
+if point >= 1024 { if point <= 1153 { return true } }
+if point >= 1162 { if point <= 1279 { return true } }
+false
+}
+fn mp_unicode_cased5(point: i64) -> bool {
+if point >= 1280 { if point <= 1327 { return true } }
+if point >= 1329 { if point <= 1366 { return true } }
+if point >= 1376 { if point <= 1416 { return true } }
+false
+}
+fn mp_unicode_cased16(point: i64) -> bool {
+if point >= 4256 { if point <= 4293 { return true } }
+if point >= 4295 { if point <= 4295 { return true } }
+if point >= 4301 { if point <= 4301 { return true } }
+if point >= 4304 { if point <= 4346 { return true } }
+if point >= 4348 { if point <= 4351 { return true } }
+false
+}
+fn mp_unicode_cased19(point: i64) -> bool {
+if point >= 5024 { if point <= 5109 { return true } }
+if point >= 5112 { if point <= 5117 { return true } }
+false
+}
+fn mp_unicode_cased28(point: i64) -> bool {
+if point >= 7296 { if point <= 7304 { return true } }
+if point >= 7312 { if point <= 7354 { return true } }
+if point >= 7357 { if point <= 7359 { return true } }
+false
+}
+fn mp_unicode_cased29(point: i64) -> bool {
+if point >= 7424 { if point <= 7615 { return true } }
+false
+}
+fn mp_unicode_cased30(point: i64) -> bool {
+if point >= 7680 { if point <= 7935 { return true } }
+false
+}
+fn mp_unicode_cased31(point: i64) -> bool {
+if point >= 7936 { if point <= 7957 { return true } }
+if point >= 7960 { if point <= 7965 { return true } }
+if point >= 7968 { if point <= 8005 { return true } }
+if point >= 8008 { if point <= 8013 { return true } }
+if point >= 8016 { if point <= 8023 { return true } }
+if point >= 8025 { if point <= 8025 { return true } }
+if point >= 8027 { if point <= 8027 { return true } }
+if point >= 8029 { if point <= 8029 { return true } }
+if point >= 8031 { if point <= 8061 { return true } }
+if point >= 8064 { if point <= 8116 { return true } }
+if point >= 8118 { if point <= 8124 { return true } }
+if point >= 8126 { if point <= 8126 { return true } }
+if point >= 8130 { if point <= 8132 { return true } }
+if point >= 8134 { if point <= 8140 { return true } }
+if point >= 8144 { if point <= 8147 { return true } }
+if point >= 8150 { if point <= 8155 { return true } }
+if point >= 8160 { if point <= 8172 { return true } }
+if point >= 8178 { if point <= 8180 { return true } }
+if point >= 8182 { if point <= 8188 { return true } }
+false
+}
+fn mp_unicode_cased32(point: i64) -> bool {
+if point >= 8305 { if point <= 8305 { return true } }
+if point >= 8319 { if point <= 8319 { return true } }
+if point >= 8336 { if point <= 8348 { return true } }
+false
+}
+fn mp_unicode_cased33(point: i64) -> bool {
+if point >= 8450 { if point <= 8450 { return true } }
+if point >= 8455 { if point <= 8455 { return true } }
+if point >= 8458 { if point <= 8467 { return true } }
+if point >= 8469 { if point <= 8469 { return true } }
+if point >= 8473 { if point <= 8477 { return true } }
+if point >= 8484 { if point <= 8484 { return true } }
+if point >= 8486 { if point <= 8486 { return true } }
+if point >= 8488 { if point <= 8488 { return true } }
+if point >= 8490 { if point <= 8493 { return true } }
+if point >= 8495 { if point <= 8500 { return true } }
+if point >= 8505 { if point <= 8505 { return true } }
+if point >= 8508 { if point <= 8511 { return true } }
+if point >= 8517 { if point <= 8521 { return true } }
+if point >= 8526 { if point <= 8526 { return true } }
+if point >= 8544 { if point <= 8575 { return true } }
+if point >= 8579 { if point <= 8580 { return true } }
+false
+}
+fn mp_unicode_cased36(point: i64) -> bool {
+if point >= 9398 { if point <= 9449 { return true } }
+false
+}
+fn mp_unicode_cased44(point: i64) -> bool {
+if point >= 11264 { if point <= 11492 { return true } }
+if point >= 11499 { if point <= 11502 { return true } }
+if point >= 11506 { if point <= 11507 { return true } }
+false
+}
+fn mp_unicode_cased45(point: i64) -> bool {
+if point >= 11520 { if point <= 11557 { return true } }
+if point >= 11559 { if point <= 11559 { return true } }
+if point >= 11565 { if point <= 11565 { return true } }
+false
+}
+fn mp_unicode_cased166(point: i64) -> bool {
+if point >= 42560 { if point <= 42605 { return true } }
+if point >= 42624 { if point <= 42653 { return true } }
+false
+}
+fn mp_unicode_cased167(point: i64) -> bool {
+if point >= 42786 { if point <= 42887 { return true } }
+if point >= 42891 { if point <= 42894 { return true } }
+if point >= 42896 { if point <= 42954 { return true } }
+if point >= 42960 { if point <= 42961 { return true } }
+if point >= 42963 { if point <= 42963 { return true } }
+if point >= 42965 { if point <= 42969 { return true } }
+if point >= 42994 { if point <= 42998 { return true } }
+if point >= 43000 { if point <= 43002 { return true } }
+false
+}
+fn mp_unicode_cased171(point: i64) -> bool {
+if point >= 43824 { if point <= 43866 { return true } }
+if point >= 43868 { if point <= 43881 { return true } }
+if point >= 43888 { if point <= 43967 { return true } }
+false
+}
+fn mp_unicode_cased251(point: i64) -> bool {
+if point >= 64256 { if point <= 64262 { return true } }
+if point >= 64275 { if point <= 64279 { return true } }
+false
+}
+fn mp_unicode_cased255(point: i64) -> bool {
+if point >= 65313 { if point <= 65338 { return true } }
+if point >= 65345 { if point <= 65370 { return true } }
+false
+}
+fn mp_unicode_cased260(point: i64) -> bool {
+if point >= 66560 { if point <= 66639 { return true } }
+if point >= 66736 { if point <= 66771 { return true } }
+if point >= 66776 { if point <= 66811 { return true } }
+false
+}
+fn mp_unicode_cased261(point: i64) -> bool {
+if point >= 66928 { if point <= 66938 { return true } }
+if point >= 66940 { if point <= 66954 { return true } }
+if point >= 66956 { if point <= 66962 { return true } }
+if point >= 66964 { if point <= 66965 { return true } }
+if point >= 66967 { if point <= 66977 { return true } }
+if point >= 66979 { if point <= 66993 { return true } }
+if point >= 66995 { if point <= 67001 { return true } }
+if point >= 67003 { if point <= 67004 { return true } }
+false
+}
+fn mp_unicode_cased263(point: i64) -> bool {
+if point >= 67456 { if point <= 67456 { return true } }
+if point >= 67459 { if point <= 67461 { return true } }
+if point >= 67463 { if point <= 67504 { return true } }
+if point >= 67506 { if point <= 67514 { return true } }
+false
+}
+fn mp_unicode_cased268(point: i64) -> bool {
+if point >= 68736 { if point <= 68786 { return true } }
+if point >= 68800 { if point <= 68850 { return true } }
+false
+}
+fn mp_unicode_cased280(point: i64) -> bool {
+if point >= 71840 { if point <= 71903 { return true } }
+false
+}
+fn mp_unicode_cased366(point: i64) -> bool {
+if point >= 93760 { if point <= 93823 { return true } }
+false
+}
+fn mp_unicode_cased468(point: i64) -> bool {
+if point >= 119808 { if point <= 119892 { return true } }
+if point >= 119894 { if point <= 119964 { return true } }
+if point >= 119966 { if point <= 119967 { return true } }
+if point >= 119970 { if point <= 119970 { return true } }
+if point >= 119973 { if point <= 119974 { return true } }
+if point >= 119977 { if point <= 119980 { return true } }
+if point >= 119982 { if point <= 119993 { return true } }
+if point >= 119995 { if point <= 119995 { return true } }
+if point >= 119997 { if point <= 120003 { return true } }
+if point >= 120005 { if point <= 120063 { return true } }
+false
+}
+fn mp_unicode_cased469(point: i64) -> bool {
+if point >= 120064 { if point <= 120069 { return true } }
+if point >= 120071 { if point <= 120074 { return true } }
+if point >= 120077 { if point <= 120084 { return true } }
+if point >= 120086 { if point <= 120092 { return true } }
+if point >= 120094 { if point <= 120121 { return true } }
+if point >= 120123 { if point <= 120126 { return true } }
+if point >= 120128 { if point <= 120132 { return true } }
+if point >= 120134 { if point <= 120134 { return true } }
+if point >= 120138 { if point <= 120144 { return true } }
+if point >= 120146 { if point <= 120319 { return true } }
+false
+}
+fn mp_unicode_cased470(point: i64) -> bool {
+if point >= 120320 { if point <= 120485 { return true } }
+if point >= 120488 { if point <= 120512 { return true } }
+if point >= 120514 { if point <= 120538 { return true } }
+if point >= 120540 { if point <= 120570 { return true } }
+if point >= 120572 { if point <= 120575 { return true } }
+false
+}
+fn mp_unicode_cased471(point: i64) -> bool {
+if point >= 120576 { if point <= 120596 { return true } }
+if point >= 120598 { if point <= 120628 { return true } }
+if point >= 120630 { if point <= 120654 { return true } }
+if point >= 120656 { if point <= 120686 { return true } }
+if point >= 120688 { if point <= 120712 { return true } }
+if point >= 120714 { if point <= 120744 { return true } }
+if point >= 120746 { if point <= 120770 { return true } }
+if point >= 120772 { if point <= 120779 { return true } }
+false
+}
+fn mp_unicode_cased479(point: i64) -> bool {
+if point >= 122624 { if point <= 122633 { return true } }
+if point >= 122635 { if point <= 122654 { return true } }
+if point >= 122661 { if point <= 122666 { return true } }
+false
+}
+fn mp_unicode_cased480(point: i64) -> bool {
+if point >= 122928 { if point <= 122989 { return true } }
+false
+}
+fn mp_unicode_cased489(point: i64) -> bool {
+if point >= 125184 { if point <= 125251 { return true } }
+false
+}
+fn mp_unicode_cased497(point: i64) -> bool {
+if point >= 127280 { if point <= 127305 { return true } }
+if point >= 127312 { if point <= 127337 { return true } }
+if point >= 127344 { if point <= 127369 { return true } }
+false
+}
+fn mp_unicode_cased(point: i64) -> bool {
+if point < 42752 {
+if point < 7424 {
+if point < 1024 {
+if point < 512 {
+if point < 256 {
+if point / 256 == 0 { return mp_unicode_cased0(point) }
+return false
+} else {
+if point / 256 == 1 { return mp_unicode_cased1(point) }
+return false
+}
+} else {
+if point < 768 {
+if point / 256 == 2 { return mp_unicode_cased2(point) }
+return false
+} else {
+if point / 256 == 3 { return mp_unicode_cased3(point) }
+return false
+}
+}
+} else {
+if point < 4096 {
+if point < 1280 {
+if point / 256 == 4 { return mp_unicode_cased4(point) }
+return false
+} else {
+if point / 256 == 5 { return mp_unicode_cased5(point) }
+return false
+}
+} else {
+if point < 4864 {
+if point / 256 == 16 { return mp_unicode_cased16(point) }
+return false
+} else {
+if point < 7168 {
+if point / 256 == 19 { return mp_unicode_cased19(point) }
+return false
+} else {
+if point / 256 == 28 { return mp_unicode_cased28(point) }
+return false
+}
+}
+}
+}
+} else {
+if point < 8448 {
+if point < 7936 {
+if point < 7680 {
+if point / 256 == 29 { return mp_unicode_cased29(point) }
+return false
+} else {
+if point / 256 == 30 { return mp_unicode_cased30(point) }
+return false
+}
+} else {
+if point < 8192 {
+if point / 256 == 31 { return mp_unicode_cased31(point) }
+return false
+} else {
+if point / 256 == 32 { return mp_unicode_cased32(point) }
+return false
+}
+}
+} else {
+if point < 11264 {
+if point < 9216 {
+if point / 256 == 33 { return mp_unicode_cased33(point) }
+return false
+} else {
+if point / 256 == 36 { return mp_unicode_cased36(point) }
+return false
+}
+} else {
+if point < 11520 {
+if point / 256 == 44 { return mp_unicode_cased44(point) }
+return false
+} else {
+if point < 42496 {
+if point / 256 == 45 { return mp_unicode_cased45(point) }
+return false
+} else {
+if point / 256 == 166 { return mp_unicode_cased166(point) }
+return false
+}
+}
+}
+}
+}
+} else {
+if point < 93696 {
+if point < 66560 {
+if point < 64256 {
+if point < 43776 {
+if point / 256 == 167 { return mp_unicode_cased167(point) }
+return false
+} else {
+if point / 256 == 171 { return mp_unicode_cased171(point) }
+return false
+}
+} else {
+if point < 65280 {
+if point / 256 == 251 { return mp_unicode_cased251(point) }
+return false
+} else {
+if point / 256 == 255 { return mp_unicode_cased255(point) }
+return false
+}
+}
+} else {
+if point < 67328 {
+if point < 66816 {
+if point / 256 == 260 { return mp_unicode_cased260(point) }
+return false
+} else {
+if point / 256 == 261 { return mp_unicode_cased261(point) }
+return false
+}
+} else {
+if point < 68608 {
+if point / 256 == 263 { return mp_unicode_cased263(point) }
+return false
+} else {
+if point < 71680 {
+if point / 256 == 268 { return mp_unicode_cased268(point) }
+return false
+} else {
+if point / 256 == 280 { return mp_unicode_cased280(point) }
+return false
+}
+}
+}
+}
+} else {
+if point < 120576 {
+if point < 120064 {
+if point < 119808 {
+if point / 256 == 366 { return mp_unicode_cased366(point) }
+return false
+} else {
+if point / 256 == 468 { return mp_unicode_cased468(point) }
+return false
+}
+} else {
+if point < 120320 {
+if point / 256 == 469 { return mp_unicode_cased469(point) }
+return false
+} else {
+if point / 256 == 470 { return mp_unicode_cased470(point) }
+return false
+}
+}
+} else {
+if point < 122880 {
+if point < 122624 {
+if point / 256 == 471 { return mp_unicode_cased471(point) }
+return false
+} else {
+if point / 256 == 479 { return mp_unicode_cased479(point) }
+return false
+}
+} else {
+if point < 125184 {
+if point / 256 == 480 { return mp_unicode_cased480(point) }
+return false
+} else {
+if point < 127232 {
+if point / 256 == 489 { return mp_unicode_cased489(point) }
+return false
+} else {
+if point / 256 == 497 { return mp_unicode_cased497(point) }
+return false
+}
+}
+}
+}
+}
+}
+}
+fn mp_unicode_ignorable0(point: i64) -> bool {
+if point >= 39 { if point <= 39 { return true } }
+if point >= 46 { if point <= 46 { return true } }
+if point >= 58 { if point <= 58 { return true } }
+if point >= 94 { if point <= 94 { return true } }
+if point >= 96 { if point <= 96 { return true } }
+if point >= 168 { if point <= 168 { return true } }
+if point >= 173 { if point <= 173 { return true } }
+if point >= 175 { if point <= 175 { return true } }
+if point >= 180 { if point <= 180 { return true } }
+if point >= 183 { if point <= 184 { return true } }
+false
+}
+fn mp_unicode_ignorable2(point: i64) -> bool {
+if point >= 688 { if point <= 767 { return true } }
+false
+}
+fn mp_unicode_ignorable3(point: i64) -> bool {
+if point >= 768 { if point <= 879 { return true } }
+if point >= 884 { if point <= 885 { return true } }
+if point >= 890 { if point <= 890 { return true } }
+if point >= 900 { if point <= 901 { return true } }
+if point >= 903 { if point <= 903 { return true } }
+false
+}
+fn mp_unicode_ignorable4(point: i64) -> bool {
+if point >= 1155 { if point <= 1161 { return true } }
+false
+}
+fn mp_unicode_ignorable5(point: i64) -> bool {
+if point >= 1369 { if point <= 1369 { return true } }
+if point >= 1375 { if point <= 1375 { return true } }
+if point >= 1425 { if point <= 1469 { return true } }
+if point >= 1471 { if point <= 1471 { return true } }
+if point >= 1473 { if point <= 1474 { return true } }
+if point >= 1476 { if point <= 1477 { return true } }
+if point >= 1479 { if point <= 1479 { return true } }
+if point >= 1524 { if point <= 1524 { return true } }
+false
+}
+fn mp_unicode_ignorable6(point: i64) -> bool {
+if point >= 1536 { if point <= 1541 { return true } }
+if point >= 1552 { if point <= 1562 { return true } }
+if point >= 1564 { if point <= 1564 { return true } }
+if point >= 1600 { if point <= 1600 { return true } }
+if point >= 1611 { if point <= 1631 { return true } }
+if point >= 1648 { if point <= 1648 { return true } }
+if point >= 1750 { if point <= 1757 { return true } }
+if point >= 1759 { if point <= 1768 { return true } }
+if point >= 1770 { if point <= 1773 { return true } }
+false
+}
+fn mp_unicode_ignorable7(point: i64) -> bool {
+if point >= 1807 { if point <= 1807 { return true } }
+if point >= 1809 { if point <= 1809 { return true } }
+if point >= 1840 { if point <= 1866 { return true } }
+if point >= 1958 { if point <= 1968 { return true } }
+if point >= 2027 { if point <= 2037 { return true } }
+if point >= 2042 { if point <= 2042 { return true } }
+if point >= 2045 { if point <= 2045 { return true } }
+false
+}
+fn mp_unicode_ignorable8(point: i64) -> bool {
+if point >= 2070 { if point <= 2093 { return true } }
+if point >= 2137 { if point <= 2139 { return true } }
+if point >= 2184 { if point <= 2184 { return true } }
+if point >= 2192 { if point <= 2193 { return true } }
+if point >= 2200 { if point <= 2207 { return true } }
+if point >= 2249 { if point <= 2303 { return true } }
+false
+}
+fn mp_unicode_ignorable9(point: i64) -> bool {
+if point >= 2304 { if point <= 2306 { return true } }
+if point >= 2362 { if point <= 2362 { return true } }
+if point >= 2364 { if point <= 2364 { return true } }
+if point >= 2369 { if point <= 2376 { return true } }
+if point >= 2381 { if point <= 2381 { return true } }
+if point >= 2385 { if point <= 2391 { return true } }
+if point >= 2402 { if point <= 2403 { return true } }
+if point >= 2417 { if point <= 2417 { return true } }
+if point >= 2433 { if point <= 2433 { return true } }
+if point >= 2492 { if point <= 2492 { return true } }
+if point >= 2497 { if point <= 2500 { return true } }
+if point >= 2509 { if point <= 2509 { return true } }
+if point >= 2530 { if point <= 2531 { return true } }
+if point >= 2558 { if point <= 2558 { return true } }
+false
+}
+fn mp_unicode_ignorable10(point: i64) -> bool {
+if point >= 2561 { if point <= 2562 { return true } }
+if point >= 2620 { if point <= 2620 { return true } }
+if point >= 2625 { if point <= 2626 { return true } }
+if point >= 2631 { if point <= 2632 { return true } }
+if point >= 2635 { if point <= 2637 { return true } }
+if point >= 2641 { if point <= 2641 { return true } }
+if point >= 2672 { if point <= 2673 { return true } }
+if point >= 2677 { if point <= 2677 { return true } }
+if point >= 2689 { if point <= 2690 { return true } }
+if point >= 2748 { if point <= 2748 { return true } }
+if point >= 2753 { if point <= 2757 { return true } }
+if point >= 2759 { if point <= 2760 { return true } }
+if point >= 2765 { if point <= 2765 { return true } }
+if point >= 2786 { if point <= 2787 { return true } }
+if point >= 2810 { if point <= 2815 { return true } }
+false
+}
+fn mp_unicode_ignorable11(point: i64) -> bool {
+if point >= 2817 { if point <= 2817 { return true } }
+if point >= 2876 { if point <= 2876 { return true } }
+if point >= 2879 { if point <= 2879 { return true } }
+if point >= 2881 { if point <= 2884 { return true } }
+if point >= 2893 { if point <= 2893 { return true } }
+if point >= 2901 { if point <= 2902 { return true } }
+if point >= 2914 { if point <= 2915 { return true } }
+if point >= 2946 { if point <= 2946 { return true } }
+if point >= 3008 { if point <= 3008 { return true } }
+if point >= 3021 { if point <= 3021 { return true } }
+false
+}
+fn mp_unicode_ignorable12(point: i64) -> bool {
+if point >= 3072 { if point <= 3072 { return true } }
+if point >= 3076 { if point <= 3076 { return true } }
+if point >= 3132 { if point <= 3132 { return true } }
+if point >= 3134 { if point <= 3136 { return true } }
+if point >= 3142 { if point <= 3144 { return true } }
+if point >= 3146 { if point <= 3149 { return true } }
+if point >= 3157 { if point <= 3158 { return true } }
+if point >= 3170 { if point <= 3171 { return true } }
+if point >= 3201 { if point <= 3201 { return true } }
+if point >= 3260 { if point <= 3260 { return true } }
+if point >= 3263 { if point <= 3263 { return true } }
+if point >= 3270 { if point <= 3270 { return true } }
+if point >= 3276 { if point <= 3277 { return true } }
+if point >= 3298 { if point <= 3299 { return true } }
+false
+}
+fn mp_unicode_ignorable13(point: i64) -> bool {
+if point >= 3328 { if point <= 3329 { return true } }
+if point >= 3387 { if point <= 3388 { return true } }
+if point >= 3393 { if point <= 3396 { return true } }
+if point >= 3405 { if point <= 3405 { return true } }
+if point >= 3426 { if point <= 3427 { return true } }
+if point >= 3457 { if point <= 3457 { return true } }
+if point >= 3530 { if point <= 3530 { return true } }
+if point >= 3538 { if point <= 3540 { return true } }
+if point >= 3542 { if point <= 3542 { return true } }
+false
+}
+fn mp_unicode_ignorable14(point: i64) -> bool {
+if point >= 3633 { if point <= 3633 { return true } }
+if point >= 3636 { if point <= 3642 { return true } }
+if point >= 3654 { if point <= 3662 { return true } }
+if point >= 3761 { if point <= 3761 { return true } }
+if point >= 3764 { if point <= 3772 { return true } }
+if point >= 3782 { if point <= 3782 { return true } }
+if point >= 3784 { if point <= 3790 { return true } }
+false
+}
+fn mp_unicode_ignorable15(point: i64) -> bool {
+if point >= 3864 { if point <= 3865 { return true } }
+if point >= 3893 { if point <= 3893 { return true } }
+if point >= 3895 { if point <= 3895 { return true } }
+if point >= 3897 { if point <= 3897 { return true } }
+if point >= 3953 { if point <= 3966 { return true } }
+if point >= 3968 { if point <= 3972 { return true } }
+if point >= 3974 { if point <= 3975 { return true } }
+if point >= 3981 { if point <= 3991 { return true } }
+if point >= 3993 { if point <= 4028 { return true } }
+if point >= 4038 { if point <= 4038 { return true } }
+false
+}
+fn mp_unicode_ignorable16(point: i64) -> bool {
+if point >= 4141 { if point <= 4144 { return true } }
+if point >= 4146 { if point <= 4151 { return true } }
+if point >= 4153 { if point <= 4154 { return true } }
+if point >= 4157 { if point <= 4158 { return true } }
+if point >= 4184 { if point <= 4185 { return true } }
+if point >= 4190 { if point <= 4192 { return true } }
+if point >= 4209 { if point <= 4212 { return true } }
+if point >= 4226 { if point <= 4226 { return true } }
+if point >= 4229 { if point <= 4230 { return true } }
+if point >= 4237 { if point <= 4237 { return true } }
+if point >= 4253 { if point <= 4253 { return true } }
+if point >= 4348 { if point <= 4348 { return true } }
+false
+}
+fn mp_unicode_ignorable19(point: i64) -> bool {
+if point >= 4957 { if point <= 4959 { return true } }
+false
+}
+fn mp_unicode_ignorable23(point: i64) -> bool {
+if point >= 5906 { if point <= 5908 { return true } }
+if point >= 5938 { if point <= 5939 { return true } }
+if point >= 5970 { if point <= 5971 { return true } }
+if point >= 6002 { if point <= 6003 { return true } }
+if point >= 6068 { if point <= 6069 { return true } }
+if point >= 6071 { if point <= 6077 { return true } }
+if point >= 6086 { if point <= 6086 { return true } }
+if point >= 6089 { if point <= 6099 { return true } }
+if point >= 6103 { if point <= 6103 { return true } }
+if point >= 6109 { if point <= 6109 { return true } }
+false
+}
+fn mp_unicode_ignorable24(point: i64) -> bool {
+if point >= 6155 { if point <= 6159 { return true } }
+if point >= 6211 { if point <= 6211 { return true } }
+if point >= 6277 { if point <= 6278 { return true } }
+if point >= 6313 { if point <= 6313 { return true } }
+false
+}
+fn mp_unicode_ignorable25(point: i64) -> bool {
+if point >= 6432 { if point <= 6434 { return true } }
+if point >= 6439 { if point <= 6440 { return true } }
+if point >= 6450 { if point <= 6450 { return true } }
+if point >= 6457 { if point <= 6459 { return true } }
+false
+}
+fn mp_unicode_ignorable26(point: i64) -> bool {
+if point >= 6679 { if point <= 6680 { return true } }
+if point >= 6683 { if point <= 6683 { return true } }
+if point >= 6742 { if point <= 6742 { return true } }
+if point >= 6744 { if point <= 6750 { return true } }
+if point >= 6752 { if point <= 6752 { return true } }
+if point >= 6754 { if point <= 6754 { return true } }
+if point >= 6757 { if point <= 6764 { return true } }
+if point >= 6771 { if point <= 6780 { return true } }
+if point >= 6783 { if point <= 6783 { return true } }
+if point >= 6823 { if point <= 6823 { return true } }
+if point >= 6832 { if point <= 6862 { return true } }
+false
+}
+fn mp_unicode_ignorable27(point: i64) -> bool {
+if point >= 6912 { if point <= 6915 { return true } }
+if point >= 6964 { if point <= 6964 { return true } }
+if point >= 6966 { if point <= 6970 { return true } }
+if point >= 6972 { if point <= 6972 { return true } }
+if point >= 6978 { if point <= 6978 { return true } }
+if point >= 7019 { if point <= 7027 { return true } }
+if point >= 7040 { if point <= 7041 { return true } }
+if point >= 7074 { if point <= 7077 { return true } }
+if point >= 7080 { if point <= 7081 { return true } }
+if point >= 7083 { if point <= 7085 { return true } }
+if point >= 7142 { if point <= 7142 { return true } }
+if point >= 7144 { if point <= 7145 { return true } }
+if point >= 7149 { if point <= 7149 { return true } }
+if point >= 7151 { if point <= 7153 { return true } }
+false
+}
+fn mp_unicode_ignorable28(point: i64) -> bool {
+if point >= 7212 { if point <= 7219 { return true } }
+if point >= 7222 { if point <= 7223 { return true } }
+if point >= 7288 { if point <= 7293 { return true } }
+if point >= 7376 { if point <= 7378 { return true } }
+if point >= 7380 { if point <= 7392 { return true } }
+if point >= 7394 { if point <= 7400 { return true } }
+if point >= 7405 { if point <= 7405 { return true } }
+if point >= 7412 { if point <= 7412 { return true } }
+if point >= 7416 { if point <= 7417 { return true } }
+false
+}
+fn mp_unicode_ignorable29(point: i64) -> bool {
+if point >= 7468 { if point <= 7530 { return true } }
+if point >= 7544 { if point <= 7544 { return true } }
+if point >= 7579 { if point <= 7679 { return true } }
+false
+}
+fn mp_unicode_ignorable31(point: i64) -> bool {
+if point >= 8125 { if point <= 8125 { return true } }
+if point >= 8127 { if point <= 8129 { return true } }
+if point >= 8141 { if point <= 8143 { return true } }
+if point >= 8157 { if point <= 8159 { return true } }
+if point >= 8173 { if point <= 8175 { return true } }
+if point >= 8189 { if point <= 8190 { return true } }
+false
+}
+fn mp_unicode_ignorable32(point: i64) -> bool {
+if point >= 8203 { if point <= 8207 { return true } }
+if point >= 8216 { if point <= 8217 { return true } }
+if point >= 8228 { if point <= 8228 { return true } }
+if point >= 8231 { if point <= 8231 { return true } }
+if point >= 8234 { if point <= 8238 { return true } }
+if point >= 8288 { if point <= 8292 { return true } }
+if point >= 8294 { if point <= 8303 { return true } }
+if point >= 8305 { if point <= 8305 { return true } }
+if point >= 8319 { if point <= 8319 { return true } }
+if point >= 8336 { if point <= 8348 { return true } }
+if point >= 8400 { if point <= 8432 { return true } }
+false
+}
+fn mp_unicode_ignorable44(point: i64) -> bool {
+if point >= 11388 { if point <= 11389 { return true } }
+if point >= 11503 { if point <= 11505 { return true } }
+false
+}
+fn mp_unicode_ignorable45(point: i64) -> bool {
+if point >= 11631 { if point <= 11631 { return true } }
+if point >= 11647 { if point <= 11647 { return true } }
+if point >= 11744 { if point <= 11775 { return true } }
+false
+}
+fn mp_unicode_ignorable46(point: i64) -> bool {
+if point >= 11823 { if point <= 11823 { return true } }
+false
+}
+fn mp_unicode_ignorable48(point: i64) -> bool {
+if point >= 12293 { if point <= 12293 { return true } }
+if point >= 12330 { if point <= 12333 { return true } }
+if point >= 12337 { if point <= 12341 { return true } }
+if point >= 12347 { if point <= 12347 { return true } }
+if point >= 12441 { if point <= 12446 { return true } }
+if point >= 12540 { if point <= 12542 { return true } }
+false
+}
+fn mp_unicode_ignorable160(point: i64) -> bool {
+if point >= 40981 { if point <= 40981 { return true } }
+false
+}
+fn mp_unicode_ignorable164(point: i64) -> bool {
+if point >= 42232 { if point <= 42237 { return true } }
+false
+}
+fn mp_unicode_ignorable166(point: i64) -> bool {
+if point >= 42508 { if point <= 42508 { return true } }
+if point >= 42607 { if point <= 42610 { return true } }
+if point >= 42612 { if point <= 42621 { return true } }
+if point >= 42623 { if point <= 42623 { return true } }
+if point >= 42652 { if point <= 42655 { return true } }
+if point >= 42736 { if point <= 42737 { return true } }
+false
+}
+fn mp_unicode_ignorable167(point: i64) -> bool {
+if point >= 42752 { if point <= 42785 { return true } }
+if point >= 42864 { if point <= 42864 { return true } }
+if point >= 42888 { if point <= 42890 { return true } }
+if point >= 42994 { if point <= 42996 { return true } }
+if point >= 43000 { if point <= 43001 { return true } }
+false
+}
+fn mp_unicode_ignorable168(point: i64) -> bool {
+if point >= 43010 { if point <= 43010 { return true } }
+if point >= 43014 { if point <= 43014 { return true } }
+if point >= 43019 { if point <= 43019 { return true } }
+if point >= 43045 { if point <= 43046 { return true } }
+if point >= 43052 { if point <= 43052 { return true } }
+if point >= 43204 { if point <= 43205 { return true } }
+if point >= 43232 { if point <= 43249 { return true } }
+if point >= 43263 { if point <= 43263 { return true } }
+false
+}
+fn mp_unicode_ignorable169(point: i64) -> bool {
+if point >= 43302 { if point <= 43309 { return true } }
+if point >= 43335 { if point <= 43345 { return true } }
+if point >= 43392 { if point <= 43394 { return true } }
+if point >= 43443 { if point <= 43443 { return true } }
+if point >= 43446 { if point <= 43449 { return true } }
+if point >= 43452 { if point <= 43453 { return true } }
+if point >= 43471 { if point <= 43471 { return true } }
+if point >= 43493 { if point <= 43494 { return true } }
+false
+}
+fn mp_unicode_ignorable170(point: i64) -> bool {
+if point >= 43561 { if point <= 43566 { return true } }
+if point >= 43569 { if point <= 43570 { return true } }
+if point >= 43573 { if point <= 43574 { return true } }
+if point >= 43587 { if point <= 43587 { return true } }
+if point >= 43596 { if point <= 43596 { return true } }
+if point >= 43632 { if point <= 43632 { return true } }
+if point >= 43644 { if point <= 43644 { return true } }
+if point >= 43696 { if point <= 43696 { return true } }
+if point >= 43698 { if point <= 43700 { return true } }
+if point >= 43703 { if point <= 43704 { return true } }
+if point >= 43710 { if point <= 43711 { return true } }
+if point >= 43713 { if point <= 43713 { return true } }
+if point >= 43741 { if point <= 43741 { return true } }
+if point >= 43756 { if point <= 43757 { return true } }
+if point >= 43763 { if point <= 43764 { return true } }
+if point >= 43766 { if point <= 43766 { return true } }
+false
+}
+fn mp_unicode_ignorable171(point: i64) -> bool {
+if point >= 43867 { if point <= 43871 { return true } }
+if point >= 43881 { if point <= 43883 { return true } }
+if point >= 44005 { if point <= 44005 { return true } }
+if point >= 44008 { if point <= 44008 { return true } }
+if point >= 44013 { if point <= 44013 { return true } }
+false
+}
+fn mp_unicode_ignorable251(point: i64) -> bool {
+if point >= 64286 { if point <= 64286 { return true } }
+if point >= 64434 { if point <= 64450 { return true } }
+false
+}
+fn mp_unicode_ignorable254(point: i64) -> bool {
+if point >= 65024 { if point <= 65039 { return true } }
+if point >= 65043 { if point <= 65043 { return true } }
+if point >= 65056 { if point <= 65071 { return true } }
+if point >= 65106 { if point <= 65106 { return true } }
+if point >= 65109 { if point <= 65109 { return true } }
+if point >= 65279 { if point <= 65279 { return true } }
+false
+}
+fn mp_unicode_ignorable255(point: i64) -> bool {
+if point >= 65287 { if point <= 65287 { return true } }
+if point >= 65294 { if point <= 65294 { return true } }
+if point >= 65306 { if point <= 65306 { return true } }
+if point >= 65342 { if point <= 65342 { return true } }
+if point >= 65344 { if point <= 65344 { return true } }
+if point >= 65392 { if point <= 65392 { return true } }
+if point >= 65438 { if point <= 65439 { return true } }
+if point >= 65507 { if point <= 65507 { return true } }
+if point >= 65529 { if point <= 65531 { return true } }
+false
+}
+fn mp_unicode_ignorable257(point: i64) -> bool {
+if point >= 66045 { if point <= 66045 { return true } }
+false
+}
+fn mp_unicode_ignorable258(point: i64) -> bool {
+if point >= 66272 { if point <= 66272 { return true } }
+false
+}
+fn mp_unicode_ignorable259(point: i64) -> bool {
+if point >= 66422 { if point <= 66426 { return true } }
+false
+}
+fn mp_unicode_ignorable263(point: i64) -> bool {
+if point >= 67456 { if point <= 67461 { return true } }
+if point >= 67463 { if point <= 67504 { return true } }
+if point >= 67506 { if point <= 67514 { return true } }
+false
+}
+fn mp_unicode_ignorable266(point: i64) -> bool {
+if point >= 68097 { if point <= 68099 { return true } }
+if point >= 68101 { if point <= 68102 { return true } }
+if point >= 68108 { if point <= 68111 { return true } }
+if point >= 68152 { if point <= 68154 { return true } }
+if point >= 68159 { if point <= 68159 { return true } }
+if point >= 68325 { if point <= 68326 { return true } }
+false
+}
+fn mp_unicode_ignorable269(point: i64) -> bool {
+if point >= 68900 { if point <= 68903 { return true } }
+false
+}
+fn mp_unicode_ignorable270(point: i64) -> bool {
+if point >= 69291 { if point <= 69292 { return true } }
+if point >= 69373 { if point <= 69375 { return true } }
+false
+}
+fn mp_unicode_ignorable271(point: i64) -> bool {
+if point >= 69446 { if point <= 69456 { return true } }
+if point >= 69506 { if point <= 69509 { return true } }
+false
+}
+fn mp_unicode_ignorable272(point: i64) -> bool {
+if point >= 69633 { if point <= 69633 { return true } }
+if point >= 69688 { if point <= 69702 { return true } }
+if point >= 69744 { if point <= 69744 { return true } }
+if point >= 69747 { if point <= 69748 { return true } }
+if point >= 69759 { if point <= 69761 { return true } }
+if point >= 69811 { if point <= 69814 { return true } }
+if point >= 69817 { if point <= 69818 { return true } }
+if point >= 69821 { if point <= 69821 { return true } }
+if point >= 69826 { if point <= 69826 { return true } }
+if point >= 69837 { if point <= 69837 { return true } }
+false
+}
+fn mp_unicode_ignorable273(point: i64) -> bool {
+if point >= 69888 { if point <= 69890 { return true } }
+if point >= 69927 { if point <= 69931 { return true } }
+if point >= 69933 { if point <= 69940 { return true } }
+if point >= 70003 { if point <= 70003 { return true } }
+if point >= 70016 { if point <= 70017 { return true } }
+if point >= 70070 { if point <= 70078 { return true } }
+if point >= 70089 { if point <= 70092 { return true } }
+if point >= 70095 { if point <= 70095 { return true } }
+false
+}
+fn mp_unicode_ignorable274(point: i64) -> bool {
+if point >= 70191 { if point <= 70193 { return true } }
+if point >= 70196 { if point <= 70196 { return true } }
+if point >= 70198 { if point <= 70199 { return true } }
+if point >= 70206 { if point <= 70206 { return true } }
+if point >= 70209 { if point <= 70209 { return true } }
+if point >= 70367 { if point <= 70367 { return true } }
+if point >= 70371 { if point <= 70378 { return true } }
+false
+}
+fn mp_unicode_ignorable275(point: i64) -> bool {
+if point >= 70400 { if point <= 70401 { return true } }
+if point >= 70459 { if point <= 70460 { return true } }
+if point >= 70464 { if point <= 70464 { return true } }
+if point >= 70502 { if point <= 70508 { return true } }
+if point >= 70512 { if point <= 70516 { return true } }
+false
+}
+fn mp_unicode_ignorable276(point: i64) -> bool {
+if point >= 70712 { if point <= 70719 { return true } }
+if point >= 70722 { if point <= 70724 { return true } }
+if point >= 70726 { if point <= 70726 { return true } }
+if point >= 70750 { if point <= 70750 { return true } }
+if point >= 70835 { if point <= 70840 { return true } }
+if point >= 70842 { if point <= 70842 { return true } }
+if point >= 70847 { if point <= 70848 { return true } }
+if point >= 70850 { if point <= 70851 { return true } }
+false
+}
+fn mp_unicode_ignorable277(point: i64) -> bool {
+if point >= 71090 { if point <= 71093 { return true } }
+if point >= 71100 { if point <= 71101 { return true } }
+if point >= 71103 { if point <= 71104 { return true } }
+if point >= 71132 { if point <= 71133 { return true } }
+false
+}
+fn mp_unicode_ignorable278(point: i64) -> bool {
+if point >= 71219 { if point <= 71226 { return true } }
+if point >= 71229 { if point <= 71229 { return true } }
+if point >= 71231 { if point <= 71232 { return true } }
+if point >= 71339 { if point <= 71339 { return true } }
+if point >= 71341 { if point <= 71341 { return true } }
+if point >= 71344 { if point <= 71349 { return true } }
+if point >= 71351 { if point <= 71351 { return true } }
+false
+}
+fn mp_unicode_ignorable279(point: i64) -> bool {
+if point >= 71453 { if point <= 71455 { return true } }
+if point >= 71458 { if point <= 71461 { return true } }
+if point >= 71463 { if point <= 71467 { return true } }
+false
+}
+fn mp_unicode_ignorable280(point: i64) -> bool {
+if point >= 71727 { if point <= 71735 { return true } }
+if point >= 71737 { if point <= 71738 { return true } }
+false
+}
+fn mp_unicode_ignorable281(point: i64) -> bool {
+if point >= 71995 { if point <= 71996 { return true } }
+if point >= 71998 { if point <= 71998 { return true } }
+if point >= 72003 { if point <= 72003 { return true } }
+if point >= 72148 { if point <= 72151 { return true } }
+if point >= 72154 { if point <= 72155 { return true } }
+if point >= 72160 { if point <= 72160 { return true } }
+false
+}
+fn mp_unicode_ignorable282(point: i64) -> bool {
+if point >= 72193 { if point <= 72202 { return true } }
+if point >= 72243 { if point <= 72248 { return true } }
+if point >= 72251 { if point <= 72254 { return true } }
+if point >= 72263 { if point <= 72263 { return true } }
+if point >= 72273 { if point <= 72278 { return true } }
+if point >= 72281 { if point <= 72283 { return true } }
+if point >= 72330 { if point <= 72342 { return true } }
+if point >= 72344 { if point <= 72345 { return true } }
+false
+}
+fn mp_unicode_ignorable284(point: i64) -> bool {
+if point >= 72752 { if point <= 72758 { return true } }
+if point >= 72760 { if point <= 72765 { return true } }
+if point >= 72767 { if point <= 72767 { return true } }
+if point >= 72850 { if point <= 72871 { return true } }
+if point >= 72874 { if point <= 72880 { return true } }
+if point >= 72882 { if point <= 72883 { return true } }
+if point >= 72885 { if point <= 72886 { return true } }
+false
+}
+fn mp_unicode_ignorable285(point: i64) -> bool {
+if point >= 73009 { if point <= 73014 { return true } }
+if point >= 73018 { if point <= 73018 { return true } }
+if point >= 73020 { if point <= 73021 { return true } }
+if point >= 73023 { if point <= 73029 { return true } }
+if point >= 73031 { if point <= 73031 { return true } }
+if point >= 73104 { if point <= 73105 { return true } }
+if point >= 73109 { if point <= 73109 { return true } }
+if point >= 73111 { if point <= 73111 { return true } }
+false
+}
+fn mp_unicode_ignorable286(point: i64) -> bool {
+if point >= 73459 { if point <= 73460 { return true } }
+false
+}
+fn mp_unicode_ignorable287(point: i64) -> bool {
+if point >= 73472 { if point <= 73473 { return true } }
+if point >= 73526 { if point <= 73530 { return true } }
+if point >= 73536 { if point <= 73536 { return true } }
+if point >= 73538 { if point <= 73538 { return true } }
+false
+}
+fn mp_unicode_ignorable308(point: i64) -> bool {
+if point >= 78896 { if point <= 78912 { return true } }
+if point >= 78919 { if point <= 78933 { return true } }
+false
+}
+fn mp_unicode_ignorable362(point: i64) -> bool {
+if point >= 92912 { if point <= 92916 { return true } }
+false
+}
+fn mp_unicode_ignorable363(point: i64) -> bool {
+if point >= 92976 { if point <= 92982 { return true } }
+if point >= 92992 { if point <= 92995 { return true } }
+false
+}
+fn mp_unicode_ignorable367(point: i64) -> bool {
+if point >= 94031 { if point <= 94031 { return true } }
+if point >= 94095 { if point <= 94111 { return true } }
+if point >= 94176 { if point <= 94177 { return true } }
+if point >= 94179 { if point <= 94180 { return true } }
+false
+}
+fn mp_unicode_ignorable431(point: i64) -> bool {
+if point >= 110576 { if point <= 110579 { return true } }
+if point >= 110581 { if point <= 110587 { return true } }
+if point >= 110589 { if point <= 110590 { return true } }
+false
+}
+fn mp_unicode_ignorable444(point: i64) -> bool {
+if point >= 113821 { if point <= 113822 { return true } }
+if point >= 113824 { if point <= 113827 { return true } }
+false
+}
+fn mp_unicode_ignorable463(point: i64) -> bool {
+if point >= 118528 { if point <= 118573 { return true } }
+if point >= 118576 { if point <= 118598 { return true } }
+false
+}
+fn mp_unicode_ignorable465(point: i64) -> bool {
+if point >= 119143 { if point <= 119145 { return true } }
+if point >= 119155 { if point <= 119170 { return true } }
+if point >= 119173 { if point <= 119179 { return true } }
+if point >= 119210 { if point <= 119213 { return true } }
+false
+}
+fn mp_unicode_ignorable466(point: i64) -> bool {
+if point >= 119362 { if point <= 119364 { return true } }
+false
+}
+fn mp_unicode_ignorable474(point: i64) -> bool {
+if point >= 121344 { if point <= 121398 { return true } }
+if point >= 121403 { if point <= 121452 { return true } }
+if point >= 121461 { if point <= 121461 { return true } }
+if point >= 121476 { if point <= 121476 { return true } }
+if point >= 121499 { if point <= 121503 { return true } }
+if point >= 121505 { if point <= 121519 { return true } }
+false
+}
+fn mp_unicode_ignorable480(point: i64) -> bool {
+if point >= 122880 { if point <= 122886 { return true } }
+if point >= 122888 { if point <= 122904 { return true } }
+if point >= 122907 { if point <= 122913 { return true } }
+if point >= 122915 { if point <= 122916 { return true } }
+if point >= 122918 { if point <= 122922 { return true } }
+if point >= 122928 { if point <= 122989 { return true } }
+if point >= 123023 { if point <= 123023 { return true } }
+false
+}
+fn mp_unicode_ignorable481(point: i64) -> bool {
+if point >= 123184 { if point <= 123197 { return true } }
+false
+}
+fn mp_unicode_ignorable482(point: i64) -> bool {
+if point >= 123566 { if point <= 123566 { return true } }
+if point >= 123628 { if point <= 123631 { return true } }
+false
+}
+fn mp_unicode_ignorable484(point: i64) -> bool {
+if point >= 124139 { if point <= 124143 { return true } }
+false
+}
+fn mp_unicode_ignorable488(point: i64) -> bool {
+if point >= 125136 { if point <= 125142 { return true } }
+false
+}
+fn mp_unicode_ignorable489(point: i64) -> bool {
+if point >= 125252 { if point <= 125259 { return true } }
+false
+}
+fn mp_unicode_ignorable499(point: i64) -> bool {
+if point >= 127995 { if point <= 127999 { return true } }
+false
+}
+fn mp_unicode_ignorable3584(point: i64) -> bool {
+if point >= 917505 { if point <= 917505 { return true } }
+if point >= 917536 { if point <= 917631 { return true } }
+false
+}
+fn mp_unicode_ignorable3585(point: i64) -> bool {
+if point >= 917760 { if point <= 917999 { return true } }
+false
+}
+fn mp_unicode_ignorable(point: i64) -> bool {
+if point < 65792 {
+if point < 6656 {
+if point < 2816 {
+if point < 1536 {
+if point < 768 {
+if point < 512 {
+if point / 256 == 0 { return mp_unicode_ignorable0(point) }
+return false
+} else {
+if point / 256 == 2 { return mp_unicode_ignorable2(point) }
+return false
+}
+} else {
+if point < 1024 {
+if point / 256 == 3 { return mp_unicode_ignorable3(point) }
+return false
+} else {
+if point < 1280 {
+if point / 256 == 4 { return mp_unicode_ignorable4(point) }
+return false
+} else {
+if point / 256 == 5 { return mp_unicode_ignorable5(point) }
+return false
+}
+}
+}
+} else {
+if point < 2048 {
+if point < 1792 {
+if point / 256 == 6 { return mp_unicode_ignorable6(point) }
+return false
+} else {
+if point / 256 == 7 { return mp_unicode_ignorable7(point) }
+return false
+}
+} else {
+if point < 2304 {
+if point / 256 == 8 { return mp_unicode_ignorable8(point) }
+return false
+} else {
+if point < 2560 {
+if point / 256 == 9 { return mp_unicode_ignorable9(point) }
+return false
+} else {
+if point / 256 == 10 { return mp_unicode_ignorable10(point) }
+return false
+}
+}
+}
+}
+} else {
+if point < 4096 {
+if point < 3328 {
+if point < 3072 {
+if point / 256 == 11 { return mp_unicode_ignorable11(point) }
+return false
+} else {
+if point / 256 == 12 { return mp_unicode_ignorable12(point) }
+return false
+}
+} else {
+if point < 3584 {
+if point / 256 == 13 { return mp_unicode_ignorable13(point) }
+return false
+} else {
+if point < 3840 {
+if point / 256 == 14 { return mp_unicode_ignorable14(point) }
+return false
+} else {
+if point / 256 == 15 { return mp_unicode_ignorable15(point) }
+return false
+}
+}
+}
+} else {
+if point < 5888 {
+if point < 4864 {
+if point / 256 == 16 { return mp_unicode_ignorable16(point) }
+return false
+} else {
+if point / 256 == 19 { return mp_unicode_ignorable19(point) }
+return false
+}
+} else {
+if point < 6144 {
+if point / 256 == 23 { return mp_unicode_ignorable23(point) }
+return false
+} else {
+if point < 6400 {
+if point / 256 == 24 { return mp_unicode_ignorable24(point) }
+return false
+} else {
+if point / 256 == 25 { return mp_unicode_ignorable25(point) }
+return false
+}
+}
+}
+}
+}
+} else {
+if point < 40960 {
+if point < 8192 {
+if point < 7168 {
+if point < 6912 {
+if point / 256 == 26 { return mp_unicode_ignorable26(point) }
+return false
+} else {
+if point / 256 == 27 { return mp_unicode_ignorable27(point) }
+return false
+}
+} else {
+if point < 7424 {
+if point / 256 == 28 { return mp_unicode_ignorable28(point) }
+return false
+} else {
+if point < 7936 {
+if point / 256 == 29 { return mp_unicode_ignorable29(point) }
+return false
+} else {
+if point / 256 == 31 { return mp_unicode_ignorable31(point) }
+return false
+}
+}
+}
+} else {
+if point < 11520 {
+if point < 11264 {
+if point / 256 == 32 { return mp_unicode_ignorable32(point) }
+return false
+} else {
+if point / 256 == 44 { return mp_unicode_ignorable44(point) }
+return false
+}
+} else {
+if point < 11776 {
+if point / 256 == 45 { return mp_unicode_ignorable45(point) }
+return false
+} else {
+if point < 12288 {
+if point / 256 == 46 { return mp_unicode_ignorable46(point) }
+return false
+} else {
+if point / 256 == 48 { return mp_unicode_ignorable48(point) }
+return false
+}
+}
+}
+}
+} else {
+if point < 43264 {
+if point < 42496 {
+if point < 41984 {
+if point / 256 == 160 { return mp_unicode_ignorable160(point) }
+return false
+} else {
+if point / 256 == 164 { return mp_unicode_ignorable164(point) }
+return false
+}
+} else {
+if point < 42752 {
+if point / 256 == 166 { return mp_unicode_ignorable166(point) }
+return false
+} else {
+if point < 43008 {
+if point / 256 == 167 { return mp_unicode_ignorable167(point) }
+return false
+} else {
+if point / 256 == 168 { return mp_unicode_ignorable168(point) }
+return false
+}
+}
+}
+} else {
+if point < 64256 {
+if point < 43520 {
+if point / 256 == 169 { return mp_unicode_ignorable169(point) }
+return false
+} else {
+if point < 43776 {
+if point / 256 == 170 { return mp_unicode_ignorable170(point) }
+return false
+} else {
+if point / 256 == 171 { return mp_unicode_ignorable171(point) }
+return false
+}
+}
+} else {
+if point < 65024 {
+if point / 256 == 251 { return mp_unicode_ignorable251(point) }
+return false
+} else {
+if point < 65280 {
+if point / 256 == 254 { return mp_unicode_ignorable254(point) }
+return false
+} else {
+if point / 256 == 255 { return mp_unicode_ignorable255(point) }
+return false
+}
+}
+}
+}
+}
+}
+} else {
+if point < 73216 {
+if point < 70144 {
+if point < 68864 {
+if point < 66304 {
+if point < 66048 {
+if point / 256 == 257 { return mp_unicode_ignorable257(point) }
+return false
+} else {
+if point / 256 == 258 { return mp_unicode_ignorable258(point) }
+return false
+}
+} else {
+if point < 67328 {
+if point / 256 == 259 { return mp_unicode_ignorable259(point) }
+return false
+} else {
+if point < 68096 {
+if point / 256 == 263 { return mp_unicode_ignorable263(point) }
+return false
+} else {
+if point / 256 == 266 { return mp_unicode_ignorable266(point) }
+return false
+}
+}
+}
+} else {
+if point < 69376 {
+if point < 69120 {
+if point / 256 == 269 { return mp_unicode_ignorable269(point) }
+return false
+} else {
+if point / 256 == 270 { return mp_unicode_ignorable270(point) }
+return false
+}
+} else {
+if point < 69632 {
+if point / 256 == 271 { return mp_unicode_ignorable271(point) }
+return false
+} else {
+if point < 69888 {
+if point / 256 == 272 { return mp_unicode_ignorable272(point) }
+return false
+} else {
+if point / 256 == 273 { return mp_unicode_ignorable273(point) }
+return false
+}
+}
+}
+}
+} else {
+if point < 71424 {
+if point < 70656 {
+if point < 70400 {
+if point / 256 == 274 { return mp_unicode_ignorable274(point) }
+return false
+} else {
+if point / 256 == 275 { return mp_unicode_ignorable275(point) }
+return false
+}
+} else {
+if point < 70912 {
+if point / 256 == 276 { return mp_unicode_ignorable276(point) }
+return false
+} else {
+if point < 71168 {
+if point / 256 == 277 { return mp_unicode_ignorable277(point) }
+return false
+} else {
+if point / 256 == 278 { return mp_unicode_ignorable278(point) }
+return false
+}
+}
+}
+} else {
+if point < 72192 {
+if point < 71680 {
+if point / 256 == 279 { return mp_unicode_ignorable279(point) }
+return false
+} else {
+if point < 71936 {
+if point / 256 == 280 { return mp_unicode_ignorable280(point) }
+return false
+} else {
+if point / 256 == 281 { return mp_unicode_ignorable281(point) }
+return false
+}
+}
+} else {
+if point < 72704 {
+if point / 256 == 282 { return mp_unicode_ignorable282(point) }
+return false
+} else {
+if point < 72960 {
+if point / 256 == 284 { return mp_unicode_ignorable284(point) }
+return false
+} else {
+if point / 256 == 285 { return mp_unicode_ignorable285(point) }
+return false
+}
+}
+}
+}
+}
+} else {
+if point < 119296 {
+if point < 93952 {
+if point < 78848 {
+if point < 73472 {
+if point / 256 == 286 { return mp_unicode_ignorable286(point) }
+return false
+} else {
+if point / 256 == 287 { return mp_unicode_ignorable287(point) }
+return false
+}
+} else {
+if point < 92672 {
+if point / 256 == 308 { return mp_unicode_ignorable308(point) }
+return false
+} else {
+if point < 92928 {
+if point / 256 == 362 { return mp_unicode_ignorable362(point) }
+return false
+} else {
+if point / 256 == 363 { return mp_unicode_ignorable363(point) }
+return false
+}
+}
+}
+} else {
+if point < 113664 {
+if point < 110336 {
+if point / 256 == 367 { return mp_unicode_ignorable367(point) }
+return false
+} else {
+if point / 256 == 431 { return mp_unicode_ignorable431(point) }
+return false
+}
+} else {
+if point < 118528 {
+if point / 256 == 444 { return mp_unicode_ignorable444(point) }
+return false
+} else {
+if point < 119040 {
+if point / 256 == 463 { return mp_unicode_ignorable463(point) }
+return false
+} else {
+if point / 256 == 465 { return mp_unicode_ignorable465(point) }
+return false
+}
+}
+}
+}
+} else {
+if point < 123904 {
+if point < 122880 {
+if point < 121344 {
+if point / 256 == 466 { return mp_unicode_ignorable466(point) }
+return false
+} else {
+if point / 256 == 474 { return mp_unicode_ignorable474(point) }
+return false
+}
+} else {
+if point < 123136 {
+if point / 256 == 480 { return mp_unicode_ignorable480(point) }
+return false
+} else {
+if point < 123392 {
+if point / 256 == 481 { return mp_unicode_ignorable481(point) }
+return false
+} else {
+if point / 256 == 482 { return mp_unicode_ignorable482(point) }
+return false
+}
+}
+}
+} else {
+if point < 127744 {
+if point < 124928 {
+if point / 256 == 484 { return mp_unicode_ignorable484(point) }
+return false
+} else {
+if point < 125184 {
+if point / 256 == 488 { return mp_unicode_ignorable488(point) }
+return false
+} else {
+if point / 256 == 489 { return mp_unicode_ignorable489(point) }
+return false
+}
+}
+} else {
+if point < 917504 {
+if point / 256 == 499 { return mp_unicode_ignorable499(point) }
+return false
+} else {
+if point < 917760 {
+if point / 256 == 3584 { return mp_unicode_ignorable3584(point) }
+return false
+} else {
+if point / 256 == 3585 { return mp_unicode_ignorable3585(point) }
+return false
+}
+}
+}
+}
+}
+}
+}
+}
+fn mp_unicode_simple0(point: i64) -> i64 with Div {
+if point >= 97 { if point <= 122 { return point + (-32) } }
+if point >= 224 { if point <= 246 { return point + (-32) } }
+if point >= 248 { if point <= 254 { return point + (-32) } }
+if point >= 65 { if point <= 90 { return point + (32) } }
+if point >= 192 { if point <= 214 { return point + (32) } }
+if point >= 216 { if point <= 222 { return point + (32) } }
+if point >= 255 { if point <= 255 { return point + (121) } }
+if point >= 181 { if point <= 181 { return point + (743) } }
+point
+}
+fn mp_unicode_simple1(point: i64) -> i64 with Div {
+if point >= 383 { if point <= 383 { return point + (-300) } }
+if point >= 305 { if point <= 305 { return point + (-232) } }
+if point >= 376 { if point <= 376 { return point + (-121) } }
+if point >= 502 { if point <= 502 { return point + (-97) } }
+if point >= 477 { if point <= 477 { return point + (-79) } }
+if point >= 503 { if point <= 503 { return point + (-56) } }
+if point >= 454 { if point <= 454 { return point + (-2) } }
+if point >= 457 { if point <= 457 { return point + (-2) } }
+if point >= 460 { if point <= 460 { return point + (-2) } }
+if point >= 499 { if point <= 499 { return point + (-2) } }
+if point >= 257 { if point <= 303 { if (point - 257) % 2 == 0 { return point + (-1) } } }
+if point >= 307 { if point <= 311 { if (point - 307) % 2 == 0 { return point + (-1) } } }
+if point >= 314 { if point <= 328 { if (point - 314) % 2 == 0 { return point + (-1) } } }
+if point >= 331 { if point <= 375 { if (point - 331) % 2 == 0 { return point + (-1) } } }
+if point >= 378 { if point <= 382 { if (point - 378) % 2 == 0 { return point + (-1) } } }
+if point >= 387 { if point <= 389 { if (point - 387) % 2 == 0 { return point + (-1) } } }
+if point >= 392 { if point <= 392 { return point + (-1) } }
+if point >= 396 { if point <= 396 { return point + (-1) } }
+if point >= 402 { if point <= 402 { return point + (-1) } }
+if point >= 409 { if point <= 409 { return point + (-1) } }
+if point >= 417 { if point <= 421 { if (point - 417) % 2 == 0 { return point + (-1) } } }
+if point >= 424 { if point <= 424 { return point + (-1) } }
+if point >= 429 { if point <= 429 { return point + (-1) } }
+if point >= 432 { if point <= 432 { return point + (-1) } }
+if point >= 436 { if point <= 438 { if (point - 436) % 2 == 0 { return point + (-1) } } }
+if point >= 441 { if point <= 441 { return point + (-1) } }
+if point >= 445 { if point <= 445 { return point + (-1) } }
+if point >= 462 { if point <= 476 { if (point - 462) % 2 == 0 { return point + (-1) } } }
+if point >= 479 { if point <= 495 { if (point - 479) % 2 == 0 { return point + (-1) } } }
+if point >= 501 { if point <= 501 { return point + (-1) } }
+if point >= 505 { if point <= 511 { if (point - 505) % 2 == 0 { return point + (-1) } } }
+if point >= 256 { if point <= 302 { if (point - 256) % 2 == 0 { return point + (1) } } }
+if point >= 306 { if point <= 310 { if (point - 306) % 2 == 0 { return point + (1) } } }
+if point >= 313 { if point <= 327 { if (point - 313) % 2 == 0 { return point + (1) } } }
+if point >= 330 { if point <= 374 { if (point - 330) % 2 == 0 { return point + (1) } } }
+if point >= 377 { if point <= 381 { if (point - 377) % 2 == 0 { return point + (1) } } }
+if point >= 386 { if point <= 388 { if (point - 386) % 2 == 0 { return point + (1) } } }
+if point >= 391 { if point <= 391 { return point + (1) } }
+if point >= 395 { if point <= 395 { return point + (1) } }
+if point >= 401 { if point <= 401 { return point + (1) } }
+if point >= 408 { if point <= 408 { return point + (1) } }
+if point >= 416 { if point <= 420 { if (point - 416) % 2 == 0 { return point + (1) } } }
+if point >= 423 { if point <= 423 { return point + (1) } }
+if point >= 428 { if point <= 428 { return point + (1) } }
+if point >= 431 { if point <= 431 { return point + (1) } }
+if point >= 435 { if point <= 437 { if (point - 435) % 2 == 0 { return point + (1) } } }
+if point >= 440 { if point <= 440 { return point + (1) } }
+if point >= 444 { if point <= 444 { return point + (1) } }
+if point >= 461 { if point <= 475 { if (point - 461) % 2 == 0 { return point + (1) } } }
+if point >= 478 { if point <= 494 { if (point - 478) % 2 == 0 { return point + (1) } } }
+if point >= 500 { if point <= 500 { return point + (1) } }
+if point >= 504 { if point <= 510 { if (point - 504) % 2 == 0 { return point + (1) } } }
+if point >= 452 { if point <= 452 { return point + (2) } }
+if point >= 455 { if point <= 455 { return point + (2) } }
+if point >= 458 { if point <= 458 { return point + (2) } }
+if point >= 497 { if point <= 497 { return point + (2) } }
+if point >= 447 { if point <= 447 { return point + (56) } }
+if point >= 398 { if point <= 398 { return point + (79) } }
+if point >= 405 { if point <= 405 { return point + (97) } }
+if point >= 414 { if point <= 414 { return point + (130) } }
+if point >= 410 { if point <= 410 { return point + (163) } }
+if point >= 384 { if point <= 384 { return point + (195) } }
+if point >= 399 { if point <= 399 { return point + (202) } }
+if point >= 400 { if point <= 400 { return point + (203) } }
+if point >= 393 { if point <= 394 { return point + (205) } }
+if point >= 403 { if point <= 403 { return point + (205) } }
+if point >= 390 { if point <= 390 { return point + (206) } }
+if point >= 404 { if point <= 404 { return point + (207) } }
+if point >= 407 { if point <= 407 { return point + (209) } }
+if point >= 385 { if point <= 385 { return point + (210) } }
+if point >= 406 { if point <= 406 { return point + (211) } }
+if point >= 412 { if point <= 412 { return point + (211) } }
+if point >= 413 { if point <= 413 { return point + (213) } }
+if point >= 415 { if point <= 415 { return point + (214) } }
+if point >= 433 { if point <= 434 { return point + (217) } }
+if point >= 422 { if point <= 422 { return point + (218) } }
+if point >= 425 { if point <= 425 { return point + (218) } }
+if point >= 430 { if point <= 430 { return point + (218) } }
+if point >= 439 { if point <= 439 { return point + (219) } }
+point
+}
+fn mp_unicode_simple2(point: i64) -> i64 with Div {
+if point >= 658 { if point <= 658 { return point + (-219) } }
+if point >= 640 { if point <= 640 { return point + (-218) } }
+if point >= 643 { if point <= 643 { return point + (-218) } }
+if point >= 648 { if point <= 648 { return point + (-218) } }
+if point >= 650 { if point <= 651 { return point + (-217) } }
+if point >= 629 { if point <= 629 { return point + (-214) } }
+if point >= 626 { if point <= 626 { return point + (-213) } }
+if point >= 617 { if point <= 617 { return point + (-211) } }
+if point >= 623 { if point <= 623 { return point + (-211) } }
+if point >= 595 { if point <= 595 { return point + (-210) } }
+if point >= 616 { if point <= 616 { return point + (-209) } }
+if point >= 611 { if point <= 611 { return point + (-207) } }
+if point >= 596 { if point <= 596 { return point + (-206) } }
+if point >= 598 { if point <= 599 { return point + (-205) } }
+if point >= 608 { if point <= 608 { return point + (-205) } }
+if point >= 603 { if point <= 603 { return point + (-203) } }
+if point >= 601 { if point <= 601 { return point + (-202) } }
+if point >= 579 { if point <= 579 { return point + (-195) } }
+if point >= 573 { if point <= 573 { return point + (-163) } }
+if point >= 544 { if point <= 544 { return point + (-130) } }
+if point >= 652 { if point <= 652 { return point + (-71) } }
+if point >= 649 { if point <= 649 { return point + (-69) } }
+if point >= 513 { if point <= 543 { if (point - 513) % 2 == 0 { return point + (-1) } } }
+if point >= 547 { if point <= 563 { if (point - 547) % 2 == 0 { return point + (-1) } } }
+if point >= 572 { if point <= 572 { return point + (-1) } }
+if point >= 578 { if point <= 578 { return point + (-1) } }
+if point >= 583 { if point <= 591 { if (point - 583) % 2 == 0 { return point + (-1) } } }
+if point >= 512 { if point <= 542 { if (point - 512) % 2 == 0 { return point + (1) } } }
+if point >= 546 { if point <= 562 { if (point - 546) % 2 == 0 { return point + (1) } } }
+if point >= 571 { if point <= 571 { return point + (1) } }
+if point >= 577 { if point <= 577 { return point + (1) } }
+if point >= 582 { if point <= 590 { if (point - 582) % 2 == 0 { return point + (1) } } }
+if point >= 580 { if point <= 580 { return point + (69) } }
+if point >= 581 { if point <= 581 { return point + (71) } }
+if point >= 637 { if point <= 637 { return point + (10727) } }
+if point >= 619 { if point <= 619 { return point + (10743) } }
+if point >= 625 { if point <= 625 { return point + (10749) } }
+if point >= 593 { if point <= 593 { return point + (10780) } }
+if point >= 594 { if point <= 594 { return point + (10782) } }
+if point >= 592 { if point <= 592 { return point + (10783) } }
+if point >= 574 { if point <= 574 { return point + (10792) } }
+if point >= 570 { if point <= 570 { return point + (10795) } }
+if point >= 575 { if point <= 576 { return point + (10815) } }
+if point >= 670 { if point <= 670 { return point + (42258) } }
+if point >= 669 { if point <= 669 { return point + (42261) } }
+if point >= 613 { if point <= 613 { return point + (42280) } }
+if point >= 647 { if point <= 647 { return point + (42282) } }
+if point >= 620 { if point <= 620 { return point + (42305) } }
+if point >= 642 { if point <= 642 { return point + (42307) } }
+if point >= 614 { if point <= 614 { return point + (42308) } }
+if point >= 618 { if point <= 618 { return point + (42308) } }
+if point >= 609 { if point <= 609 { return point + (42315) } }
+if point >= 604 { if point <= 604 { return point + (42319) } }
+point
+}
+fn mp_unicode_simple3(point: i64) -> i64 with Div {
+if point >= 1021 { if point <= 1023 { return point + (-130) } }
+if point >= 1011 { if point <= 1011 { return point + (-116) } }
+if point >= 1013 { if point <= 1013 { return point + (-96) } }
+if point >= 1008 { if point <= 1008 { return point + (-86) } }
+if point >= 1009 { if point <= 1009 { return point + (-80) } }
+if point >= 972 { if point <= 972 { return point + (-64) } }
+if point >= 973 { if point <= 974 { return point + (-63) } }
+if point >= 976 { if point <= 976 { return point + (-62) } }
+if point >= 1012 { if point <= 1012 { return point + (-60) } }
+if point >= 977 { if point <= 977 { return point + (-57) } }
+if point >= 982 { if point <= 982 { return point + (-54) } }
+if point >= 981 { if point <= 981 { return point + (-47) } }
+if point >= 940 { if point <= 940 { return point + (-38) } }
+if point >= 941 { if point <= 943 { return point + (-37) } }
+if point >= 945 { if point <= 961 { return point + (-32) } }
+if point >= 963 { if point <= 971 { return point + (-32) } }
+if point >= 962 { if point <= 962 { return point + (-31) } }
+if point >= 983 { if point <= 983 { return point + (-8) } }
+if point >= 1017 { if point <= 1017 { return point + (-7) } }
+if point >= 881 { if point <= 883 { if (point - 881) % 2 == 0 { return point + (-1) } } }
+if point >= 887 { if point <= 887 { return point + (-1) } }
+if point >= 985 { if point <= 1007 { if (point - 985) % 2 == 0 { return point + (-1) } } }
+if point >= 1016 { if point <= 1016 { return point + (-1) } }
+if point >= 1019 { if point <= 1019 { return point + (-1) } }
+if point >= 880 { if point <= 882 { if (point - 880) % 2 == 0 { return point + (1) } } }
+if point >= 886 { if point <= 886 { return point + (1) } }
+if point >= 984 { if point <= 1006 { if (point - 984) % 2 == 0 { return point + (1) } } }
+if point >= 1015 { if point <= 1015 { return point + (1) } }
+if point >= 1018 { if point <= 1018 { return point + (1) } }
+if point >= 1010 { if point <= 1010 { return point + (7) } }
+if point >= 975 { if point <= 975 { return point + (8) } }
+if point >= 913 { if point <= 929 { return point + (32) } }
+if point >= 931 { if point <= 939 { return point + (32) } }
+if point >= 904 { if point <= 906 { return point + (37) } }
+if point >= 902 { if point <= 902 { return point + (38) } }
+if point >= 910 { if point <= 911 { return point + (63) } }
+if point >= 908 { if point <= 908 { return point + (64) } }
+if point >= 837 { if point <= 837 { return point + (84) } }
+if point >= 895 { if point <= 895 { return point + (116) } }
+if point >= 891 { if point <= 893 { return point + (130) } }
+point
+}
+fn mp_unicode_simple4(point: i64) -> i64 with Div {
+if point >= 1104 { if point <= 1119 { return point + (-80) } }
+if point >= 1072 { if point <= 1103 { return point + (-32) } }
+if point >= 1231 { if point <= 1231 { return point + (-15) } }
+if point >= 1121 { if point <= 1153 { if (point - 1121) % 2 == 0 { return point + (-1) } } }
+if point >= 1163 { if point <= 1215 { if (point - 1163) % 2 == 0 { return point + (-1) } } }
+if point >= 1218 { if point <= 1230 { if (point - 1218) % 2 == 0 { return point + (-1) } } }
+if point >= 1233 { if point <= 1279 { if (point - 1233) % 2 == 0 { return point + (-1) } } }
+if point >= 1120 { if point <= 1152 { if (point - 1120) % 2 == 0 { return point + (1) } } }
+if point >= 1162 { if point <= 1214 { if (point - 1162) % 2 == 0 { return point + (1) } } }
+if point >= 1217 { if point <= 1229 { if (point - 1217) % 2 == 0 { return point + (1) } } }
+if point >= 1232 { if point <= 1278 { if (point - 1232) % 2 == 0 { return point + (1) } } }
+if point >= 1216 { if point <= 1216 { return point + (15) } }
+if point >= 1040 { if point <= 1071 { return point + (32) } }
+if point >= 1024 { if point <= 1039 { return point + (80) } }
+point
+}
+fn mp_unicode_simple5(point: i64) -> i64 with Div {
+if point >= 1377 { if point <= 1414 { return point + (-48) } }
+if point >= 1281 { if point <= 1327 { if (point - 1281) % 2 == 0 { return point + (-1) } } }
+if point >= 1280 { if point <= 1326 { if (point - 1280) % 2 == 0 { return point + (1) } } }
+if point >= 1329 { if point <= 1366 { return point + (48) } }
+point
+}
+fn mp_unicode_simple16(point: i64) -> i64 with Div {
+if point >= 4304 { if point <= 4346 { return point + (3008) } }
+if point >= 4349 { if point <= 4351 { return point + (3008) } }
+if point >= 4256 { if point <= 4293 { return point + (7264) } }
+if point >= 4295 { if point <= 4295 { return point + (7264) } }
+if point >= 4301 { if point <= 4301 { return point + (7264) } }
+point
+}
+fn mp_unicode_simple19(point: i64) -> i64 with Div {
+if point >= 5112 { if point <= 5117 { return point + (-8) } }
+if point >= 5104 { if point <= 5109 { return point + (8) } }
+if point >= 5024 { if point <= 5103 { return point + (38864) } }
+point
+}
+fn mp_unicode_simple28(point: i64) -> i64 with Div {
+if point >= 7296 { if point <= 7296 { return point + (-6254) } }
+if point >= 7297 { if point <= 7297 { return point + (-6253) } }
+if point >= 7298 { if point <= 7298 { return point + (-6244) } }
+if point >= 7301 { if point <= 7301 { return point + (-6243) } }
+if point >= 7299 { if point <= 7300 { return point + (-6242) } }
+if point >= 7302 { if point <= 7302 { return point + (-6236) } }
+if point >= 7303 { if point <= 7303 { return point + (-6181) } }
+if point >= 7312 { if point <= 7354 { return point + (-3008) } }
+if point >= 7357 { if point <= 7359 { return point + (-3008) } }
+if point >= 7304 { if point <= 7304 { return point + (35266) } }
+point
+}
+fn mp_unicode_simple29(point: i64) -> i64 with Div {
+if point >= 7549 { if point <= 7549 { return point + (3814) } }
+if point >= 7545 { if point <= 7545 { return point + (35332) } }
+if point >= 7566 { if point <= 7566 { return point + (35384) } }
+point
+}
+fn mp_unicode_simple30(point: i64) -> i64 with Div {
+if point >= 7838 { if point <= 7838 { return point + (-7615) } }
+if point >= 7835 { if point <= 7835 { return point + (-59) } }
+if point >= 7681 { if point <= 7829 { if (point - 7681) % 2 == 0 { return point + (-1) } } }
+if point >= 7841 { if point <= 7935 { if (point - 7841) % 2 == 0 { return point + (-1) } } }
+if point >= 7680 { if point <= 7828 { if (point - 7680) % 2 == 0 { return point + (1) } } }
+if point >= 7840 { if point <= 7934 { if (point - 7840) % 2 == 0 { return point + (1) } } }
+point
+}
+fn mp_unicode_simple31(point: i64) -> i64 with Div {
+if point >= 8126 { if point <= 8126 { return point + (-7205) } }
+if point >= 8184 { if point <= 8185 { return point + (-128) } }
+if point >= 8186 { if point <= 8187 { return point + (-126) } }
+if point >= 8170 { if point <= 8171 { return point + (-112) } }
+if point >= 8154 { if point <= 8155 { return point + (-100) } }
+if point >= 8136 { if point <= 8139 { return point + (-86) } }
+if point >= 8122 { if point <= 8123 { return point + (-74) } }
+if point >= 7944 { if point <= 7951 { return point + (-8) } }
+if point >= 7960 { if point <= 7965 { return point + (-8) } }
+if point >= 7976 { if point <= 7983 { return point + (-8) } }
+if point >= 7992 { if point <= 7999 { return point + (-8) } }
+if point >= 8008 { if point <= 8013 { return point + (-8) } }
+if point >= 8025 { if point <= 8031 { if (point - 8025) % 2 == 0 { return point + (-8) } } }
+if point >= 8040 { if point <= 8047 { return point + (-8) } }
+if point >= 8120 { if point <= 8121 { return point + (-8) } }
+if point >= 8152 { if point <= 8153 { return point + (-8) } }
+if point >= 8168 { if point <= 8169 { return point + (-8) } }
+if point >= 8172 { if point <= 8172 { return point + (-7) } }
+if point >= 8165 { if point <= 8165 { return point + (7) } }
+if point >= 7936 { if point <= 7943 { return point + (8) } }
+if point >= 7952 { if point <= 7957 { return point + (8) } }
+if point >= 7968 { if point <= 7975 { return point + (8) } }
+if point >= 7984 { if point <= 7991 { return point + (8) } }
+if point >= 8000 { if point <= 8005 { return point + (8) } }
+if point >= 8017 { if point <= 8023 { if (point - 8017) % 2 == 0 { return point + (8) } } }
+if point >= 8032 { if point <= 8039 { return point + (8) } }
+if point >= 8112 { if point <= 8113 { return point + (8) } }
+if point >= 8144 { if point <= 8145 { return point + (8) } }
+if point >= 8160 { if point <= 8161 { return point + (8) } }
+if point >= 8048 { if point <= 8049 { return point + (74) } }
+if point >= 8050 { if point <= 8053 { return point + (86) } }
+if point >= 8054 { if point <= 8055 { return point + (100) } }
+if point >= 8058 { if point <= 8059 { return point + (112) } }
+if point >= 8060 { if point <= 8061 { return point + (126) } }
+if point >= 8056 { if point <= 8057 { return point + (128) } }
+point
+}
+fn mp_unicode_simple33(point: i64) -> i64 with Div {
+if point >= 8490 { if point <= 8490 { return point + (-8383) } }
+if point >= 8491 { if point <= 8491 { return point + (-8262) } }
+if point >= 8486 { if point <= 8486 { return point + (-7517) } }
+if point >= 8526 { if point <= 8526 { return point + (-28) } }
+if point >= 8560 { if point <= 8575 { return point + (-16) } }
+if point >= 8580 { if point <= 8580 { return point + (-1) } }
+if point >= 8579 { if point <= 8579 { return point + (1) } }
+if point >= 8544 { if point <= 8559 { return point + (16) } }
+if point >= 8498 { if point <= 8498 { return point + (28) } }
+point
+}
+fn mp_unicode_simple36(point: i64) -> i64 with Div {
+if point >= 9424 { if point <= 9449 { return point + (-26) } }
+if point >= 9398 { if point <= 9423 { return point + (26) } }
+point
+}
+fn mp_unicode_simple44(point: i64) -> i64 with Div {
+if point >= 11390 { if point <= 11391 { return point + (-10815) } }
+if point >= 11365 { if point <= 11365 { return point + (-10795) } }
+if point >= 11366 { if point <= 11366 { return point + (-10792) } }
+if point >= 11375 { if point <= 11375 { return point + (-10783) } }
+if point >= 11376 { if point <= 11376 { return point + (-10782) } }
+if point >= 11373 { if point <= 11373 { return point + (-10780) } }
+if point >= 11374 { if point <= 11374 { return point + (-10749) } }
+if point >= 11362 { if point <= 11362 { return point + (-10743) } }
+if point >= 11364 { if point <= 11364 { return point + (-10727) } }
+if point >= 11363 { if point <= 11363 { return point + (-3814) } }
+if point >= 11312 { if point <= 11359 { return point + (-48) } }
+if point >= 11361 { if point <= 11361 { return point + (-1) } }
+if point >= 11368 { if point <= 11372 { if (point - 11368) % 2 == 0 { return point + (-1) } } }
+if point >= 11379 { if point <= 11379 { return point + (-1) } }
+if point >= 11382 { if point <= 11382 { return point + (-1) } }
+if point >= 11393 { if point <= 11491 { if (point - 11393) % 2 == 0 { return point + (-1) } } }
+if point >= 11500 { if point <= 11502 { if (point - 11500) % 2 == 0 { return point + (-1) } } }
+if point >= 11507 { if point <= 11507 { return point + (-1) } }
+if point >= 11360 { if point <= 11360 { return point + (1) } }
+if point >= 11367 { if point <= 11371 { if (point - 11367) % 2 == 0 { return point + (1) } } }
+if point >= 11378 { if point <= 11378 { return point + (1) } }
+if point >= 11381 { if point <= 11381 { return point + (1) } }
+if point >= 11392 { if point <= 11490 { if (point - 11392) % 2 == 0 { return point + (1) } } }
+if point >= 11499 { if point <= 11501 { if (point - 11499) % 2 == 0 { return point + (1) } } }
+if point >= 11506 { if point <= 11506 { return point + (1) } }
+if point >= 11264 { if point <= 11311 { return point + (48) } }
+point
+}
+fn mp_unicode_simple45(point: i64) -> i64 with Div {
+if point >= 11520 { if point <= 11557 { return point + (-7264) } }
+if point >= 11559 { if point <= 11559 { return point + (-7264) } }
+if point >= 11565 { if point <= 11565 { return point + (-7264) } }
+point
+}
+fn mp_unicode_simple166(point: i64) -> i64 with Div {
+if point >= 42561 { if point <= 42605 { if (point - 42561) % 2 == 0 { return point + (-1) } } }
+if point >= 42625 { if point <= 42651 { if (point - 42625) % 2 == 0 { return point + (-1) } } }
+if point >= 42560 { if point <= 42604 { if (point - 42560) % 2 == 0 { return point + (1) } } }
+if point >= 42624 { if point <= 42650 { if (point - 42624) % 2 == 0 { return point + (1) } } }
+point
+}
+fn mp_unicode_simple167(point: i64) -> i64 with Div {
+if point >= 42923 { if point <= 42923 { return point + (-42319) } }
+if point >= 42924 { if point <= 42924 { return point + (-42315) } }
+if point >= 42922 { if point <= 42922 { return point + (-42308) } }
+if point >= 42926 { if point <= 42926 { return point + (-42308) } }
+if point >= 42949 { if point <= 42949 { return point + (-42307) } }
+if point >= 42925 { if point <= 42925 { return point + (-42305) } }
+if point >= 42929 { if point <= 42929 { return point + (-42282) } }
+if point >= 42893 { if point <= 42893 { return point + (-42280) } }
+if point >= 42930 { if point <= 42930 { return point + (-42261) } }
+if point >= 42928 { if point <= 42928 { return point + (-42258) } }
+if point >= 42950 { if point <= 42950 { return point + (-35384) } }
+if point >= 42877 { if point <= 42877 { return point + (-35332) } }
+if point >= 42948 { if point <= 42948 { return point + (-48) } }
+if point >= 42787 { if point <= 42799 { if (point - 42787) % 2 == 0 { return point + (-1) } } }
+if point >= 42803 { if point <= 42863 { if (point - 42803) % 2 == 0 { return point + (-1) } } }
+if point >= 42874 { if point <= 42876 { if (point - 42874) % 2 == 0 { return point + (-1) } } }
+if point >= 42879 { if point <= 42887 { if (point - 42879) % 2 == 0 { return point + (-1) } } }
+if point >= 42892 { if point <= 42892 { return point + (-1) } }
+if point >= 42897 { if point <= 42899 { if (point - 42897) % 2 == 0 { return point + (-1) } } }
+if point >= 42903 { if point <= 42921 { if (point - 42903) % 2 == 0 { return point + (-1) } } }
+if point >= 42933 { if point <= 42947 { if (point - 42933) % 2 == 0 { return point + (-1) } } }
+if point >= 42952 { if point <= 42954 { if (point - 42952) % 2 == 0 { return point + (-1) } } }
+if point >= 42961 { if point <= 42961 { return point + (-1) } }
+if point >= 42967 { if point <= 42969 { if (point - 42967) % 2 == 0 { return point + (-1) } } }
+if point >= 42998 { if point <= 42998 { return point + (-1) } }
+if point >= 42786 { if point <= 42798 { if (point - 42786) % 2 == 0 { return point + (1) } } }
+if point >= 42802 { if point <= 42862 { if (point - 42802) % 2 == 0 { return point + (1) } } }
+if point >= 42873 { if point <= 42875 { if (point - 42873) % 2 == 0 { return point + (1) } } }
+if point >= 42878 { if point <= 42886 { if (point - 42878) % 2 == 0 { return point + (1) } } }
+if point >= 42891 { if point <= 42891 { return point + (1) } }
+if point >= 42896 { if point <= 42898 { if (point - 42896) % 2 == 0 { return point + (1) } } }
+if point >= 42902 { if point <= 42920 { if (point - 42902) % 2 == 0 { return point + (1) } } }
+if point >= 42932 { if point <= 42946 { if (point - 42932) % 2 == 0 { return point + (1) } } }
+if point >= 42951 { if point <= 42953 { if (point - 42951) % 2 == 0 { return point + (1) } } }
+if point >= 42960 { if point <= 42960 { return point + (1) } }
+if point >= 42966 { if point <= 42968 { if (point - 42966) % 2 == 0 { return point + (1) } } }
+if point >= 42997 { if point <= 42997 { return point + (1) } }
+if point >= 42900 { if point <= 42900 { return point + (48) } }
+if point >= 42931 { if point <= 42931 { return point + (928) } }
+point
+}
+fn mp_unicode_simple171(point: i64) -> i64 with Div {
+if point >= 43888 { if point <= 43967 { return point + (-38864) } }
+if point >= 43859 { if point <= 43859 { return point + (-928) } }
+point
+}
+fn mp_unicode_simple255(point: i64) -> i64 with Div {
+if point >= 65345 { if point <= 65370 { return point + (-32) } }
+if point >= 65313 { if point <= 65338 { return point + (32) } }
+point
+}
+fn mp_unicode_simple260(point: i64) -> i64 with Div {
+if point >= 66600 { if point <= 66639 { return point + (-40) } }
+if point >= 66776 { if point <= 66811 { return point + (-40) } }
+if point >= 66560 { if point <= 66599 { return point + (40) } }
+if point >= 66736 { if point <= 66771 { return point + (40) } }
+point
+}
+fn mp_unicode_simple261(point: i64) -> i64 with Div {
+if point >= 66967 { if point <= 66977 { return point + (-39) } }
+if point >= 66979 { if point <= 66993 { return point + (-39) } }
+if point >= 66995 { if point <= 67001 { return point + (-39) } }
+if point >= 67003 { if point <= 67004 { return point + (-39) } }
+if point >= 66928 { if point <= 66938 { return point + (39) } }
+if point >= 66940 { if point <= 66954 { return point + (39) } }
+if point >= 66956 { if point <= 66962 { return point + (39) } }
+if point >= 66964 { if point <= 66965 { return point + (39) } }
+point
+}
+fn mp_unicode_simple268(point: i64) -> i64 with Div {
+if point >= 68800 { if point <= 68850 { return point + (-64) } }
+if point >= 68736 { if point <= 68786 { return point + (64) } }
+point
+}
+fn mp_unicode_simple280(point: i64) -> i64 with Div {
+if point >= 71872 { if point <= 71903 { return point + (-32) } }
+if point >= 71840 { if point <= 71871 { return point + (32) } }
+point
+}
+fn mp_unicode_simple366(point: i64) -> i64 with Div {
+if point >= 93792 { if point <= 93823 { return point + (-32) } }
+if point >= 93760 { if point <= 93791 { return point + (32) } }
+point
+}
+fn mp_unicode_simple489(point: i64) -> i64 with Div {
+if point >= 125218 { if point <= 125251 { return point + (-34) } }
+if point >= 125184 { if point <= 125217 { return point + (34) } }
+point
+}
+fn mp_unicode_simple(point: i64) -> i64 with Div {
+if point < 9216 {
+if point < 4096 {
+if point < 768 {
+if point < 256 {
+if point / 256 == 0 { return mp_unicode_simple0(point) }
+return point
+} else {
+if point < 512 {
+if point / 256 == 1 { return mp_unicode_simple1(point) }
+return point
+} else {
+if point / 256 == 2 { return mp_unicode_simple2(point) }
+return point
+}
+}
+} else {
+if point < 1024 {
+if point / 256 == 3 { return mp_unicode_simple3(point) }
+return point
+} else {
+if point < 1280 {
+if point / 256 == 4 { return mp_unicode_simple4(point) }
+return point
+} else {
+if point / 256 == 5 { return mp_unicode_simple5(point) }
+return point
+}
+}
+}
+} else {
+if point < 7424 {
+if point < 4864 {
+if point / 256 == 16 { return mp_unicode_simple16(point) }
+return point
+} else {
+if point < 7168 {
+if point / 256 == 19 { return mp_unicode_simple19(point) }
+return point
+} else {
+if point / 256 == 28 { return mp_unicode_simple28(point) }
+return point
+}
+}
+} else {
+if point < 7936 {
+if point < 7680 {
+if point / 256 == 29 { return mp_unicode_simple29(point) }
+return point
+} else {
+if point / 256 == 30 { return mp_unicode_simple30(point) }
+return point
+}
+} else {
+if point < 8448 {
+if point / 256 == 31 { return mp_unicode_simple31(point) }
+return point
+} else {
+if point / 256 == 33 { return mp_unicode_simple33(point) }
+return point
+}
+}
+}
+}
+} else {
+if point < 65280 {
+if point < 42496 {
+if point < 11264 {
+if point / 256 == 36 { return mp_unicode_simple36(point) }
+return point
+} else {
+if point < 11520 {
+if point / 256 == 44 { return mp_unicode_simple44(point) }
+return point
+} else {
+if point / 256 == 45 { return mp_unicode_simple45(point) }
+return point
+}
+}
+} else {
+if point < 42752 {
+if point / 256 == 166 { return mp_unicode_simple166(point) }
+return point
+} else {
+if point < 43776 {
+if point / 256 == 167 { return mp_unicode_simple167(point) }
+return point
+} else {
+if point / 256 == 171 { return mp_unicode_simple171(point) }
+return point
+}
+}
+}
+} else {
+if point < 68608 {
+if point < 66560 {
+if point / 256 == 255 { return mp_unicode_simple255(point) }
+return point
+} else {
+if point < 66816 {
+if point / 256 == 260 { return mp_unicode_simple260(point) }
+return point
+} else {
+if point / 256 == 261 { return mp_unicode_simple261(point) }
+return point
+}
+}
+} else {
+if point < 93696 {
+if point < 71680 {
+if point / 256 == 268 { return mp_unicode_simple268(point) }
+return point
+} else {
+if point / 256 == 280 { return mp_unicode_simple280(point) }
+return point
+}
+} else {
+if point < 125184 {
+if point / 256 == 366 { return mp_unicode_simple366(point) }
+return point
+} else {
+if point / 256 == 489 { return mp_unicode_simple489(point) }
+return point
+}
+}
+}
+}
+}
+}
+fn mp_unicode_expansion(result: MPStr, point: i64) -> bool with Alloc, Mut, Panic, Div {
+if point == 223 {
+mp_seq_push(result.handle, 83)
+mp_seq_push(result.handle, 83)
+return true
+}
+if point == 304 {
+mp_seq_push(result.handle, 105)
+mp_seq_push(result.handle, 775)
+return true
+}
+if point == 329 {
+mp_seq_push(result.handle, 700)
+mp_seq_push(result.handle, 78)
+return true
+}
+if point == 496 {
+mp_seq_push(result.handle, 74)
+mp_seq_push(result.handle, 780)
+return true
+}
+if point == 912 {
+mp_seq_push(result.handle, 921)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 769)
+return true
+}
+if point == 944 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 769)
+return true
+}
+if point == 1415 {
+mp_seq_push(result.handle, 1333)
+mp_seq_push(result.handle, 1362)
+return true
+}
+if point == 7830 {
+mp_seq_push(result.handle, 72)
+mp_seq_push(result.handle, 817)
+return true
+}
+if point == 7831 {
+mp_seq_push(result.handle, 84)
+mp_seq_push(result.handle, 776)
+return true
+}
+if point == 7832 {
+mp_seq_push(result.handle, 87)
+mp_seq_push(result.handle, 778)
+return true
+}
+if point == 7833 {
+mp_seq_push(result.handle, 89)
+mp_seq_push(result.handle, 778)
+return true
+}
+if point == 7834 {
+mp_seq_push(result.handle, 65)
+mp_seq_push(result.handle, 702)
+return true
+}
+if point == 8016 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 787)
+return true
+}
+if point == 8018 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 787)
+mp_seq_push(result.handle, 768)
+return true
+}
+if point == 8020 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 787)
+mp_seq_push(result.handle, 769)
+return true
+}
+if point == 8022 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 787)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8064 {
+mp_seq_push(result.handle, 7944)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8065 {
+mp_seq_push(result.handle, 7945)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8066 {
+mp_seq_push(result.handle, 7946)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8067 {
+mp_seq_push(result.handle, 7947)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8068 {
+mp_seq_push(result.handle, 7948)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8069 {
+mp_seq_push(result.handle, 7949)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8070 {
+mp_seq_push(result.handle, 7950)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8071 {
+mp_seq_push(result.handle, 7951)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8080 {
+mp_seq_push(result.handle, 7976)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8081 {
+mp_seq_push(result.handle, 7977)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8082 {
+mp_seq_push(result.handle, 7978)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8083 {
+mp_seq_push(result.handle, 7979)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8084 {
+mp_seq_push(result.handle, 7980)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8085 {
+mp_seq_push(result.handle, 7981)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8086 {
+mp_seq_push(result.handle, 7982)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8087 {
+mp_seq_push(result.handle, 7983)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8096 {
+mp_seq_push(result.handle, 8040)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8097 {
+mp_seq_push(result.handle, 8041)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8098 {
+mp_seq_push(result.handle, 8042)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8099 {
+mp_seq_push(result.handle, 8043)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8100 {
+mp_seq_push(result.handle, 8044)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8101 {
+mp_seq_push(result.handle, 8045)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8102 {
+mp_seq_push(result.handle, 8046)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8103 {
+mp_seq_push(result.handle, 8047)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8114 {
+mp_seq_push(result.handle, 8122)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8115 {
+mp_seq_push(result.handle, 913)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8116 {
+mp_seq_push(result.handle, 902)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8118 {
+mp_seq_push(result.handle, 913)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8119 {
+mp_seq_push(result.handle, 913)
+mp_seq_push(result.handle, 834)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8130 {
+mp_seq_push(result.handle, 8138)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8131 {
+mp_seq_push(result.handle, 919)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8132 {
+mp_seq_push(result.handle, 905)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8134 {
+mp_seq_push(result.handle, 919)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8135 {
+mp_seq_push(result.handle, 919)
+mp_seq_push(result.handle, 834)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8146 {
+mp_seq_push(result.handle, 921)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 768)
+return true
+}
+if point == 8147 {
+mp_seq_push(result.handle, 921)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 769)
+return true
+}
+if point == 8150 {
+mp_seq_push(result.handle, 921)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8151 {
+mp_seq_push(result.handle, 921)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8162 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 768)
+return true
+}
+if point == 8163 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 769)
+return true
+}
+if point == 8164 {
+mp_seq_push(result.handle, 929)
+mp_seq_push(result.handle, 787)
+return true
+}
+if point == 8166 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8167 {
+mp_seq_push(result.handle, 933)
+mp_seq_push(result.handle, 776)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8178 {
+mp_seq_push(result.handle, 8186)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8179 {
+mp_seq_push(result.handle, 937)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8180 {
+mp_seq_push(result.handle, 911)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 8182 {
+mp_seq_push(result.handle, 937)
+mp_seq_push(result.handle, 834)
+return true
+}
+if point == 8183 {
+mp_seq_push(result.handle, 937)
+mp_seq_push(result.handle, 834)
+mp_seq_push(result.handle, 921)
+return true
+}
+if point == 64256 {
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 70)
+return true
+}
+if point == 64257 {
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 73)
+return true
+}
+if point == 64258 {
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 76)
+return true
+}
+if point == 64259 {
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 73)
+return true
+}
+if point == 64260 {
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 70)
+mp_seq_push(result.handle, 76)
+return true
+}
+if point == 64261 {
+mp_seq_push(result.handle, 83)
+mp_seq_push(result.handle, 84)
+return true
+}
+if point == 64262 {
+mp_seq_push(result.handle, 83)
+mp_seq_push(result.handle, 84)
+return true
+}
+if point == 64275 {
+mp_seq_push(result.handle, 1348)
+mp_seq_push(result.handle, 1350)
+return true
+}
+if point == 64276 {
+mp_seq_push(result.handle, 1348)
+mp_seq_push(result.handle, 1333)
+return true
+}
+if point == 64277 {
+mp_seq_push(result.handle, 1348)
+mp_seq_push(result.handle, 1339)
+return true
+}
+if point == 64278 {
+mp_seq_push(result.handle, 1358)
+mp_seq_push(result.handle, 1350)
+return true
+}
+if point == 64279 {
+mp_seq_push(result.handle, 1348)
+mp_seq_push(result.handle, 1341)
+return true
+}
+false
+}
+
+fn mp_unicode_final_sigma(text: MPStr, index: i64) -> bool with Alloc, Mut, Panic, Div {
+    var j = index - 1
+    var before = false
+    while j >= 0 {
+        let point = mp_str_codepoint(text, j)
+        if !mp_unicode_ignorable(point) { before = mp_unicode_cased(point); break }
+        j = j - 1
+    }
+    if !before { return false }
+    j = index + 1
+    while j < mp_str_len(text) {
+        let point = mp_str_codepoint(text, j)
+        if !mp_unicode_ignorable(point) { return !mp_unicode_cased(point) }
+        j = j + 1
+    }
+    true
+}
+
+fn mp_unicode_append_swap(result: MPStr, text: MPStr, index: i64) with Alloc, Mut, Panic, Div {
+    let point = mp_str_codepoint(text, index)
+    if point == 931 {
+        if mp_unicode_final_sigma(text, index) { mp_seq_push(result.handle, 962) }
+        else { mp_seq_push(result.handle, 963) }
+        return
+    }
+    if mp_unicode_expansion(result, point) { return }
+    mp_seq_push(result.handle, mp_unicode_simple(point))
+}
+
+fn mp_str_swapcase(text: MPStr) -> MPStr with Alloc, Mut, Panic, Div {
+    let result = mp_str_new()
+    var i: i64 = 0
+    while i < mp_str_len(text) {
+        mp_unicode_append_swap(result, text, i)
+        i = i + 1
+    }
+    result
+}
+
+
+// bigint: process-lifetime heap value; no fixed capacity.
+
+struct MPBigint { handle: i64 }
+
+// Generated-prefix template: follows MPBigint and the common mp_seq helpers.
+// Immutable signed arbitrary-precision values. Sign slot followed by base-1e9 limbs.
+// Constructors/arithmetic own their result; operands are never modified.
+
+fn mp_bigint_new() -> MPBigint with Alloc, Mut, Panic, Div {
+    let value = MPBigint { handle: mp_seq_new() }
+    mp_seq_push(value.handle, 0)
+    mp_seq_push(value.handle, 0)
+    value
+}
+
+fn mp_bigint_normalize(value: MPBigint) with Mut, Panic {
+    var length = mp_seq_len(value.handle)
+    while length > 2 {
+        if mp_seq_get(value.handle, length - 1) != 0 { break }
+        length = length - 1
+        mp_header_set(value.handle, 1, length)
+    }
+    if length == 2 {
+        if mp_seq_get(value.handle, 1) == 0 { mp_seq_set(value.handle, 0, 0) }
+    }
+}
+
+fn mp_bigint_from_i64(number: i64) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_new()
+    if number == 0 { return result }
+    var remaining = number
+    var sign: i64 = -1
+    if number > 0 { remaining = 0 - number; sign = 1 }
+    mp_seq_set(result.handle, 0, sign)
+    mp_header_set(result.handle, 1, 1)
+    while remaining < 0 {
+        mp_seq_push(result.handle, 0 - remaining % 1000000000)
+        remaining = remaining / 1000000000
+    }
+    result
+}
+
+fn mp_bigint_eq(a: MPBigint, b: MPBigint) -> bool with Mut, Panic {
+    mp_seq_equal(a.handle, b.handle)
+}
+
+fn mp_bigint_abs_compare(a: MPBigint, b: MPBigint) -> i64 with Mut, Panic {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    if al < bl { return -1 }
+    if al > bl { return 1 }
+    var i = al - 1
+    while i > 0 {
+        let av = mp_seq_get(a.handle, i)
+        let bv = mp_seq_get(b.handle, i)
+        if av < bv { return -1 }
+        if av > bv { return 1 }
+        i = i - 1
+    }
+    0
+}
+
+fn mp_bigint_lt(a: MPBigint, b: MPBigint) -> bool with Mut, Panic {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    if sa != sb { return sa < sb }
+    let comparison = mp_bigint_abs_compare(a, b)
+    if sa < 0 { return comparison > 0 }
+    comparison < 0
+}
+
+fn mp_bigint_copy(value: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    MPBigint { handle: mp_seq_copy(value.handle) }
+}
+
+fn mp_bigint_neg(value: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_copy(value)
+    mp_seq_set(result.handle, 0, 0 - mp_seq_get(result.handle, 0))
+    result
+}
+
+fn mp_bigint_abs_add(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_new()
+    mp_header_set(result.handle, 1, 1)
+    mp_seq_set(result.handle, 0, 1)
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var length = al
+    if bl > length { length = bl }
+    var carry: i64 = 0
+    var i: i64 = 1
+    while i < length {
+        var av: i64 = 0
+        var bv: i64 = 0
+        if i < al { av = mp_seq_get(a.handle, i) }
+        if i < bl { bv = mp_seq_get(b.handle, i) }
+        let sum = av + bv + carry
+        mp_seq_push(result.handle, sum % 1000000000)
+        carry = sum / 1000000000
+        i = i + 1
+    }
+    if carry > 0 { mp_seq_push(result.handle, carry) }
+    mp_bigint_normalize(result)
+    result
+}
+
+fn mp_bigint_abs_sub(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    assert(mp_bigint_abs_compare(a, b) >= 0)
+    let result = mp_bigint_new()
+    mp_header_set(result.handle, 1, 1)
+    mp_seq_set(result.handle, 0, 1)
+    var borrow: i64 = 0
+    var i: i64 = 1
+    while i < mp_seq_len(a.handle) {
+        var bv: i64 = 0
+        if i < mp_seq_len(b.handle) { bv = mp_seq_get(b.handle, i) }
+        var digit = mp_seq_get(a.handle, i) - bv - borrow
+        borrow = 0
+        if digit < 0 { digit = digit + 1000000000; borrow = 1 }
+        mp_seq_push(result.handle, digit)
+        i = i + 1
+    }
+    assert(borrow == 0)
+    mp_bigint_normalize(result)
+    result
+}
+
+fn mp_bigint_add(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    if sa == 0 { return mp_bigint_copy(b) }
+    if sb == 0 { return mp_bigint_copy(a) }
+    if sa == sb {
+        let result = mp_bigint_abs_add(a, b)
+        mp_seq_set(result.handle, 0, sa)
+        return result
+    }
+    let comparison = mp_bigint_abs_compare(a, b)
+    if comparison == 0 { return mp_bigint_new() }
+    if comparison > 0 {
+        let result = mp_bigint_abs_sub(a, b)
+        mp_seq_set(result.handle, 0, sa)
+        return result
+    }
+    let result = mp_bigint_abs_sub(b, a)
+    mp_seq_set(result.handle, 0, sb)
+    result
+}
+
+fn mp_bigint_sub(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    mp_bigint_add(a, mp_bigint_neg(b))
+}
+
+fn mp_bigint_mul(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    if sa == 0 { return mp_bigint_new() }
+    if sb == 0 { return mp_bigint_new() }
+    let na = mp_seq_len(a.handle) - 1
+    let nb = mp_seq_len(b.handle) - 1
+    let result = mp_bigint_new()
+    mp_header_set(result.handle, 1, 1)
+    mp_seq_set(result.handle, 0, sa * sb)
+    var i: i64 = 0
+    while i < na + nb { mp_seq_push(result.handle, 0); i = i + 1 }
+    i = 1
+    while i <= na {
+        var carry: i64 = 0
+        var j: i64 = 1
+        while j <= nb {
+            let index = i + j - 1
+            let product = mp_seq_get(a.handle, i) * mp_seq_get(b.handle, j)
+            let total = mp_seq_get(result.handle, index) + product + carry
+            mp_seq_set(result.handle, index, total % 1000000000)
+            carry = total / 1000000000
+            j = j + 1
+        }
+        mp_seq_set(result.handle, i + nb, carry)
+        i = i + 1
+    }
+    mp_bigint_normalize(result)
+    result
+}
+
+struct MPBigintDivmod { quotient: MPBigint, remainder: MPBigint }
+
+fn mp_bigint_abs(value: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let result = mp_bigint_copy(value)
+    if mp_seq_get(result.handle, 0) < 0 { mp_seq_set(result.handle, 0, 1) }
+    result
+}
+
+// Unsigned long division. All limb products stay below 1e18.
+// The one-limb fast path is linear; larger divisors use bounded digit search.
+fn mp_bigint_abs_divmod(a: MPBigint, b: MPBigint) -> MPBigintDivmod with Alloc, Mut, Panic, Div {
+    assert(mp_seq_get(b.handle, 0) != 0)
+    let quotient = mp_bigint_copy(a)
+    var remainder = mp_bigint_new()
+    var i = mp_seq_len(a.handle) - 1
+    if mp_seq_len(b.handle) == 2 {
+        let divisor = mp_seq_get(b.handle, 1)
+        var carry: i64 = 0
+        while i > 0 {
+            let word = carry * 1000000000 + mp_seq_get(a.handle, i)
+            mp_seq_set(quotient.handle, i, word / divisor)
+            carry = word % divisor
+            i = i - 1
+        }
+        remainder = mp_bigint_from_i64(carry)
+    } else {
+        while i > 0 {
+            // remainder = remainder * base + next dividend limb.
+            let shifted = mp_bigint_new()
+            mp_header_set(shifted.handle, 1, 1)
+            mp_seq_set(shifted.handle, 0, 1)
+            mp_seq_push(shifted.handle, mp_seq_get(a.handle, i))
+            var j: i64 = 1
+            while j < mp_seq_len(remainder.handle) {
+                mp_seq_push(shifted.handle, mp_seq_get(remainder.handle, j))
+                j = j + 1
+            }
+            mp_bigint_normalize(shifted)
+            remainder = shifted
+            var low: i64 = 0
+            var high: i64 = 999999999
+            while low < high {
+                let middle = low + (high - low + 1) / 2
+                let product = mp_bigint_mul(b, mp_bigint_from_i64(middle))
+                if mp_bigint_abs_compare(product, remainder) <= 0 { low = middle }
+                else { high = middle - 1 }
+            }
+            mp_seq_set(quotient.handle, i, low)
+            remainder = mp_bigint_abs_sub(remainder, mp_bigint_mul(b, mp_bigint_from_i64(low)))
+            i = i - 1
+        }
+    }
+    if mp_seq_get(quotient.handle, 0) != 0 { mp_seq_set(quotient.handle, 0, 1) }
+    mp_bigint_normalize(quotient)
+    MPBigintDivmod { quotient: quotient, remainder: remainder }
+}
+
+// Python floor division: a == b*q+r; nonzero r has the divisor's sign.
+// Division by zero fails explicitly; neither operand is modified.
+fn mp_bigint_divmod(a: MPBigint, b: MPBigint) -> MPBigintDivmod with Alloc, Mut, Panic, Div {
+    let sa = mp_seq_get(a.handle, 0)
+    let sb = mp_seq_get(b.handle, 0)
+    assert(sb != 0)
+    let pair = mp_bigint_abs_divmod(mp_bigint_abs(a), mp_bigint_abs(b))
+    var quotient = pair.quotient
+    var remainder = pair.remainder
+    if sa * sb < 0 {
+        quotient = mp_bigint_neg(quotient)
+        if mp_seq_get(remainder.handle, 0) != 0 {
+            quotient = mp_bigint_sub(quotient, mp_bigint_from_i64(1))
+            remainder = mp_bigint_abs_sub(mp_bigint_abs(b), remainder)
+        }
+    }
+    if mp_seq_get(remainder.handle, 0) != 0 { mp_seq_set(remainder.handle, 0, sb) }
+    MPBigintDivmod { quotient: quotient, remainder: remainder }
+}
+
+fn mp_bigint_floordiv(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let pair = mp_bigint_divmod(a, b)
+    pair.quotient
+}
+
+fn mp_bigint_mod(a: MPBigint, b: MPBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let pair = mp_bigint_divmod(a, b)
+    pair.remainder
+}
+
+// Explicit checked conversion for finite native container indices, not a
+// fallback arithmetic representation. Negative accumulation admits MIN_I64.
+fn mp_bigint_to_i64(value: MPBigint) -> i64 with Mut, Panic, Div {
+    var result: i64 = 0
+    var i = mp_seq_len(value.handle) - 1
+    let minimum = 0 - 9223372036854775807 - 1
+    while i > 0 {
+        let digit = mp_seq_get(value.handle, i)
+        assert(result >= minimum / 1000000000)
+        result = result * 1000000000
+        assert(result >= minimum + digit)
+        result = result - digit
+        i = i - 1
+    }
+    if mp_seq_get(value.handle, 0) >= 0 {
+        assert(result != minimum)
+        return 0 - result
+    }
+    result
+}
+
+// Correctly rounded finite binary64 conversion, round-to-nearest/ties-even.
+// Overflow is an explicit failure, not silent narrowing or wraparound.
+fn mp_bigint_to_f64(value: MPBigint) -> f64 with Alloc, Mut, Panic, Div {
+    var magnitude = mp_bigint_abs(value)
+    let limit = mp_bigint_from_i64(9007199254740991)
+    let two = mp_bigint_from_i64(2)
+    var shifts: i64 = 0
+    var round_bit = false
+    var sticky = false
+    while mp_bigint_lt(limit, magnitude) {
+        if round_bit { sticky = true }
+        let pair = mp_bigint_abs_divmod(magnitude, two)
+        round_bit = !mp_bigint_eq(pair.remainder, mp_bigint_new())
+        magnitude = pair.quotient
+        shifts = shifts + 1
+        assert(shifts <= 1024)
+    }
+    var top = mp_bigint_to_i64(magnitude)
+    if round_bit { if sticky || top % 2 != 0 { top = top + 1 } }
+    var result = top as f64
+    var i: i64 = 0
+    while i < shifts { result = result * 2.0; i = i + 1 }
+    assert(result <= 1.7976931348623157e308)
+    if mp_seq_get(value.handle, 0) < 0 { return 0.0 - result }
+    result
+}
+
+
+// list_str: process-lifetime heap value; no fixed capacity.
+
+struct MPListStr { handle: i64 }
+
+fn mp_list_str_new() -> MPListStr with Alloc, Mut, Panic, Div {
+    MPListStr { handle: mp_seq_new() }
+}
+
+fn mp_list_str_len(value: MPListStr) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_len(value.handle)
+}
+
+fn mp_list_str_get(value: MPListStr, index: i64) -> MPStr with Alloc, Mut, Panic, Div {
+    MPStr { handle: mp_seq_get(value.handle, index) }
+}
+
+fn mp_list_str_contains(value: MPListStr, item: MPStr) -> bool with Alloc, Mut, Panic, Div {
+    var i: i64 = 0
+    while i < mp_seq_len(value.handle) {
+        if mp_str_eq(mp_list_str_get(value, i), item) { return true }
+        i = i + 1
+    }
+    false
+}
+
+fn mp_list_str_push(value: MPListStr, item: MPStr) with Alloc, Mut, Panic, Div {
+    mp_seq_push(value.handle, (item).handle)
+}
+
+fn mp_list_str_set(value: MPListStr, index: i64, item: MPStr) with Alloc, Mut, Panic, Div {
+    mp_seq_set(value.handle, index, (item).handle)
+}
+
+fn mp_list_str_pop(value: MPListStr) -> MPStr with Alloc, Mut, Panic, Div {
+    let word = mp_seq_get(value.handle, -1)
+    mp_header_set(value.handle, 1, mp_seq_len(value.handle) - 1)
+    MPStr { handle: word }
+}
+
+fn mp_list_str_copy(value: MPListStr) -> MPListStr with Alloc, Mut, Panic, Div {
+    MPListStr { handle: mp_seq_copy(value.handle) }
+}
+
+fn mp_list_str_slice(value: MPListStr, start: i64, stop: i64) -> MPListStr with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(value.handle)
+    var begin = start
+    var end = stop
+    if begin < 0 { begin = begin + length }
+    if end < 0 { end = end + length }
+    if begin < 0 { begin = 0 }
+    if end < 0 { end = 0 }
+    if begin > length { begin = length }
+    if end > length { end = length }
+    let result = mp_list_str_new()
+    var i = begin
+    while i < end {
+        mp_seq_push(result.handle, mp_seq_get(value.handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_list_str_eq(a: MPListStr, b: MPListStr) -> bool with Alloc, Mut, Panic, Div {
+    if mp_seq_len(a.handle) != mp_seq_len(b.handle) { return false }
+    var i: i64 = 0
+    while i < mp_seq_len(a.handle) {
+        if !mp_str_eq(mp_list_str_get(a, i), mp_list_str_get(b, i)) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_list_str_lt(a: MPListStr, b: MPListStr) -> bool with Alloc, Mut, Panic, Div {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var i: i64 = 0
+    while i < al {
+        if i >= bl { return false }
+        let av = mp_list_str_get(a, i)
+        let bv = mp_list_str_get(b, i)
+        if mp_str_lt(av, bv) { return true }
+        if mp_str_lt(bv, av) { return false }
+        i = i + 1
+    }
+    al < bl
+}
+
+fn mp_list_str_sort(value: MPListStr) with Alloc, Mut, Panic, Div {
+    var i: i64 = 1
+    while i < mp_seq_len(value.handle) {
+        var j = i
+        while j > 0 {
+            let a = mp_list_str_get(value, j)
+            let b = mp_list_str_get(value, j - 1)
+            if !mp_str_lt(a, b) { break }
+            mp_list_str_set(value, j - 1, a)
+            mp_list_str_set(value, j, b)
+            j = j - 1
+        }
+        i = i + 1
+    }
+}
+
+
+// list_bigint: process-lifetime heap value; no fixed capacity.
+
+struct MPListBigint { handle: i64 }
+
+fn mp_list_bigint_new() -> MPListBigint with Alloc, Mut, Panic, Div {
+    MPListBigint { handle: mp_seq_new() }
+}
+
+fn mp_list_bigint_len(value: MPListBigint) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_len(value.handle)
+}
+
+fn mp_list_bigint_get(value: MPListBigint, index: i64) -> MPBigint with Alloc, Mut, Panic, Div {
+    MPBigint { handle: mp_seq_get(value.handle, index) }
+}
+
+fn mp_list_bigint_contains(value: MPListBigint, item: MPBigint) -> bool with Alloc, Mut, Panic, Div {
+    var i: i64 = 0
+    while i < mp_seq_len(value.handle) {
+        if mp_bigint_eq(mp_list_bigint_get(value, i), item) { return true }
+        i = i + 1
+    }
+    false
+}
+
+fn mp_list_bigint_push(value: MPListBigint, item: MPBigint) with Alloc, Mut, Panic, Div {
+    mp_seq_push(value.handle, (item).handle)
+}
+
+fn mp_list_bigint_set(value: MPListBigint, index: i64, item: MPBigint) with Alloc, Mut, Panic, Div {
+    mp_seq_set(value.handle, index, (item).handle)
+}
+
+fn mp_list_bigint_pop(value: MPListBigint) -> MPBigint with Alloc, Mut, Panic, Div {
+    let word = mp_seq_get(value.handle, -1)
+    mp_header_set(value.handle, 1, mp_seq_len(value.handle) - 1)
+    MPBigint { handle: word }
+}
+
+fn mp_list_bigint_copy(value: MPListBigint) -> MPListBigint with Alloc, Mut, Panic, Div {
+    MPListBigint { handle: mp_seq_copy(value.handle) }
+}
+
+fn mp_list_bigint_slice(value: MPListBigint, start: i64, stop: i64) -> MPListBigint with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(value.handle)
+    var begin = start
+    var end = stop
+    if begin < 0 { begin = begin + length }
+    if end < 0 { end = end + length }
+    if begin < 0 { begin = 0 }
+    if end < 0 { end = 0 }
+    if begin > length { begin = length }
+    if end > length { end = length }
+    let result = mp_list_bigint_new()
+    var i = begin
+    while i < end {
+        mp_seq_push(result.handle, mp_seq_get(value.handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_list_bigint_eq(a: MPListBigint, b: MPListBigint) -> bool with Alloc, Mut, Panic, Div {
+    if mp_seq_len(a.handle) != mp_seq_len(b.handle) { return false }
+    var i: i64 = 0
+    while i < mp_seq_len(a.handle) {
+        if !mp_bigint_eq(mp_list_bigint_get(a, i), mp_list_bigint_get(b, i)) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_list_bigint_lt(a: MPListBigint, b: MPListBigint) -> bool with Alloc, Mut, Panic, Div {
+    let al = mp_seq_len(a.handle)
+    let bl = mp_seq_len(b.handle)
+    var i: i64 = 0
+    while i < al {
+        if i >= bl { return false }
+        let av = mp_list_bigint_get(a, i)
+        let bv = mp_list_bigint_get(b, i)
+        if mp_bigint_lt(av, bv) { return true }
+        if mp_bigint_lt(bv, av) { return false }
+        i = i + 1
+    }
+    al < bl
+}
+
+fn mp_list_bigint_sort(value: MPListBigint) with Alloc, Mut, Panic, Div {
+    var i: i64 = 1
+    while i < mp_seq_len(value.handle) {
+        var j = i
+        while j > 0 {
+            let a = mp_list_bigint_get(value, j)
+            let b = mp_list_bigint_get(value, j - 1)
+            if !mp_bigint_lt(a, b) { break }
+            mp_list_bigint_set(value, j - 1, a)
+            mp_list_bigint_set(value, j, b)
+            j = j - 1
+        }
+        i = i + 1
+    }
+}
+
+
+// dict_str_bigint: process-lifetime heap value; no fixed capacity.
+
+struct MPDictStrBigint { handle: i64 }
+
+fn mp_dict_str_bigint_new() -> MPDictStrBigint with Alloc, Mut, Panic, Div {
+    MPDictStrBigint { handle: mp_seq_new() }
+}
+
+fn mp_dict_str_bigint_len(value: MPDictStrBigint) -> i64 with Alloc, Mut, Panic, Div {
+    mp_seq_len(value.handle) / 2
+}
+
+fn mp_dict_str_bigint_key_at(value: MPDictStrBigint, index: i64) -> MPStr with Alloc, Mut, Panic, Div {
+    MPStr { handle: mp_seq_get(value.handle, index * 2) }
+}
+
+fn mp_dict_str_bigint_value_at(value: MPDictStrBigint, index: i64) -> MPBigint with Alloc, Mut, Panic, Div {
+    MPBigint { handle: mp_seq_get(value.handle, index * 2 + 1) }
+}
+
+fn mp_dict_str_bigint_find(value: MPDictStrBigint, key: MPStr) -> i64 with Alloc, Mut, Panic, Div {
+    var i: i64 = 0
+    while i < mp_dict_str_bigint_len(value) {
+        if mp_str_eq(mp_dict_str_bigint_key_at(value, i), key) { return i }
+        i = i + 1
+    }
+    -1
+}
+
+fn mp_dict_str_bigint_get(value: MPDictStrBigint, key: MPStr) -> MPBigint with Alloc, Mut, Panic, Div {
+    let index = mp_dict_str_bigint_find(value, key)
+    assert(index >= 0)
+    mp_dict_str_bigint_value_at(value, index)
+}
+
+fn mp_dict_str_bigint_contains(value: MPDictStrBigint, key: MPStr) -> bool with Alloc, Mut, Panic, Div {
+    mp_dict_str_bigint_find(value, key) >= 0
+}
+
+fn mp_dict_str_bigint_set(value: MPDictStrBigint, key: MPStr, item: MPBigint) with Alloc, Mut, Panic, Div {
+    let index = mp_dict_str_bigint_find(value, key)
+    if index >= 0 {
+        mp_seq_set(value.handle, index * 2 + 1, (item).handle)
+    } else {
+        mp_seq_push(value.handle, (key).handle)
+        mp_seq_push(value.handle, (item).handle)
+    }
+}
+
+fn mp_dict_str_bigint_keys(value: MPDictStrBigint) -> MPListStr with Alloc, Mut, Panic, Div {
+    let result = mp_list_str_new()
+    var i: i64 = 0
+    while i < mp_dict_str_bigint_len(value) {
+        mp_list_str_push(result, mp_dict_str_bigint_key_at(value, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_dict_str_bigint_values(value: MPDictStrBigint) -> MPListBigint with Alloc, Mut, Panic, Div {
+    let result = mp_list_bigint_new()
+    var i: i64 = 0
+    while i < mp_dict_str_bigint_len(value) {
+        mp_list_bigint_push(result, mp_dict_str_bigint_value_at(value, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_dict_str_bigint_eq(a: MPDictStrBigint, b: MPDictStrBigint) -> bool with Alloc, Mut, Panic, Div {
+    if mp_dict_str_bigint_len(a) != mp_dict_str_bigint_len(b) { return false }
+    var i: i64 = 0
+    while i < mp_dict_str_bigint_len(a) {
+        let key = mp_dict_str_bigint_key_at(a, i)
+        let index = mp_dict_str_bigint_find(b, key)
+        if index < 0 { return false }
+        if !mp_bigint_eq(mp_dict_str_bigint_value_at(a, i), mp_dict_str_bigint_value_at(b, index)) { return false }
+        i = i + 1
+    }
+    true
+}
+
+// Compound adapters use mp_<type>_new/get/push/set/len/eq.
+// Strings contain Unicode code points; concat and slice return new values.
+// Lists/dictionaries preserve shared mutable handles across growth.
+// All Python int annotations use immutable MPBigint, including nested types.
+// Arithmetic: mp_bigint_add/sub/mul/floordiv/mod/eq/lt; never native handle arithmetic.
+// Container indices and lengths use native i64; conversion to i64 is checked.
+// Given a string representing a space separated lowercase letters, return a HashMap
+// of the letter with the most repetition and containing the corresponding count.
+// If several letters have the same occurrence, return all of them.
+// Example:
+// histogram('a b c') == {'a': 1, 'b': 1, 'c': 1}
+// histogram('a b b a') == {'a': 2, 'b': 2}
+// histogram('a b c a b') == {'a': 2, 'b': 2}
+// histogram('b b b b a') == {'b': 4}
+// histogram('') == {}
+fn histogram(test: MPStr) -> MPDictStrBigint with Alloc, Mut, Panic, Div {
+    // Unimplemented reference: must never count as a pass.
+        assert(false)
+        MPDictStrBigint { handle: 0 }
+}
+
+fn main() -> i64 with Alloc, Mut, Panic, Div {
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 97)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    value
+}, mp_bigint_from_i64(2))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 98)
+    value
+}, mp_bigint_from_i64(2))
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 99)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 97)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    value
+}, mp_bigint_from_i64(2))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 98)
+    value
+}, mp_bigint_from_i64(2))
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 99)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 100)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 103)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 98)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 99)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 100)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 103)
+    value
+}, mp_bigint_from_i64(1))
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 114)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 116)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 103)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 114)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 116)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 103)
+    value
+}, mp_bigint_from_i64(1))
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 98)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 97)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 98)
+    value
+}, mp_bigint_from_i64(4))
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 114)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 116)
+    mp_seq_push(value.handle, 32)
+    mp_seq_push(value.handle, 103)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 114)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 116)
+    value
+}, mp_bigint_from_i64(1))
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 103)
+    value
+}, mp_bigint_from_i64(1))
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    value
+}))
+    assert(mp_dict_str_bigint_eq(histogram({
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    value
+}), {
+    let value = mp_dict_str_bigint_new()
+    mp_dict_str_bigint_set(value, {
+    let value = mp_str_new()
+    mp_seq_push(value.handle, 97)
+    value
+}, mp_bigint_from_i64(1))
+    value
+}))
+    0
+}
