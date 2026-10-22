@@ -164,6 +164,12 @@ def postprocess_completion(
     prompt: str,
     completion: str,
 ) -> str:
+    if lang == "sio":
+        from sounio_chat_completion import assemble_sounio_chat
+
+        assembled = assemble_sounio_chat(prompt, completion, stop_tokens)
+        if assembled is not None:
+            return assembled
     if completion.startswith("```"):
         # Assume that this is a complete Markdown block.
         lines = completion.split("\n")

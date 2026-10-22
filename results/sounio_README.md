@@ -1,5 +1,11 @@
 # Sounio baseline — DeepSeek-Coder
 
+> Historical record, not a result for the current adapter. The former compiler
+> release is unavailable, and this run has not been independently reproduced
+> during the toolchain migration. Its scores, environment and training-data
+> claims must not be carried over to the replacement distribution. See
+> [the current migration and evidence guide](../evaluation/SOUNIO_MIGRATION.md).
+
 Baseline pass@k for the Sounio MultiPL-E target, computed end-to-end through
 the in-tree translator + `evaluation/src/eval_sounio.py`.
 

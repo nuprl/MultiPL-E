@@ -1,5 +1,11 @@
 # Cx-2 iterative-convergence log (Q2)
 
+> Historical pre-migration proposal notes, not current semantic validation.
+> The Rust-shaped APIs and unavailable compiler pin discussed below were
+> replaced. Body-stripped structural passes can include unimplemented bodies.
+> See [the migration guide](../evaluation/SOUNIO_MIGRATION.md) for the current
+> contract and executable validation, including deliberately wrong references.
+
 > Q2 (Iterative Convergence ≥ 3): translator goes through ≥ 3 cycles:
 > hand-reference comparison → revise → re-translate → re-compare.
 

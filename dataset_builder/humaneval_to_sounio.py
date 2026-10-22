@@ -1,265 +1,188 @@
-# This script translates problems from the OpenAI HumanEval dataset into Sounio.
-#
-# Sounio (https://github.com/Sounio-lang/Sounio) is an epistemic systems
-# language. The translator targets Sounio 1.0.0-beta.5 and produces files with
-# the `.sio` extension.
-#
-# Sounio specifics worth knowing while reading this file:
-#   * No unary minus -- `-x` is written `(0 - x)` and we encode negative
-#     integer/float literals with that wrapping.
-#   * No semicolons; statements are newline terminated.
-#   * Effects must be declared on every function; HumanEval problems typically
-#     touch arrays / arithmetic / division so we use `with Mut, Panic, Div`
-#     for the user function and add `IO` on `main` for the test harness.
-#   * Mutable bindings use `var`, immutable bindings use `let`; mutable
-#     references use `&!`.
-#   * Sounio uses Rust-shaped generics in the type-system, so `Vec<T>`,
-#     `Option<T>`, `HashMap<K, V>` and tuples translate over cleanly at the
-#     prompt level.  Whether the generated code compiles depends on the model.
-#   * Sounio supports first-class function references (Sprint 228), so the
-#     `let candidate = {entry_point}` aliasing used by the Rust translator
-#     translates verbatim.
-#
-# As with the Rust translator, we walk the Python type annotations and refuse
-# explicitly-untyped or Union-typed prompts.
+"""Type-directed MultiPL-E adapter for the pinned native Madaros toolchain.
+
+Compound literals remain structured until their expected type is known.
+Generated adapters use dynamic stable handles, not Rust-shaped prelude APIs.
+"""
 
 import ast
-import re
+from dataclasses import dataclass
 from typing import List, Optional
 
-DOCSTRING_LINESTART_RE = re.compile("""\n(\\s*)""")
-
-# Whether the current translation needs `use std::collections::HashMap` style
-# imports.  Sounio's stdlib exposes `HashMap` from `std::collections` via the
-# `use` keyword, mirroring Rust.  This is a module-level flag for parity with
-# humaneval_to_rs.py and is reset on every translate_prompt call.
-needs_hashmap = False
+from sounio_types import EFFECTS, Type, equal, parse_type, runtime
 
 
-def translate_type(t) -> str:
-    """Translate a Python type annotation AST node to a Sounio type."""
-    global needs_hashmap
-    match t:
-        case ast.Subscript(ast.Name(id), slice, _ctx):
-            match id:
-                case "List":
-                    return "Vec<" + translate_type(slice) + ">"
-                case "Union":
-                    raise Exception("Union unsupported")
-                case "Tuple":
-                    match slice:
-                        case ast.Tuple(elts, _ctx2):
-                            tys = [translate_type(e) for e in elts]
-                            return "(" + ", ".join(tys) + ")"
-                        case _:
-                            raise Exception(f"Bad tuple: {slice}")
-                case "Dict":
-                    match slice:
-                        case ast.Tuple([ast.Name(k), ast.Name(v)], _ctx2):
-                            key, value = translate_type(k), translate_type(v)
-                            needs_hashmap = True
-                            return f"HashMap<{key}, {value}>"
-                        case _:
-                            raise Exception(f"Bad dict: {slice}")
-                case "Optional":
-                    return "Option<" + translate_type(slice) + ">"
-                case other:
-                    raise Exception(f"Bad generic {other}")
-        case ast.Name("int") | "int":
-            return "i64"
-        case ast.Name("float"):
-            return "f64"
-        case ast.Name("bool"):
-            return "bool"
-        case ast.Name("str") | "str":
-            return "String"
-        case None:
-            raise Exception("implicitly untyped argument")
-        case ast.Name("Any"):
-            raise Exception("explicitly untyped argument")
-        case ast.Name(x):
-            raise Exception(f"unknown name {x}")
-        case ast.Constant(Ellipsis):
-            raise Exception("no ellipsis!!")
-        case _:
-            raise Exception(f"unknown annotation: {t}")
+@dataclass(frozen=True)
+class Expression:
+    kind: str
+    value: object = None
+    children: tuple = ()
+    type: Optional[Type] = None
 
 
-def coerce(expr: str, type) -> str:
-    """Coerce a Python-shaped literal expression to fit a Sounio type.
+def translate_type(annotation):
+    return parse_type(annotation).code
 
-    Mirrors the Rust translator's approach: most expressions pass through
-    unchanged, but `Option`-typed arguments need `Some(_)` wrapping, empty
-    `vec![]` literals need explicit element-type annotation, and integer
-    literals appearing where a `f64` is expected pick up a `.0` suffix.
-    """
-    def coerce_to_option(e: str) -> str:
-        if e == "None":
-            return e
-        return f"Some({e})"
 
-    match expr, type:
-        case e, ast.Subscript(ast.Name("Optional"), _):
-            return coerce_to_option(e)
-        case "vec![]", ast.Subscript(ast.Name("List"), to):
-            return f"Vec::<{translate_type(to)}>::new()"
-        case "vec![]", ast.Name("str") | "str":
-            return f"String::new()"
-        case "HashMap::from([])", ast.Subscript(ast.Name("Dict"), ast.Tuple([k, v])):
-            return f"HashMap::<{translate_type(k)}, {translate_type(v)}>::new()"
-        case e, ast.Name("float") | "float" if "." not in e:
-            return f"{e}.0"
-        case e, ast.Subscript(ast.Name("List"), ast.Name("float") | "float"):
-            # vec![1, 2, 3] with float element type -> vec![1.0, 2.0, 3.0]
-            parts = e[5:-1].split(", ")
-            inner = ", ".join(coerce(p, "float") for p in parts)
-            return f"vec![{inner}]"
-        case e, ast.Subscript(
-            ast.Name("Tuple"),
-            ast.Tuple(
-                [
-                    ast.Subscript(ast.Name("Optional")),
-                    ast.Subscript(ast.Name("Optional")),
-                ],
-                _,
-            ),
-        ):
-            l, r = e.strip("()").split(", ")
-            return f"({coerce_to_option(l)}, {coerce_to_option(r)})"
-        case _:
-            return expr
+def _construct(type_, statements):
+    return "{\n    let value = " + type_.prefix + "_new()\n" + "".join(
+        "    " + statement + "\n" for statement in statements
+    ) + "    value\n}"
+
+
+def coerce(expression, annotation):
+    """Render for the expected type recursively, without parsing emitted text."""
+    type_ = annotation if isinstance(annotation, Type) else parse_type(annotation)
+    if not isinstance(expression, Expression):
+        raise ValueError("Untyped Sounio expression")
+    if expression.kind == "code":
+        if expression.type == type_:
+            return expression.value
+        if expression.type == Type("i64") and type_ == Type("f64"):
+            return f"({expression.value} as f64)"
+        raise ValueError(f"Cannot coerce {expression.type} to {type_}")
+    if type_.kind == "option":
+        if expression.kind == "literal" and expression.value is None:
+            return type_.prefix + "_none()"
+        return type_.prefix + "_some(" + coerce(expression, type_.args[0]) + ")"
+    if expression.kind == "literal":
+        value = expression.value
+        if type_.kind == "bigint" and type(value) is int:
+            if -(1 << 63) <= value < (1 << 63):
+                return "mp_bigint_from_i64(" + coerce(expression, Type("i64")) + ")"
+            digits = str(value).lstrip("-")
+            groups = [digits[max(0, end - 9):end].lstrip("0") or "0"
+                      for end in range(len(digits), 0, -9)]
+            statements = ["mp_header_set(value.handle, 1, 1)",
+                          "mp_seq_set(value.handle, 0, " + ("-1" if value < 0 else "1") + ")"]
+            statements += [f"mp_seq_push(value.handle, {group})" for group in groups]
+            return _construct(type_, statements)
+        if type_.kind == "str" and isinstance(value, str):
+            return _construct(type_, [
+                f"mp_seq_push(value.handle, {ord(character)})" for character in value
+            ])
+        if type_.kind == "bool" and isinstance(value, bool):
+            return "true" if value else "false"
+        if type_.kind == "i64" and type(value) is int:
+            if not -(1 << 63) <= value < (1 << 63):
+                raise ValueError("Integer literal outside Sounio i64 range")
+            if value == -(1 << 63):
+                return "(0 - 9223372036854775807 - 1)"
+            return str(value)
+        if type_.kind == "f64" and type(value) in (int, float):
+            # Decimal serialization belongs to the translation harness, not
+            # an independent numerical reference or benchmark algorithm.
+            return repr(float(value))
+        raise ValueError(f"Literal {value!r} does not match {type_}")
+    if type_.kind == "list" and expression.kind == "list":
+        return _construct(type_, [
+            f"{type_.prefix}_push(value, {coerce(child, type_.args[0])})"
+            for child in expression.children
+        ])
+    if type_.kind == "set" and expression.kind == "set":
+        return _construct(type_, [
+            f"{type_.prefix}_add(value, {coerce(child, type_.args[0])})"
+            for child in expression.children
+        ])
+    if type_.kind == "tuple" and expression.kind == "tuple":
+        if len(expression.children) != len(type_.args):
+            raise ValueError("Tuple literal has the wrong arity")
+        return type_.prefix + "_new(" + ", ".join(
+            coerce(child, expected) for child, expected in zip(expression.children, type_.args)
+        ) + ")"
+    if type_.kind == "dict" and expression.kind == "dict":
+        return _construct(type_, [
+            f"{type_.prefix}_set(value, {coerce(key, type_.args[0])}, {coerce(item, type_.args[1])})"
+            for key, item in expression.children
+        ])
+    raise ValueError(f"Cannot render {expression.kind} as {type_}")
 
 
 class Translator:
-    """MultiPL-E translator: Python HumanEval -> Sounio."""
-
     stop = ["\n}"]
 
-    def file_ext(self) -> str:
+    def __init__(self):
+        self.type = None
+        self.entry_point = None
+
+    def file_ext(self):
         return "sio"
 
-    def __init__(self):
-        self.type = None  # ([arg_types], return_type) — used for test coercions
-
-    def translate_prompt(
-        self,
-        name: str,
-        args: List[ast.arg],
-        returns,
-        description: str,
-    ) -> Optional[str]:
-        global needs_hashmap
-        description = (
-            "// " + re.sub(DOCSTRING_LINESTART_RE, "\n// ", description.strip()) + "\n"
-        )
-        needs_hashmap = False
-        self.type = [[arg.annotation for arg in args], returns]
-
-        def translate_arg(arg: ast.arg) -> str:
-            return arg.arg + ": " + translate_type(arg.annotation)
-
+    def translate_prompt(self, name: str, args: List[ast.arg], returns,
+                         description: str) -> Optional[str]:
+        self.entry_point = name
         try:
-            arg_strings = [translate_arg(a) for a in args]
-            return_type = translate_type(returns)
-        except Exception as e:
-            print(e)
+            argument_types = [parse_type(arg.annotation) for arg in args]
+            return_type = parse_type(returns)
+        except ValueError as error:
+            print(error)
+            self.type = None
             return None
-
-        arg_list = ", ".join(arg_strings)
-        imports = "use std::collections::HashMap\n\n" if needs_hashmap else ""
-        # `with Mut, Panic, Div` covers the effects HumanEval functions
-        # typically need.  The Sounio type-checker can tighten these later.
+        self.type = (argument_types, return_type)
+        declaration = ", ".join(
+            arg.arg + ": " + type_.code for arg, type_ in zip(args, argument_types)
+        )
+        comments = "\n".join("// " + line for line in description.strip().splitlines())
+        helpers = runtime([*argument_types, return_type])
         return (
-            f"{imports}{description}"
-            f"fn {name}({arg_list}) -> {return_type} with Mut, Panic, Div {{\n"
+            helpers + "// Compound adapters use mp_<type>_new/get/push/set/len/eq.\n"
+            "// Strings contain Unicode code points; concat and slice return new values.\n"
+            "// Lists/dictionaries preserve shared mutable handles across growth.\n"
+            "// All Python int annotations use immutable MPBigint, including nested types.\n"
+            "// Arithmetic: mp_bigint_add/sub/mul/floordiv/mod/eq/lt; never native handle arithmetic.\n"
+            "// Container indices and lengths use native i64; conversion to i64 is checked.\n"
+            + comments + "\n"
+            + f"fn {name}({declaration}) -> {return_type.code}{EFFECTS} {{\n"
         )
 
-    def test_suite_prefix_lines(self, entry_point: str) -> List[str]:
-        # We close the function body opened by translate_prompt with `}` (which
-        # is also our stop token), then open a `main` test harness that
-        # aliases the entry point via Sounio's first-class fn refs.
-        return [
-            "}",
-            "",
-            "fn main() -> i64 with IO, Mut, Panic, Div {",
-            f"    let candidate = {entry_point}",
-        ]
+    def gen_literal(self, value):
+        return Expression("literal", value)
 
-    def test_suite_suffix_lines(self) -> List[str]:
+    def gen_var(self, name):
+        return name
+
+    def gen_list(self, values):
+        return Expression("list", children=tuple(values))
+
+    def gen_tuple(self, values):
+        return Expression("tuple", children=tuple(values))
+
+    def gen_set(self, values):
+        return Expression("set", children=tuple(values))
+
+    def gen_dict(self, keys, values):
+        if len(keys) != len(values):
+            raise ValueError("Dictionary literal keys/values differ in length")
+        return Expression("dict", children=tuple(zip(keys, values)))
+
+    def gen_call(self, function, arguments):
+        if function not in ("candidate", self.entry_point):
+            raise ValueError(f"Unsupported translated call: {function}")
+        expected, result = self.type
+        if len(arguments) != len(expected):
+            raise ValueError("Candidate call has the wrong arity")
+        call = self.entry_point + "(" + ", ".join(
+            coerce(value, type_) for value, type_ in zip(arguments, expected)
+        ) + ")"
+        return Expression("code", call, type=result)
+
+    def finalize(self, expression, context):
+        if context not in ("lhs", "rhs"):
+            raise ValueError(f"Invalid Sounio expression context: {context}")
+        return coerce(expression, self.type[1])
+
+    def deep_equality(self, left, right):
+        return "    assert(" + equal(self.type[1], left, right) + ")"
+
+    def test_suite_prefix_lines(self, entry_point):
+        return ["}", "", "fn main() -> i64" + EFFECTS + " {"]
+
+    def test_suite_suffix_lines(self):
         return ["    0", "}", ""]
 
-    def deep_equality(self, left: str, right: str) -> str:
-        # Sounio's `assert(...)` is the canonical assertion macro and aborts
-        # the process on failure, which the eval harness reads as a non-zero
-        # exit code -> "Exception" verdict.
-        return f"    assert({left} == {right})"
-
-    # ------------------------------------------------------------------ AST → str
-
-    def gen_literal(self, c) -> str:
-        if isinstance(c, bool):
-            return "true" if c else "false"
-        if isinstance(c, str):
-            if '"' in c:
-                # Punt on inner quotes for now -- the Python source rarely
-                # produces these in HumanEval bodies and a smarter quoter is
-                # follow-up work.
-                raise Exception("smarter quote handling")
-            return f'String::from("{c}")'
-        if c is None:
-            return "None"
-        if isinstance(c, int):
-            if c < 0:
-                return f"(0 - {abs(c)})"
-            return str(c)
-        if isinstance(c, float):
-            if c < 0:
-                return f"(0.0 - {abs(c)})"
-            # Force a decimal point so the literal stays f64-typed.
-            return repr(c) if "." in repr(c) else f"{c}.0"
-        return repr(c)
-
-    def gen_unaryop(self, op: str, v: str) -> str:
-        if op == "-":
-            return f"(0 - {v})"
-        return f"{op}{v}"
-
-    def gen_var(self, v: str) -> str:
-        return v
-
-    def gen_list(self, l: List[str]) -> str:
-        return "vec![" + ", ".join(l) + "]"
-
-    def gen_tuple(self, t: List[str]) -> str:
-        return "(" + ", ".join(t) + ")"
-
-    def gen_dict(self, keys: List[str], values: List[str]) -> str:
-        return (
-            "HashMap::from(["
-            + ", ".join(f"({k}, {v})" for k, v in zip(keys, values))
-            + "])"
-        )
-
-    def gen_set(self, s: List[str]) -> str:
-        # Sounio's stdlib uses `HashSet` (Rust-shaped).  Empty sets are rare
-        # in HumanEval so we don't special-case them here.
-        return "HashSet::from([" + ", ".join(s) + "])"
-
-    def gen_call(self, func: str, args: List[str]) -> str:
-        if func == "candidate":
-            args = [coerce(a, self.type[0][i]) for i, a in enumerate(args)]
-        return func + "(" + ", ".join(args) + ")"
-
-    def finalize(self, result, context) -> str:
-        match context:
-            case "lhs":
-                return result
-            case "rhs":
-                return coerce(result, self.type[1])
-            case _:
-                raise Exception("bad context to finalize")
-
-    def no_completion_prompt_stub(self) -> str:
-        # A safe Sounio stub: panic immediately.  The `panic!` macro is part
-        # of the Sounio stdlib and the trailing `}` matches our stop token.
-        return "    panic!(\"todo\")\n}\n"
+    def no_completion_prompt_stub(self):
+        result = self.type[1]
+        defaults = {"i64": "0", "f64": "0.0", "bool": "false"}
+        default = defaults.get(result.kind, result.code + " { handle: 0 }")
+        # Unreachable fallback keeps the return type explicit. A native false
+        # assertion is independently tested to fail; this is not a solution.
+        return "    // Unimplemented reference: must never count as a pass.\n    assert(false)\n    " + default + "\n"

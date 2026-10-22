@@ -1,6 +1,6 @@
 """MultiPL-E evaluation backend for Sounio (.sio).
 
-Compiles each generated `.sio` file with `souc compile`, runs the produced
+Compiles each generated `.sio` file with the pinned compiler, runs the produced
 binary with a short timeout, and emits a verdict in the MultiPL-E convention.
 
 The driver in `generic_eval.main` calls `eval_script(path)` per problem and
@@ -29,66 +29,47 @@ SOUC = os.environ.get("SOUC", "souc")
 
 
 def eval_script(path: Path):
-    basename = ".".join(str(path).split(".")[:-1])
-    binary = basename + ".bin"
-
-    # souc 1.0.0-beta.5 implements both `souc compile <src> -o <out>` and a
-    # raw pass-through `souc <src> <out>`.  The raw form is the one currently
-    # exercised by the in-tree gates, so we use it here for parity.
-    try:
-        build = subprocess.run(
-            [SOUC, str(path), binary],
-            capture_output=True,
-            timeout=30,
-        )
-    except subprocess.TimeoutExpired:
-        return {
-            "status": "Timeout",
-            "exit_code": -1,
-            "stdout": "Compiler timeout",
-            "stderr": "Compiler timeout",
-        }
-
-    # The raw pass-through writes the ELF without setting the +x bit, so we
-    # explicitly mark it executable before invoking.
-    try:
-        os.chmod(binary, 0o755)
-    except FileNotFoundError:
-        pass
-
-    if build.returncode != 0:
-        return {
-            "status": "SyntaxError",
-            "exit_code": build.returncode,
-            "stdout": build.stdout.decode("utf-8", errors="replace"),
-            "stderr": build.stderr.decode("utf-8", errors="replace"),
-        }
-
-    try:
-        output = subprocess.run([binary], capture_output=True, timeout=10)
-    except subprocess.TimeoutExpired as exc:
+    # Never reuse or remove an executable adjacent to a caller's input. Each
+    # invocation owns its output directory, including on every failure path.
+    with tempfile.TemporaryDirectory(prefix="multipl-e-sounio-") as directory:
+        binary = str(Path(directory) / "program")
         try:
-            os.remove(binary)
-        except OSError:
-            pass
-        return {
-            "status": "Timeout",
-            "exit_code": -1,
-            "stdout": "",
-            "stderr": str(exc),
-        }
+            build = subprocess.run(
+                [SOUC, "compile", str(path.resolve()), "-o", binary],
+                capture_output=True,
+                timeout=30,
+            )
+        except subprocess.TimeoutExpired:
+            return _failure("Timeout", "Compiler timeout")
+        except OSError as exc:
+            return _failure("Exception", str(exc))
 
-    status = "OK" if output.returncode == 0 else "Exception"
-    try:
-        os.remove(binary)
-    except OSError:
-        pass
+        if build.returncode != 0:
+            return _result("SyntaxError", build)
 
+        try:
+            os.chmod(binary, 0o755)
+            output = subprocess.run([binary], capture_output=True, timeout=10)
+        except subprocess.TimeoutExpired as exc:
+            return _failure("Timeout", str(exc))
+        except OSError as exc:
+            # A successful compiler exit without an executable, or an OS-level
+            # launch failure, is not a successful benchmark completion.
+            return _failure("Exception", str(exc))
+
+        return _result("OK" if output.returncode == 0 else "Exception", output)
+
+
+def _failure(status, message):
+    return {"status": status, "exit_code": -1, "stdout": "", "stderr": message}
+
+
+def _result(status, process):
     return {
         "status": status,
-        "exit_code": output.returncode,
-        "stdout": output.stdout.decode("utf-8", errors="replace"),
-        "stderr": output.stderr.decode("utf-8", errors="replace"),
+        "exit_code": process.returncode,
+        "stdout": process.stdout.decode("utf-8", errors="replace"),
+        "stderr": process.stderr.decode("utf-8", errors="replace"),
     }
 
 

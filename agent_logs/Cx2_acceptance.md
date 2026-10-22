@@ -1,5 +1,11 @@
 # Cx-2 acceptance test log
 
+> Historical pre-migration proposal notes. The compiler pin and compatibility
+> claims below are not validation of the current implementation. Structural
+> comparison did not establish executable correctness of the reference bodies.
+> Current toolchain identities and native/model evidence are documented in
+> [the migration guide](../evaluation/SOUNIO_MIGRATION.md).
+
 Recorded on the `feature/add-sounio` branch of `agourakis82/MultiPL-E`.
 
 Compiler under test: `souc 1.0.0-beta.5`

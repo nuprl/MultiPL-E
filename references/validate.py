@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 """Validate Sounio hand translations against the MultiPL-E auto translator.
 
-For each pair (references/auto/X.sio, references/hand/X.sio), strip the
-function body region opened by `with Mut, Panic, Div {` and closed by the
-next bare `}` at column 0, then assert that the *remaining* lines (prompt
-docstring, signature, test harness) match exactly.
-
-This catches translator regressions on:
-  * type mapping (Python int/float/List -> Sounio i64/f64/Vec)
-  * literal handling (`(0 - n)` for negatives, `true`/`false`, `vec![]`)
-  * test assertion shape (`assert(candidate(...) == ...)` and Option coercions)
-  * docstring formatting (`//` line-comment prefix)
+For each pair, exclude only the named benchmark function's body, preserving
+all generated runtime helpers, the signature, comments and test harness.
+The entry point is derived from the reference filename, never inferred as
+the first function in a generated prefix. Malformed/missing boundaries fail.
 
 Exit code is 0 if all pairs pass, 1 otherwise.  The body region is
 intentionally ignored because it is the LLM's (or the human's) free
@@ -21,6 +15,7 @@ from __future__ import annotations
 
 import re
 import sys
+import argparse
 from pathlib import Path
 
 
@@ -28,21 +23,25 @@ HERE = Path(__file__).resolve().parent
 HAND_DIR = HERE / "hand"
 AUTO_DIR = HERE / "auto"
 
-BODY_OPEN_RE = re.compile(r"^fn\s+\w+\(.*\).*\{$")
 # A bare closing brace at column 0 marks the end of the user function body.
 BODY_CLOSE = "}"
 
 
-def strip_body(text: str) -> list[str]:
+def strip_body(text: str, entry_point: str) -> list[str]:
     """Return all lines except the user-function body region."""
     lines = text.splitlines()
     out: list[str] = []
     in_body = False
     body_seen_close = False
+    found = False
+    body_open = re.compile(r"^fn\s+" + re.escape(entry_point) + r"\(")
     for line in lines:
         if not in_body:
             out.append(line)
-            if BODY_OPEN_RE.match(line) and not body_seen_close:
+            if body_open.match(line):
+                if found or not line.rstrip().endswith("{"):
+                    raise ValueError("ambiguous reference function boundary")
+                found = True
                 in_body = True
             continue
         # We are inside the body; eat lines until we see the closing `}` at
@@ -51,6 +50,8 @@ def strip_body(text: str) -> list[str]:
             in_body = False
             body_seen_close = True
             out.append(line)
+    if not found or not body_seen_close or in_body:
+        raise ValueError("missing or unterminated reference function")
     return out
 
 
@@ -61,19 +62,28 @@ def diff(a: list[str], b: list[str]) -> list[str]:
 
 
 def main() -> int:
-    hand_files = sorted(HAND_DIR.glob("*.sio"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=HERE)
+    args = parser.parse_args()
+    hand_dir = args.root / "hand"
+    hand_files = sorted(hand_dir.glob("*.sio"))
     if not hand_files:
-        print(f"no hand references found in {HAND_DIR}", file=sys.stderr)
+        print(f"no hand references found in {hand_dir}", file=sys.stderr)
         return 1
 
     failures: list[str] = []
     for hand_path in hand_files:
-        auto_path = AUTO_DIR / hand_path.name
+        auto_path = args.root / "auto" / hand_path.name
         if not auto_path.exists():
             failures.append(f"MISSING auto: {hand_path.name}")
             continue
-        hand_lines = strip_body(hand_path.read_text())
-        auto_lines = strip_body(auto_path.read_text())
+        entry_point = hand_path.stem.split("_", 2)[-1]
+        try:
+            hand_lines = strip_body(hand_path.read_text(), entry_point)
+            auto_lines = strip_body(auto_path.read_text(), entry_point)
+        except ValueError as error:
+            failures.append(f"INVALID {hand_path.name}: {error}")
+            continue
         if hand_lines != auto_lines:
             d = diff(auto_lines, hand_lines)
             failures.append(f"DIFF {hand_path.name}\n" + "\n".join(d))
