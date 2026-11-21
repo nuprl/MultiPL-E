@@ -100,6 +100,9 @@ class Translator:
             return arg.arg + "::" + translate_type(arg.annotation)
         arg_strings = []
         return_type = ""
+        # Keep a trailing quote in the description separate from the delimiter.
+        if description.endswith('"'):
+            description += "\n"
         description = f"\"\"\"{description}\"\"\"\n"
         try:
             arg_strings = [translate_arg(arg) for arg in args]
