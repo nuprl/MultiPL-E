@@ -1,0 +1,63 @@
+# Sounio-only evaluation image for MultiPL-E.
+#
+# This is a smaller, language-specific image used for `eval_sounio.py`.  The
+# main multi-language `Dockerfile` in this directory installs every supported
+# toolchain; this one isolates Sounio and pins its complete distribution.
+# The Debian base and APT packages are not digest-pinned, so this does not
+# promise bit-for-bit reproducibility of the entire image.
+#
+# Reproducibility contract:
+#   * SOUNIO_RELEASE pins the GitHub distribution release tag.
+#   * SOUNIO_ARCHIVE_SHA256 pins the complete compiler/runtime distribution.
+#   * The build verifies both the archive and the distribution manifest.
+#
+# Build:
+#   docker build -f evaluation/Dockerfile.sounio -t multipl-e-sounio evaluation/
+#
+# Run (MultiPL-E completion JSON files, Linux x86-64):
+#   docker run --rm --network none -v "$INPUT_DIR:/inputs:ro" \
+#     -v "$OUTPUT_DIR:/outputs:rw" multipl-e-sounio \
+#     --dir /inputs --output-dir /outputs
+
+FROM debian:bookworm-slim
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
+RUN apt-get update -yqq && \
+    apt-get install -yqq --no-install-recommends \
+        ca-certificates \
+        bash \
+        curl \
+        gzip \
+        python3 \
+        python3-tqdm \
+        libc6 \
+        coreutils \
+        tar \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- Pinned Sounio compiler ------------------------------------------------
+#
+# Keep the wrapper, standard library and manifest from the same release.
+# Pinning only the ELF would omit the supported external-consumer runtime.
+ENV SOUNIO_RELEASE=madaros-distribution-20260920-preview
+ENV SOUNIO_ARCHIVE_SHA256=f0d4511124ad3bfc8c07173b2b33e83acbed7c3cb5a13bd00714e733d1b9c6d3
+
+RUN set -eu; \
+    test "$(uname -m)" = x86_64; \
+    url="https://github.com/Sounio-lang/sounio/releases/download/${SOUNIO_RELEASE}/madaros-distribution.tar.gz"; \
+    curl -fsSL "$url" -o /tmp/sounio-distribution.tar.gz; \
+    echo "${SOUNIO_ARCHIVE_SHA256}  /tmp/sounio-distribution.tar.gz" | sha256sum -c -; \
+    mkdir -p /opt/sounio; \
+    tar -xzf /tmp/sounio-distribution.tar.gz -C /opt/sounio --strip-components=1 --no-same-owner; \
+    python3 /opt/sounio/verify-distribution.py --verify /opt/sounio; \
+    /opt/sounio/bin/souc --version; \
+    rm /tmp/sounio-distribution.tar.gz
+
+ENV SOUC=/opt/sounio/bin/souc
+
+COPY src /code
+WORKDIR /code
+
+ENTRYPOINT ["python3", "main.py"]

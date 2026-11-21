@@ -1,0 +1,122 @@
+// MultiPL-E process-lifetime arena. Handles remain stable when storage grows.
+// Every slot is one 64-bit word; typed adapters preserve its interpretation.
+// No fixed element capacity and no silent out-of-bounds sentinel values.
+
+fn mp_alloc_words(count: i64) -> i64 with Alloc, Panic, Div {
+    assert(count > 0)
+    assert(count <= 9223372036854775807 / 8)
+    let memory = heap_alloc(count * 8) as i64
+    assert(memory > 0)
+    memory
+}
+
+fn mp_header_get(handle: i64, slot: i64) -> i64 {
+    read_i64(handle as *mut i64, slot)
+}
+
+fn mp_header_set(handle: i64, slot: i64, value: i64) with Mut {
+    write_i64(handle as *mut i64, slot, value)
+}
+
+fn mp_seq_new() -> i64 with Alloc, Mut, Panic, Div {
+    let handle = mp_alloc_words(3)
+    mp_header_set(handle, 0, 0)
+    mp_header_set(handle, 1, 0)
+    mp_header_set(handle, 2, 0)
+    handle
+}
+
+fn mp_seq_len(handle: i64) -> i64 {
+    mp_header_get(handle, 1)
+}
+
+fn mp_seq_reserve(handle: i64, required: i64) with Alloc, Mut, Panic, Div {
+    let limit: i64 = 9223372036854775807 / 8
+    assert(required >= 0)
+    assert(required <= limit)
+    let old_capacity = mp_header_get(handle, 2)
+    if required <= old_capacity { return }
+    var capacity: i64 = old_capacity
+    if capacity == 0 { capacity = 4 }
+    while capacity < required {
+        if capacity > limit / 2 { capacity = limit }
+        else { capacity = capacity * 2 }
+    }
+    let storage = mp_alloc_words(capacity)
+    let old_storage = mp_header_get(handle, 0)
+    let length = mp_seq_len(handle)
+    var i: i64 = 0
+    while i < length {
+        write_i64(storage as *mut i64, i, read_i64(old_storage as *mut i64, i))
+        i = i + 1
+    }
+    mp_header_set(handle, 0, storage)
+    mp_header_set(handle, 2, capacity)
+    if old_capacity > 0 { heap_free(old_storage as *mut i8) }
+}
+
+fn mp_seq_push(handle: i64, word: i64) with Alloc, Mut, Panic, Div {
+    let length = mp_seq_len(handle)
+    assert(length < 9223372036854775807 / 8)
+    mp_seq_reserve(handle, length + 1)
+    write_i64(mp_header_get(handle, 0) as *mut i64, length, word)
+    mp_header_set(handle, 1, length + 1)
+}
+
+fn mp_seq_index(handle: i64, index: i64) -> i64 with Panic {
+    let length = mp_seq_len(handle)
+    var normalized = index
+    if normalized < 0 { normalized = length + normalized }
+    assert(normalized >= 0)
+    assert(normalized < length)
+    normalized
+}
+
+fn mp_seq_get(handle: i64, index: i64) -> i64 with Panic {
+    let normalized = mp_seq_index(handle, index)
+    read_i64(mp_header_get(handle, 0) as *mut i64, normalized)
+}
+
+fn mp_seq_set(handle: i64, index: i64, word: i64) with Mut, Panic {
+    let normalized = mp_seq_index(handle, index)
+    write_i64(mp_header_get(handle, 0) as *mut i64, normalized, word)
+}
+
+fn mp_seq_copy(handle: i64) -> i64 with Alloc, Mut, Panic, Div {
+    let result = mp_seq_new()
+    let length = mp_seq_len(handle)
+    mp_seq_reserve(result, length)
+    var i: i64 = 0
+    while i < length {
+        mp_seq_push(result, mp_seq_get(handle, i))
+        i = i + 1
+    }
+    result
+}
+
+fn mp_seq_equal(left: i64, right: i64) -> bool with Panic {
+    let length = mp_seq_len(left)
+    if length != mp_seq_len(right) { return false }
+    var i: i64 = 0
+    while i < length {
+        if mp_seq_get(left, i) != mp_seq_get(right, i) { return false }
+        i = i + 1
+    }
+    true
+}
+
+fn mp_float_word(value: f64) -> i64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_f64(memory as *mut f64, 0, value)
+    let word = read_i64(memory as *mut i64, 0)
+    heap_free(memory as *mut i8)
+    word
+}
+
+fn mp_word_float(word: i64) -> f64 with Alloc, Mut, Panic, Div {
+    let memory = mp_alloc_words(1)
+    write_i64(memory as *mut i64, 0, word)
+    let value = read_f64(memory as *mut f64, 0)
+    heap_free(memory as *mut i8)
+    value
+}

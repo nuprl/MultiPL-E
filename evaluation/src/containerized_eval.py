@@ -29,10 +29,12 @@ import eval_clj
 import eval_v
 import eval_lean
 import eval_dart
+import eval_sounio
 import tempfile
 
 
 EVALUATORS = {
+    "sio": (eval_sounio.eval_script, ".sio"),
     "ada": (eval_adb.eval_script, ".adb"),
     "rb": (eval_ruby.eval_script, ".rb"),
     "lua": (eval_lua.eval_script, ".lua"),
